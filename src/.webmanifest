@@ -1,0 +1,20 @@
+{
+  "short_name": "V8",
+  "name": "V8",
+  "display": "minimal-ui",
+  "icons": [
+    {
+      "src": "/_img/v8-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/_img/v8-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "theme_color": "#4285F4",
+  "background_color": "#4285F4"
+}

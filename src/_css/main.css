@@ -1,0 +1,419 @@
+/* Copyright 2018 Google Inc.
+**
+** Licensed under the Apache License, Version 2.0 (the “License”);
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+** <https://apache.org/licenses/LICENSE-2.0>.
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an “AS IS” BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+
+:root {
+  /* Colors used in the V8 logos. */
+  --blue: #4285F4;
+  --darkgray: #464646;
+  --lightgray: #A6A6A6;
+  --white: #FFF;
+  /* Derived colors. */
+  --darkblue: #0A50C2;
+  --lightestgray: #D6D6D6;
+  --yellow: #FAD956;
+  --orange: #F8A602;
+
+  /* Body padding offset. */
+  --offset: 2em;
+}
+
+* {
+  box-sizing: border-box;
+}
+html, body, fieldset, nav ul, nav ul li, h1, h2, h3 {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+html {
+  font: 16px/1.6 sans-serif;
+  color: #000;
+  background: var(--darkgray);
+}
+body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+#header {
+  position: relative;
+  height: 6.5em;
+  background: var(--blue);
+  padding: 0 1em;
+}
+#header nav ul, #header nav li {
+  display: flex;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+}
+#header nav ul {
+  position: absolute;
+  bottom: 0;
+  right: 1em;
+}
+#header h1 a {
+  color: #fff;
+  padding: 1em;
+  font-size: 16px;
+  position: absolute;
+  bottom: 0;
+  background: url(../_img/v8-outline.svg) no-repeat center center;
+  background-size: 80%;
+  width: 6.5em;
+  height: 6.5em;
+  text-indent: -9999em;
+  overflow: hidden;
+}
+#header nav a, #nav-toggle {
+  padding: 1em;
+  color: #000;
+  font-weight: bold;
+  background: rgba(255, 255, 255, .8);
+  font-size: 16px;
+  margin-right: 1em;
+  display: block;
+}
+#nav-toggle {
+  display: none;
+}
+#nav-toggle::after {
+  background: url(/_img/v8-outline.svg) no-repeat center center;
+  content: '';
+  width: 2em;
+  height: 2em;
+  display: inline-block;
+  padding-left: 0.5em;
+  vertical-align: middle;
+}
+nav .current a {
+  background: #FFF;
+}
+#header nav a:hover, #header nav a:focus {
+  background-color: var(--darkgray);
+  color: #fff;
+}
+nav li:last-child a {
+  margin-right: 0;
+}
+a {
+  text-decoration: none;
+}
+#map {
+  width: 100%;
+  height: 600px;
+}
+main, #footer {
+  background: #fff;
+  padding: 1em var(--offset);
+}
+article footer {
+  overflow: hidden;
+  background: var(--yellow);
+}
+article footer p {
+  margin: 0 0 1em;
+}
+article footer p:only-child {
+  margin-bottom: 0;
+}
+article footer img {
+  float: left;
+  margin-right: 1em;
+}
+hr {
+  padding: 0;
+  border: 0;
+  border-top: 1px dotted var(--lightgray);
+}
+.footnotes {
+  font-size: 0.8em;
+}
+.retweet {
+  display: inline-block;
+  background: url(/_img/twitter.svg) no-repeat 0 0;
+  padding-left: 1.75em;
+  color: var(--darkgray);
+  border-color: var(--darkgray);
+  font-weight: bold;
+}
+.retweet:hover, .retweet:focus {
+  background-color: var(--darkgray);
+  border-color: var(--darkgray);
+}
+#footer {
+  background: var(--lightestgray) url(/_img/v8-outline.svg) no-repeat 95.5% center;
+  padding-right: 12em;
+  background-size: 10em;
+}
+#footer nav {
+  padding-top: 1em;
+}
+pre, code, var, kbd, samp {
+  font-family: Source Code Pro, Monaco, Lucida Console, monospace;
+  font-size: 1em;
+}
+pre {
+  background: #000;
+  color: #E6E1DC;
+  overflow: auto;
+  white-space: pre;
+  overflow: auto;
+}
+pre, article footer {
+  width: calc(100% + var(--offset) * 2);
+  margin-left: calc(-1 * var(--offset));
+  padding: 1em 1em 1em var(--offset);
+}
+code {
+  padding: 1px 2px;
+  tab-size: 2;
+  background: rgba(0, 0, 0, 0.07);
+}
+pre code {
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: inherit;
+}
+del, ins {
+  padding: 0.2em;
+}
+del {
+  background: #fdd;
+}
+ins {
+  background: #afa;
+}
+ins, del:hover {
+  text-decoration: none;
+}
+main a, footer a {
+  color: var(--darkblue);
+  border-bottom: 1px solid var(--darkblue);
+  padding: 2px 2px 1px 2px;
+}
+main a:hover, main a:focus, footer a:hover, footer a:focus {
+  background-color: var(--darkblue);
+  color: #fff;
+}
+main a:hover code, main a:focus code {
+  background-color: inherit;
+}
+a.bookmark {
+  visibility: hidden;
+}
+h2:hover a.bookmark,
+h3:hover a.bookmark,
+h4:hover a.bookmark {
+  visibility: visible;
+}
+figure {
+  margin: 0 0 1em;
+  padding: 0;
+  text-align: center;
+}
+figure img {
+  display: block;
+  margin: 0 auto;
+}
+figure a {
+  border-bottom: 0;
+  padding: 0;
+}
+blockquote {
+  border-left: 1em solid var(--lightestgray);
+  margin-left: 0;
+  padding-left: 1em;
+}
+.logo-download {
+  display: block;
+  border: 0;
+}
+.logo-download:hover,
+.logo-download:focus {
+  background: var(--lightestgray);
+  color: #000;
+}
+.logo-download + h2 {
+  margin-top: 1em;
+}
+figcaption {
+  font-size: 0.9em;
+}
+iframe {
+  border: 0;
+  width: 100%;
+}
+iframe + h2, iframe + h3 {
+  margin-top: 1em;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+}
+thead th {
+  background: var(--blue);
+  color: #fff;
+}
+th, td {
+  border: 1px solid #dedede;
+  padding: .5em 1em;
+}
+tbody tr:nth-child(odd) {
+  background-color: #eee;
+}
+main nav {
+  text-align: center;
+  margin-bottom: 1em;
+  overflow: hidden;
+}
+main nav a {
+  font-weight: bold;
+  padding: 0.5em;
+  border-bottom: 0;
+}
+main .meta {
+  font-size: 14px;
+  margin-top: -0.2em;
+}
+.tag {
+  border: 0;
+  background: #EEE;
+  color: #000;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 770px) {
+  :root {
+    --offset: 10px;
+  }
+  body {
+    padding: 0;
+  }
+  #footer {
+    background-size: 5em;
+    padding-right: 7em;
+  }
+}
+
+@media (max-width: 670px) {
+  #header, .compact #header {
+    height: auto;
+    background: transparent;
+    padding: 0;
+  }
+  #header h1 a {
+    position: static;
+    display: block;
+  }
+  #header nav ul {
+    position: static;
+  }
+  #header nav ul, #header nav li {
+    display: block;
+  }
+  #header nav a, #nav-toggle {
+    margin-right: 0;
+  }
+  #header h1 a {
+    display: none;
+  }
+  nav .current a {
+    background: #333;
+    color: #fff;
+  }
+  .js #nav-toggle, .js #header nav.show {
+    display: block;
+  }
+  .js #nav-toggle.hide, .js #header nav {
+    display: none;
+  }
+  main nav a[rel="prev"], main nav a[rel="next"] {
+    float: none;
+    display: block;
+    text-align: center;
+  }
+  #footer {
+    background-image: none;
+    padding-right: var(--offset);
+  }
+}
+
+/* https://github.com/PrismJS/prism-themes/blob/master/themes/prism-cb.css
+** with custom modifications for increased accessibility/contrast.
+**/
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #999;
+}
+
+.token.selector,
+.token.operator,
+.token.punctuation {
+  color: #FFF;
+}
+
+.token.namespace {
+  opacity: .7;
+}
+
+.token.tag,
+.token.boolean {
+  color: #FFD893;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.hex,
+.token.string {
+  color: #B0C975;
+}
+
+.token.property,
+.token.entity,
+.token.url,
+.token.attr-name,
+.token.keyword {
+  color: #C27628;
+}
+
+.token.regex {
+  color: #9B71C6;
+}
+
+.token.function,
+.token.constant {
+  color: #E5A638;
+}
+
+.token.variable {
+  color: #FDFBA8;
+}
+
+.token.number {
+  color: #8799B0;
+}
+
+.token.important,
+.token.deliminator {
+  color: #E45734;
+}

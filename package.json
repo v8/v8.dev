@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "scripts": {
+    "lint": "markdownlint src/**/*.md",
+    "eleventy": "eleventy",
+    "html": "html-minifier --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
+    "css": "postcss src/_css/main.css --output dist/_css/main.css",
+    "js": "mkdir -p dist/_js && minify --mangle.topLevel src/_js/main.mjs --outFile dist/_js/main.mjs && minify --mangle.topLevel src/_js/legacy.js --outFile dist/_js/legacy.js",
+    "sw": "workbox injectManifest workbox-config.js && minify dist/sw.js --outFile dist/sw.js",
+    "clean": "rm -rf -- dist",
+    "build": "npm run clean && npm run css && npm run js && npm run eleventy && npm run sw && npm run html",
+    "watch": "npm run build && npx eleventy --watch",
+    "debug": "DEBUG=* npx eleventy",
+    "start": "firebase serve --port=9001",
+    "deploy": "firebase deploy",
+    "ci": "npm run lint && npm run build"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^0.5.3",
+    "@11ty/eleventy-plugin-rss": "^1.0.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^1.0.5",
+    "autoprefixer": "^9.1.5",
+    "babel-minify": "^0.5.0",
+    "cssnano": "^4.1.3",
+    "firebase-tools": "^4.2.1",
+    "html-minifier": "^3.5.20",
+    "luxon": "^1.3.3",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.0.2",
+    "markdown-it-footnote": "^3.0.1",
+    "markdownlint-cli": "^0.13.0",
+    "postcss-cli": "^6.0.0",
+    "postcss-custom-properties": "^8.0.5",
+    "workbox-cli": "^3.6.1"
+  }
+}

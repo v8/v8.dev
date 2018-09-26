@@ -1,0 +1,18 @@
+---
+renderData:
+  title: 'Blog posts tagged “{{ tag }}”'
+pagination:
+  data: collections
+  size: 1
+  alias: tag
+  filter:
+    - all
+    - posts
+    - tagList
+permalink: /blog/tags/{{ tag | slug }}/
+layout: layouts/base.njk
+---
+<h1>Blog posts tagged “{{ tag }}”</h1>
+
+{% set posts = collections[ tag ] | reverse %}
+{% include "posts.njk" %}

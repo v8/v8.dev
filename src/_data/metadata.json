@@ -1,0 +1,14 @@
+{
+  "title": "V8",
+  "url": "https://v8.dev/",
+  "feed": {
+    "subtitle": "The V8 JavaScript engine",
+    "filename": "blog.atom",
+    "path": "/blog.atom",
+    "url": "https://v8.dev/blog.atom",
+    "id": "https://v8.dev/"
+  },
+  "author": {
+    "name": "Mathias Bynens"
+  }
+}

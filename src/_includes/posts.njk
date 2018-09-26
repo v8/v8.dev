@@ -1,0 +1,11 @@
+<ol>
+{% for post in posts %}
+  <li>
+    <a href="{{ post.url | url | clean }}">{% if post.data.title %}{{ post.data.title | markdown | safe }}{% else %}<code>{{ post.url }}</code>{% endif %}</a>
+    <time datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate }}</time>
+    {% for tag in post.data.tags %}
+      <a href="/blog/tags/{{ tag | slug }}" class="tag">{{ tag }}</a>
+    {% endfor %}
+  </li>
+{% endfor %}
+</ol>

@@ -1,0 +1,11 @@
+{
+  "default": true,
+  "MD002": { "level": 2 },
+  "MD003": { "style": "atx" },
+  "MD004": { "style": "dash" },
+  "MD007": { "indent": 4 },
+  "MD013": false,
+  "MD026": { "punctuation": ".,;:!" },
+  "MD033": false,
+  "MD040": false
+}

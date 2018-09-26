@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if '/' === page.url %}V8 JavaScript engine{% else %}{{ (renderData.title or title) | markdown | striptags }} · V8{% endif %}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="/_css/main.css">
+    <link rel="manifest" href="/.webmanifest">
+    <meta name="theme-color" content="#4285F4">
+    <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="V8 Atom feed">
+    <script>document.documentElement.className+=' js'</script>
+{% if description %}
+    <meta name="description" content="{{ description }}">
+{% endif %}
+  </head>
+  <body>
+    <header id="header">
+      <h1><a href="/">V8</a></h1>
+      <a href="#navigation-toggle" id="nav-toggle">Show navigation</a>
+      <nav>
+        <ul>
+          <li{% if '/' === page.url %} class="active"{% endif %}><a href="/">Home</a></li>
+          <li{% if '/blog' in page.url %} class="active"{% endif %}><a href="/blog">Blog</a></li>
+          <!--<li{% if '/docs' in page.url %} class="active"{% endif %}><a href="/docs">Docs</a></li>-->
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      {{ content | safe }}
+    </main>
+    <footer id="footer">
+      <nav>
+        <a href="/logo">Branding</a> ·
+        <a href="/terms">Terms</a> ·
+        <a href="https://policies.google.com/privacy">Privacy</a> ·
+        <a href="https://twitter.com/v8js" rel="me nofollow">Twitter</a>
+      </nav>
+      <p><small>Except as otherwise noted, any code samples from the V8 project are licensed under <a href="https://chromium.googlesource.com/v8/v8.git/+/master/LICENSE">V8’s BSD-style license</a>. Other content on this page is licensed under <a href="https://creativecommons.org/licenses/by/3.0/">the Creative Commons Attribution 3.0 License</a>. For details, see <a href="/terms#site-policies">our site policies</a>.</small></p>
+    </footer>
+    <script type="module" src="/_js/main.mjs"></script>
+    <script nomodule src="/_js/legacy.js"></script>
+  </body>
+</html>

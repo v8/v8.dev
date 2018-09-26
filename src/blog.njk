@@ -1,0 +1,10 @@
+---
+permalink: /blog/
+title: Blog
+navtitle: Archive
+layout: layouts/base.njk
+---
+<h1>Blog post archive</h1>
+
+{% set posts = collections.posts %}
+{% include "posts.njk" %}

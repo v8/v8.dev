@@ -1,0 +1,74 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [],
+    "redirects": [
+      {
+        "source": "/@",
+        "destination": "https://twitter.com/v8js",
+        "type": 301
+      },
+      {
+        "source": "/git",
+        "destination": "https://chromium.googlesource.com/v8/v8.git",
+        "type": 301
+      },
+      {
+        "source": "/bug",
+        "destination": "https://bugs.chromium.org/p/v8/issues/entry",
+        "type": 301
+      },
+      {
+        "source": "/bugs",
+        "destination": "https://bugs.chromium.org/p/v8/issues/list",
+        "type": 301
+      }
+    ],
+    "headers": [
+      {
+        "source": "/sw.js",
+        "headers": [{
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }]
+      },
+      {
+        "source": "**/*.@(js|mjs)",
+        "headers": [{
+          "key": "Content-Type",
+          "value": "text/javascript;charset=utf-8"
+        }]
+      },
+      {
+        "source": "/blog.atom",
+        "headers": [{
+          "key": "Content-Type",
+          "value": "application/atom+xml;charset=utf-8"
+        }]
+      },
+      {
+        "source": "/sitemap.xml",
+        "headers": [{
+          "key": "Content-Type",
+          "value": "application/xml;charset=utf-8"
+        }]
+      },
+      {
+        "source": "**/*.@(mjs|js|css)",
+        "headers": [{
+          "key": "Cache-Control",
+          "value": "max-age=31557600"
+        }]
+      },
+      {
+        "source": "**/*.@(jpg|gif|png|svg|ico|webmanifest)",
+        "headers": [{
+          "key": "Cache-Control",
+          "value": "max-age=31557600"
+        }]
+      }
+    ],
+    "trailingSlash": false,
+    "cleanUrls": true
+  }
+}

@@ -1,0 +1,25 @@
+---
+title: 'Experimental support for WebAssembly in V8'
+author: 'Seth Thompson, WebAssembly Wrangler'
+date: 2016-03-15 13:33:37
+tags:
+  - WebAssembly
+---
+_For a comprehensive overview of WebAssembly and a roadmap for future community collaboration, see [A WebAssembly Milestone](https://hacks.mozilla.org/2016/03/a-webassembly-milestone/) on the Mozilla Hacks blog._
+
+Since June 2015, collaborators from Google, Mozilla, Microsoft, Apple and the [W3C WebAssembly Community Group](https://www.w3.org/community/webassembly/participants) have been hard at work [designing](https://github.com/WebAssembly/design), [specifying](https://github.com/WebAssembly/spec), and implementing ([1](https://www.chromestatus.com/features/5453022515691520), [2](https://platform-status.mozilla.org/#web-assembly), [3](https://github.com/Microsoft/ChakraCore/wiki/Roadmap), [4](https://webkit.org/status/#specification-webassembly)) WebAssembly, a new runtime and compilation target for the web. [WebAssembly](https://webassembly.github.io/) is a low-level, portable bytecode that is designed to be encoded in a compact binary format and executed at near-native speed in a memory-safe sandbox. As an evolution of existing technologies, WebAssembly is tightly integrated with the web platform, as well as faster to download over the network and faster to instantiate than [asm.js](http://asmjs.org/), a low-level subset of JavaScript.
+
+Starting today, experimental support for WebAssembly is available in V8 and Chromium behind a flag. To try it out in V8, run `d8` version 5.1.117 or greater from the command line with the `--expose_wasm` flag or turn on the Experimental WebAssembly feature under `chrome://flags#enable-webassembly` in Chrome Canary 51.0.2677.0 or greater. After restarting the browser, a new `Wasm` object will be available from the JavaScript context which exposes an API that can instantiate and run WebAssembly modules. **Thanks to the efforts of collaborators at Mozilla and Microsoft, two compatible implementations of WebAssembly are also running behind a flag in [Firefox Nightly](https://hacks.mozilla.org/2016/03/a-webassembly-milestone) and in an internal build of [Microsoft Edge](http://blogs.windows.com/msedgedev/2016/03/15/previewing-webassembly-experiments) (demonstrated in a video screencapture).**
+
+The WebAssembly project website has a [demo](https://webassembly.github.io/demo/) showcasing the runtime’s usage in a 3D game. In browsers that support WebAssembly, the demo page will load and instantiate a wasm module that uses WebGL and other web platform APIs to render an interactive game. In other browsers, the demo page falls back to an asm.js version of the same game.
+
+<figure>
+  <img src="/_img/webassembly-experimental/tanks.jpg" alt="">
+  <figcaption><a href="https://webassembly.github.io/demo/">WebAssembly demo</a></figcaption>
+</figure>
+
+Under the hood, the WebAssembly implementation in V8 is designed to reuse much of the existing JavaScript virtual machine infrastructure, specifically the [TurboFan compiler](/blog/turbofan-jit). A specialized WebAssembly decoder validates modules by checking types, local variable indices, function references, return values, and control flow structure in a single pass. The decoder produces a TurboFan graph which is processed by various optimization passes and finally turned into machine code by the same backend which generates machine code for optimized JavaScript and asm.js. In the next few months, the team will concentrate on improving the startup time of the V8 implementation through compiler tuning, parallelism, and compilation policy improvements.
+
+Two upcoming changes will also significantly improve the developer experience. A standard textual representation of WebAssembly will enable developers to view the source of a WebAssembly binary like any other web script or resource. In addition, the current placeholder `Wasm` object will be redesigned to provide a more powerful, idiomatic set of methods and properties to instantiate and introspect WebAssembly modules from JavaScript.
+
+The V8 / WebAssembly team looks forward to continued collaboration with other browser vendors and the greater community as we work towards a stable release of the runtime. We’re also planning [future](https://github.com/WebAssembly/design/blob/master/PostMVP.md) WebAssembly features (including [multi-threading](https://github.com/WebAssembly/design/blob/master/PostMVP.md#threads), [dynamic linking](https://github.com/WebAssembly/design/blob/master/DynamicLinking.md), and [GC / first-class DOM integration](https://github.com/WebAssembly/design/blob/master/GC.md)) and continuing the development of toolchains for compiling C, C++, and other languages via the [WebAssembly LLVM backend](http://llvm.org/docs/doxygen/html/WebAssembly_8h.html) and [Emscripten](https://github.com/kripken/emscripten/wiki/WebAssembly). Check back for more updates as the design and implementation process continues.
