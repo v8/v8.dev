@@ -1,6 +1,8 @@
 ---
 title: 'V8 extras'
-author: 'Domenic Denicola, Streams Sorcerer'
+author: 'Domenic Denicola ([@domenic](https://twitter.com/domenic)), Streams Sorcerer'
+avatars:
+  - 'domenic-denicola'
 date: 2016-02-04 13:33:37
 tags:
   - internals
