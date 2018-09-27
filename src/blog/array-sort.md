@@ -46,6 +46,7 @@ array.push({
 // Sort without a comparison function.
 array.sort();
 ```
+
 ### More fun with accessors and prototype-chain interactions
 
 This is the part where we leave the spec behind and venture into “implementation-defined” behavior land. The spec has a whole list of conditions that, when met, allow the engine to sort the object/array as it sees fit or not at all. Engines still have to follow some ground rules but everything else is pretty much up in the air. This has both advantages and some drawbacks. On one hand, this frees engines up to do as they like, which makes it easier for engine developers. On the other hand users expect some reasonable behavior even though the spec doesn’t require there to be any. This is further complicated by the fact that “reasonable behavior” is not always straightforward to determine.
