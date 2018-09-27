@@ -53,7 +53,7 @@ This is the part where we leave the spec behind and venture into “implementati
 
 This section is intended to show multiple things. First, we highly (!) recommend not writing code like this; engines won’t optimize for it. Second, there are still some parts of JavaScript left where engine behavior differs greatly. Third, these are hard edge cases and as mentioned above it is not always clear what “the right thing to do” actually is.
 
-The first example simply shows an array with some accessors (i.e. getters and setters) and a “call log” of the different engines. Accessors are the first case where the resulting sort-order is implementation-defined:
+The first example shows an array with some accessors (i.e. getters and setters) and a “call log” of the different engines. Accessors are the first case where the resulting sort order is implementation-defined:
 
 ```js
 const array = [0, 1, 2];
