@@ -1,11 +1,12 @@
 ---
 title: 'Getting things sorted out in V8'
 author: 'Simon Zünd ([@nimODota](https://twitter.com/nimODota)), consistent comparator'
+avatars:
+  - simon-zuend
 date: 2018-09-28 11:20:37
 tags:
   - ECMAScript
-avatars:
-  - simon-zuend
+  - internals
 description: 'Starting with V8 v7.0 / Chrome 70, Array.prototype.sort is stable.'
 ---
 `Array.prototype.sort` was among the last builtins implemented in self-hosted JavaScript in V8. Porting it offered us the opportunity to experiment with different algorithms and implementation strategies and finally [make it stable](https://mathiasbynens.be/demo/sort-stability).
@@ -72,13 +73,13 @@ array.sort();
 Here’s the output of that snippet in various engines. Note that there are no “right” or “wrong” answers here — the spec leaves this up to the implementation!
 
 ```
-#### Chakra
+// Chakra
 get 0
 get 1
 set 0
 set 1
 
-#### JavaScriptCore
+// JavaScriptCore
 get 0
 get 1
 get 0
@@ -88,7 +89,7 @@ get 1
 set 0
 set 1
 
-#### V8
+// V8
 get 0
 get 0
 get 1
@@ -103,52 +104,53 @@ set 0
 set 1
 ```
 
-The next example shows interactions with the prototype chain, for the sake of brevity we don’t show the call log:
+The next example shows interactions with the prototype chain. For the sake of brevity we don’t show the call log.
 
 ```js
-let object = {
- 1:"d1",
- 2:"c1",
- 3:"b1",
+const object = {
+ 1: 'd1',
+ 2: 'c1',
+ 3: 'b1',
  4: undefined,
  __proto__: {
    length: 10000,
-   1: "e2",
-   10: "a2",
-   100: "b2",
-   1000: "c2",
+   1: 'e2',
+   10: 'a2',
+   100: 'b2',
+   1000: 'c2',
    2000: undefined,
-   8000: "d2",
-   12000: "XX",
+   8000: 'd2',
+   12000: 'XX',
    __proto__: {
-     0: "e3",
-     1: "d3",
-     2: "c3",
-     3: "b3",
-     4: "f3",
-     5: "a3",
+     0: 'e3',
+     1: 'd3',
+     2: 'c3',
+     3: 'b3',
+     4: 'f3',
+     5: 'a3',
      6: undefined,
-   }
- }
+   },
+ },
 };
 Array.prototype.sort.call(object);
 ```
 
-The output shows the `object` after it is sorted. Again, there is no right answer here and just serves to show how weird the interaction between indexed properties and the prototype chain can get:
+The output shows the `object` after it is sorted. Again, there is no right answer here. This example just shows how weird the interaction between indexed properties and the prototype chain can get:
 
-```
-#### Chakra
+```js
+// Chakra
 [a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
 
-#### V8
-[a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
-
-#### JavaScriptCore
+// JavaScriptCore
 [a2, a2, a3, b1, b2, b2, c1, c2, d1, d2, e3, undefined]
 
-#### SpiderMonkey
+// V8
+[a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
+
+// SpiderMonkey
 [a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
 ```
+
 ### What V8 does before actually sorting
 
 V8 has two pre-processing steps before it actually sorts anything. First, if the object to sort has holes and elements on the prototype chain, they are copied from the prototype chain to the object itself. This frees us from caring about the prototype chain during all remaining steps. This is currently only done for non-`JSArray`s but other engines do it for `JSArray`s as well.
@@ -171,14 +173,14 @@ The second pre-processing step is the removal of holes. All elements in the sort
 
 Choosing a suitable pivot element has a big impact when it comes to Quicksort. V8 employed two strategies:
 
-* The pivot was chosen as the median of the first, last and a third element of the sub-array that gets sorted. For smaller arrays that third element is simply the middle element.
-* For larger arrays a sample was taken, then sorted and the median of the sorted sample served as the third element in the above calculation.
+- The pivot was chosen as the median of the first, last and a third element of the sub-array that gets sorted. For smaller arrays that third element is simply the middle element.
+- For larger arrays a sample was taken, then sorted and the median of the sorted sample served as the third element in the above calculation.
 
 One of the advantages of Quicksort is that it sorts in-place. The memory overhead comes from allocating a small array for the sample when sorting large arrays, and log(n) stack space. The downside is that it’s not a stable algorithm and there’s a chance the algorithm hits the worst-case scenario where QuickSort degrades to O(n^2).
 
 ### Introducing V8 Torque
 
-As an avid reader of the V8 blog you might have heard of [`CodeStubAssembler`](https://v8.dev/blog/csa) or CSA for short. CSA is a V8 component that allows us to write low-level TurboFan IR directly in C++ that later gets translated to machine code for the appropriate architecture using TurboFan’s backend.
+As an avid reader of the V8 blog you might have heard of [`CodeStubAssembler`](/blog/csa) or CSA for short. CSA is a V8 component that allows us to write low-level TurboFan IR directly in C++ that later gets translated to machine code for the appropriate architecture using TurboFan’s backend.
 
 CSA is heavily utilized to write so-called “fast-paths” for JavaScript builtins. A fast-path version of a builtin usually checks whether certain invariants hold (e.g. no elements on the prototype chain, no accessors, etc) and then uses faster, more specific operations to implement the builtin functionality. This can result in execution times that are an order of magnitude faster than a more generic version.
 
@@ -186,7 +188,7 @@ The downside of CSA is that it really can be considered an assembly language. Co
 
 Enter V8 Torque. Torque is a domain-specific language with TypeScript-like syntax that currently uses CSA as its sole compilation target. Torque allows nearly the same level of control as CSA does while at the same time offering higher-level constructs such as `while` and `for` loops. Additionally, it’s strongly typed and will in the future contain security checks such as automatic out-of-bound checks providing V8 engineers with stronger guarantees.
 
-The first major builtins that were re-written in V8 Torque were [`TypedArray#sort`](https://v8.dev/blog/v8-release-68) and [`Dataview` operations](https://v8.dev/blog/dataview). Both served the additional purpose of providing feedback to the Torque developers on what languages features are needed and idioms should be used to write builtins efficiently. At the time of writing, several `JSArray` builtins had their self-hosted JavaScript fall-back implementations moved to Torque (e.g. `Array#unshift`) while others were completely re-written (e.g. `Array#splice` and `Array#reverse`).
+The first major builtins that were re-written in V8 Torque were [`TypedArray#sort`](/blog/v8-release-68) and [`Dataview` operations](/blog/dataview). Both served the additional purpose of providing feedback to the Torque developers on what languages features are needed and idioms should be used to write builtins efficiently. At the time of writing, several `JSArray` builtins had their self-hosted JavaScript fall-back implementations moved to Torque (e.g. `Array#unshift`) while others were completely re-written (e.g. `Array#splice` and `Array#reverse`).
 
 ### Moving `Array#sort` to Torque
 
@@ -198,17 +200,17 @@ This worked reasonably well, but as it still utilized Quicksort, `Array#sort` re
 
 Timsort, initially developed by Tim Peters for Python in 2002, could best be described as an adaptive stable Mergesort variant. Even though the details are rather complex and are best described by [the man himself](https://github.com/python/cpython/blob/master/Objects/listsort.txt) or the [Wikipedia page](https://en.wikipedia.org/wiki/Timsort), the basics are easy to understand. While Mergesort usually works in recursive fashion, Timsort works iteratively. It processes an array from left to right and looks for so-called _runs_. A run is simply a sequence that is already sorted. This includes sequences that are sorted “the wrong way” as these sequences can simply be reversed to form a run. At the start of the sorting process a minimum run length is determined that depends on the length of the input. If Timsort can’t find natural runs of this minimum run length a run is “boosted artificially” using Insertion Sort.
 
-Runs that are found this way are tracked using a stack that remembers a starting index and a length of each run. From time to time runs on the stack are merged together until only one sorted run remains. Timsort tries to maintain a balance when it comes to deciding which runs to merge. On the one hand you want to try and merge early as the data of those runs has a high chance of already being in the cache, on the other hand you want to merge as late as possible to take advantage of patterns in the data that might emerge. To accomplish this, Timsort maintains two invariants. Assuming A, B, and C are the three top-most runs:
+Runs that are found this way are tracked using a stack that remembers a starting index and a length of each run. From time to time runs on the stack are merged together until only one sorted run remains. Timsort tries to maintain a balance when it comes to deciding which runs to merge. On the one hand you want to try and merge early as the data of those runs has a high chance of already being in the cache, on the other hand you want to merge as late as possible to take advantage of patterns in the data that might emerge. To accomplish this, Timsort maintains two invariants. Assuming `A`, `B`, and `C` are the three top-most runs:
 
-* `|C| > |B| + |A|`
-* `|B| > |A|`
+- `|C| > |B| + |A|`
+- `|B| > |A|`
 
 <figure>
   <img src="/_img/array-sort/runs-stack.svg" alt="">
-  <figcaption>Runs stack before and after merging A with B</figcaption>
+  <figcaption>Runs stack before and after merging <code>A</code> with <code>B</code></figcaption>
 </figure>
 
-The image shows the case where |A| > |B| so B is merged with the smaller of the two runs.
+The image shows the case where `|A| > |B|` so `B` is merged with the smaller of the two runs.
 
 Note that Timsort only merges consecutive runs, this is needed to maintain stability, otherwise equal elements would be transferred between runs. Also the first invariant makes sure that run lengths grow at least as fast as the Fibonacci numbers, giving an upper bound on the size of the run stack when we know the maximum array length.
 
@@ -217,7 +219,7 @@ One can now see that already-sorted sequences are sorted in O(n) as such an arra
 ### Implementing Timsort in Torque
 
 Builtins usually have different code-paths that are chosen during runtime depending on various variables. The most generic version can handle any kind of object, regardless if its a `JSProxy`, has interceptors or needs to do prototype chain lookups when retrieving or setting properties.
-The generic path is rather slow in most cases, as it needs to account for all eventualities. But if we know upfront that the object to sort is a simple `JSArray` containing only Smis, all these expensive `[[Get]]` and `[[Set]]` operations can be replaced by simple Loads and Stores to a `FixedArray`. The main differentiator is the [`ElementsKind`](https://v8.dev/blog/elements-kinds).
+The generic path is rather slow in most cases, as it needs to account for all eventualities. But if we know upfront that the object to sort is a simple `JSArray` containing only Smis, all these expensive `[[Get]]` and `[[Set]]` operations can be replaced by simple Loads and Stores to a `FixedArray`. The main differentiator is the [`ElementsKind`](/blog/elements-kinds).
 
 The problem now becomes how to implement a fast-path. The core algorithm stays the same for all but the way we access elements changes based on the `ElementsKind`. One way we could accomplish this is to dispatch to the correct “accessor” on each call-site. Imagine a switch for each “load”/”store” operation where we choose a different branch based on the chosen fast-path.
 
@@ -225,7 +227,7 @@ Another solution (and this was the first approach tried) is to just copy the who
 
 The final solution is slightly different. Each load/store operation for each fast-path is put into its own “mini-builtin”. See the code example which shows the “load” operation for `FixedDoubleArray`s.
 
-```
+```js
 Load<FastDoubleElements>(
     context: Context, sortState: FixedArray, elements: HeapObject,
     index: Smi): Object {
@@ -246,7 +248,7 @@ Load<FastDoubleElements>(
 
 To compare, the most generic “load” operation is simply a call to `GetProperty`. <explain the “expensiveness” of GetProperty>
 
-```
+```js
 builtin Load<ElementsAccessor : type>(
     context: Context, sortState: FixedArray, elements: HeapObject,
     index: Smi): Object {
@@ -254,7 +256,7 @@ builtin Load<ElementsAccessor : type>(
 }
 ```
 
-A fast-path then simply becomes a set of function pointers. This means we only need one copy of the core algorithm while setting up all relevant function pointers once upfront. While this greatly reduces the needed code space (down to 20k) it comes at the cost of an indirect branch at each access site. This is even exacerbated by the recent change to use [Embedded builtins](https://v8.dev/blog/embedded-builtins).
+A fast-path then simply becomes a set of function pointers. This means we only need one copy of the core algorithm while setting up all relevant function pointers once upfront. While this greatly reduces the needed code space (down to 20k) it comes at the cost of an indirect branch at each access site. This is even exacerbated by the recent change to use [Embedded builtins](/blog/embedded-builtins).
 
 ### Sort state
 
@@ -272,7 +274,7 @@ The rest of the fields (with the exception of the fast path ID) are Timsort-spec
 
 ### Discussing performance trade-offs
 
-Moving sorting from self-hosted JavaScript to Torque comes with performance trade-offs. As `Array#sort` is written in Torque, it is now a statically compiled piece of code, meaning we still can build fast-paths for certain [`ElementsKind`s](https://v8.dev/blog/elements-kinds) but it will never be as fast as a highly optimized TurboFan version that can utilize type feedback. On the other hand, in cases where the code doesn’t get hot enough to warrant JIT compilation or the call-site is megamorphic, we are stuck with the interpreter or a slow/generic version. The parsing, compiling and possible optimizing of the self-hosted JavaScript version is also an overhead that is not needed with the Torque implementation.
+Moving sorting from self-hosted JavaScript to Torque comes with performance trade-offs. As `Array#sort` is written in Torque, it is now a statically compiled piece of code, meaning we still can build fast-paths for certain [`ElementsKind`s](/blog/elements-kinds) but it will never be as fast as a highly optimized TurboFan version that can utilize type feedback. On the other hand, in cases where the code doesn’t get hot enough to warrant JIT compilation or the call-site is megamorphic, we are stuck with the interpreter or a slow/generic version. The parsing, compiling and possible optimizing of the self-hosted JavaScript version is also an overhead that is not needed with the Torque implementation.
 
 While the Torque approach doesn’t result in the same peak performance for sorting, it does avoid performance cliffs. The result is a sorting performance that is much more predictable than it previously was. Keep in mind that Torque is very much in flux and in addition of targeting CSA it might target TurboFan in the future, allowing JIT compilation of code written in Torque.
 
