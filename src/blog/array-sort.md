@@ -307,7 +307,7 @@ The chai benchmark spends *a third* of its time inside a single comparison funct
 
 ### Memory impact
 
-Analyzing V8 heap snapshots while browsing some 50 sites (both on Mobile as well as Desktop), didn’t show any memory regressions or improvements. On the one hand, this is surprising. The switch from Quicksort to Timsort introduced the need for a temporary array for merging runs, which can grow much larger than the temporary arrays used for sampling. On the other hand, these temporary arrays are very short lived (only for the duration of the `sort` call) and can be allocated and discarded rather quickly in V8s new space.
+Analyzing V8 heap snapshots while browsing some 50 sites (both on mobile as well as on desktop) didn’t show any memory regressions or improvements. On the one hand, this is surprising: the switch from Quicksort to Timsort introduced the need for a temporary array for merging runs, which can grow much larger than the temporary arrays used for sampling. On the other hand, these temporary arrays are very short-lived (only for the duration of the `sort` call) and can be allocated and discarded rather quickly in V8’s new space.
 
 ## Conclusion
 
