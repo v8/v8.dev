@@ -12,7 +12,6 @@
 // limitations under the License.
 
 const oldToNew = new Map([
-  ['https://v8project.blogspot.com/2018/09/array-sort.html', 'https://v8.dev/blog/array-sort'],
   ['https://v8project.blogspot.com/2018/09/dataview.html', 'https://v8.dev/blog/dataview'],
   ['https://v8project.blogspot.com/2018/09/10-years.html', 'https://v8.dev/blog/10-years'],
   ['https://v8project.blogspot.com/2018/08/liftoff.html', 'https://v8.dev/blog/liftoff'],
