@@ -15,9 +15,9 @@ description: 'Starting with V8 v7.0 / Chrome 70, Array.prototype.sort is stable.
 
 Sorting in JavaScript is hard. This blog post looks at some of the quirks in the interaction between a sorting algorithm and the JavaScript language, and describes our journey to move V8 to a stable algorithm and make performance more predictable.
 
-When comparing different sorting algorithms we look at their worst and average performance given as a bound on the asymptotic growth (i.e. “Big O” notation) of either memory operations or number of comparisons. It is important to note that in dynamic languages, such as JavaScript, a comparison operation is usually a magnitude more expensive than a memory access. This is due to the fact that comparing two values while sorting usually involves calls to user code.
+When comparing different sorting algorithms we look at their worst and average performance given as a bound on the asymptotic growth (i.e. “Big O” notation) of either memory operations or number of comparisons. Note that in dynamic languages, such as JavaScript, a comparison operation is usually a magnitude more expensive than a memory access. This is due to the fact that comparing two values while sorting usually involves calls to user code.
 
-Let’s take a look at a simple example of sorting some numbers into ascending order based on a user-provided comparison function. A _consistent_ comparison function returns `-1` (or any other negative value), `0`, or `1` (or any other positive value) when the two provided values are either smaller, equal, or greater respectively. Comparison functions that do not follow this pattern are _inconsistent_ and can have arbitrary side-effects, such as modifying the array it is intended to sort.
+Let’s take a look at a simple example of sorting some numbers into ascending order based on a user-provided comparison function. A _consistent_ comparison function returns `-1` (or any other negative value), `0`, or `1` (or any other positive value) when the two provided values are either smaller, equal, or greater respectively. A comparison function that does not follow this pattern is _inconsistent_ and can have arbitrary side-effects, such as modifying the array it’s intended to sort.
 
 ```js
 const array = [4, 2, 5, 3, 1];
@@ -51,7 +51,7 @@ array.sort();
 
 This is the part where we leave the spec behind and venture into “implementation-defined” behavior land. The spec has a whole list of conditions that, when met, allow the engine to sort the object/array as it sees fit or not at all. Engines still have to follow some ground rules but everything else is pretty much up in the air. This has both advantages and some drawbacks. On one hand, this frees engines up to do as they like, which makes it easier for engine developers. On the other hand users expect some reasonable behavior even though the spec doesn’t require there to be any. This is further complicated by the fact that “reasonable behavior” is not always straightforward to determine.
 
-This section is intended to show multiple things. First, we highly (!) recommend not writing code like this; engines won’t optimize for it. Second, there are still some parts of JavaScript left where engine behavior differs greatly. Third, these are hard edge cases and as mentioned above it is not always clear what “the right thing to do” actually is.
+This section is intended to show multiple things. First, we highly (!) recommend not writing code like this; engines won’t optimize for it. Second, there are still some parts of JavaScript left where engine behavior differs greatly. Third, these are hard edge cases and as mentioned above it’s not always clear what “the right thing to do” actually is.
 
 The first example shows an array with some accessors (i.e. getters and setters) and a “call log” of the different engines. Accessors are the first case where the resulting sort order is implementation-defined:
 
@@ -136,7 +136,7 @@ const object = {
 Array.prototype.sort.call(object);
 ```
 
-The output shows the `object` after it is sorted. Again, there is no right answer here. This example just shows how weird the interaction between indexed properties and the prototype chain can get:
+The output shows the `object` after it’s sorted. Again, there is no right answer here. This example just shows how weird the interaction between indexed properties and the prototype chain can get:
 
 ```js
 // Chakra
@@ -195,7 +195,7 @@ The first major builtins that were re-written in V8 Torque were [`TypedArray#sor
 
 The initial `Array#sort` Torque version was more or less a straight up port of the JavaScript implementation. The only difference was that instead of using a sampling approach for larger arrays, the third element for the pivot calculation was chosen at random.
 
-This worked reasonably well, but as it still utilized Quicksort, `Array#sort` remained unstable. [The request for a stable `Array#sort`](https://bugs.chromium.org/p/v8/issues/detail?id=90) is among the oldest tickets in V8’s bug tracker. Experimenting with Timsort as a next step offered us multiple things. First, we like that it is stable and offers some nice algorithmic guarantees (see next section). Second, Torque was still a work-in-progress and implementing a more complex builtin such as `Array#sort` with Timsort resulted in lots of actionable feedback influencing Torque as a language.
+This worked reasonably well, but as it still utilized Quicksort, `Array#sort` remained unstable. [The request for a stable `Array#sort`](https://bugs.chromium.org/p/v8/issues/detail?id=90) is among the oldest tickets in V8’s bug tracker. Experimenting with Timsort as a next step offered us multiple things. First, we like that it’s stable and offers some nice algorithmic guarantees (see next section). Second, Torque was still a work-in-progress and implementing a more complex builtin such as `Array#sort` with Timsort resulted in lots of actionable feedback influencing Torque as a language.
 
 ## Timsort
 
@@ -224,7 +224,7 @@ The generic path is rather slow in most cases, as it needs to account for all ev
 
 The problem now becomes how to implement a fast-path. The core algorithm stays the same for all but the way we access elements changes based on the `ElementsKind`. One way we could accomplish this is to dispatch to the correct “accessor” on each call-site. Imagine a switch for each “load”/”store” operation where we choose a different branch based on the chosen fast-path.
 
-Another solution (and this was the first approach tried) is to just copy the whole builtin once for each fast-path and inline the correct load/store access method. This approach turned out to be infeasible for Timsort as it is a big builtin and making a copy for each fast-path turned out to require 106 KB in total, which is way too much for a single builtin.
+Another solution (and this was the first approach tried) is to just copy the whole builtin once for each fast-path and inline the correct load/store access method. This approach turned out to be infeasible for Timsort as it’s a big builtin and making a copy for each fast-path turned out to require 106 KB in total, which is way too much for a single builtin.
 
 The final solution is slightly different. Each load/store operation for each fast-path is put into its own “mini-builtin”. See the code example which shows the “load” operation for `FixedDoubleArray`s.
 
@@ -265,7 +265,7 @@ A fast-path then simply becomes a set of function pointers. This means we only n
   <img src="/_img/array-sort/sort-state.svg" alt="">
 </figure>
 
-The picture above shows the “sort state”. It is a `FixedArray` that keeps track of all the things needed while sorting. Each time `Array#sort` is called, such a sort state is allocated. Entry 4 to 7 are the set of function pointers discussed above that comprise a fast-path.
+The picture above shows the “sort state”. It’s a `FixedArray` that keeps track of all the things needed while sorting. Each time `Array#sort` is called, such a sort state is allocated. Entry 4 to 7 are the set of function pointers discussed above that comprise a fast-path.
 
 The “check” builtin is used every time we return from user JavaScript code, to check if we can continue on the current fast-path. It uses the “initial receiver map” and “initial receiver length” for this.  Should the user code have modified the current object, we simply abandon the sorting run, reset all pointers to their most generic version and restart the sorting process. The “bailout status” in slot 8 is used to signal this reset.
 
@@ -275,7 +275,7 @@ The rest of the fields (with the exception of the fast path ID) are Timsort-spec
 
 ### Discussing performance trade-offs
 
-Moving sorting from self-hosted JavaScript to Torque comes with performance trade-offs. As `Array#sort` is written in Torque, it is now a statically compiled piece of code, meaning we still can build fast-paths for certain [`ElementsKind`s](/blog/elements-kinds) but it will never be as fast as a highly optimized TurboFan version that can utilize type feedback. On the other hand, in cases where the code doesn’t get hot enough to warrant JIT compilation or the call-site is megamorphic, we are stuck with the interpreter or a slow/generic version. The parsing, compiling and possible optimizing of the self-hosted JavaScript version is also an overhead that is not needed with the Torque implementation.
+Moving sorting from self-hosted JavaScript to Torque comes with performance trade-offs. As `Array#sort` is written in Torque, it’s now a statically compiled piece of code, meaning we still can build fast-paths for certain [`ElementsKind`s](/blog/elements-kinds) but it will never be as fast as a highly optimized TurboFan version that can utilize type feedback. On the other hand, in cases where the code doesn’t get hot enough to warrant JIT compilation or the call-site is megamorphic, we are stuck with the interpreter or a slow/generic version. The parsing, compiling and possible optimizing of the self-hosted JavaScript version is also an overhead that is not needed with the Torque implementation.
 
 While the Torque approach doesn’t result in the same peak performance for sorting, it does avoid performance cliffs. The result is a sorting performance that is much more predictable than it previously was. Keep in mind that Torque is very much in flux and in addition of targeting CSA it might target TurboFan in the future, allowing JIT compilation of code written in Torque.
 
