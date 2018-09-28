@@ -1,5 +1,5 @@
 ---
-title: 'Getting things sorted out in V8'
+title: 'Getting things sorted in V8'
 author: 'Simon Zünd ([@nimODota](https://twitter.com/nimODota)), consistent comparator'
 avatars:
   - simon-zuend
@@ -258,7 +258,7 @@ builtin Load<ElementsAccessor : type>(
 }
 ```
 
-A fast-path then simply becomes a set of function pointers. This means we only need one copy of the core algorithm while setting up all relevant function pointers once upfront. While this greatly reduces the needed code space (down to 20k) it comes at the cost of an indirect branch at each access site. This is even exacerbated by the recent change to use [Embedded builtins](/blog/embedded-builtins).
+A fast-path then simply becomes a set of function pointers. This means we only need one copy of the core algorithm while setting up all relevant function pointers once upfront. While this greatly reduces the needed code space (down to 20k) it comes at the cost of an indirect branch at each access site. This is even exacerbated by the recent change to use [embedded builtins](/blog/embedded-builtins).
 
 ### Sort state
 
