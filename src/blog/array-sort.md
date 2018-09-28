@@ -229,7 +229,7 @@ Another solution (and this was the first approach tried) is to just copy the who
 
 The final solution is slightly different. Each load/store operation for each fast-path is put into its own “mini-builtin”. See the code example which shows the “load” operation for `FixedDoubleArray`s.
 
-```js
+```torque
 Load<FastDoubleElements>(
     context: Context, sortState: FixedArray, elements: HeapObject,
     index: Smi): Object {

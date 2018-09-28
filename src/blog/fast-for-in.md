@@ -258,17 +258,17 @@ var o = {
 };
 Object.defineProperty(o, 'b', {});
 
-for (var k in o) print(k);
+for (var k in o) console.log(k);
 ```
 
 Output:
 
 ```
- "a"
- "b"
+a
+b
 ```
 
-Perhaps counterintuitively this should just print out 'a' instead of 'a' and 'b'. If you recall the spec text at the beginning of this post, steps G and J imply that non-enumerable properties on the receiver shadow properties on the prototype chain.
+Perhaps counterintuitively this should just print out `a` instead of `a` and `b`. If you recall the spec text at the beginning of this post, steps G and J imply that non-enumerable properties on the receiver shadow properties on the prototype chain.
 
 To make things more complicated, ES6 introduced the [proxy](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object. This broke a lot of assumptions of the V8 code. To implement for-in in a spec-compliant manner, we have to trigger the following 5 out of a total of 13 different proxy traps.
 

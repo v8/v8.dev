@@ -98,7 +98,7 @@ In order to make it easier for developers to contribute to the optimized JavaScr
 
 Rewriting the `DataView` code was an excellent opportunity to start using Torque for new code, and helped provide the Torque developers with a lot of feedback about the language. This is what the `DataView`’s `getUint32()` method looks like, written in Torque:
 
-```js
+```torque
 macro LoadDataViewUint32(buffer: JSArrayBuffer, offset: intptr,
                     requested_little_endian: bool,
                     signed: constexpr bool): Number {

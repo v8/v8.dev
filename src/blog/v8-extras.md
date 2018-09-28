@@ -56,7 +56,7 @@ You might be curious about where these objects come from. All three of them are 
 
 Finally, to tell V8 that we’ll be compiling in an extra, we add a line to our project’s gypfile:
 
-```
+```js
 'v8_extra_library_files': ['./Vec2.js']
 ```
 
