@@ -248,7 +248,7 @@ Load<FastDoubleElements>(
 }
 ```
 
-To compare, the most generic “load” operation is simply a call to `GetProperty`. <explain the “expensiveness” of GetProperty>
+To compare, the most generic “load” operation is simply a call to `GetProperty`. But while the above version generates efficient and fast machine code to load and convert a `Number`, `GetProperty` is a call to another builtin that could potentially involve a prototype chain lookup or invoking an accessor function.
 
 ```js
 builtin Load<ElementsAccessor : type>(
