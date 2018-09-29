@@ -50,11 +50,11 @@ array.sort();
 
 ### More fun with accessors and prototype-chain interactions
 
-This is the part where we leave the spec behind and venture into “implementation-defined” behavior land. The spec has a whole list of conditions that, when met, allow the engine to sort the object/array as it sees fit or not at all. Engines still have to follow some ground rules but everything else is pretty much up in the air. This has both advantages and some drawbacks. On one hand, this frees engines up to do as they like, which makes it easier for engine developers. On the other hand users expect some reasonable behavior even though the spec doesn’t require there to be any. This is further complicated by the fact that “reasonable behavior” is not always straightforward to determine.
+This is the part where we leave the spec behind and venture into “implementation-defined” behavior land. The spec has a whole list of conditions that, when met, allow the engine to sort the object/array as it sees fit — or not at all. Engines still have to follow some ground rules but everything else is pretty much up in the air. On the one hand, this gives engine developers the freedom to experiment with different implementations. On the other hand, users expect some reasonable behavior even though the spec doesn’t require there to be any. This is further complicated by the fact that “reasonable behavior” is not always straightforward to determine.
 
-This section is intended to show multiple things. First, we highly (!) recommend not writing code like this; engines won’t optimize for it. Second, there are still some parts of JavaScript left where engine behavior differs greatly. Third, these are hard edge cases and as mentioned above it’s not always clear what “the right thing to do” actually is.
+This section shows that there are still some aspects of `Array#sort` where engine behavior differs greatly. These are hard edge cases, and as mentioned above it’s not always clear what “the right thing to do” actually is. We _highly_ recommend not writing code like this; engines won’t optimize for it.
 
-The first example shows an array with some accessors (i.e. getters and setters) and a “call log” of the different engines. Accessors are the first case where the resulting sort order is implementation-defined:
+The first example shows an array with some accessors (i.e. getters and setters) and a “call log” in different JavaScript engines. Accessors are the first case where the resulting sort order is implementation-defined:
 
 ```js
 const array = [0, 1, 2];
@@ -141,16 +141,16 @@ The output shows the `object` after it’s sorted. Again, there is no right answ
 
 ```js
 // Chakra
-[a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
+['a2', 'a3', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 'e3', undefined, undefined, undefined]
 
 // JavaScriptCore
-[a2, a2, a3, b1, b2, b2, c1, c2, d1, d2, e3, undefined]
+['a2', 'a2', 'a3', 'b1', 'b2', 'b2', 'c1', 'c2', 'd1', 'd2', 'e3', undefined]
 
 // V8
-[a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
+['a2', 'a3', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 'e3', undefined, undefined, undefined]
 
 // SpiderMonkey
-[a2, a3, b1, b2, c1, c2, d1, d2, e3, undefined, undefined, undefined]
+['a2', 'a3', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 'e3', undefined, undefined, undefined]
 ```
 
 ### What V8 does before actually sorting
