@@ -14,10 +14,14 @@
 module.exports = {
   globDirectory: 'dist/',
   globPatterns: [
-    'index.html',
     '**/*.{css,mjs}',
     '_img/v8-outline.svg',
   ],
   swDest: 'dist/sw.js',
   swSrc: 'src/sw.js',
+  templatedUrls: {
+    '/': [
+      'index.html',
+    ],
+  },
 };
