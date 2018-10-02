@@ -1,6 +1,6 @@
 # v8.dev [![Build status](https://travis-ci.com/v8/v8.dev.svg?branch=master)](https://travis-ci.com/v8/v8.dev)
 
-This repository hosts the source code of [v8.dev, the official website of the V8 project](https://v8.dev/).
+This repository hosts the source code of [v8.dev, the official website of the V8 project](https://v8.dev/). True dat!
 
 ## Local setup
 
