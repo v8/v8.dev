@@ -6,6 +6,10 @@ layout: layouts/base.njk
 
 By using the official V8 website (the “Service”), you agree to be bound by our Google Terms of Services located at <https://www.google.com/accounts/TOS> as well as these additional terms. Google may change these terms from time to time and post any modified terms at <https://v8.dev/terms>. You understand and agree that if you use the Service after the date on which these terms have changed, Google treats your use as acceptance of the updated terms.
 
+## Code of conduct
+
+As part of the Chromium team, the V8 team is committed to preserving and fostering a diverse, welcoming community. To this end, the [Chromium Code of Conduct](https://chromium.googlesource.com/chromium/src/+/master/CODE_OF_CONDUCT.md) applies to our website, repositories, organizations, mailing lists, and any other Chromium-supported communication groups, as well as any private communication initiated in the context of these spaces.
+
 ## Site policies
 
 We are pleased to license much of the documentation on the official V8 website under terms that explicitly encourage people to take, modify, reuse, re-purpose, and remix our work as they see fit.
