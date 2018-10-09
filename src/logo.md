@@ -30,6 +30,12 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
     <figcaption>Logo for Ignition, V8’s interpreter</figcaption>
   </figure>
 </a>
+<a href="/_img/v8-ignition-outline.svg" class="logo-download" download>
+  <figure>
+    <img src="/_img/v8-ignition-outline.svg" width="256" height="256" alt="">
+    <figcaption>Logo for Ignition with a white outline, for use on dark backgrounds</figcaption>
+  </figure>
+</a>
 
 ## TurboFan
 
@@ -37,6 +43,12 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   <figure>
     <img src="/_img/v8-turbofan.svg" width="256" height="256" alt="">
     <figcaption>Logo for TurboFan, V8’s optimizing compiler</figcaption>
+  </figure>
+</a>
+<a href="/_img/v8-turbofan-outline.svg" class="logo-download" download>
+  <figure>
+    <img src="/_img/v8-turbofan-outline.svg" width="256" height="256" alt="">
+    <figcaption>Logo for TurboFan with a white outline, for use on dark backgrounds</figcaption>
   </figure>
 </a>
 
@@ -48,6 +60,12 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
     <figcaption>Logo for Liftoff, V8’s baseline compiler for WebAssembly</figcaption>
   </figure>
 </a>
+<a href="/_img/v8-liftoff-outline.svg" class="logo-download" download>
+  <figure>
+    <img src="/_img/v8-liftoff-outline.svg" width="256" height="256" alt="">
+    <figcaption>Logo for Liftoff with a white outline, for use on dark backgrounds</figcaption>
+  </figure>
+</a>
 
 ## Orinoco
 
@@ -55,5 +73,11 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   <figure>
     <img src="/_img/v8-orinoco.svg" width="256" height="256" alt="">
     <figcaption>Logo for Orinoco, V8’s garbage collector</figcaption>
+  </figure>
+</a>
+<a href="/_img/v8-orinoco-outline.svg" class="logo-download" download>
+  <figure>
+    <img src="/_img/v8-orinoco-outline.svg" width="256" height="256" alt="">
+    <figcaption>Logo for Orinoco with a white outline, for use on dark backgrounds</figcaption>
   </figure>
 </a>
