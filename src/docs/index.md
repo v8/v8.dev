@@ -17,9 +17,9 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
 
 ## Documentation overview
 
-- [Building from source (start here)](Building-from-Source)
+- [Building V8 from source](/docs/build)
     - [Checking out the V8 source code](/docs/source-code)
-    - [Building with GN](Building-with-GN)
+    - [Building with GN](build-gn)
     - [Cross-compiling for ARM](Cross-compiling-for-ARM)
     - [GUI and IDE access](GUI-and-IDE-access)
 - [Contributing](Contributing)
