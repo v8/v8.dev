@@ -18,8 +18,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
 ## Documentation overview
 
 - [Building from source (start here)](Building-from-Source)
-    - [Checking out source](Checking-out-source)
-    - [Using Git](Using-Git)
+    - [Checking out the V8 source code](/docs/source-code)
     - [Building with GN](Building-with-GN)
     - [Cross-compiling for ARM](Cross-compiling-for-ARM)
     - [GUI and IDE access](GUI-and-IDE-access)
@@ -34,7 +33,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Flake bisect](Flake-bisect)
     - [Handling of ports](Handling-of-Ports)
     - [How to change V8’s public API](How-to-change-V8-public-API)
-    - [Merging & patching](Merging-&-Patching)
+    - [Merging & patching](/docs/merging-patching)
     - [Node.js integration build](What-to-do-if-your-CL-broke-the-Node.js-integration-build)
     - [Release process](Release-Process)
     - [Reporting security bugs](Reporting-security-bugs)
@@ -52,7 +51,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
 - Embedding V8
     - [Getting started with embedding V8](Getting-Started-with-Embedding)
     - [Example code](Example-code)
-    - [Embedder’s guide](Embedder's-Guide)
+    - [Embedder’s guide](Embedder's-Guide) <!-- TODO: how is this different from the getting started guide? -->
     - [Version numbers](Version-numbers)
     - [Built-in functions](Built-in-functions)
     - [i18n support](i18n-support)
@@ -62,7 +61,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [TurboFan](/docs/turbofan)
     - [CodeStubAssembler built-ins](/docs/csa-builtins)
 - Writing optimizable JavaScript
-    - [V8 internal profiler](/docs/profiler)
+    - [Using V8’s sample-based profiler](/docs/profiler)
     - [Using Linux `perf` with V8](/docs/linux-perf)
     - [Profiling Chromium with V8](/docs/profiling-chromium)
     - [Tracing V8](/docs/tracing)
