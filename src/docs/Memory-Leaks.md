@@ -1,6 +1,7 @@
-_**(from Ulan's email)**_
-
-If you're investigating a memory leak and wonder why an object is not garbage collected, you can now use `%DebugTrackRetainingPath(object)` to print the actual retaining path of the object on each GC.
+---
+title: 'Investigating memory leaks'
+---
+If you’re investigating a memory leak and wonder why an object is not garbage-collected, you can use `%DebugTrackRetainingPath(object)` to print the actual retaining path of the object on each GC.
 
 This requires `--allow-natives-syntax --track-retaining-path` run-time flags and works both in release and debug modes. More info in the CL description.
 
@@ -8,17 +9,17 @@ Consider the following `test.js`:
 
 ```js
 function foo() {
-  let x = { bar: "bar"};
+  const x = { bar: "bar"};
   %DebugTrackRetainingPath(x);
   return () => { return x; }
 }
-let closure = foo();
+const closure = foo();
 gc();
 ```
 
 Example (use debug mode or `v8_enable_object_print = true` for much more verbose output):
 
-```
+```bash
 $ out/x64.release/d8 --allow-natives-syntax --track-retaining-path --expose-gc test.js
 #################################################
 Retaining path for 0x245c59f0c1a1:
@@ -46,5 +47,6 @@ Root: (Isolate)
 -------------------------------------------------
 ```
 
-# Debugger Support
-While in a debugger session (e.g. gdb/lldb), and assuming you passed the above flags to the process (i.e. `--allow-natives-syntax --track-retaining-path`), you may be able to `print isolate->heap()->PrintRetainingPath(HeapObject*)` on an object of interest.
+## Debugger Support
+
+While in a debugger session (e.g. `gdb`/`lldb`), and assuming you passed the above flags to the process (i.e. `--allow-natives-syntax --track-retaining-path`), you may be able to `print isolate->heap()->PrintRetainingPath(HeapObject*)` on an object of interest.
