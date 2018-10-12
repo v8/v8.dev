@@ -107,7 +107,7 @@ const oldToNew = new Map([
   ['https://github.com/v8/v8/wiki/Feature-Launch-Process', 'https://v8.dev/docs/feature-launch-process'],
   ['https://github.com/v8/v8/wiki/Merging-&-Patching', 'https://v8.dev/docs/merge-patch'],
   ['https://github.com/v8/v8/wiki/Triaging-issues', 'https://v8.dev/docs/triage-issues'],
-  ['https://github.com/v8/v8/wiki/Cpp-style-guide', 'https://v8.devhttps://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md'],
+  ['https://github.com/v8/v8/wiki/Cpp-style-guide', 'https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md'],
   ['https://github.com/v8/v8/wiki/Becoming-a-committer', 'https://v8.dev/docs/become-committer'],
   ['https://github.com/v8/v8/wiki/Handling-of-Ports', 'https://v8.dev/docs/ports'],
   ['https://github.com/v8/v8/wiki/Reporting-security-bugs', 'https://v8.dev/docs/security-bugs'],
