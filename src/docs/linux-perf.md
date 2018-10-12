@@ -42,7 +42,7 @@ ninja -C out.gn/x64.release
 
 Alternatively, you create a new clean build configuration with only the single build flag set to enable `perf` support:
 
-```
+```bash
 cd <path_to_your_v8_checkout>
 tools/dev/v8gen.py x64.release
 echo 'enable_profiling = true' >> out.gn/x64.release/args.gn
@@ -53,7 +53,7 @@ ninja -C out.gn/x64.release
 
 Once you have the right kernel, perf tool and build of V8, you can add the `--perf-prof` to the V8 command-line to record performance samples in JIT code. Here’s an example that records samples from a test JavaScript file:
 
-```
+```bash
 cd <path_to_your_v8_checkout>
 echo '(function f() { var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s; })();' > test.js
 <path_to_kernel_checkout>/tip/tools/perf/perf record -k mono out.gn/x64.release/d8 --perf-prof test.js

@@ -1,8 +1,6 @@
 ---
 title: 'Cross-compiling for ARM'
 ---
-## Cross-compiling with GN
-
 First, make sure you can [build with GN](/docs/build-gn).
 
 Then, add android to your `.gclient` configuration file.
@@ -88,7 +86,7 @@ The following script installs in `/opt/codesourcery`:
 
 sudo mkdir /opt/codesourcery
 cd /opt/codesourcery
-sudo chown $USERNAME .
+sudo chown "$USERNAME" .
 chmod g+ws .
 umask 2
 wget http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2

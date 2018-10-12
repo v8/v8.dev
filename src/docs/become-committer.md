@@ -32,7 +32,7 @@ In the worst case, this can drag out for two weeks. Keep writing patches! Even i
 
 ### Setting up push access to the repository
 
-When you are accepted as a committer make sure to [set up push access to the repo](https://github.com/v8/v8/wiki/Using%20Git#prerequisites).
+When you are accepted as a committer make sure to [set up push access to the repo](/docs/source-code#committing).
 
 ## Maintaining committer status
 

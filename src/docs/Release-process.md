@@ -41,7 +41,7 @@ They are based on a Canary branch.
 
 ## Stable releases
 
-Roughly every 6 weeks a new major Stable release is done. No special branch is created as the latest Beta branch is simply promoted to Stable. This version is pushed to the users via [Chrome's Stable channel](https://www.google.com/chrome/browser/desktop/index.html?platform=win64).
+Roughly every 6 weeks a new major Stable release is done. No special branch is created as the latest Beta branch is simply promoted to Stable. This version is pushed to the users via [Chrome’s Stable channel](https://www.google.com/chrome/browser/desktop/index.html?platform=win64).
 
 Branches for a Stable release normally look like this:
 
@@ -61,4 +61,4 @@ As soon as a new branch is promoted to Stable, we stop maintaining the previous 
 
 Example: The current stable Chrome release is [44.0.2403.125](https://omahaproxy.appspot.com), with V8 v4.4.63.25. So you should embed [branch-heads/4.4](https://chromium.googlesource.com/v8/v8.git/+/branch-heads/4.4). And you should update to branch-heads/4.5 when Chrome 45 is released on the Stable channel.
 
-**Related:** [Which V8 version should I use?](https://github.com/v8/v8/wiki/Version-numbers#which-v8-version-should-i-use)
+**Related:** [Which V8 version should I use?](/docs/version-numbers#which-v8-version-should-i-use%3F)

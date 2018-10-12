@@ -6,12 +6,12 @@ title: 'Using `d8` on Android'
 - a Linux/Mac workstation
 - V8 r12178 (on Google Code) or later
 - an Android emulator or device with matching USB cable
-- make sure [building with GYP](https://github.com/v8/v8/wiki/Building%20with%20Gyp) works
+- make sure building with GYP works
 - Mac-only: [download the NDK](http://developer.android.com/ndk/downloads/index.html) and note the path where it is installed.
 
 ## Get the code
 
-- Use the instructions from [Using Git](TODO) to get the code.
+- First, [check out the V8 source code](/docs/source-code).
 - Add the Android dependencies:
 
     ```bash
@@ -122,7 +122,7 @@ Unless V8 was compiled with `i18nsupport=off` option the program must also link 
 
 ## Compile SpiderMonkey for Lollipop
 
-```
+```bash
 cd firefox/js/src
 autoconf2.13
 ./configure \

@@ -1,7 +1,7 @@
 ---
 title: 'GUI and IDE setup'
 ---
-The V8 source code can be browsed online with [Chromium Codesearch](https://cs.chromium.org/chromium/src/v8/).
+The V8 source code can be browsed online with [Chromium Code Search](https://cs.chromium.org/chromium/src/v8/).
 
 This project’s Git repository may be accessed using many other client programs and plug-ins. See your client’s documentation for more information.
 
@@ -15,33 +15,33 @@ VSCode and cquery provide good code navigation capabilities. It offers “go to 
 
 ### Install VSCode
 
-Install VSCode in your preferred way. We will assume that you can run VSCode from the command line via the command `code`.
+Install VSCode in your preferred way. The rest of this guide assumes that you can run VSCode from the command line via the command `code`.
 
 ### Install cquery
 
 Clone cquery from [cquery](https://github.com/cquery-project/cquery) in a directory of your choice. We use `CQUERY_DIR="$HOME/cquery"` in this guide.
 
 ```bash
-git clone https://github.com/cquery-project/cquery $CQUERY_DIR
-cd $CQUERY_DIR
+git clone https://github.com/cquery-project/cquery "$CQUERY_DIR"
+cd "$CQUERY_DIR"
 git submodule update --init
 ./waf configure build
 ```
 
-If anything goes wrong, be sure to check out [cquery's getting started guide](https://github.com/cquery-project/cquery/wiki/Getting-started).
+If anything goes wrong, be sure to check out [cquery’s getting started guide](https://github.com/cquery-project/cquery/wiki/Getting-started).
 
 You can use `git pull && git submodule update` to update cquery at a later time (don't forget to rebuild via `./waf configure build`).
 
 ### Install and configure cquery-plugin for VSCode
 
-Install the cquery extension from the marketplace in VSCode. Open VSCode in your v8 checkout
+Install the cquery extension from the marketplace in VSCode. Open VSCode in your V8 checkout:
 
 ```bash
 cd v8
 code .
 ```
 
-Go to settings in VSCode, for example, via the shortcut <CTRL+,>.
+Go to settings in VSCode, for example, via the shortcut <kbd>Ctrl</kbd> + <kbd>,</kbd>.
 
 Add the following to your workspace configuration, replacing `YOURUSERNAME` and `YOURV8CHECKOUTDIR` appropriately.
 
@@ -66,7 +66,7 @@ This needs to be re-executed from time to time to teach cquery about new source 
 
 ### Other useful settings
 
-The auto-closing of parenthesis in VisualStudioCode does not work that well. It can be disabled with
+The auto-closing of parenthesis in Visual Studio Code does not work that well. It can be disabled with
 
 ```json
 "editor.autoClosingBrackets": false
@@ -74,14 +74,14 @@ The auto-closing of parenthesis in VisualStudioCode does not work that well. It 
 
 in the user settings.
 
-The following exclusion masks help avoid unwanted results when using search (CTRL+SHIFT+F):
+The following exclusion masks help avoid unwanted results when using search (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>):
 
 ```js
-    "files.exclude": {
-        "**/.vscode": true,  // this is a default value
-    },
-    "search.exclude": {
-        "**/out*": true,     // this is a default value
-        "**/build*": true    // this is a default value
-    },
+"files.exclude": {
+  "**/.vscode": true,  // this is a default value
+},
+"search.exclude": {
+  "**/out*": true,     // this is a default value
+  "**/build*": true    // this is a default value
+},
 ```

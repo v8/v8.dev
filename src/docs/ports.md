@@ -1,7 +1,7 @@
 ---
 title: 'Handling of ports'
 ---
-This article describes how ports should be handled.
+This document describes how ports should be handled.
 
 ## MIPS
 

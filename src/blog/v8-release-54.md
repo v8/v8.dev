@@ -33,4 +33,4 @@ Our [internal startup test suite](https://www.youtube.com/watch?v=xCx4uC7mn6Y) t
 
 Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document is regularly updated a few weeks after each major release.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using%20Git) can use `git checkout -b 5.4 -t branch-heads/5.4` to experiment with the new features in V8 v5.4. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using%20Git) can use `git checkout -b 5.4 -t branch-heads/5.4` to experiment with the new features in V8 v5.4. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
