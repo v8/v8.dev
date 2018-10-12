@@ -1,5 +1,5 @@
 ---
-title: 'GUI and IDE access'
+title: 'GUI and IDE setup'
 ---
 The V8 source code can be browsed online with [Chromium Codesearch](https://cs.chromium.org/chromium/src/v8/).
 

@@ -5,7 +5,7 @@ Technically, committers are people who have write access to the V8 Git repositor
 
 This privilege is granted with some expectation of responsibility: committers are people who care about the V8 project and want to help meet its goals. Committers are not just people who can make changes, but people who have demonstrated their ability to collaborate with the team, get the most knowledgeable people to review code, contribute high-quality code, and follow through to fix issues (in code or tests).
 
-A committer is a contributor to the V8 project’s success and a citizen helping the projects succeed. See [Committer’s Responsibility](https://github.com/v8/v8/wiki/Committer's-responsibility).
+A committer is a contributor to the V8 project’s success and a citizen helping the projects succeed. See [Committer’s Responsibility](/docs/committer-responsibility).
 
 ## How do I become a committer?
 
