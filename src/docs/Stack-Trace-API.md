@@ -69,6 +69,7 @@ For efficiency stack traces are not formatted when they are captured but on dema
 ```js
 Error.prepareStackTrace(error, structuredStackTrace)
 ```
+
 and using whatever this call returns as the value of the `stack` property. If you assign a different function value to `Error.prepareStackTrace` that function is used to format stack traces. It gets passed the error object that it is preparing a stack trace for, as well as a structured representation of the stack. User stack trace formatters are free to format the stack trace however they want and even return non-string values. It is safe to retain references to the structured stack trace object after a call to `prepareStackTrace` completes so that it is also a valid return value. Note that the custom `prepareStackTrace` function is only called once the stack property of `Error` object is accessed.
 
 The structured stack trace is an array of `CallSite` objects, each of which represents a stack frame. A `CallSite` object defines the following methods

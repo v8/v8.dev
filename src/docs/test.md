@@ -104,7 +104,7 @@ ninja -C out.gn/x64.release generate-bytecode-expectations
 out.gn/x64.release/generate-bytecode-expectations --rebaseline
 ```
 
-The updated goldens are now available in ` test/cctest/interpreter/bytecode_expectations/`.
+The updated goldens are now available in `test/cctest/interpreter/bytecode_expectations/`.
 
 ## Adding a new bytecode expectations test
 

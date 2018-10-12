@@ -1,9 +1,7 @@
 ---
 title: 'Responsibilities of V8 committers and reviewers'
 ---
-## Commit guidelines
-
-When you’re committing to the V8 repositories, ensure that you follow those guidelines (adapted from <https://dev.chromium.org/developers/committers-responsibility>):
+When you’re committing to the V8 repositories, ensure that you follow these guidelines (adapted from <https://dev.chromium.org/developers/committers-responsibility>):
 
 1. Find the right reviewer for your changes and for patches you’re asked to review.
 1. Be available on IM and/or email before and after you land the change.

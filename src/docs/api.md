@@ -1,6 +1,8 @@
 ---
 title: 'V8’s public API'
 ---
+This document discusses the stability of V8’s public API, and how developers can make changes to it.
+
 ## API stability
 
 If V8 in a Chromium canary turns out to be crashy, it gets rolled back to the V8 version of the previous canary. It is therefore important to keep V8’s API compatible from one canary version to the next.

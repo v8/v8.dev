@@ -1,6 +1,8 @@
 ---
 title: 'Triaging issues'
 ---
+This document explains how to deal with issues in [V8’s bug tracker](https://v8.dev/bugs).
+
 ## How to get an issue triaged
 
 - *V8 tracker*: Set the state to `Untriaged`

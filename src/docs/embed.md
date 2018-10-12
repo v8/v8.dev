@@ -11,7 +11,8 @@ This document is intended for C++ programmers who want to embed the V8 JavaScrip
 
 Let's look at a [Hello World example](https://chromium.googlesource.com/v8/v8/+/branch-heads/6.8/samples/hello-world.cc) that takes a JavaScript statement as a string argument, executes it as JavaScript code, and prints the result to standard out.
 
-First, some key concepts you will need:
+First, some key concepts:
+
 - An isolate is a VM instance with its own heap.
 - A local handle is a pointer to an object. All V8 objects are accessed using handles. They are necessary because of the way the V8 garbage collector works.
 - A handle scope can be thought of as a container for any number of handles. When you've finished with your handles, instead of deleting each one individually you can simply delete their scope.

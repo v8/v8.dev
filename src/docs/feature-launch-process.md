@@ -10,6 +10,7 @@ We strive to be responsible stewards of JavaScript language, balancing interoper
 ### Compatibility risk
 
 Factors that reduce compatibility risk include:
+
 - **Acceptance at TC39 committee**. TC39 is a primary steward of JavaScript language. We track progress of language features through [the TC39 process](https://tc39.github.io/process-document/) and consider features that reach higher stages more stable and ready for implementation. The V8 team is actively involved in the TC39 committee and champions new features when appropriate.
 - **Interest from other browser vendors**. Implementations in other browsers are a clear signal of feature usefulness. In order of strength, this includes:
     1. compatible implementation in more than one engine
@@ -47,7 +48,7 @@ Anyone who wants to implement a feature in V8 must contact [v8-users@googlegroup
 
 - Clarify the feature status with regard to the criteria in the guidelines on this page (TC39 acceptance, interest from browser vendors, testing plans) in an “intent to implement” email.
 - Provide a design doc to clarify V8 code base impact.
-- The implementation should also consider DevTools support. Refer to the [_debugger support checklist for new language features_](https://docs.google.com/document/d/1_DBgJ9eowJJwZYtY6HdiyrizzWzwXVkG5Kt8s3TccYE/edit?usp=sharing) for more details.
+- The implementation should also consider DevTools support. Refer to the [_debugger support checklist for new language features_](https://docs.google.com/document/d/1_DBgJ9eowJJwZYtY6HdiyrizzWzwXVkG5Kt8s3TccYE/edit) for more details.
 - Implement the feature under a `--harmony-X` flag.
 - Develop conformance and performance tests in parallel.
 

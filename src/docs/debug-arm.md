@@ -24,13 +24,13 @@ make arm.debug
 There are different ways of starting the debugger:
 
 ```bash
-$ out/arm.debug/d8 --stop_sim_at <n>
+out/arm.debug/d8 --stop_sim_at <n>
 ```
 
 The simulator will start the debugger after executing `n` instructions.
 
 ```bash
-$ out/arm.debug/d8 --stop_at <function name>
+out/arm.debug/d8 --stop_at <function name>
 ```
 
 The simulator will stop at the given JavaScript function.
@@ -174,14 +174,14 @@ Information can be printed for all (watched) stops which were hit at least once.
 ```
 sim> stop info all
 Stop information:
-stop 123 - 0x7b: 	Enabled, 	counter = 1, 	My stop.
+stop 123 - 0x7b:      Enabled,      counter = 1,      My stop.
 sim> cont
 Simulator hit My second stop
   0xb5355a04  e1a00000       mov r1, r1
 sim> stop info all
 Stop information:
-stop 1 - 0x1: 	Enabled, 	counter = 1, 	My second stop
-stop 123 - 0x7b: 	Enabled, 	counter = 1, 	My stop.
+stop 1 - 0x1:         Enabled,      counter = 1,      My second stop
+stop 123 - 0x7b:      Enabled,      counter = 1,      My stop.
 ```
 
 Stops can be disabled or enabled. (Only available for watched stops.)
@@ -196,8 +196,8 @@ Simulator hit My stop.
   0xb5356c28  e1a00000       mov r0, r0
 sim> stop info all
 Stop information:
-stop 1 - 0x1: 	Disabled, 	counter = 2, 	My second stop
-stop 123 - 0x7b: 	Enabled, 	counter = 3, 	My stop.
+stop 1 - 0x1:         Disabled,     counter = 2,      My second stop
+stop 123 - 0x7b:      Enabled,      counter = 3,      My stop.
 sim> stop enable 1
 sim> cont
 Simulator hit My second stop

@@ -1,7 +1,7 @@
 ---
 title: 'Checking out the V8 source code'
 ---
-## Quick links
+This document explains how to check out the V8 source code locally. If you just want to browse the source online, use these links:
 
 - [browse](https://chromium.googlesource.com/v8/v8/)
 - [browse bleeding edge](https://chromium.googlesource.com/v8/v8/+/master)
@@ -110,7 +110,7 @@ This section is only useful for V8 project members.
 
 1. Try the CL by sending a try job to the try bots like this:
 
-    ```
+    ```bash
     git cl try
     ```
 
@@ -136,7 +136,7 @@ git cl try --revision=1234
 
 ### Useful arguments
 
-The revision argument tells the try bot what revision of the code base is used for applying your local changes to. Without the revision, our LKGR revision is used as the base (https://v8-status.appspot.com/lkgr).
+The revision argument tells the try bot what revision of the code base is used for applying your local changes to. Without the revision, [V8’s LKGR revision](https://v8-status.appspot.com/lkgr) is used as the base.
 
 ```bash
 git cl try --revision=1234

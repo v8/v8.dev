@@ -1,13 +1,15 @@
 ---
 title: 'Using `d8` on Android'
 ---
+This document explains how to run [`d8`](/docs/d8) on Android.
+
 ## Prerequisites
 
 - a Linux/Mac workstation
 - V8 r12178 (on Google Code) or later
 - an Android emulator or device with matching USB cable
 - make sure building with GYP works
-- Mac-only: [download the NDK](http://developer.android.com/ndk/downloads/index.html) and note the path where it is installed.
+- Mac-only: [download the NDK](https://developer.android.com/ndk/downloads/) and note the path where it is installed.
 
 ## Get the code
 
@@ -25,11 +27,10 @@ title: 'Using `d8` on Android'
     make android_arm.release -j16 android_ndk_root=[full path to ndk]
     ```
 
-
 ## Get the Android SDK
 
 - tested version: `r15`
-- download the SDK from http://developer.android.com/sdk/index.html
+- download the SDK from <https://developer.android.com/studio/>
 - extract it
 - install the “Platform tools” using the SDK manager that you can start by running `tools/android`
 - now you have a `platform_tools/adb` binary which will be used later; put it in your `PATH` or remember where it is
@@ -84,7 +85,6 @@ adb shell /data/local/tmp/v8/d8 <parameters>
 ```
 
 - warning: when you cancel such an `adb shell whatever` command using Ctrl+C, the process on the phone sometimes keeps running.
-
 
 ## Profile
 

@@ -167,7 +167,7 @@ Let’s use that profiler to examine the [Mandelbrot explorer demo](https://web.
 But what if you want the code to run faster on all browsers? You should first **understand what keeps your CPU busy**. Run Chrome (Windows and Linux [Canary](https://tools.google.com/dlpage/chromesxs)) with the following command line switches, which causes it to output profiler tick information (in the `v8.log` file) for the URL you specify, which in our case was a local version of the Mandelbrot demo without web workers:
 
 ```bash
-$ ./chrome --js-flags='--prof' --no-sandbox 'http://localhost:8080/'
+./chrome --js-flags='--prof' --no-sandbox 'http://localhost:8080/'
 ```
 
 When preparing the test case, make sure it begins its work immediately upon load, and simply close Chrome when the computation is done (hit Alt+F4), so that you only have the ticks you care about in the log file. Also note that web workers aren’t yet profiled correctly with this technique.
@@ -175,7 +175,7 @@ When preparing the test case, make sure it begins its work immediately upon load
 Then, process the `v8.log` file with the tick-processor script that ships with V8 (or the new practical web version):
 
 ```bash
-$ v8/tools/linux-tick-processor v8.log
+v8/tools/linux-tick-processor v8.log
 ```
 
 Here’s an interesting snippet of the processed output that should catch your attention:

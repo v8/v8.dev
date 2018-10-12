@@ -71,6 +71,7 @@ If one of the builders is not green after handling your patch, revert the merge 
 In case you need to patch a Canary/Dev version (which should not happen often), follow these instructions:
 
 ### Step 1: Merge to roll branch
+
 Example version used is `5.7.433`.
 
 ```bash
@@ -82,9 +83,9 @@ tools/release/roll_merge.py --branch 5.7.433 af3cf11
 Example Chromium branch used is `2978`:
 
 ```bash
-$ git checkout chromium/2978
-$ git merge 5.7.433.1
-$ git push
+git checkout chromium/2978
+git merge 5.7.433.1
+git push
 ```
 
 ### Step 3: The end
