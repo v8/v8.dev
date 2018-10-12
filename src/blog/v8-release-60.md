@@ -5,7 +5,7 @@ date: 2017-06-09 13:33:37
 tags:
   - release
 ---
-Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release%20Process). Each version is branched from V8’s git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.0), which will be in beta until it is released in coordination with Chrome 60 Stable in several weeks. V8 6.0 is filled with all sorts of developer-facing goodies. We’d like to give you a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.0), which will be in beta until it is released in coordination with Chrome 60 Stable in several weeks. V8 6.0 is filled with all sorts of developer-facing goodies. We’d like to give you a preview of some of the highlights in anticipation of the release.
 
 ## SharedArrayBuffers
 
@@ -48,4 +48,4 @@ V8 v6.0 continues to improve performance of ES2015 features. This release contai
 
 Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document is regularly updated a few weeks after each major release.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using%20Git) can use `git checkout -b 6.0 -t branch-heads/6.0` to experiment with the new features in V8 6.0. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 6.0 -t branch-heads/6.0` to experiment with the new features in V8 6.0. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

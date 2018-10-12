@@ -5,11 +5,11 @@ date: 2016-12-02 13:33:37
 tags:
   - release
 ---
-Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release%20Process). Each version is branched from V8’s git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.6](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.6), which will be in beta until it is released in coordination with Chrome 56 Stable in several weeks. V8 5.6 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.6](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.6), which will be in beta until it is released in coordination with Chrome 56 Stable in several weeks. V8 5.6 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release.
 
 ## Ignition and TurboFan pipeline for ES.next (and more) shipped
 
-Starting with 5.6, V8 can optimize the entirety of the JavaScript language. Moreover, many language features are sent through a new optimization pipeline in V8. This pipeline uses V8’s [Ignition interpreter](/blog/ignition-interpreter) as a baseline and optimizes frequently executed methods with V8’s more powerful [TurboFan optimizing compiler](https://github.com/v8/v8/wiki/TurboFan). The new pipeline activates for new language features (e.g. many of the new features from the ES2015 and ES2016 specifications) or whenever Crankshaft ([V8’s “classic” optimizing compiler](https://blog.chromium.org/2010/12/new-crankshaft-for-v8.html)) cannot optimize a method (e.g. try-catch, with).
+Starting with 5.6, V8 can optimize the entirety of the JavaScript language. Moreover, many language features are sent through a new optimization pipeline in V8. This pipeline uses V8’s [Ignition interpreter](/blog/ignition-interpreter) as a baseline and optimizes frequently executed methods with V8’s more powerful [TurboFan optimizing compiler](/docs/turbofan). The new pipeline activates for new language features (e.g. many of the new features from the ES2015 and ES2016 specifications) or whenever Crankshaft ([V8’s “classic” optimizing compiler](https://blog.chromium.org/2010/12/new-crankshaft-for-v8.html)) cannot optimize a method (e.g. try-catch, with).
 
 Why are we only routing some JavaScript language features through the new pipeline? The new pipeline is better-suited to optimizing the whole spectrum of the JS language (past and present). It's a healthier, more modern codebase, and it has been designed specifically for real-world use cases including running V8 on low-memory devices.
 
@@ -90,4 +90,4 @@ Chromium 56 (which includes V8 v5.6) is going to ship the WebAssembly browser pr
 
 Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document is regularly updated a few weeks after each major release.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using%20Git) can use `git checkout -b 5.6 -t branch-heads/5.6` to experiment with the new features in V8 v5.6. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 5.6 -t branch-heads/5.6` to experiment with the new features in V8 v5.6. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

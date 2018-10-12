@@ -5,7 +5,7 @@ date: 2016-06-04 13:33:37
 tags:
   - release
 ---
-Roughly every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release%20Process). Each version is branched from V8’s git master immediately before Chrome branches for a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.2](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.2), which will be in beta until it is released in coordination with Chrome 52 Stable. V8 5.2 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release in several weeks.
+Roughly every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s git master immediately before Chrome branches for a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.2](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.2), which will be in beta until it is released in coordination with Chrome 52 Stable. V8 5.2 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release in several weeks.
 
 ## ES2015 & ES2016 support
 

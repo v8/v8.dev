@@ -6,11 +6,11 @@ tags:
   - release
 tweet: '959174292406640640'
 ---
-Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release-Process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.5](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.5), which is in beta until its release in coordination with Chrome 65 Stable in several weeks. V8 v6.5 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.5](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.5), which is in beta until its release in coordination with Chrome 65 Stable in several weeks. V8 v6.5 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## Untrusted code mode
 
-In response to the latest speculative side-channel attack called Spectre, V8 introduced an [untrusted code mode](https://github.com/v8/v8/wiki/Untrusted-code-mitigations). If you embed V8, consider leveraging this mode in case your application processes user-generated, not-trustworthy code. Please note that the mode is enabled by default, including in Chrome.
+In response to the latest speculative side-channel attack called Spectre, V8 introduced an [untrusted code mode](/docs/untrusted-code-mitigations). If you embed V8, consider leveraging this mode in case your application processes user-generated, not-trustworthy code. Please note that the mode is enabled by default, including in Chrome.
 
 ## Streaming compilation for WebAssembly code
 
@@ -61,4 +61,4 @@ The following image shows the improvement delta compared to V8 v6.4 in our inlin
 
 Please use `git log branch-heads/6.4..branch-heads/6.5 include/v8.h` to get a list of the API changes.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using%20Git) can use `git checkout -b 6.5 -t branch-heads/6.5` to experiment with the new features in V8 v6.5. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 6.5 -t branch-heads/6.5` to experiment with the new features in V8 v6.5. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
