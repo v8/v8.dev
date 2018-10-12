@@ -216,8 +216,10 @@ exp(x) ≈ 1 / ( 1 - x + x * x / 2) for -4 < x < 0
 
 Tweaking the algorithm this way boosts the performance by an extra 30% compared to latest Canary and 5× to the system library based `Math.exp()` on Chrome Canary.
 
-![](images/mandelbrot_chrome_speed.png)
+<figure>
+  <img src="/_img/docs/profile/mandelbrot.png" alt="">
+</figure>
 
 This example shows how V8’s internal profiler can help you go deeper into understanding your code bottlenecks, and that a smarter algorithm can push performance even further.
 
-To compare VM performances that represents today’s complex and demanding web applications, one might also want to consider a more comprehensive set of benchmarks such as the [Octane Javascript Benchmark Suite](https://chromium.github.io/octane/).
+To compare VM performances that represents today’s complex and demanding web applications, one might also want to consider a more comprehensive set of benchmarks such as the [Octane JavaScript Benchmark Suite](https://chromium.github.io/octane/).

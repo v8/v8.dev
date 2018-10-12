@@ -58,7 +58,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [TurboFan](/docs/turbofan)
     - [CodeStubAssembler built-ins](/docs/csa-builtins)
 - Writing optimizable JavaScript
-    - [Using V8’s sample-based profiler](/docs/profiler)
-    - [Using Linux `perf` with V8](/docs/linux-perf)
+    - [Using V8’s sample-based profiler](/docs/profile)
     - [Profiling Chromium with V8](/docs/profile-chromium)
+    - [Using Linux `perf` with V8](/docs/linux-perf)
     - [Tracing V8](/docs/trace)

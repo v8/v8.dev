@@ -30,7 +30,9 @@ The trace config format is compatible with the one of Chrome Tracing, however, w
 
 To get Runtime Call Statistics (<abbr>RCS</abbr>), please record the trace with the following two categories enabled: `v8` and `disabled-by-default-v8.runtime_stats`. Each top-level V8 trace event contains the runtime statistics for the period of that event. By selecting any of those events in `trace-viewer`, the runtime stats table are displayed in the lower panel. Selecting multiple events create a merged view.
 
-![](images/runtimestats_traceviewer.png)
+<figure>
+  <img src="/_img/docs/trace/runtime-stats.png" alt="">
+</figure>
 
 ## Enabling GC Object Statistics in tracing
 
@@ -42,4 +44,6 @@ To get the GC Object Statistics in tracing, you need to collect a trace with `di
 
 Once you load the trace in `trace-viewer`, search for slices named: `V8.GC_Object_Stats`. The statistics appear in the lower panel. Selecting multiple slices creates a merged view.
 
-![](images/gcstats_traceviewer.png)
+<figure>
+  <img src="/_img/docs/trace/gc-stats.png" alt="">
+</figure>

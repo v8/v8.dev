@@ -9,7 +9,7 @@ Consider the following `test.js`:
 
 ```js
 function foo() {
-  const x = { bar: "bar"};
+  const x = { bar: 'bar' };
   %DebugTrackRetainingPath(x);
   return () => { return x; }
 }
@@ -47,6 +47,6 @@ Root: (Isolate)
 -------------------------------------------------
 ```
 
-## Debugger Support
+## Debugger support
 
 While in a debugger session (e.g. `gdb`/`lldb`), and assuming you passed the above flags to the process (i.e. `--allow-natives-syntax --track-retaining-path`), you may be able to `print isolate->heap()->PrintRetainingPath(HeapObject*)` on an object of interest.
