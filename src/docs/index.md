@@ -41,12 +41,12 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
 - Debugging
     - [ARM debugging](/docs/arm-debugging)
     - [Debugging builtins with GDB](/docs/debugging-gdb)
+    - [Debugging over the V8 Inspector Protocol](/docs/inspector)
     - [GDB JIT Compilation Interface integration](/docs/gdb-jit)
     - [Investigating memory leaks](/docs/memory-leaks)
     - [Stack trace API](/docs/stack-trace-api)
-    - [Using D8](Using-D8)
-    - [Using D8 on Android](D8-on-Android)
-    - [V8 Inspector API](Debugging-over-the-V8-Inspector-API)
+    - [Using D8](/docs/d8)
+    - [Using D8 on Android](/docs/d8-android)
 - Embedding V8
     - [Getting started with embedding V8](Getting-Started-with-Embedding)
     - [Example code](Example-code)
