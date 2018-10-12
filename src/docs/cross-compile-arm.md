@@ -3,7 +3,7 @@ title: 'Cross-compiling for ARM'
 ---
 ## Cross-compiling with GN
 
-First, make sure you can [build with GN](Building with GN).
+First, make sure you can [build with GN](/docs/build-gn).
 
 Then, add android to your `.gclient` configuration file.
 
@@ -70,10 +70,6 @@ d8> 'w00t!'
 "w00t!"
 d8>
 ```
-
-## Building with GYP
-
-See [Building with GYP](Building with Gyp) for more information on how to build.
 
 ## Using Sourcery G++ Lite
 
