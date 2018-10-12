@@ -119,20 +119,3 @@ The static libraries created by the build process are found in `out/android_arm.
 A program linking with V8 must link with `libv8_libplatform.a` `libv8_base.a` `libv8_libbase.a` and one of the snapshot libaries such as`libv8_nosnapshot.a` that are produced if V8 is compiled with the `snapshot=off` option.
 
 Unless V8 was compiled with `i18nsupport=off` option the program must also link with the International Components for Unicode (ICU) library found in `out/android_arm.release/obj.target/third_party/icu/`.
-
-## Compile SpiderMonkey for Lollipop
-
-```bash
-cd firefox/js/src
-autoconf2.13
-./configure \
-  --target=arm-linux-androideabi \
-  --with-android-ndk=$ANDROID_NDK_ROOT \
-  --with-android-version=21 \
-  --without-intl-api \
-  --disable-tests \
-  --enable-android-libstdcxx \
-  --enable-pie
-make
-adb push -p js/src/shell/js /data/local/tmp/js
-```
