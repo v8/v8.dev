@@ -32,7 +32,7 @@ In the worst case, this can drag out for two weeks. Keep writing patches! Even i
 
 ### Setting up push access to the repository
 
-When you are accepted as a committer make sure to [set up push access to the repo](/docs/source-code#committing).
+When you are accepted as a committer make sure to [set up push access to the repo](/docs/source-code#instructions).
 
 ## Maintaining committer status
 
