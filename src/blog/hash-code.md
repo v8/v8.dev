@@ -76,7 +76,7 @@ For the empty case, we can directly store the hash code in this offset on the `J
 
 ### The properties backing store is an array
 
-V8 represents integers less than 231 (on 32-bit systems) unboxed, as [Smi](https://wingolog.org/archives/2011/05/18/value-representation-in-javascript-implementations)s. In a Smi, the least significant bit is a tag used to distinguish it from pointers, while the remaining 31 bits hold the actual integer value.
+V8 represents integers less than 2<sup>31</sup> (on 32-bit systems) unboxed, as [Smi](https://wingolog.org/archives/2011/05/18/value-representation-in-javascript-implementations)s. In a Smi, the least significant bit is a tag used to distinguish it from pointers, while the remaining 31 bits hold the actual integer value.
 
 Normally, arrays store their length as a Smi. Since we know that the maximum capacity of this array is only 1022, we only need 10 bits to store the length. We can use the remaining 21 bits to store the hash code!
 
