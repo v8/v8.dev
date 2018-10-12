@@ -12,7 +12,7 @@ In this post we’d like to introduce the CodeStubAssembler (CSA), a component i
 
 To understand the CSA’s role in V8, it’s important to understand a little bit of the context and history that led to its development.
 
-V8 squeezes performance out of JavaScript using a combination of techniques. For JavaScript code that runs a long time, V8’s [TurboFan](https://github.com/v8/v8/wiki/TurboFan) optimizing compiler does a great job of speeding up the entire spectrum of ES2015+ functionality for peak performance. However, V8 also needs to execute short-running JavaScript efficiently for good baseline performance. This is especially the case for the so-called **builtin functions** on the pre-defined objects that are available to all JavaScript programs as defined by the [ECMAScript specification](https://tc39.github.io/ecma262/).
+V8 squeezes performance out of JavaScript using a combination of techniques. For JavaScript code that runs a long time, V8’s [TurboFan](/docs/turbofan) optimizing compiler does a great job of speeding up the entire spectrum of ES2015+ functionality for peak performance. However, V8 also needs to execute short-running JavaScript efficiently for good baseline performance. This is especially the case for the so-called **builtin functions** on the pre-defined objects that are available to all JavaScript programs as defined by the [ECMAScript specification](https://tc39.github.io/ecma262/).
 
 Historically, many of these builtin functions were [self-hosted](https://en.wikipedia.org/wiki/Self-hosting), that is, they were authored by a V8 developer in JavaScript—albeit a special V8-internal dialect. To achieve good performance, these self-hosted builtins rely on the same mechanisms V8 uses to optimize user-supplied JavaScript. As with user-supplied code, the self-hosted builtins require a warm-up phase in which type feedback is gathered and they need to be compiled by the optimizing compiler.
 
@@ -28,7 +28,7 @@ V8 developers wrestled with a dilemma for many years: is it possible to create b
 
 With the advent of TurboFan the answer to this question is finally “yes”. TurboFan’s backend uses a cross-platform [intermediate representation](https://en.wikipedia.org/wiki/Intermediate_representation) (IR) for low-level machine operations. This low-level machine IR is input to an instruction selector, register allocator, instruction scheduler and code generator that produce very good code on all platforms. The backend also knows about many of the tricks that are used in V8’s hand-written assembly builtins—e.g. how to use and call a custom register-based ABI, how to support machine-level tail calls, and how to elide the construction of stack frames in leaf functions. That knowledge makes the TurboFan backend especially well-suited for generating fast code that integrates well with the rest of V8.
 
-This combination of functionality made a robust and maintainable alternative to hand-written assembly builtins feasible for the first time. The team built a new V8 component—dubbed the CodeStubAssembler or CSA—that defines a portable assembly language built on top of TurboFan’s backend. The CSA adds an API to generate TurboFan machine-level IR directly without having to write and parse JavaScript or apply TurboFan’s JavaScript-specific optimizations. Although this fast-path to code generation is something that only V8 developers can use to speed up the V8 engine internally, this efficient path for generating optimized assembly code in a cross-platform way directly benefits all developers’ JavaScript code in the builtins constructed with the CSA, including the performance-critical bytecode handlers for V8’s interpreter, [Ignition](https://github.com/v8/v8/wiki/Ignition).
+This combination of functionality made a robust and maintainable alternative to hand-written assembly builtins feasible for the first time. The team built a new V8 component—dubbed the CodeStubAssembler or CSA—that defines a portable assembly language built on top of TurboFan’s backend. The CSA adds an API to generate TurboFan machine-level IR directly without having to write and parse JavaScript or apply TurboFan’s JavaScript-specific optimizations. Although this fast-path to code generation is something that only V8 developers can use to speed up the V8 engine internally, this efficient path for generating optimized assembly code in a cross-platform way directly benefits all developers’ JavaScript code in the builtins constructed with the CSA, including the performance-critical bytecode handlers for V8’s interpreter, [Ignition](/docs/ignition).
 
 <figure>
   <img src="/_img/csa/csa.png" alt="">
@@ -142,7 +142,7 @@ TEST(GetStringLength) {
 }
 ```
 
-For more details about using the CSA for different kinds of builtins and for further examples, see [this wiki page](https://github.com/v8/v8/wiki/CodeStubAssembler-Builtins).
+For more details about using the CSA for different kinds of builtins and for further examples, see [this wiki page](/docs/csa-builtins).
 
 ## A V8 developer velocity multiplier
 

@@ -337,7 +337,7 @@ Another example of monomorphism vs. polymorphism in V8 involves object shapes, a
 
 ## Debugging elements kinds
 
-To figure out a given object’s “elements kind”, get a debug build of `d8` (see [“Building from source”](https://github.com/v8/v8/wiki/Building-from-Source)), and run:
+To figure out a given object’s “elements kind”, get a debug build of `d8` (see [“Building from source”](/docs/build)), and run:
 
 ```bash
 out/x64.debug/d8 --allow-natives-syntax

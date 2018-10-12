@@ -32,9 +32,9 @@ function GetObjectHash(key) {
 
 This worked well because we didn’t have to reserve memory for a hash code field until the object was added to a hash table, at which point a new private symbol was stored on the object.
 
-V8 could also optimize the hash code symbol lookup just like any other property lookup using the IC system, providing very fast lookups for the hash code. This works well for [monomorphic IC lookups](https://en.wikipedia.org/wiki/Inline_caching#Monomorphic_inline_caching), when the keys have the same [hidden class](https://github.com/v8/v8/wiki/Design-Elements). However, most real-world code doesn’t follow this pattern, and often keys have different hidden classes, leading to slow [megamorphic IC lookups](https://en.wikipedia.org/wiki/Inline_caching#Megamorphic_inline_caching) of the hash code.
+V8 could also optimize the hash code symbol lookup just like any other property lookup using the IC system, providing very fast lookups for the hash code. This works well for [monomorphic IC lookups](https://en.wikipedia.org/wiki/Inline_caching#Monomorphic_inline_caching), when the keys have the same [hidden class](/). However, most real-world code doesn’t follow this pattern, and often keys have different hidden classes, leading to slow [megamorphic IC lookups](https://en.wikipedia.org/wiki/Inline_caching#Megamorphic_inline_caching) of the hash code.
 
-Another problem with the private symbol approach was that it triggered a [hidden class transition](https://github.com/v8/v8/wiki/Design%20Elements#fast-property-access) in the key on storing the hash code. This resulted in poor polymorphic code not just for the hash code lookup but also for other property lookups on the key and [deoptimization](https://floitsch.blogspot.com/2012/03/optimizing-for-v8-inlining.html) from optimized code.
+Another problem with the private symbol approach was that it triggered a [hidden class transition](/#fast-property-access) in the key on storing the hash code. This resulted in poor polymorphic code not just for the hash code lookup but also for other property lookups on the key and [deoptimization](https://floitsch.blogspot.com/2012/03/optimizing-for-v8-inlining.html) from optimized code.
 
 ## JavaScript object backing stores
 

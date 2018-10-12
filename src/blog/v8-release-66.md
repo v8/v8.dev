@@ -6,7 +6,7 @@ tags:
   - release
 tweet: '978534399938584576'
 ---
-Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release-Process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.6](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.6), which is in beta until its release in coordination with Chrome 66 Stable in several weeks. V8 v6.6 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.6](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.6), which is in beta until its release in coordination with Chrome 66 Stable in several weeks. V8 v6.6 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## JavaScript language features
 
@@ -126,7 +126,7 @@ The throughput performance of `Array#reduce` was increased by more than 10× for
 
 ## Untrusted code mitigations
 
-In V8 v6.6 we’ve landed [more mitigations for side-channel vulnerabilities](https://github.com/v8/v8/wiki/Untrusted-code-mitigations) to prevent information leaks to untrusted JavaScript and WebAssembly code.
+In V8 v6.6 we’ve landed [more mitigations for side-channel vulnerabilities](/docs/untrusted-code-mitigations) to prevent information leaks to untrusted JavaScript and WebAssembly code.
 
 ## GYP is gone
 
@@ -140,4 +140,4 @@ Chrome’s DevTools can now trace and snapshot C++ DOM objects and display all r
 
 Please use `git log branch-heads/6.5..branch-heads/6.6 include/v8.h` to get a list of the API changes.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using%20Git) can use `git checkout -b 6.6 -t branch-heads/6.6` to experiment with the new features in V8 v6.6. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 6.6 -t branch-heads/6.6` to experiment with the new features in V8 v6.6. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
