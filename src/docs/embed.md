@@ -1,25 +1,97 @@
 ---
-title: 'Embedder’s guide'
+title: 'Getting started with embedding V8'
 ---
-If you’ve read [Getting started with embedding V8](https://github.com/v8/v8/wiki/Getting-Started-with-Embedding), you are already familiar with using V8 as a standalone virtual machine and with some key V8 concepts such as handles, scopes, and contexts. This document discusses these concepts further and introduces others that are key to embedding V8 within your own C++ application.
-
-The V8 API provides functions for compiling and executing scripts, accessing C++ methods and data structures, handling errors, and enabling security checks. Your application can use V8 just like any other C++ library. Your C++ code accesses V8 through the V8 API by including the header `include/v8.h`.
-
-The [V8 Design Elements](/docs/design-elements) document provides background you may find useful when optimizing your application for V8.
+This document introduces some key V8 concepts and provides a `hello world` example to get you started with V8 code.
 
 ## Audience
 
-This document is intended for C++ programmers who want to embed the V8 JavaScript engine within a C++ application. It will help you to make your own application's C++ objects and methods available to JavaScript, and to make JavaScript objects and functions available to your C++ application.
+This document is intended for C++ programmers who want to embed the V8 JavaScript engine within a C++ application. It will help you to make your own application’s C++ objects and methods available to JavaScript, and to make JavaScript objects and functions available to your C++ application.
 
-## Handles and garbage collection
+## Hello world
 
-A handle provides a reference to a JavaScript object's location in the heap. The V8 garbage collector reclaims memory used by objects that can no longer again be accessed. During the garbage collection process the garbage collector often moves objects to different locations in the heap. When the garbage collector moves an object the garbage collector also updates all handles that refer to the object with the object's new location.
+Let's look at a [Hello World example](https://chromium.googlesource.com/v8/v8/+/branch-heads/6.8/samples/hello-world.cc) that takes a JavaScript statement as a string argument, executes it as JavaScript code, and prints the result to standard out.
 
-An object is considered garbage if it is inaccessible from JavaScript and there are no handles that refer to it. From time to time the garbage collector removes all objects considered to be garbage. V8's garbage collection mechanism is key to V8's performance. To learn more about it see [V8 Design Elements](/docs/design-elements).
+First, some key concepts you will need:
+- An isolate is a VM instance with its own heap.
+- A local handle is a pointer to an object. All V8 objects are accessed using handles. They are necessary because of the way the V8 garbage collector works.
+- A handle scope can be thought of as a container for any number of handles. When you've finished with your handles, instead of deleting each one individually you can simply delete their scope.
+- A context is an execution environment that allows separate, unrelated, JavaScript code to run in a single instance of V8. You must explicitly specify the context in which you want any JavaScript code to be run.
+
+These concepts are discussed in greater detail in the [[Embedder's Guide|Embedder's Guide]].
+
+## Run the example
+
+Follow the steps below to run the example yourself:
+
+1. Download the V8 source code by following [the Git instructions](TODO-using-git).
+1. The instructions for this hello world example have last been tested with V8 v7.1.11. You can check out this branch with `git checkout refs/tags/7.1.11 -b sample -t`
+1. Create a build configuration using the helper script:
+
+    ```bash
+    tools/dev/v8gen.py x64.release.sample
+    ```
+
+    You can inspect and manually edit the build configuration by running:
+
+    ```bash
+    gn args out.gn/x64.release.sample
+    ```
+
+1. Build the static library on a Linux 64 system:
+
+    ```bash
+    ninja -C out.gn/x64.release.sample v8_monolith
+    ```
+
+1. Compile `hello-world.cc`, linking to the static library created in the build process. For example, on 64bit Linux using the GNU compiler:
+
+    ```bash
+    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -lv8_monolith -Lout.gn/x64.release.sample/obj/ -pthread -std=c++0x
+    ```
+
+1. For more complex code, V8 fails without an ICU data file. Copy this file to where your binary is stored:
+
+    ```bash
+    cp out.gn/x64.release.sample/icudtl.dat .
+    ```
+
+1. Run the `hello_world` executable file at the command line. e.g. On Linux, in the V8 directory, run:
+
+    ```bash
+    ./hello_world
+    ```
+
+1. You will see `Hello, World!`. Yay!
+
+If you are looking for an example which is in sync with master simply check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/master/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
+
+## More example code
+
+The following samples are provided as part of the source code download.
+
+### [`process.cc`](https://github.com/v8/v8/blob/master/samples/process.cc)
+
+This sample provides the code necessary to extend a hypothetical HTTP request processing application - which could be part of a web server, for example - so that it is scriptable. It takes a JavaScript script as an argument, which must provide a function called `Process`. The JavaScript `Process` function can be used to, for example, collect information such as how many hits each page served by the fictional web server gets.
+
+### [`shell.cc`](https://github.com/v8/v8/blob/master/samples/shell.cc)
+
+This sample takes filenames as arguments then reads and executes their contents. Includes a command prompt at which you can enter JavaScript code snippets which are then executed. In this sample additional functions like `print` are also added to JavaScript through the use of object and function templates.
+
+## Advanced guide
+
+Now that you’re familiar with using V8 as a standalone virtual machine and with some key V8 concepts such as handles, scopes, and contexts, let’s discuss these concepts further and introduce a few other concepts that are key to embedding V8 within your own C++ application.
+
+The V8 API provides functions for compiling and executing scripts, accessing C++ methods and data structures, handling errors, and enabling security checks. Your application can use V8 just like any other C++ library. Your C++ code accesses V8 through the V8 API by including the header `include/v8.h`.
+
+### Handles and garbage collection
+
+A handle provides a reference to a JavaScript object’s location in the heap. The V8 garbage collector reclaims memory used by objects that can no longer again be accessed. During the garbage collection process the garbage collector often moves objects to different locations in the heap. When the garbage collector moves an object the garbage collector also updates all handles that refer to the object with the object’s new location.
+
+An object is considered garbage if it is inaccessible from JavaScript and there are no handles that refer to it. From time to time the garbage collector removes all objects considered to be garbage. V8’s garbage collection mechanism is key to V8’s performance.
 
 There are several types of handles:
 
-- Local handles are held on a stack and are deleted when the appropriate destructor is called. These handles' lifetime is determined by a handle scope, which is often created at the beginning of a function call. When the handle scope is deleted, the garbage collector is free to deallocate those objects previously referenced by handles in the handle scope, provided they are no longer accessible from JavaScript or other handles. This type of handle is used in the example in [Getting Started](TODO).
+- Local handles are held on a stack and are deleted when the appropriate destructor is called. These handles’ lifetime is determined by a handle scope, which is often created at the beginning of a function call. When the handle scope is deleted, the garbage collector is free to deallocate those objects previously referenced by handles in the handle scope, provided they are no longer accessible from JavaScript or other handles. This type of handle is used in the hello world example above.
 
     Local handles have the class `Local<SomeType>`.
 
@@ -35,7 +107,7 @@ There are several types of handles:
 
 Of course, creating a local handle every time you create an object can result in a lot of handles! This is where handle scopes are very useful. You can think of a handle scope as a container that holds lots of handles. When the handle scope’s destructor is called all handles created within that scope are removed from the stack. As you would expect, this results in the objects to which the handles point being eligible for deletion from the heap by the garbage collector.
 
-Returning to our very simple example, described in [Getting Started](TODO), in the following diagram you can see the handle-stack and heap-allocated objects. Note that `Context::New()` returns a `Local` handle, and we create a new `Persistent` handle based on it to demonstrate the usage of `Persistent` handles.
+Returning to [our very simple hello world example](#hello-world), in the following diagram you can see the handle-stack and heap-allocated objects. Note that `Context::New()` returns a `Local` handle, and we create a new `Persistent` handle based on it to demonstrate the usage of `Persistent` handles.
 
 ![](images/local_persist_handles_review.png)
 
@@ -43,7 +115,7 @@ When the destructor `HandleScope::~HandleScope` is called, the handle scope is d
 
 Note: Throughout this document the term “handle” refers to a local handle. When discussing a persistent handle, that term is used in full.
 
-It is important to be aware of one common pitfall with this model: *you cannot return a local handle directly from a function that declares a handle scope*. If you do the local handle you’re trying to return will end up being deleted by the handle scope's destructor immediately before the function returns. The proper way to return a local handle is construct an `EscapableHandleScope` instead of a `HandleScope` and to call the `Escape` method on the handle scope, passing in the handle whose value you want to return. Here’s an example of how that works in practice:
+It is important to be aware of one common pitfall with this model: *you cannot return a local handle directly from a function that declares a handle scope*. If you do the local handle you’re trying to return will end up being deleted by the handle scope’s destructor immediately before the function returns. The proper way to return a local handle is construct an `EscapableHandleScope` instead of a `HandleScope` and to call the `Escape` method on the handle scope, passing in the handle whose value you want to return. Here’s an example of how that works in practice:
 
 ```cpp
 // This function returns a new array with three elements, x, y, and z.
@@ -72,13 +144,13 @@ Local<Array> NewPointArray(int x, int y, int z) {
 
 The `Escape` method copies the value of its argument into the enclosing scope, deletes all its local handles, and then gives back the new handle copy which can safely be returned.
 
-## Contexts
+### Contexts
 
 In V8, a context is an execution environment that allows separate, unrelated, JavaScript applications to run in a single instance of V8. You must explicitly specify the context in which you want any JavaScript code to be run.
 
 Why is this necessary? Because JavaScript provides a set of built-in utility functions and objects that can be changed by JavaScript code. For example, if two entirely unrelated JavaScript functions both changed the global object in the same way then unexpected results are fairly likely to happen.
 
-In terms of CPU time and memory, it might seem an expensive operation to create a new execution context given the number of built-in objects that must be built. However, V8's extensive caching ensures that, while the first context you create is somewhat expensive, subsequent contexts are much cheaper. This is because the first context needs to create the built-in objects and parse the built-in JavaScript code while subsequent contexts only have to create the built-in objects for their context. With the V8 snapshot feature (activated with build option `snapshot=yes`, which is the default) the time spent creating the first context will be highly optimized as a snapshot includes a serialized heap which contains already compiled code for the built-in JavaScript code. Along with garbage collection, V8's extensive caching is also key to V8’s performance, for more information see [V8 Design Elements](/docs/design-elements).
+In terms of CPU time and memory, it might seem an expensive operation to create a new execution context given the number of built-in objects that must be built. However, V8’s extensive caching ensures that, while the first context you create is somewhat expensive, subsequent contexts are much cheaper. This is because the first context needs to create the built-in objects and parse the built-in JavaScript code while subsequent contexts only have to create the built-in objects for their context. With the V8 snapshot feature (activated with build option `snapshot=yes`, which is the default) the time spent creating the first context will be highly optimized as a snapshot includes a serialized heap which contains already compiled code for the built-in JavaScript code. Along with garbage collection, V8’s extensive caching is also key to V8’s performance, for more information see [V8 Design Elements](/docs/design-elements).
 
 When you have created a context you can enter and exit it any number of times. While you are in context A you can also enter a different context, B, which means that you replace A as the current context with B. When you exit B then A is restored as the current context. This is illustrated below:
 
@@ -88,7 +160,7 @@ Note that the built-in utility functions and objects of each context are kept se
 
 The motivation for using contexts in V8 was so that each window and iframe in a browser can have its own fresh JavaScript environment.
 
-## Templates
+### Templates
 
 A template is a blueprint for JavaScript functions and objects in a context. You can use a template to wrap C++ functions and data structures within JavaScript objects so that they can be manipulated by JavaScript scripts. For example, Google Chrome uses templates to wrap C++ DOM nodes as JavaScript objects and to install functions in the global namespace. You can create a set of templates and then use the same ones for every new context you make. You can have as many templates as you require. However you can only have one instance of any template in any given context.
 
@@ -96,7 +168,7 @@ In JavaScript there is a strong duality between functions and objects. To create
 
 - Function templates
 
-    A function template is the blueprint for a single function. You create a JavaScript instance of the template by calling the template's `GetFunction` method from within the context in which you wish to instantiate the JavaScript function. You can also associate a C++ callback with a function template which is called when the JavaScript function instance is invoked.
+    A function template is the blueprint for a single function. You create a JavaScript instance of the template by calling the template’s `GetFunction` method from within the context in which you wish to instantiate the JavaScript function. You can also associate a C++ callback with a function template which is called when the JavaScript function instance is invoked.
 
 - Object templates
 
@@ -121,7 +193,7 @@ Persistent<Context> context = Context::New(isolate, NULL, global);
 
 This example code is taken from `JsHttpProcessor::Initializer` in the `process.cc` sample.
 
-## Accessors
+### Accessors
 
 An accessor is a C++ callback that calculates and returns a value when an object property is accessed by a JavaScript script. Accessors are configured through an object template, using the `SetAccessor` method. This method takes the name of the property with which it is associated and two callbacks to run when a script attempts to read or write the property.
 
@@ -130,9 +202,9 @@ The complexity of an accessor depends upon the type of data you are manipulating
 - [Accessing static global variables](#accessing-static-global-variables)
 - [Accessing dynamic variables](#accessing-dynamic-variables)
 
-## Accessing static global variables
+### Accessing static global variables
 
-Let's say there are two C++ integer variables, `x` and `y` that are to be made available to JavaScript as global variables within a context. To do this, you need to call C++ accessor functions whenever a script reads or writes those variables. These accessor functions convert a C++ integer to a JavaScript integer using `Integer::New`, and convert a JavaScript integer to a C++ integer using `Int32Value`. An example is provided below:
+Let’s say there are two C++ integer variables, `x` and `y` that are to be made available to JavaScript as global variables within a context. To do this, you need to call C++ accessor functions whenever a script reads or writes those variables. These accessor functions convert a C++ integer to a JavaScript integer using `Integer::New`, and convert a JavaScript integer to a C++ integer using `Int32Value`. An example is provided below:
 
 ```cpp
 void XGetter(Local<String> property,
@@ -155,9 +227,9 @@ Persistent<Context> context = Context::New(isolate, NULL, global_templ);
 
 Note that the object template in the code above is created at the same time as the context. The template could have been created in advance and then used for any number of contexts.
 
-## Accessing dynamic variables
+### Accessing dynamic variables
 
-In the preceding example the variables were static and global. What if the data being manipulated is dynamic, as is true of the DOM tree in a browser? Let's imagine `x` and `y` are object fields on the C++ class `Point`:
+In the preceding example the variables were static and global. What if the data being manipulated is dynamic, as is true of the DOM tree in a browser? Let’s imagine `x` and `y` are object fields on the C++ class `Point`:
 
 ```cpp
 class Point {
@@ -200,7 +272,7 @@ obj->SetInternalField(0, External::New(isolate, p));
 
 The external object is simply a wrapper around a `void*`. External objects can only be used to store reference values in internal fields. JavaScript objects can not have references to C++ objects directly so the external value is used as a "bridge" to go from JavaScript into C++.  In that sense external values are the opposite of handles since handles lets C++ make references to JavaScript objects.
 
-Here's the definition of the `get` and `set` accessors for `x`, the `y` accessor definitions are identical except `y` replaces `x`:
+Here’s the definition of the `get` and `set` accessors for `x`, the `y` accessor definitions are identical except `y` replaces `x`:
 
 ```cpp
 void GetPointX(Local<String> property,
@@ -223,7 +295,7 @@ void SetPointX(Local<String> property, Local<Value> value,
 
 Accessors extract the reference to the `point` object that was wrapped by the JavaScript object and then read and writes the associated field. This way these generic accessors can be used on any number of wrapped point objects.
 
-## Interceptors
+### Interceptors
 
 You can also specify a callback for whenever a script accesses any object property. These are called interceptors. For efficiency, there are two types of interceptors:
 
@@ -263,7 +335,7 @@ void JsHttpRequestProcessor::MapGet(Local<String> name,
 
 As with accessors, the specified callbacks are invoked whenever a property is accessed. The difference between accessors and interceptors is that interceptors handle all properties, while accessors are associated with one specific property.
 
-## Security model
+### Security model
 
 The “same-origin policy” (first introduced with Netscape Navigator 2.0) prevents a document or script loaded from one “origin” from getting or setting properties of a document from a different “origin”. The term origin is defined here as a combination of domain name (e.g. `www.example.com`), protocol (e.g. `https`) and port. For example, `www.example.com:81` is not the same origin as `www.example.com`. All three must match for two web pages to be considered to have the same origin. Without this protection, a malicious web page could compromise the integrity of another web page.
 
@@ -273,7 +345,7 @@ When an attempt is made to access a global variable the V8 security system first
 
 This mechanism is implemented in Google Chrome so that if security tokens do not match, a special callback is used to allow access only to the following: `window.focus()`, `window.blur()`, `window.close()`, `window.location`, `window.open()`, `history.forward()`, `history.back()`, and `history.go()`.
 
-## Exceptions
+### Exceptions
 
 V8 throws an exception if an error occurs — for example, when a script or function attempts to read a property that does not exist, or if a function is called that is not a function.
 
@@ -294,7 +366,7 @@ if (v.IsEmpty()) {
 
 If the value returned is an empty handle, and you do not have a `TryCatch` in place, your code must bail out. If you do have a `TryCatch` the exception is caught and your code is allowed to continue processing.
 
-## Inheritance
+### Inheritance
 
 JavaScript is a *class-free*, object-oriented language, and as such, it uses prototypal inheritance instead of classical inheritance. This can be puzzling to programmers trained in conventional object-oriented languages like C++ and Java.
 
@@ -322,7 +394,7 @@ bicycle.prototype.wheels = 2;
 
 All instances of `bicycle()` will now have the `wheels` property prebuilt into them.
 
-The same approach is used in V8 with templates. Each `FunctionTemplate` has a `PrototypeTemplate` method which gives a template for the function's prototype. You can set properties, and associate C++ functions with those properties, on a `PrototypeTemplate` which will then be present on all instances of the corresponding `FunctionTemplate`. For example:
+The same approach is used in V8 with templates. Each `FunctionTemplate` has a `PrototypeTemplate` method which gives a template for the function’s prototype. You can set properties, and associate C++ functions with those properties, on a `PrototypeTemplate` which will then be present on all instances of the corresponding `FunctionTemplate`. For example:
 
 ```cpp
 Local<FunctionTemplate> biketemplate = FunctionTemplate::New(isolate);

@@ -24,7 +24,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [GUI and IDE setup](/docs/ide-setup)
 - [Contributing](/docs/contribute)
     - [V8’s public API and its stability](/docs/api)
-    - [Becoming a committer](/docs/becoming-a-committer)
+    - [Becoming a V8 committer](/docs/become-committer)
     - [Committer’s responsibility](/docs/committer-responsibility)
     - [Blink layout tests](/docs/blink-layout-tests)
     - [Code of conduct](/docs/code-of-conduct)
@@ -48,13 +48,11 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Using D8](/docs/d8)
     - [Using D8 on Android](/docs/d8-android)
 - Embedding V8
-    - [Getting started with embedding V8](Getting-Started-with-Embedding)
-    - [Example code](Example-code)
-    - [Embedder’s guide](Embedder's-Guide) <!-- TODO: how is this different from the getting started guide? -->
-    - [Version numbers](Version-numbers)
-    - [Built-in functions](Built-in-functions)
-    - [i18n support](i18n-support)
-    - [Untrusted code mitigations](Untrusted-code-mitigations)
+    - [Guide to embedding V8](/docs/embed)
+    - [Version numbers](/docs/version-numbers)
+    - [Built-in functions](/docs/builtin-functions)
+    - [i18n support](/docs/i18n)
+    - [Untrusted code mitigations](/docs/untrusted-code-mitigations)
 - Under the hood
     - [Ignition](/docs/ignition)
     - [TurboFan](/docs/turbofan)
