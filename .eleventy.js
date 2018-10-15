@@ -12,6 +12,7 @@
 // limitations under the License.
 
 const { DateTime } = require('luxon');
+const he = require('he');
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItFootnote = require('markdown-it-footnote');
@@ -56,6 +57,10 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addFilter('markdown', (string) => {
     return md.renderInline(string);
+  });
+
+  eleventyConfig.addFilter('decodeHtmlEntities', (string) => {
+    return he.decode(string);
   });
 
   // Match Firebase’s `cleanUrls` setting.

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% if '/' === page.url %}V8 JavaScript engine{% else %}{{ (renderData.title or title) | markdown | striptags }} · V8{% endif %}</title>
+    <title>{% if '/' === page.url %}V8 JavaScript engine{% else %}{{ (renderData.title or title) | markdown | striptags | decodeHtmlEntities }} · V8{% endif %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="/_css/main.css">
     <link rel="manifest" href="/.webmanifest">

@@ -40,7 +40,7 @@ The currently important labels for V8 are:
 
 Use `mergeinfo.py` to get all the commits which are connected to the `$COMMIT_HASH` according to Git.
 
-```
+```bash
 tools/release/mergeinfo.py $COMMIT_HASH
 ```
 
