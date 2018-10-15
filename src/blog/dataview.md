@@ -32,7 +32,7 @@ console.log(array);
 // → [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225]
 ```
 
-On the other hand, `DataView`s allow for more fine-grained data access. They let the programmer choose the type of values read from and written tothe buffer by providing specialized getters and setters for each number type, making them useful for serializing data structures.
+On the other hand, `DataView`s allow for more fine-grained data access. They let the programmer choose the type of values read from and written to the buffer by providing specialized getters and setters for each number type, making them useful for serializing data structures.
 
 ```js
 const buffer = new ArrayBuffer(32);
