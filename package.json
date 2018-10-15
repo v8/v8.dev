@@ -11,7 +11,7 @@
     "build": "npm run clean && npm run css && npm run js && npm run eleventy && npm run sw && npm run html",
     "watch": "npm run build && npx eleventy --watch",
     "debug": "DEBUG=* npx eleventy",
-    "start": "firebase serve --port=9001",
+    "start": "superstatic --port=9001",
     "deploy": "firebase deploy",
     "ci": "npm run lint && npm run build"
   },
@@ -31,6 +31,7 @@
     "markdownlint-cli": "^0.13.0",
     "postcss-cli": "^6.0.0",
     "postcss-custom-properties": "^8.0.6",
+    "superstatic": "^6.0.3",
     "workbox-cli": "^3.6.2"
   }
 }
