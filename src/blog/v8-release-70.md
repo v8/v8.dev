@@ -6,8 +6,10 @@ avatars:
 date: 2018-10-15 17:17:00
 tags:
   - release
+description: 'V8 v7.0 includes WebAssembly threads, Symbol.prototype.description, and embedded built-ins on more platforms!'
+tweet: '1051857446279532544'
 ---
-_Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release-Process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.0), which is in beta until its release in coordination with Chrome 70 Stable in several weeks. V8 v7.0 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release._
+Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release-Process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.0), which is in beta until its release in coordination with Chrome 70 Stable in several weeks. V8 v7.0 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## Embedded built-ins
 
