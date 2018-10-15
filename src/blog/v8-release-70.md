@@ -3,7 +3,7 @@ title: 'V8 release v7.0'
 author: 'Michael Hablich'
 avatars:
   - michael-hablich
-date: 2018-10-15 13:33:37
+date: 2018-10-15 17:17:00
 tags:
   - release
 ---
