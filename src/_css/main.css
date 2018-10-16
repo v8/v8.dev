@@ -299,6 +299,14 @@ img {
   height: auto;
 }
 
+.language-grammar {
+  font-style: italic;
+}
+
+.language-grammar b {
+  font-style: normal;
+}
+
 @media (max-width: 770px) {
   :root {
     --offset: 10px;
