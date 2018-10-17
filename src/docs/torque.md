@@ -257,7 +257,7 @@ Every non-`extern` Torque `macro` uses the `StatementBlock` body of the `macro` 
 
 Labels are a mechanism for exceptional exit from a `macro`. They map 1:1 to CSA labels and are added as `CodeStubAssemblerLabels*`-typed parameters to the C++ method generated for the `macro`. Their exact semantics are discussed below, but for the purpose of a `macro` declartion, the comma-separated list of a `macro`'s labels is optionally provided with the `labels` keywords and positioned after the `macro`'s parameter lists and return type.
 
-Here’s an example from `base.tq` of an external and Torque-defined `macro`s:
+Here’s an example from `base.tq` of external and Torque-defined `macro`s:
 
 ```torque
 extern macro BranchIfFastJSArrayForCopy(Object, Context): never
@@ -304,7 +304,7 @@ Like builtins, `runtime`s cannot have labels.
 Torque callables can specify implicit parameters using something similar to [Scala’s implicit parameters](https://docs.scala-lang.org/tour/implicit-parameters.html):
 
 <pre><code class="language-grammar">ImplicitParameters :
-  <b>(</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list</sub>  <b>)</b>
+  <b>(</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list</sub> <b>)</b>
 </code></pre>
 
 Concretely: A `macro` can declare implicit parameters in addition to explicit ones:
