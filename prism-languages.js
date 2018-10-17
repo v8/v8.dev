@@ -13,7 +13,7 @@
 
 const installPrismLanguages = (Prism) => {
 
-  // Based on the grammar defined at the bottom of
+  // Based on the grammar defined at the bottom of:
   // https://cs.chromium.org/chromium/src/v8/src/torque/torque-parser.cc
   Prism.languages.torque = {
     'comment': {
@@ -42,7 +42,7 @@ const installPrismLanguages = (Prism) => {
       }
     ],
     'builtin': /\b(?:UnsafeCast|Convert|Cast|check|assert)\b/,
-    'keyword': /\b(?:typeswitch|javascript|generates|constexpr|otherwise|continue|operator|runtime|builtin|extends|labels|return|module|extern|while|macro|const|label|break|type|else|case|let|try|for|if|implicit)\b/,
+    'keyword': /\b(?:typeswitch|javascript|generates|constexpr|otherwise|continue|implicit|operator|runtime|builtin|extends|labels|return|module|extern|while|macro|const|label|break|type|else|case|let|try|for|if)\b/,
     'boolean': /\b(?:[tT]rue|[fF]alse)\b/,
     'number': /\b0x[\da-fA-F]+\b|(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?/i,
     'operator': /--?|\+\+?|!=?=?|<=?|>=?|==?=?|&&?|\|\|?|\?|\*|\/|~|\^|%/,
