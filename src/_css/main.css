@@ -212,12 +212,12 @@ main a:hover code, main a:focus code {
   background-color: inherit;
 }
 a.bookmark {
-  visibility: hidden;
+  display: none;
 }
 h2:hover a.bookmark,
 h3:hover a.bookmark,
 h4:hover a.bookmark {
-  visibility: visible;
+  display: inline;
 }
 figure {
   margin: 0 0 1em;
