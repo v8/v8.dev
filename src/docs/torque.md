@@ -79,7 +79,7 @@ Why do you need to know this? Understanding how Torque files get converted into 
 
 Understanding the Torque build process is also important to understanding a core feature in the Torque language: `constexpr`.
 
-Torque allows evaluation of expressions in Torque code at runtime (i.e. when v8 builtins are executed as part of executing JavaScript). However, it also allows expressions to be executed at compile time (i.e. as part of the Torque build process and before the v8 library and d8 executable have even been created).
+Torque allows evaluation of expressions in Torque code at runtime (i.e. when V8 builtins are executed as part of executing JavaScript). However, it also allows expressions to be executed at compile time (i.e. as part of the Torque build process and before the V8 library and `d8` executable have even been created).
 
 Torque uses the `constexpr` keyword to indicate that an expression must be evaluated at build-time. Its usage is somewhat analogous to [C++’s `constexpr`](https://en.cppreference.com/w/cpp/language/constexpr): in addition to borrowing the `constexpr` keyword and some of its syntax from C++, Torque similarly uses `constexpr` to indicate the distinction between evaluation at compile-time and runtime.
 
@@ -156,9 +156,9 @@ class FooBuiltinsFromDSLAssembler: public FooBuiltinsAssembler {
 };
 ```
 
-`FooBuiltinsFromDSLAssembler` contains all of the Torque-implemented declarations for the `foo` namespace. In this case it only contains the method `Baz`, a C++ method that uses the CSA interface to generate code for `Baz`'s Torque implementation.
+`FooBuiltinsFromDSLAssembler` contains all of the Torque-implemented declarations for the `foo` namespace. In this case it only contains the method `Baz`, a C++ method that uses the CSA interface to generate code for `Baz`’s Torque implementation.
 
-Note that module classes do not directly derive from the class of their parent module, but rather provide a level of indirection between themselves and their parent module's superclass that allows direct CSA-based functionality to be added to the module. In this case, `FooBuiltinsFromDSLAssembler` subclasses `FooBuiltinsAssembler`, which must be provided as a pure-CSA implementation. It provides an intermediary place to put non-Torque implemented (i.e. hand-written CSA) functionality that also belongs to the module. In this example, `FooBuiltinsAssembler` must implement `Bar`, since it is declared in a Torque as an `external macro`, i.e. it is not implemented in Torque code but provided through a hand-written CSA implementation in C++.
+Note that module classes do not directly derive from the class of their parent module, but rather provide a level of indirection between themselves and their parent module’s superclass that allows direct CSA-based functionality to be added to the module. In this case, `FooBuiltinsFromDSLAssembler` subclasses `FooBuiltinsAssembler`, which must be provided as a pure-CSA implementation. It provides an intermediary place to put non-Torque implemented (i.e. hand-written CSA) functionality that also belongs to the module. In this example, `FooBuiltinsAssembler` must implement `Bar`, since it is declared in a Torque as an `external macro`, i.e. it is not implemented in Torque code but provided through a hand-written CSA implementation in C++.
 
 New modules must be added to the `BUILD.gn` file in the `torque_modules` variable.
 
@@ -231,7 +231,7 @@ There are two special types indicated by the keywords `void` and `never`. `void`
 
 ### Callables
 
-Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides three types of callables, `macro`s, `builtin`s and `runtime`s.
+Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides three types of callables: `macro`s, `builtin`s, and `runtime`s.
 
 <pre><code class="language-grammar">CallableDeclaration :
   MacroDeclaration
@@ -251,11 +251,11 @@ Macros are a callable that correspond to a chunk of generated CSA-producing C++.
     LabelsDeclaration<sub>opt</sub> <b>;</b>
 </code></pre>
 
-Every non-`extern` Torque `macro` uses the `StatementBlock` body of the `macro` to create a CSA-generating function in its module's generated `Assembler` class. This code looks just like other code that you might find in `code-stub-assembler.cc`, albeit a bit less readable because it’s machine-generated. `macro`s that are marked `extern` have no body written in Torque and simply provide the interface to hand-written C++ CSA code so that it's usable from Torque.
+Every non-`extern` Torque `macro` uses the `StatementBlock` body of the `macro` to create a CSA-generating function in its module’s generated `Assembler` class. This code looks just like other code that you might find in `code-stub-assembler.cc`, albeit a bit less readable because it’s machine-generated. `macro`s that are marked `extern` have no body written in Torque and simply provide the interface to hand-written C++ CSA code so that it’s usable from Torque.
 
 `macro` definitions specify implicit and explict parameters, an optional return type and optoinal labels. Parameters and return types will be discussed in more detail below, but for now it suffices to know that they work somewhat like TypeScript parameters, which as discussed in the Function Types section of the TypeScript documentation [here](https://www.typescriptlang.org/docs/handbook/functions.html).
 
-Labels are a mechanism for exceptional exit from a `macro`. They map 1:1 to CSA labels and are added as `CodeStubAssemblerLabels*`-typed parameters to the C++ method generated for the `macro`. Their exact semantics are discussed below, but for the purpose of a `macro` declartion, the comma-separated list of a `macro`'s labels is optionally provided with the `labels` keywords and positioned after the `macro`'s parameter lists and return type.
+Labels are a mechanism for exceptional exit from a `macro`. They map 1:1 to CSA labels and are added as `CodeStubAssemblerLabels*`-typed parameters to the C++ method generated for the `macro`. Their exact semantics are discussed below, but for the purpose of a `macro` declartion, the comma-separated list of a `macro`’s labels is optionally provided with the `labels` keywords and positioned after the `macro`’s parameter lists and return type.
 
 Here’s an example from `base.tq` of external and Torque-defined `macro`s:
 
