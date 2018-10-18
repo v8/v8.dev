@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.1/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.0.0-alpha.0/workbox-sw.js');
 
 workbox.core.setCacheNameDetails({
   prefix: 'v8.dev',
