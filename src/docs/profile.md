@@ -222,4 +222,4 @@ Tweaking the algorithm this way boosts the performance by an extra 30% compared 
 
 This example shows how V8’s internal profiler can help you go deeper into understanding your code bottlenecks, and that a smarter algorithm can push performance even further.
 
-One might also want to know more about how V8 measures performace, to get a more comprehensive insight about how V8 and Javascript engines work, consider visiting [How V8 measures real-world performance](https://v8.dev/blog/real-world-performance).
+To find out more about how benchmark that represent today’s complex and demanding web applications, read [How V8 measures real-world performance](/blog/real-world-performance).
