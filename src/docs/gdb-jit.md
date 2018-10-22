@@ -53,9 +53,9 @@ To check that you have enabled GDB JIT integration correctly try setting a break
 
 - GDB side of JIT Interface currently (as of GDB 7.2) does not handle registration of code objects very effectively. Each next registration takes more time: with 500 registered objects each next registration takes more than 50ms, with 1000 registered code objects - more than 300 ms. This problem was [reported to GDB developers](https://sourceware.org/ml/gdb/2011-01/msg00002.html) but currently there is no solution available. To reduce pressure on GDB current implementation of GDB JIT integration operates in two modes: _default_ and _full_ (enabled by `--gdbjit-full` flag). In _default_ mode V8 notifies GDB only about code objects that have source information attached (this usually includes all user scripts). In _full_ - about all generated code objects (stubs, ICs, trampolines).
 
-- On x64 GDB is unable to properly unwind stack without `.eh_frame` section (Issue 1053 (on Google Code))
+- On x64 GDB is unable to properly unwind stack without `.eh_frame` section ([Issue 1053](https://bugs.chromium.org/p/v8/issues/detail?id=1053))
 
-- GDB is not notified about code deserialized from the snapshot (Issue 1054 (on Google Code))
+- GDB is not notified about code deserialized from the snapshot ([Issue 1054](https://bugs.chromium.org/p/v8/issues/detail?id=1054))
 
 - Only Linux OS on Intel-compatible CPUs is supported. For different OSes either a different ELF-header should be generated or a completely different object format should be used.
 
