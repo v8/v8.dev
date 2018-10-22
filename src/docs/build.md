@@ -51,4 +51,4 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
     tools/dev/gm.py x64.release.check
     ```
 
-    For more information on the `gm.py` helper script and the commands it triggers, see [Building with GN](/docs/building-gn).
+    For more information on the `gm.py` helper script and the commands it triggers, see [Building with GN](/docs/build-gn).
