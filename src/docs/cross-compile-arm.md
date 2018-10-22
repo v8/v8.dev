@@ -19,6 +19,18 @@ Run `gclient sync`, and you’ll get a large checkout under `./third_party/andro
 
 Enable developer mode on your phone or tablet, and turn on USB debugging, via instructions [here](https://developer.android.com/studio/run/device.html). Also, get the handy [`adb`](https://developer.android.com/studio/command-line/adb.html) tool on your path. It’s in your checkout at `./third_party/android_tools/sdk/platform-tools`.
 
+## Using gm
+
+Starting from V8 r56659 you can use `tools/dev/gm.py` script to automatically build V8 tests and run them on the device.
+
+    ```bash
+    alias gm=/path/to/v8/tools/dev/gm.py
+    gm android_arm.release.check
+    ```
+The script pushes the binaries and tests to the `/data/local/tmp/v8` directory on the device.
+
+## Manual build
+
 Use `v8gen.py` to generate an ARM release or debug build:
 
 ```bash
@@ -52,17 +64,19 @@ ninja -C out.gn/arm.release d8
 Use `adb` to copy the binary and snapshot files to the phone:
 
 ```bash
-adb push out.gn/arm.release/d8 /data/local/tmp
-adb push out.gn/arm.release/natives_blob.bin /data/local/tmp
-adb push out.gn/arm.release/snapshot_blob.bin /data/local/tmp
+adb shell 'mkdir -p /data/local/tmp/v8/bin'
+adb push out.gn/arm.release/d8 /data/local/tmp/v8/bin
+adb push out.gn/arm.release/icudtl.dat /data/local/tmp/v8/bin
+adb push out.gn/arm.release/natives_blob.bin /data/local/tmp/v8/bin
+adb push out.gn/arm.release/snapshot_blob.bin /data/local/tmp/v8/bin
 ```
 
 ```bash
 rebuffat:~/src/v8$ adb shell
-bullhead:/ $ cd /data/local/tmp
-bullhead:/data/local/tmp $ ls
+bullhead:/ $ cd /data/local/tmp/v8/bin
+bullhead:/data/local/tmp/v8/bin $ ls
 v8 natives_blob.bin snapshot_blob.bin
-bullhead:/data/local/tmp $ ./d8
+bullhead:/data/local/tmp/v8/bin $ ./d8
 V8 version 5.8.0 (candidate)
 d8> 'w00t!'
 "w00t!"
@@ -92,3 +106,32 @@ umask 2
 wget http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 tar -xvf arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 ```
+
+## Profile
+
+- Compile a binary, push it to the device, keep a copy of it on the host
+
+    ```bash
+    adb shell cp /data/local/tmp/v8/bin/d8 /data/local/tmp/v8/bin/d8-version.under.test
+    cp out.gn/arm.release/d8 ./d8-version.under.test
+    ```
+
+- get a profiling log and copy it to the host:
+
+    ```bash
+    adb push benchmarks /data/local/tmp
+    adb shell cd /data/local/tmp/benchmarks; ../v8/bin/d8-version.under.test run.js --prof
+    adb shell /data/local/tmp/v8/bin/d8-version.under.test benchmark.js --prof
+    adb pull /data/local/tmp/benchmarks/v8.log ./
+    ```
+
+- open `v8.log` in your favorite editor and edit the first line to match the full path of the `d8-version.under.test` binary on your workstation (instead of the `/data/local/tmp/v8/bin/` path it had on the device)
+
+- run the tick processor with the host’s `d8` and an appropriate `nm` binary:
+
+    ```bash
+    cp out/x64.release/d8 .  # only required once
+    cp out/x64.release/natives_blob.bin .  # only required once
+    cp out/x64.release/snapshot_blob.bin .  # only required once
+    tools/linux-tick-processor --nm=$(pwd)/third_party/android_ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-nm
+    ```
