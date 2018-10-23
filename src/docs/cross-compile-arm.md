@@ -19,15 +19,16 @@ Run `gclient sync`, and you’ll get a large checkout under `./third_party/andro
 
 Enable developer mode on your phone or tablet, and turn on USB debugging, via instructions [here](https://developer.android.com/studio/run/device.html). Also, get the handy [`adb`](https://developer.android.com/studio/command-line/adb.html) tool on your path. It’s in your checkout at `./third_party/android_tools/sdk/platform-tools`.
 
-## Using gm
+## Using `gm`
 
-Starting from V8 r56659 you can use `tools/dev/gm.py` script to automatically build V8 tests and run them on the device.
+Use [the `tools/dev/gm.py` script](/docs/build-gn#building-v8-using-gm-%28the-convenience-workflow%29) to automatically build V8 tests and run them on the device.
 
     ```bash
     alias gm=/path/to/v8/tools/dev/gm.py
     gm android_arm.release.check
     ```
-The script pushes the binaries and tests to the `/data/local/tmp/v8` directory on the device.
+
+This command pushes the binaries and tests to the `/data/local/tmp/v8` directory on the device.
 
 ## Manual build
 
