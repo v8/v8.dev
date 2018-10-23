@@ -28,6 +28,7 @@
     "luxon": "^1.4.3",
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
+    "markdown-it-attrs": "^2.3.2",
     "markdown-it-footnote": "^3.0.1",
     "markdownlint-cli": "^0.13.0",
     "postcss-cli": "^6.0.0",

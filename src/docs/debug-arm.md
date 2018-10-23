@@ -27,13 +27,13 @@ There are different ways of starting the debugger:
 out/arm.debug/d8 --stop_sim_at <n>
 ```
 
-The simulator will start the debugger after executing `n` instructions.
+The simulator starts the debugger after executing `n` instructions.
 
 ```bash
 out/arm.debug/d8 --stop_at <function name>
 ```
 
-The simulator will stop at the given JavaScript function.
+The simulator stops at the given JavaScript function.
 
 Also you can directly generate 'stop' instructions in the ARM code. Stops are generated with
 
@@ -41,7 +41,7 @@ Also you can directly generate 'stop' instructions in the ARM code. Stops are ge
 Assembler::stop(const char* msg, Condition cond, int32_t code)
 ```
 
-When the simulator hits a stop, it will print `msg` and start the debugger.
+When the simulator hits a stop, it prints `msg` and starts the debugger.
 
 ### Debugging commands
 

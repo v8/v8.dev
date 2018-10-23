@@ -21,7 +21,7 @@ Enable developer mode on your phone or tablet, and turn on USB debugging, via in
 
 ## Using `gm`
 
-Use [the `tools/dev/gm.py` script](/docs/build-gn#building-v8-using-gm-%28the-convenience-workflow%29) to automatically build V8 tests and run them on the device.
+Use [the `tools/dev/gm.py` script](/docs/build-gn#gm) to automatically build V8 tests and run them on the device.
 
     ```bash
     alias gm=/path/to/v8/tools/dev/gm.py

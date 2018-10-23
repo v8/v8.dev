@@ -48,7 +48,7 @@ array.push({
 array.sort();
 ```
 
-### More fun with accessors and prototype-chain interactions
+### More fun with accessors and prototype-chain interactions{ #accessors-prototype }
 
 This is the part where we leave the spec behind and venture into “implementation-defined” behavior land. The spec has a whole list of conditions that, when met, allow the engine to sort the object/array as it sees fit — or not at all. Engines still have to follow some ground rules but everything else is pretty much up in the air. On the one hand, this gives engine developers the freedom to experiment with different implementations. On the other hand, users expect some reasonable behavior even though the spec doesn’t require there to be any. This is further complicated by the fact that “reasonable behavior” is not always straightforward to determine.
 
@@ -153,7 +153,7 @@ The output shows the `object` after it’s sorted. Again, there is no right answ
 ['a2', 'a3', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 'e3', undefined, undefined, undefined]
 ```
 
-### What V8 does before actually sorting
+### What V8 does before actually sorting { #before-sort }
 
 V8 has two pre-processing steps before it actually sorts anything. First, if the object to sort has holes and elements on the prototype chain, they are copied from the prototype chain to the object itself. This frees us from caring about the prototype chain during all remaining steps. This is currently only done for non-`JSArray`s but other engines do it for `JSArray`s as well.
 
@@ -188,7 +188,7 @@ CSA is heavily utilized to write so-called “fast-paths” for JavaScript built
 
 The downside of CSA is that it really can be considered an assembly language. Control-flow is modeled using explicit `labels` and `gotos`, which makes implementing more complex algorithms in CSA hard to read and error-prone.
 
-Enter V8 Torque. Torque is a domain-specific language with TypeScript-like syntax that currently uses CSA as its sole compilation target. Torque allows nearly the same level of control as CSA does while at the same time offering higher-level constructs such as `while` and `for` loops. Additionally, it’s strongly typed and will in the future contain security checks such as automatic out-of-bound checks providing V8 engineers with stronger guarantees.
+Enter [V8 Torque](/docs/torque). Torque is a domain-specific language with TypeScript-like syntax that currently uses CSA as its sole compilation target. Torque allows nearly the same level of control as CSA does while at the same time offering higher-level constructs such as `while` and `for` loops. Additionally, it’s strongly typed and will in the future contain security checks such as automatic out-of-bound checks providing V8 engineers with stronger guarantees.
 
 The first major builtins that were re-written in V8 Torque were [`TypedArray#sort`](/blog/v8-release-68) and [`Dataview` operations](/blog/dataview). Both served the additional purpose of providing feedback to the Torque developers on what languages features are needed and idioms should be used to write builtins efficiently. At the time of writing, several `JSArray` builtins had their self-hosted JavaScript fall-back implementations moved to Torque (e.g. `Array#unshift`) while others were completely re-written (e.g. `Array#splice` and `Array#reverse`).
 
@@ -274,7 +274,7 @@ The “compare” entry can point to two different builtins. One calls a user-pr
 
 The rest of the fields (with the exception of the fast path ID) are Timsort-specific. The run stack (described above) is initialized with a size of 85 which is enough to sort arrays of length 2<sup>64</sup>. The temporary array is used for merging runs. It grows in size as needed but never exceeds `n/2` where `n` is the input length.
 
-### Discussing performance trade-offs
+### Performance trade-offs
 
 Moving sorting from self-hosted JavaScript to Torque comes with performance trade-offs. As `Array#sort` is written in Torque, it’s now a statically compiled piece of code, meaning we still can build fast-paths for certain [`ElementsKind`s](/blog/elements-kinds) but it will never be as fast as a highly optimized TurboFan version that can utilize type feedback. On the other hand, in cases where the code doesn’t get hot enough to warrant JIT compilation or the call-site is megamorphic, we are stuck with the interpreter or a slow/generic version. The parsing, compiling and possible optimizing of the self-hosted JavaScript version is also an overhead that is not needed with the Torque implementation.
 

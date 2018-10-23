@@ -17,7 +17,7 @@ There are two workflows for building V8:
 - the convenience workflow using a helper script called `gm` that nicely combines all three steps
 - the raw workflow, where you run separate commands on a lower level for each step manually
 
-## Building V8 using `gm` (the convenience workflow)
+## Building V8 using `gm` (the convenience workflow) { #gm }
 
 `gm` is a convenience all-in-one script that generates build files, triggers the build and optionally also runs the tests. It can be found at `tools/dev/gm.py` in your V8 checkout. We recommend adding an alias to your shell configuration:
 
@@ -45,16 +45,16 @@ gm x64.release.check
 gm x64.debug mjsunit/foo cctest/test-bar/*
 ```
 
-## Building V8: the raw, manual workflow
+## Building V8: the raw, manual workflow { #manual }
 
-### Step 1: generate build files
+### Step 1: generate build files { #generate-build-files }
 
 There are several ways of generating the build files:
 
 1. The raw, manual workflow involves using `gn` directly.
 1. A helper script named `v8gen` streamlines the process for common configurations.
 
-#### Generating build files using `gn`
+#### Generating build files using `gn`  { #gn }
 
 Generate build files for the directory `out/foo` using `gn`:
 
@@ -76,7 +76,7 @@ For an overview of all available `gn` arguments, run:
 gn args out/foo --list
 ```
 
-#### Generate build files using `v8gen`
+#### Generate build files using `v8gen` { #v8gen }
 
 The V8 repository includes a `v8gen` convenience script to more easily generate build files for common configurations. We recommend adding an alias to your shell configuration:
 
@@ -102,7 +102,7 @@ Build like a particular bot from the `client.v8` waterfall in folder `foo`:
 v8gen -b 'V8 Linux64 - debug builder' -m client.v8 foo
 ```
 
-### Step 2: compile V8
+### Step 2: compile V8 { #compile }
 
 To build all of V8 (assuming `gn` generated to the `x64.release` folder), run:
 
@@ -116,7 +116,7 @@ To build specific targets like `d8`, append them to the command:
 ninja -C out/x64.release d8
 ```
 
-### Step 3: run tests
+### Step 3: run tests { #tests }
 
 You can pass the output directory to the test driver. Other relevant flags are inferred from the build:
 
