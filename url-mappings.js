@@ -87,9 +87,9 @@ const oldToNew = new Map([
   ['https://v8project.blogspot.com/2015/07/v8-45-release.html', 'https://v8.dev/blog/v8-release-45'],
   ['https://v8project.blogspot.com/2015/07/digging-into-turbofan-jit.html', 'https://v8.dev/blog/turbofan-jit'],
   ['https://v8project.blogspot.com/2015/07/hello-world.html', 'https://v8.dev/blog/hello-world'],
+  ['https://v8project.blogspot.com/', 'https://v8.dev/'],
 
   // Old wiki URLs.
-  ['https://github.com/v8/v8/wiki', 'https://v8.dev/docs'],
   ['https://github.com/v8/v8/wiki/Introduction', 'https://v8.dev/docs'],
   ['https://github.com/v8/v8/wiki/Building-from-Source', 'https://v8.dev/docs/build'],
   ['https://github.com/v8/v8/wiki/Checking-out-source', 'https://v8.dev/docs/source-code'],
@@ -141,6 +141,7 @@ const oldToNew = new Map([
   ['https://github.com/v8/v8/wiki/Ignition', 'https://v8.dev/docs/ignition'],
   ['https://github.com/v8/v8/wiki/TurboFan', 'https://v8.dev/docs/turbofan'],
   ['https://github.com/v8/v8/wiki/CodeStubAssembler-Builtins', 'https://v8.dev/docs/csa-builtins'],
+  ['https://github.com/v8/v8/wiki', 'https://v8.dev/docs'],
 ]);
 
 // for (const [oldUrl, newUrl] of oldToNew) {
