@@ -309,7 +309,7 @@ As an example:
 
 ```torque
 javascript builtin ArraySlice(
-    context: Context, receiver: Object, ...arguments): Object {
+    (implicit context: Context)(receiver: Object, ...arguments): Object {
   // …
 }
 ```
