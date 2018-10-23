@@ -150,9 +150,9 @@ git cl try --bot=v8_mac_rel
 
 ### Viewing the try server
 
-<https://build.chromium.org/p/tryserver.v8/waterfall>
-
-If asked for access credentials, use your `@chromium.org` email address and your generated password from [googlecode.com](http://code.google.com/hosting/settings).
+```bash
+git cl try-results
+```
 
 ## Source code branches
 
