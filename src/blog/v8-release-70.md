@@ -31,4 +31,4 @@ The [WebAssembly Community Group](https://www.w3.org/community/webassembly/) has
 
 Please use `git log branch-heads/6.9..branch-heads/7.0 include/v8.h` to get a list of the API changes.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using-Git) can use `git checkout -b 7.0 -t branch-heads/7.0` to experiment with the new features in V8 v6.9. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using-Git) can use `git checkout -b 7.0 -t branch-heads/7.0` to experiment with the new features in V8 v7.0. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
