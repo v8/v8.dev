@@ -330,7 +330,7 @@ macro Foo(implicit context: Context)(x: Smi, y: Smi)
 
 When mapping to CSA, implicit parameters and explicit parameters are treated the same and form a joint parameter list.
 
-Implicit parameters are not mentioned at the callsite, but instead are passed implicitly: `Foo(4,5)`. For this to work, `Foo(4,5)` must be called in a context that provides a value named `context`. Example:
+Implicit parameters are not mentioned at the callsite, but instead are passed implicitly: `Foo(4, 5)`. For this to work, `Foo(4, 5)` must be called in a context that provides a value named `context`. Example:
 
 ```torque
 macro Bar(implicit context: Context)() {
