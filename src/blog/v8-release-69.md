@@ -14,9 +14,9 @@ V8 ships with an extensive library of built-in functions. Examples are methods o
 
 Built-in functions currently consume 700 KB in each Isolate (an Isolate roughly corresponds to a browser tab in Chrome). This is quite wasteful, and last year we began working on reducing this overhead. In V8 v6.4, we shipped [lazy deserialization](/blog/lazy-deserialization), ensuring that each Isolate only pays for the built-ins that it actually needs (but each Isolate still had its own copy).
 
-Embedded built-ins go one step further. An embedded built-in is shared by all Isolates, and embedded into the binary itself instead of copied onto the JavaScript heap. This means that built-ins exist in memory only once regardless of how many Isolates are running, an especially useful property now that [Site Isolation](https://developers.google.com/web/updates/2018/07/site-isolation) has been enabled by default. With embedded built-ins, we’ve seen a median _9% reduction of the V8 heap size_ over the top 10k websites on x64. Of these sites, 50% save at least 1.2 MB, 30% save at least 2.1 MB, and 10% save 3.7 MB or more.
+[Embedded built-ins](/blog/embedded-builtins) go one step further. An embedded built-in is shared by all Isolates, and embedded into the binary itself instead of copied onto the JavaScript heap. This means that built-ins exist in memory only once regardless of how many Isolates are running, an especially useful property now that [Site Isolation](https://developers.google.com/web/updates/2018/07/site-isolation) has been enabled by default. With embedded built-ins, we’ve seen a median _9% reduction of the V8 heap size_ over the top 10k websites on x64. Of these sites, 50% save at least 1.2 MB, 30% save at least 2.1 MB, and 10% save 3.7 MB or more.
 
-V8 v6.9 ships with support for embedded built-ins on x64 platforms. Other platforms will follow soon in upcoming releases. Expect more details soon in a dedicated blog post.
+V8 v6.9 ships with support for embedded built-ins on x64 platforms. Other platforms will follow soon in upcoming releases. For more details, see our [dedicated blog post](/blog/embedded-builtins).
 
 ## Performance
 
