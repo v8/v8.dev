@@ -51,12 +51,12 @@ ninja -C out.gn/x64.release
 
 ## Running `d8` with perf flags
 
-Once you have the right kernel, perf tool and build of V8, you can add the `--perf-prof` to the V8 command-line to record performance samples in JIT code. Here’s an example that records samples from a test JavaScript file:
+Once you have the right kernel, perf tool and build of V8, you can add the `--perf-prof` to the V8 command-line to record performance samples in JIT code. Additionally, we need to disable write protection for code memory via `--nowrite-protect-code-memory`. This is necessary, because perf will discard information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
 
 ```bash
 cd <path_to_your_v8_checkout>
 echo '(function f() { var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s; })();' > test.js
-<path_to_kernel_checkout>/tip/tools/perf/perf record -k mono out.gn/x64.release/d8 --perf-prof test.js
+<path_to_kernel_checkout>/tip/tools/perf/perf record -k mono out.gn/x64.release/d8 --perf-prof --nowrite-protect-code-memory test.js
 ```
 
 ## Evaluating perf output
