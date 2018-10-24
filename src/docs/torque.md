@@ -202,7 +202,7 @@ type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 Union types express that a value belongs to one of several possible types. We only allow union types for tagged values, because they can be distinguished at runtime using the map pointer. For example, JavaScript numbers are either Smi values or allocated HeapNumber objects.
 
 ```torque
-type Number = Smi|HeapNumber;
+type Number = Smi | HeapNumber;
 ```
 
 Union types satisfy the following equalities:
