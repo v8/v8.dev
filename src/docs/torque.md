@@ -119,12 +119,12 @@ module array {
 };
 
 module string {
-  …
+  // …
   macro TestVisibility() {
     IsJsObject(o); // OK, global module visible here
     IsJSArray(o);  // ERROR, not visible in this module
   }
-  …
+  // …
 }
 
 module array {
@@ -150,9 +150,9 @@ In this example, `builtins-foo-gen-from-idl.h` declares `FooBuiltinsFromDSLAssem
 
 ```cpp
 class FooBuiltinsFromDSLAssembler: public FooBuiltinsAssembler {
- public:
-  …
-  void Baz();
+  public:
+    // …
+    void Baz();
 };
 ```
 
@@ -308,8 +308,10 @@ Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, h
 As an example:
 
 ```torque
- javascript builtin ArraySlice(
-      context: Context, receiver: Object, ...arguments): Object { … }
+javascript builtin ArraySlice(
+    context: Context, receiver: Object, ...arguments): Object {
+  // …
+}
 ```
 
 ### Implicit parameters
@@ -323,16 +325,16 @@ Torque callables can specify implicit parameters using something similar to [Sca
 Concretely: A `macro` can declare implicit parameters in addition to explicit ones:
 
 ```torque
-macro Foo(implicit context : Context)(x: Smi, y: Smi)
+macro Foo(implicit context: Context)(x: Smi, y: Smi)
 ```
 
 When mapping to CSA, implicit parameters and explicit parameters are treated the same and form a joint parameter list.
 
-Implicit parameters are not mentioned at the callsite, but instead are passed implicitly: `Foo(4,5)`. For this to work, `Foo(4,5)` must be called in a context that provides a value named `context`. Example:
+Implicit parameters are not mentioned at the callsite, but instead are passed implicitly: `Foo(4, 5)`. For this to work, `Foo(4, 5)` must be called in a context that provides a value named `context`. Example:
 
 ```torque
-macro Bar(implicit context : Context)() {
-  Foo(4,5);
+macro Bar(implicit context: Context)() {
+  Foo(4, 5);
 }
 ```
 
