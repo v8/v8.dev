@@ -35,7 +35,7 @@ MWC1616 uses little memory and is pretty fast to compute, but unfortunately offe
 - The more significant upper half of the result is almost entirely dependent on the value of state0. The period length would be at most 232, but instead of few large permutation cycles, there are many short ones. With a badly chosen initial state, the cycle length could be less than 40 million.
 - It fails many statistical tests in the TestU01 suite.
 
-This has been [pointed out](https://medium.com/@betable/tifu-by-using-math-random-f1c308c4fd9d) to us, and having understood the problem and after some research, we decided to reimplement `Math.random` based on an algorithm called [xorshift128+](http://vigna.di.unimi.it/ftp/papers/xorshiftplus.pdf). It uses 128 bits of internal state, has a period length of 2128 - 1, and passes all tests from the TestU01 suite.
+This has been [pointed out](https://medium.com/@betable/tifu-by-using-math-random-f1c308c4fd9d) to us, and having understood the problem and after some research, we decided to reimplement `Math.random` based on an algorithm called [xorshift128+](http://vigna.di.unimi.it/ftp/papers/xorshiftplus.pdf). It uses 128 bits of internal state, has a period length of 2^128 - 1, and passes all tests from the TestU01 suite.
 
 ```cpp
 uint64_t state0 = 1;
