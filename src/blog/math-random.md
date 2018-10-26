@@ -12,7 +12,7 @@ tags:
 
 — _[ES 2015, section 20.2.2.27](http://tc39.github.io/ecma262/#sec-math.random)_
 
-`Math.random()` is the most well-known and frequently-used source of randomness in Javascript. In V8 and most other Javascript engines, it is implemented using a [pseudo-random number generator](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) (PRNG). As with all PRNGs, the random number is derived from an internal state, which is altered by a fixed algorithm for every new random number. So for a given initial state, the sequence of random numbers is deterministic. Since the bit size n of the internal state is limited, the numbers that a PRNG generates will eventually repeat themselves. The upper bound for the period length of this [permutation cycle](https://en.wikipedia.org/wiki/Cyclic_permutation) is 2n.
+`Math.random()` is the most well-known and frequently-used source of randomness in Javascript. In V8 and most other Javascript engines, it is implemented using a [pseudo-random number generator](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) (PRNG). As with all PRNGs, the random number is derived from an internal state, which is altered by a fixed algorithm for every new random number. So for a given initial state, the sequence of random numbers is deterministic. Since the bit size n of the internal state is limited, the numbers that a PRNG generates will eventually repeat themselves. The upper bound for the period length of this [permutation cycle](https://en.wikipedia.org/wiki/Cyclic_permutation) is 2<sup>n</sup>.
 
 There are many different PRNG algorithms; among the most well-known ones are [Mersenne-Twister](https://en.wikipedia.org/wiki/Mersenne_Twister) and [LCG](https://en.wikipedia.org/wiki/Linear_congruential_generator). Each has its particular characteristics, advantages, and drawbacks. Ideally, it would use as little memory as possible for the initial state, be quick to perform, have a large period length, and offer a high quality random distribution. While memory usage, performance, and period length can easily be measured or calculated, the quality is harder to determine. There is a lot of math behind statistical tests to check the quality of random numbers. The de-facto standard PRNG test suite, [TestU01](http://simul.iro.umontreal.ca/testu01/tu01.html), implements many of these tests.
 
@@ -31,11 +31,11 @@ The 32-bit value is then turned into a floating point number between 0 and 1 in 
 
 MWC1616 uses little memory and is pretty fast to compute, but unfortunately offers sub-par quality:
 
-- The number of random values it can generate is limited to 232 as opposed to the 252 numbers between 0 and 1 that double precision floating point can represent.
-- The more significant upper half of the result is almost entirely dependent on the value of state0. The period length would be at most 232, but instead of few large permutation cycles, there are many short ones. With a badly chosen initial state, the cycle length could be less than 40 million.
+- The number of random values it can generate is limited to 2<sup>32</sup> as opposed to the 2<sup>52</sup> numbers between 0 and 1 that double precision floating point can represent.
+- The more significant upper half of the result is almost entirely dependent on the value of state0. The period length would be at most 2<sup>32</sup>, but instead of few large permutation cycles, there are many short ones. With a badly chosen initial state, the cycle length could be less than 40 million.
 - It fails many statistical tests in the TestU01 suite.
 
-This has been [pointed out](https://medium.com/@betable/tifu-by-using-math-random-f1c308c4fd9d) to us, and having understood the problem and after some research, we decided to reimplement `Math.random` based on an algorithm called [xorshift128+](http://vigna.di.unimi.it/ftp/papers/xorshiftplus.pdf). It uses 128 bits of internal state, has a period length of 2128 - 1, and passes all tests from the TestU01 suite.
+This has been [pointed out](https://medium.com/@betable/tifu-by-using-math-random-f1c308c4fd9d) to us, and having understood the problem and after some research, we decided to reimplement `Math.random` based on an algorithm called [xorshift128+](http://vigna.di.unimi.it/ftp/papers/xorshiftplus.pdf). It uses 128 bits of internal state, has a period length of 2<sup>128</sup> - 1, and passes all tests from the TestU01 suite.
 
 ```cpp
 uint64_t state0 = 1;
