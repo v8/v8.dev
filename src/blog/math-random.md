@@ -25,6 +25,7 @@ uint32_t mwc1616() {
   state0 = 18030 * (state0 & 0xFFFF) + (state0 >> 16);
   state1 = 30903 * (state1 & 0xFFFF) + (state1 >> 16);
   return state0 << 16 + (state1 & 0xFFFF);
+}
 ```
 
 The 32-bit value is then turned into a floating point number between 0 and 1 in agreement with the specification.
