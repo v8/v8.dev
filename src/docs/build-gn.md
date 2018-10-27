@@ -62,7 +62,7 @@ Generate build files for the directory `out/foo` using `gn`:
 gn args out/foo
 ```
 
-This opens an editor window for specifying the [`gn` arguments](https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md). Alternatively, you can pass the arguments on the command line:
+This opens an editor window for specifying the [`gn` arguments](https://gn.googlesource.com/gn/+/master/docs/reference.md). Alternatively, you can pass the arguments on the command line:
 
 ```bash
 gn gen out/foo --args='is_debug=false target_cpu="x64" v8_target_cpu="arm64" use_goma=true'
