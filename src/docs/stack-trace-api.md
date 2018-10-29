@@ -39,6 +39,18 @@ To pass this flag to V8 when running Google Chrome, use:
 --js-flags='--stack-trace-limit <value>'
 ```
 
+## Async stack traces
+
+The `--async-stack-traces` flag (currently turned off by default) enables the new [zero-cost async stack traces](http://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `stack` property of the `Error` instances with async stack frames, i.e. `await` locations in the code. These async frames are marked with `async` in the `stack` string:
+
+```
+ReferenceError: FAIL is not defined
+    at bar (<anonymous>)
+    at async foo (<anonymous>)
+```
+
+At the time of this writing it is limited to `await` locations and `Promise.all()`, since for those cases the engine can reconstruct the necessary information without any additional overhead (that's why it's zero-cost).
+
 ## Stack trace collection for custom exceptions
 
 The stack trace mechanism used for built-in errors is implemented using a general stack trace collection API that is also available to user scripts. The function
@@ -87,6 +99,9 @@ The structured stack trace is an array of `CallSite` objects, each of which repr
 - `isEval`: does this call take place in code defined by a call to `eval`?
 - `isNative`: is this call in native V8 code?
 - `isConstructor`: is this a constructor call?
+- `isAsync`: is this an async call (i.e. `await` or `Promise.all()`)?
+- `isPromiseAll`: is this an async call to `Promise.all()`?
+- `getPromiseIndex`: returns the index of the promise element that was followed in `Promise.all()` for async stack traces, or `null` if the `CallSite` is not a `Promise.all()` call.
 
 The default stack trace is created using the CallSite API so any information that is available there is also available through this API.
 
