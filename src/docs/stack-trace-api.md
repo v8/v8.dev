@@ -41,7 +41,7 @@ To pass this flag to V8 when running Google Chrome, use:
 
 ## Async stack traces
 
-The `--async-stack-traces` flag (currently turned off by default) enables the new [zero-cost async stack traces](http://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `stack` property of the `Error` instances with async stack frames, i.e. `await` locations in the code. These async frames are marked with `async` in the `stack` string:
+The `--async-stack-traces` flag (currently turned off by default) enables the new [zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `stack` property of `Error` instances with async stack frames, i.e. `await` locations in the code. These async frames are marked with `async` in the `stack` string:
 
 ```
 ReferenceError: FAIL is not defined
@@ -49,7 +49,7 @@ ReferenceError: FAIL is not defined
     at async foo (<anonymous>)
 ```
 
-At the time of this writing it is limited to `await` locations and `Promise.all()`, since for those cases the engine can reconstruct the necessary information without any additional overhead (that's why it's zero-cost).
+At the time of this writing, this functionality is limited to `await` locations and `Promise.all()`, since for those cases the engine can reconstruct the necessary information without any additional overhead (that’s why it’s zero-cost).
 
 ## Stack trace collection for custom exceptions
 
