@@ -31,7 +31,7 @@ Note that `x` is a free variable of the local closure `y => y + x`. V8 v7.1 can 
   <figcaption>Performance improvement with new escape analysis (lower is better)</figcaption>
 </figure>
 
-The escape analysis is now also able to eliminate some cases of variable index access to local arrays. Here's an example:
+The escape analysis is now also able to eliminate some cases of variable index access to local arrays. Here’s an example:
 
 ```js
 function sum(...args) {
