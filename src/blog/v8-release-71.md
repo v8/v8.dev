@@ -10,9 +10,11 @@ tags:
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.1](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.1), which is in beta until its release in coordination with Chrome 71 Stable in several weeks. V8 v7.1 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## Memory
+
 Following the work in v6.9/v7.0 to [embed builtins directly into the binary](/blog/embedded-builtins), bytecode handlers for the interpreter are now also [embedded into the binary](https://bugs.chromium.org/p/v8/issues/detail?id=8068). This saves around 200 KB on average per Isolate.
 
 ## Performance
+
 The escape analysis in TurboFan, which performs scalar replacement for objects that are local to an optimization unit, was improved to also [handle local function contexts for higher-order functions](http://bit.ly/v8-turbofan-context-sensitive-js-operators) when variables from the surrounding context escape to a local closure. Consider the following example:
 
 ```js
@@ -82,6 +84,7 @@ Read [the Web Fundamentals article on `Intl.RelativeTimeFormat`](https://develop
 V8 v7.1 also adds support for [the `globalThis` proposal](https://github.com/tc39/proposal-global), enabling a universal mechanism to access the global object even in strict functions or modules regardless of the platform.
 
 ## V8 API
-Please use `git log branch-heads/7.0..branch-heads/7.1 include/v8.h` to get a list of the API changes. 
+
+Please use `git log branch-heads/7.0..branch-heads/7.1 include/v8.h` to get a list of the API changes.
 
 Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 7.1 -t branch-heads/7.1` to experiment with the new features in V8 v7.1. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
