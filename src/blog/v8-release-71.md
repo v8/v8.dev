@@ -15,7 +15,7 @@ Following the work in v6.9/v7.0 to [embed builtins directly into the binary](/bl
 
 ## Performance
 
-The escape analysis in TurboFan, which performs scalar replacement for objects that are local to an optimization unit, was improved to also [handle local function contexts for higher-order functions](http://bit.ly/v8-turbofan-context-sensitive-js-operators) when variables from the surrounding context escape to a local closure. Consider the following example:
+The escape analysis in TurboFan, which performs scalar replacement for objects that are local to an optimization unit, was improved to also [handle local function contexts for higher-order functions](https://bit.ly/v8-turbofan-context-sensitive-js-operators) when variables from the surrounding context escape to a local closure. Consider the following example:
 
 ```js
 function mapAdd(a, x) {
