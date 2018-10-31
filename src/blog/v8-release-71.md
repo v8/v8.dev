@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v7.1'
-author: 'Stephan Herhut'
+author: 'Stephan Herhut, cloned cloner of clones'
 avatars:
   - stephan-herhut
 date: 2018-10-31 13:37:00
