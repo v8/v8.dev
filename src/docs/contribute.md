@@ -23,7 +23,7 @@ Sign them online [here](https://cla.developers.google.com/).
 
 ## Submit your code
 
-The source code of V8 follows the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) so you should familiarize yourself with those guidelines. Before submitting code you must pass all our [tests](Testing), and have to successfully run the presubmit checks:
+The source code of V8 follows the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) so you should familiarize yourself with those guidelines. Before submitting code you must pass all our [tests](/docs/test), and have to successfully run the presubmit checks:
 
 ```bash
 tools/presubmit.py
