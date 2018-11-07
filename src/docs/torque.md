@@ -17,7 +17,7 @@ First, open up the `test/torque/test-torque.tq` file and add the following code 
 
 ```torque
 macro PrintHelloWorld() {
-  Print('Hello World!');
+  Print('Hello world!');
 }
 ```
 
@@ -37,11 +37,11 @@ TEST(HelloWorld) {
 }
 ```
 
-Now [build the `cctest` executable](/docs/test) and finally execute the `cctest` test to print ‘Hello World’:
+Now [build the `cctest` executable](/docs/test) and finally execute the `cctest` test to print ‘Hello world’:
 
 ```bash
 $ out/x64.debug/cctest test-torque/HelloWorld
-Hello World!
+Hello world!
 ```
 
 ## How Torque generates code
@@ -298,7 +298,7 @@ Like builtins, `runtime`s cannot have labels.
 
 ### Explicit parameters
 
-Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn't support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses the V8's internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
+Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses the V8's internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
 
 <pre><code class="language-grammar">ExplicitParameters :
   <b>(</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list*</sub> <b>)</b>
@@ -352,8 +352,12 @@ When comparing a pair of corresponding parameters of two overloads…
 - …they are considered equally good if:
     - they are equal;
     - both require some implicit conversion.
-- … one is considered better if:
+- …one is considered better if:
     - it is a strict subtype of the other;
     - it doesn’t require an implicit conversion, while the other does.
 
 If no overload is strictly better than all alternatives, this results in a compile error.
+
+## Porting CSA code to Torque
+
+[The patch that ported `Array.of`](https://chromium-review.googlesource.com/c/v8/v8/+/1296464) serves as a minimal example of porting CSA code to Torque.
