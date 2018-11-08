@@ -18,13 +18,13 @@ First, some key concepts:
 - A handle scope can be thought of as a container for any number of handles. When you've finished with your handles, instead of deleting each one individually you can simply delete their scope.
 - A context is an execution environment that allows separate, unrelated, JavaScript code to run in a single instance of V8. You must explicitly specify the context in which you want any JavaScript code to be run.
 
-These concepts are discussed in greater detail in the [[Embedder's Guide|Embedder's Guide]].
+These concepts are discussed in greater detail in [the advanced guide](/docs/embed#advanced-guide).
 
 ## Run the example
 
 Follow the steps below to run the example yourself:
 
-1. Download the V8 source code by following [the Git instructions](TODO-using-git).
+1. Download the V8 source code by following [the Git instructions](/docs/source-code#using-git).
 1. The instructions for this hello world example have last been tested with V8 v7.1.11. You can check out this branch with `git checkout refs/tags/7.1.11 -b sample -t`
 1. Create a build configuration using the helper script:
 
