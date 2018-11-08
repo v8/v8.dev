@@ -5,7 +5,7 @@ V8 has built-in sample-based profiling. Profiling is turned off by default, but 
 
 ## Build
 
-Build the `d8` shell following the instructions at [Building with GN](TODO).
+Build the `d8` shell following the instructions at [Building with GN](/docs/build-gn).
 
 ## Command line
 
