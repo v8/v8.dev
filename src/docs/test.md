@@ -5,7 +5,7 @@ V8 includes a test framework that allows you to test the engine. The framework l
 
 ## Running the V8 tests
 
-Using `gm.py`, you can simply append `.check` to any build target to have tests run for it, e.g.
+[Using `gm`](/docs/build-gn#gm), you can simply append `.check` to any build target to have tests run for it, e.g.
 
 ```bash
 gm x64.release.check
@@ -14,7 +14,8 @@ gm ia32.check
 gm release.check
 gm check  # builds and tests all default platforms
 ```
-`gm.py` will automatically build any required targets before running the tests. You can also limit the tests to be run:
+
+`gm` automatically builds any required targets before running the tests. You can also limit the tests to be run:
 
 ```bash
 gm x64.release.check test262
@@ -37,12 +38,12 @@ Run the script with `--help` to find out about its other options.
 
 ## Running more tests
 
-The default set of tests to be run does not include all available tests. You can specify additional test suites on the command line of either `gm.py` or `run-tests.py`:
+The default set of tests to be run does not include all available tests. You can specify additional test suites on the command line of either `gm` or `run-tests.py`:
 
- - benchmarks (just for correctness, does not produce benchmark results!)
- - mozilla
- - test262
- - webkit
+ - `benchmarks` (just for correctness; does not produce benchmark results!)
+ - `mozilla`
+ - `test262`
+ - `webkit`
  
 ## Running microbenchmarks
 
@@ -86,7 +87,7 @@ The updated goldens are now available in `test/cctest/interpreter/bytecode_expec
 
 1. Run
 
-    ```
+    ```bash
     out/x64.release/generate-bytecode-expectations --raw-js testcase.js --output=test/cctest/interpreter/bytecode-expectations/testname.golden
     ```
 
