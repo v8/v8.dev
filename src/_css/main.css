@@ -64,7 +64,7 @@ body {
   right: 1em;
 }
 #header h1 a {
-  color: #fff;
+  color: #FFF;
   padding: 1em;
   font-size: 16px;
   position: absolute;
@@ -102,7 +102,7 @@ nav .current a {
 }
 #header nav a:hover, #header nav a:focus {
   background-color: var(--darkgray);
-  color: #fff;
+  color: #FFF;
 }
 nav li:last-child a {
   margin-right: 0;
@@ -115,7 +115,7 @@ a {
   height: 600px;
 }
 main, #footer {
-  background: #fff;
+  background: #FFF;
   padding: 1em var(--offset);
 }
 article footer {
@@ -187,14 +187,23 @@ pre code {
   color: inherit;
   background: inherit;
 }
-del, ins {
+mark, del, ins {
   padding: 0.2em;
 }
+pre mark {
+  background-color: var(--lightgray);
+}
+pre del {
+  background-color: red;
+}
+pre ins {
+  background-color: green;
+}
 del {
-  background: #fdd;
+  background: #FDD;
 }
 ins {
-  background: #afa;
+  background: #AFA;
 }
 ins, del:hover {
   text-decoration: none;
@@ -206,7 +215,7 @@ main a, footer a {
 }
 main a:hover, main a:focus, footer a:hover, footer a:focus {
   background-color: var(--darkblue);
-  color: #fff;
+  color: #FFF;
 }
 main a:hover code, main a:focus code {
   background-color: inherit;
@@ -266,14 +275,14 @@ table {
 }
 thead th {
   background: var(--blue);
-  color: #fff;
+  color: #FFF;
 }
 th, td {
-  border: 1px solid #dedede;
+  border: 1px solid #DEDEDE;
   padding: .5em 1em;
 }
 tbody tr:nth-child(odd) {
-  background-color: #eee;
+  background-color: #EEE;
 }
 main nav {
   text-align: center;
@@ -344,7 +353,7 @@ img {
   }
   nav .current a {
     background: #333;
-    color: #fff;
+    color: #FFF;
   }
   .js #nav-toggle, .js #header nav.show {
     display: block;
