@@ -4,7 +4,7 @@ author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), always-awa
 avatars:
   - 'maya-lekova'
   - 'benedikt-meurer'
-date: 2018-11-09 15:05:37
+date: 2018-11-12 16:45:07
 tags:
   - ECMAScript
   - benchmarks
