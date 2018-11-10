@@ -22,7 +22,7 @@ gm x64.release.check test262
 gm x64.debug.check mjsunit/regress/regress-123
 ```
 
-If you have already built V8, you can run the tests manually: 
+If you have already built V8, you can run the tests manually:
 
 ```bash
 tools/run-tests.py --outdir=out/ia32.release
@@ -40,11 +40,11 @@ Run the script with `--help` to find out about its other options.
 
 The default set of tests to be run does not include all available tests. You can specify additional test suites on the command line of either `gm` or `run-tests.py`:
 
- - `benchmarks` (just for correctness; does not produce benchmark results!)
- - `mozilla`
- - `test262`
- - `webkit`
- 
+- `benchmarks` (just for correctness; does not produce benchmark results!)
+- `mozilla`
+- `test262`
+- `webkit`
+
 ## Running microbenchmarks
 
 Under `test/js-perf-test` we have microbenchmarks to track feature performance. There is a special runner for these: `tools/run_perf.py`. Run them like:
