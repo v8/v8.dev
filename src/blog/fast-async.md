@@ -99,17 +99,23 @@ Fortunately, a cool new ES2018 feature called [async iteration](http://2ality.co
 const http = require('http');
 
 http.createServer(async (req, res) => {
-  let body = '';
-  req.setEncoding('utf8');
-  for await (const chunk of req) {
-    body += chunk;
+  try {
+    let body = '';
+    req.setEncoding('utf8');
+    for await (const chunk of req) {
+      body += chunk;
+    }
+    res.write(body);
+    res.end();
+  } catch {
+    res.statusCode = 500;
   }
-  res.write(body);
-  res.end();
 }).listen(1337);
 ```
 
-Instead of putting the logic that deals with the actual request processing into two different callbacks — the `'data'` and the `'end'` callback — we can now put everything into a single async function instead, and use the new `for await…of` loop to iterate over the chunks asynchronously.
+Instead of putting the logic that deals with the actual request processing into two different callbacks — the `'data'` and the `'end'` callback — we can now put everything into a single async function instead, and use the new `for await…of` loop to iterate over the chunks asynchronously. We also added a `try-catch` block to avoid falling into the 'unhandledRejection' caveat[^1].
+
+[^1]: Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pointing us to [this issue](https://github.com/mcollina/make-promises-safe/blob/master/README.md#the-unhandledrejection-problem).
 
 You can already use these new features in production today! Async functions are **fully supported starting with Node.js 8 (V8 v6.2 / Chrome 62)**, and async iterators and generators are **fully supported starting with Node.js 10 (V8 v6.8 / Chrome 68)**!
 
@@ -377,9 +383,9 @@ It still feels wrong that the engine has to create this `throwaway` promise, des
   <img src="/_img/fast-async/await-optimized.svg" alt="">
 </figure>
 
-This was recently addressed in an [editorial change](https://github.com/tc39/ecma262/issues/694) to the ECMAScript specification. Engines no longer need to create the `throwaway` promise for `await` — most of the time[^1].
+This was recently addressed in an [editorial change](https://github.com/tc39/ecma262/issues/694) to the ECMAScript specification. Engines no longer need to create the `throwaway` promise for `await` — most of the time[^2].
 
-[^1]: V8 still needs to create the `throwaway` promise if [`async_hooks`](https://nodejs.org/api/async_hooks.html) are being used in Node.js, since the `before` and `after` hooks are run within the _context_ of the `throwaway` promise.
+[^2]: V8 still needs to create the `throwaway` promise if [`async_hooks`](https://nodejs.org/api/async_hooks.html) are being used in Node.js, since the `before` and `after` hooks are run within the _context_ of the `throwaway` promise.
 
 <figure>
   <img src="/_img/fast-async/node-10-vs-node-12.svg" alt="">
@@ -392,9 +398,9 @@ Comparing `await` in Node.js 10 to the optimized `await` that’s likely going t
   <img src="/_img/fast-async/benchmark-optimization.svg" alt="">
 </figure>
 
-**`async`/`await` outperforms hand-written promise code now**. The key takeaway here is that we significantly reduced the overhead of async functions — not just in V8, but across all JavaScript engines, by patching the spec[^2].
+**`async`/`await` outperforms hand-written promise code now**. The key takeaway here is that we significantly reduced the overhead of async functions — not just in V8, but across all JavaScript engines, by patching the spec[^3].
 
-[^2]: As mentioned, [the patch](https://github.com/tc39/ecma262/pull/1250) hasn’t been merged into the ECMAScript specification just yet. The plan is to do so once we’ve made sure that the change doesn’t break the web.
+[^3]: As mentioned, [the patch](https://github.com/tc39/ecma262/pull/1250) hasn’t been merged into the ECMAScript specification just yet. The plan is to do so once we’ve made sure that the change doesn’t break the web.
 
 ## Improved developer experience
 
