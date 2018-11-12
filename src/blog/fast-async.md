@@ -109,6 +109,7 @@ http.createServer(async (req, res) => {
     res.end();
   } catch {
     res.statusCode = 500;
+    res.end();
   }
 }).listen(1337);
 ```
