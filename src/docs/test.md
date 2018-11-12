@@ -5,89 +5,58 @@ V8 includes a test framework that allows you to test the engine. The framework l
 
 ## Running the V8 tests
 
-Before you run the tests, [build V8 with GN](/docs/build-gn).
-
-You can append `.check` to any build target to have tests run for it, e.g.
+[Using `gm`](/docs/build-gn#gm), you can simply append `.check` to any build target to have tests run for it, e.g.
 
 ```bash
-make ia32.release.check
-make ia32.check
-make release.check
-make check # builds and tests everything (no dot before "check"!)
+gm x64.release.check
+gm x64.optdebug.check  # recommended: reasonably fast, with DCHECKs.
+gm ia32.check
+gm release.check
+gm check  # builds and tests all default platforms
 ```
 
-Before submitting patches, you should always run the `quickcheck` target, which builds a fast debug build and runs only the most relevant tests:
+`gm` automatically builds any required targets before running the tests. You can also limit the tests to be run:
 
 ```bash
-make quickcheck
+gm x64.release.check test262
+gm x64.debug.check mjsunit/regress/regress-123
 ```
 
-If you built V8 using GN, you can run tests like this:
+If you have already built V8, you can run the tests manually:
 
 ```bash
-tools/run-tests.py --gn
+tools/run-tests.py --outdir=out/ia32.release
 ```
 
-Or if you want have multiple GN configurations and don’t want to run the tests on the last compiled configuration:
+Again, you can specify which tests to run:
 
 ```bash
-tools/run-tests.py --outdir=out.gn/ia32.release
+tools/run-tests.py --outdir=ia32.release cctest/test-heap/SymbolTable/* mjsunit/delete-in-eval
 ```
 
-You can also run tests manually:
+Run the script with `--help` to find out about its other options.
 
-```bash
-tools/run-tests.py --arch-and-mode=ia32.release [--outdir=foo]
-```
+## Running more tests
 
-Or you can run individual tests:
+The default set of tests to be run does not include all available tests. You can specify additional test suites on the command line of either `gm` or `run-tests.py`:
 
-```bash
-tools/run-tests.py --arch=ia32 cctest/test-heap/SymbolTable/* mjsunit/delete-in-eval
-```
-
-Run the script with `--help` to find out about its other options, `--outdir` defaults to `out`. Also note that using the `cctest` binary to run multiple tests in one process is not supported.
-
-## Running the Mozilla and Test262 tests
-
-The V8 test framework comes with support for running the Mozilla test suite as well as the Test262 test suite. To download the test suites and then run them for the first time, do the following:
-
-```bash
-tools/run-tests.py --download-data mozilla
-tools/run-tests.py --download-data test262
-```
-
-To run the tests subsequently, you may omit the flag that downloads the test suite:
-
-```bash
-tools/run-tests.py mozilla
-tools/run-tests.py test262
-```
-
-Note that V8 fails a number of Mozilla tests because they require Firefox-specific extensions.
-
-## Running the WebKit tests
-
-Sometimes all of the above tests pass but WebKit build bots fail. To make sure WebKit tests pass run:
-
-```bash
-tools/run-tests.py --progress=verbose --outdir=out --arch=ia32 --mode=release webkit --timeout=200
-```
-
-Replace `--arch` and other parameters with values that match your build options.
+- `benchmarks` (just for correctness; does not produce benchmark results!)
+- `mozilla`
+- `test262`
+- `webkit`
 
 ## Running microbenchmarks
 
 Under `test/js-perf-test` we have microbenchmarks to track feature performance. There is a special runner for these: `tools/run_perf.py`. Run them like:
 
 ```bash
-tools/run_perf.py --arch x64 --binary-override-path out.gn/x64.release/d8 test/js-perf-test/JSTests.json
+tools/run_perf.py --arch x64 --binary-override-path out/x64.release/d8 test/js-perf-test/JSTests.json
 ```
 
 If you don’t want to run all the `JSTests`, you can provide a `filter` argument:
 
 ```bash
-tools/run_perf.py --arch x64 --binary-override-path out.gn/x64.release/d8 --filter JSTests/TypedArrays test/js-perf-test/JSTests.json
+tools/run_perf.py --arch x64 --binary-override-path out/x64.release/d8 --filter JSTests/TypedArrays test/js-perf-test/JSTests.json
 ```
 
 ## Updating the bytecode expectations
@@ -95,13 +64,13 @@ tools/run_perf.py --arch x64 --binary-override-path out.gn/x64.release/d8 --filt
 Sometimes the bytecode expectations may change resulting in `cctest` failures. To update the golden files, build `test/cctest/generate-bytecode-expectations` by running:
 
 ```bash
-ninja -C out.gn/x64.release generate-bytecode-expectations
+gm x64.release generate-bytecode-expectations
 ```
 
 …and then updating the default set of inputs by passing the `--rebaseline` flag to the generated binary:
 
 ```bash
-out.gn/x64.release/generate-bytecode-expectations --rebaseline
+out/x64.release/generate-bytecode-expectations --rebaseline
 ```
 
 The updated goldens are now available in `test/cctest/interpreter/bytecode_expectations/`.
@@ -113,13 +82,13 @@ The updated goldens are now available in `test/cctest/interpreter/bytecode_expec
 1. Build `generate-bytecode-expectations`:
 
     ```bash
-    ninja -C out.gn/x64.release generate-bytecode-expectations
+    gm x64.release generate-bytecode-expectations
     ```
 
 1. Run
 
-    ```
-    out.gn/x64.release/generate-bytecode-expectations --raw-js testcase.js --output=test/cctest/interpreter/bytecode-expectations/testname.golden
+    ```bash
+    out/x64.release/generate-bytecode-expectations --raw-js testcase.js --output=test/cctest/interpreter/bytecode-expectations/testname.golden
     ```
 
     where `testcase.js` contains the JavaScript test case that was added to `test-bytecode-generator.cc` and `testname` is the name of the test defined in `test-bytecode-generator.cc`.
