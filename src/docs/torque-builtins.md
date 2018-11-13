@@ -2,12 +2,11 @@
 title: 'V8 Torque builtins'
 ---
 
-This document is intended as an introduction to writing Torque builtins, and is targeted towards V8 developers.
-Torque replaces CodeStubAssembler as the recommended way to implement new builtins. For the CodeStubAssembler version of this guide, see [here](/docs/csa-builtins).
+This document is intended as an introduction to writing Torque builtins, and is targeted towards V8 developers. Torque replaces CodeStubAssembler as the recommended way to implement new builtins. See [CodeStubAssembler builtins](/docs/csa-builtins) for the CSA version of this guide.
 
 ## Builtins
 
-In V8, builtins can be seen as chunks of code that are executable by the VM at runtime. A common use case is to implement the functions of builtin objects (such as RegExp or Promise), but builtins can also be used to provide other internal functionality (e.g. as part of the IC system).
+In V8, builtins can be seen as chunks of code that are executable by the VM at runtime. A common use case is to implement the functions of builtin objects (such as `RegExp` or `Promise`), but builtins can also be used to provide other internal functionality (e.g. as part of the IC system).
 
 V8’s builtins can be implemented using a number of different methods (each with different trade-offs):
 
