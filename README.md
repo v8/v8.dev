@@ -18,6 +18,11 @@ This repository hosts the source code of [v8.dev, the official website of the V8
 
 The `package.json` contains Unix-specific commands.
 If you are using a Linux environment on Windows like git bash, msys2, or Cygwin, then you can configure `npm` to use it. This replaces the default behavior of using `cmd.exe`.
+For example:
+```
+npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
+```
+or
 ```
  npm config set script-shell "C:\\msys64\\usr\\bin\\sh.exe"
 ```
