@@ -89,7 +89,7 @@ In combination with generics, `constexpr` is a powerful Torque tool that can be 
 
 ## Files
 
-Torque code is packaged in individual source files. Each source file consists of a series of declarations, which themselves can optionally wrapped in a module declaration to separate the namespaces of declarations. The grammar for a `.tq` file is as follows:
+Torque code is packaged in individual source files. Each source file consists of a series of declarations, which themselves can optionally wrapped in a namespace declaration to separate the namespaces of declarations. The grammar for a `.tq` file is as follows:
 
 <pre><code class="language-grammar">Declaration :
   AbstractTypeDeclaration
