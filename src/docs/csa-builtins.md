@@ -2,6 +2,7 @@
 title: 'CodeStubAssembler builtins'
 ---
 This document is intended as an introduction to writing CodeStubAssembler builtins, and is targeted towards V8 developers.
+Torque replaces CodeStubAssembler as the recommended way to implement new builtins. For the Torque version of this guide, see [here](/docs/torque-builtins).
 
 ## Builtins
 

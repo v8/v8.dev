@@ -42,7 +42,7 @@ const installPrismLanguages = (Prism) => {
       }
     ],
     'builtin': /\b(?:UnsafeCast|Convert|Cast|check|assert)\b/,
-    'keyword': /\b(?:typeswitch|javascript|generates|constexpr|otherwise|continue|implicit|operator|runtime|builtin|extends|labels|return|module|extern|while|macro|const|label|break|type|else|case|let|try|for|if)\b/,
+    'keyword': /\b(?:typeswitch|javascript|generates|constexpr|otherwise|continue|implicit|operator|runtime|builtin|extends|labels|return|namespace|extern|while|macro|const|label|break|type|else|case|let|try|for|if)\b/,
     'boolean': /\b(?:[tT]rue|[fF]alse)\b/,
     'number': /\b0x[\da-fA-F]+\b|(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?/i,
     'operator': /--?|\+\+?|!=?=?|<=?|>=?|==?=?|&&?|\|\|?|\?|\*|\/|~|\^|%/,
