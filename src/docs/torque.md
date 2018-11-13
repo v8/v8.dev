@@ -48,7 +48,7 @@ Hello world!
 
 The Torque compiler doesn’t create machine code directly, but rather generates C++ code that calls V8’s existing `CodeStubAssembler` interface. The `CodeStubAssembler` uses the TurboFan compiler’s backend to generate efficient code. Torque compilation therefore requires multiple steps:
 
-1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files, outputting corresponding `*-gen.cc` files (one `.cc` file per Torque module). The `.cc` files that are generated use TurboFan’s `CodeStubAssembler` interface for generating code.
+1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files, outputting corresponding `*-gen.cc` files (one `.cc` file per Torque namespace). The `.cc` files that are generated use TurboFan’s `CodeStubAssembler` interface for generating code.
 1. The `gn` build then compiles the generated `.cc` files from step 1 into the `mksnapshot` executable.
 1. When `mksnapshot` runs, all of V8’s builtins are generated and packaged in to the snapshot file, including those that are defined in Torque and any other builtins that use Torque-defined functionality.
 1. The rest of V8 is built. All of Torque-authored builtins are made accessible via the snapshot file which is linked into V8. They can be called like any other builtin. In the final packaging, no direct traces of Torque remain (except for debug information): neither the Torque source code (`.tq` files) nor Torque-generated `.cc` files are included in the the `d8` or `chrome` executable.
@@ -98,16 +98,16 @@ Torque code is packaged in individual source files. Each source file consists of
   ConstDeclaration
   GenericSpecialization
 
-ModuleDeclaration :
-  <b>module</b> IdentifierName <b>{</b> Declaration* <b>}</b>
+NamespaceDeclaration :
+  <b>namespace</b> IdentifierName <b>{</b> Declaration* <b>}</b>
 
 FileDeclaration :
-  ModuleDeclaration
+  NamespaceDeclaration
   Declaration</code></pre>
 
-## Modules
+## Namespaces
 
-Torque modules allow declarations to be independent namespaces and they bear a similarity to C++ namespaces. They allow you to create declarations that are not automatically visible in other modules. Modules can be nested, and declarations inside a nested module can access the declarations in the module that contains them without qualification. Declarations that are not explicitly in a module declaration are put in a shared global default module that is visible to all modules. Modules can be reopened, allowing them to be defined over multiple files.
+Torque modules allow declarations to be independent namespaces and they bear a similarity to C++ namespaces. They allow you to create declarations that are not automatically visible in other modules. Namespaces can be nested, and declarations inside a nested module can access the declarations in the module that contains them without qualification. Declarations that are not explicitly in a module declaration are put in a shared global default module that is visible to all modules. Namespaces can be reopened, allowing them to be defined over multiple files.
 
 For example:
 
