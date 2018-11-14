@@ -3,6 +3,8 @@ title: 'CodeStubAssembler builtins'
 ---
 This document is intended as an introduction to writing CodeStubAssembler builtins, and is targeted towards V8 developers.
 
+**Note:** [Torque](/docs/torque) replaces CodeStubAssembler as the recommended way to implement new builtins. See [Torque builtins](/docs/torque-builtins) for the Torque version of this guide.
+
 ## Builtins
 
 In V8, builtins can be seen as chunks of code that are executable by the VM at runtime. A common use case is to implement the functions of builtin objects (such as RegExp or Promise), but builtins can also be used to provide other internal functionality (e.g. as part of the IC system).

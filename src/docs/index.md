@@ -54,8 +54,9 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
 - Under the hood
     - [Ignition](/docs/ignition)
     - [TurboFan](/docs/turbofan)
-    - [Torque](/docs/torque)
-    - [CodeStubAssembler built-ins](/docs/csa-builtins)
+    - [Torque user manual](/docs/torque)
+    - [Writing Torque built-ins](/docs/torque-builtins)
+    - [Writing CSA built-ins](/docs/csa-builtins)
 - Writing optimizable JavaScript
     - [Using V8’s sample-based profiler](/docs/profile)
     - [Profiling Chromium with V8](/docs/profile-chromium)
