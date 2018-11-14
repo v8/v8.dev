@@ -14,7 +14,7 @@ This repository hosts the source code of [v8.dev, the official website of the V8
 - `npm run watch` builds the site into `dist` and watches for changes.
 - `npm start` kicks off a local HTTP server.
 
-## Build on Windows
+### Additional Windows-specific instructions
 
 `npm run` might trigger Unix-specific commands. If you are using a Linux-like environment on Windows like git bash, msys2, or Cygwin, then you must configure npm to use it. This replaces the default behavior of using `cmd.exe`. For example:
 
