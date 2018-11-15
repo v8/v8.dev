@@ -189,7 +189,8 @@ The following code provides an example of creating a template for the global obj
 // Create a template for the global object and set the
 // built-in global functions.
 Local<ObjectTemplate> global = ObjectTemplate::New(isolate);
-global->Set(String::NewFromUtf8(isolate, "log"), FunctionTemplate::New(isolate, LogCallback));
+global->Set(String::NewFromUtf8(isolate, "log"),
+            FunctionTemplate::New(isolate, LogCallback));
 
 // Each processor gets its own context so different processors
 // do not affect each other.
@@ -334,7 +335,8 @@ void JsHttpRequestProcessor::MapGet(Local<String> name,
 
   // Otherwise fetch the value and wrap it in a JavaScript string.
   const string &value = (*iter).second;
-  info.GetReturnValue().Set(String::NewFromUtf8(value.c_str(), String::kNormalString, value.length()));
+  info.GetReturnValue().Set(
+      String::NewFromUtf8(value.c_str(), String::kNormalString, value.length()));
 }
 ```
 
