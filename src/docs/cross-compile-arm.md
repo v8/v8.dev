@@ -3,7 +3,7 @@ title: 'Cross-compiling for ARM'
 ---
 First, make sure you can [build with GN](/docs/build-gn).
 
-Then, add android to your `.gclient` configuration file.
+Then, add `android` to your `.gclient` configuration file.
 
 ```python
 target_os = ['android']  # Add this to get Android stuff checked out.
