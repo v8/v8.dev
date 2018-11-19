@@ -26,10 +26,10 @@ Sign them online [here](https://cla.developers.google.com/).
 The source code of V8 follows the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) so you should familiarize yourself with those guidelines. Before submitting code you must pass all our [tests](/docs/test), and have to successfully run the presubmit checks:
 
 ```bash
-tools/presubmit.py
+git cl presubmit
 ```
 
-The presubmit script uses a linter from Google, `cpplint.py`. External contributors can get this from [here](https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py) and place it in their path.
+The presubmit script uses a linter from Google, [cpplint.py](https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py). It is part of [`depot_tools`](https://dev.chromium.org/developers/how-tos/install-depot-tools), and it must be in your `PATH` -- so if you have depot_tools in your `PATH`, everything should just work.
 
 ### Upload to V8’s codereview tool
 
@@ -37,4 +37,4 @@ All submissions, including submissions by project members, require review. We us
 
 ### Look out for breakage or regressions
 
-Before submitting your code please check [the buildbot console](https://build.chromium.org/p/client.v8/console) to see that the columns are mostly green before checking in your changes — otherwise you will not know if your changes break the build or not. When your change is committed, watch [the buildbot console](https://build.chromium.org/p/client.v8/console) until the bots turn green after your change.
+Once you have codereview approval, you can land your patch using the commit queue. It runs a bunch of tests and commits your patch if all tests pass. Once your change is committed, it is a good idea to watch [the buildbot console](https://build.chromium.org/p/client.v8/console) until the bots turn green after your change, because the console runs a few more tests than the commit queue.
