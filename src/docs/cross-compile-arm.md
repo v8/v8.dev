@@ -88,15 +88,15 @@ d8>
 
 ### Logging
 
-By default, some of d8's debugging output ends up in the Android system log, which can be dumped using [logcat](https://developer.android.com/studio/command-line/logcat). Unfortunately, sometimes part of a particular debugging output is split between system log and adb, and sometimes some part seems to be completely missing. To avoid these issues, it is recommended to add the following setting to the gn args:
+By default, some of `d8`’s debugging output ends up in the Android system log, which can be dumped using [`logcat`](https://developer.android.com/studio/command-line/logcat). Unfortunately, sometimes part of a particular debugging output is split between system log and `adb`, and sometimes some part seems to be completely missing. To avoid these issues, it is recommended to add the following setting to the `gn args`:
 
 ```python
 v8_android_log_stdout = true
 ```
 
-### Floating point issues
+### Floating-point issues
 
-The gn args setting `arm_float_abi = "hard"`, which is used by the V8 Arm GC Stress bot, can result in completely nonsensical program behavior on other hardware (e.g. on Nexus 7).
+The `gn args` setting `arm_float_abi = "hard"`, which is used by the V8 Arm GC Stress bot, can result in completely nonsensical program behavior on other hardware (e.g. on Nexus 7).
 
 ## Using Sourcery G++ Lite
 
