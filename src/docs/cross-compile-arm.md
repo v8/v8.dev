@@ -96,7 +96,7 @@ v8_android_log_stdout = true
 
 ### Floating-point issues
 
-The `gn args` setting `arm_float_abi = "hard"`, which is used by the V8 Arm GC Stress bot, can result in completely nonsensical program behavior on other hardware (e.g. on Nexus 7).
+The `gn args` setting `arm_float_abi = "hard"`, which is used by the V8 Arm GC Stress bot, can result in completely nonsensical program behavior on hardware different from the one the GC stress bot is using (e.g. on Nexus 7).
 
 ## Using Sourcery G++ Lite
 
