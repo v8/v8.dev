@@ -11,7 +11,7 @@ In order to take advantage of the vulnerability, an attacker has to execute care
 
 ## If you do execute untrusted code…
 
-### Update to the latest V8 to benefit from mitigations
+### Update to the latest V8 to benefit from mitigations and enable mitigations
 
 Mitigations for this class of attack are available in V8 itself starting with [V8 v6.4.388.18](https://chromium.googlesource.com/v8/v8/+/e6eddfe4d1ed9d96b453d14b84ac19769388d8b1), so updating your embedded copy of V8 to [v6.4.388.18](https://chromium.googlesource.com/v8/v8/+/e6eddfe4d1ed9d96b453d14b84ac19769388d8b1) or later is advised. Older versions of V8, including versions of V8 that still use FullCodeGen and/or CrankShaft, do not have mitigations for SSCA.
 
@@ -23,6 +23,8 @@ These mitigations are enabled by the `--untrusted-code-mitigations` flag:
 - Masking of the indices in JIT code used to access JavaScript arrays and strings in speculatively executed paths to ensure speculative loads cannot be made with arrays and string to memory addresses that should not accessible to JavaScript code.
 
 Embedders should be aware that the mitigations may come with a performance trade-off. The actual impact depends significantly on your workload. For workloads such as Speedometer the impact is negligible but for more extreme computational workloads it can be as much as 15%. If you fully trust the JavaScript and WebAssembly code that your embedded V8 instance executes, you may choose to disable these JIT mitigations by specifying the flag `--no-untrusted-code-mitigations` at runtime. The `v8_enable_untrusted_code_mitigations` GN flag can be used to disable the mitigations at build-time.
+
+Note that V8 defaults to disabling these mitigations on platforms where it is assumed the embedder will use process isolation, such as platforms where Chromium uses site isolation.
 
 ### Sandbox untrusted execution in a separate process
 
