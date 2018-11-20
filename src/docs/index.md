@@ -38,7 +38,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Testing](/docs/test)
     - [Triaging issues](/docs/triage-issues)
 - Debugging
-    - [ARM debugging](/docs/debug-arm)
+    - [ARM debugging with the simulator](/docs/debug-arm)
     - [Debugging builtins with GDB](/docs/gdb)
     - [Debugging over the V8 Inspector Protocol](/docs/inspector)
     - [GDB JIT Compilation Interface integration](/docs/gdb-jit)
