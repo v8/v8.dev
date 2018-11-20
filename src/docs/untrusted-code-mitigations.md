@@ -22,7 +22,7 @@ These mitigations are enabled by the `--untrusted-code-mitigations` flag:
 - Masking of addresses before memory accesses in WebAssembly and asm.js to ensure that speculatively executed memory loads cannot access memory outside of the WebAssembly and asm.js heaps.
 - Masking of the indices in JIT code used to access JavaScript arrays and strings in speculatively executed paths to ensure speculative loads cannot be made with arrays and string to memory addresses that should not accessible to JavaScript code.
 
-Embedders should be aware that the mitigations may come with a performance trade-off. The actual impact depends significantly on your workload. For workloads such as Speedometer the impact is negligible but for more extreme computational workloads it can be as much as 15%. If you fully trust the JavaScript and WebAssembly code that your embedded V8 instance executes, you may choose to disable these JIT mitigations by specifying the flag `--no-untrusted-code-mitigations` at runtime. The `v8_enable_untrusted_code_mitigations` GN flag can be used to disable the mitigations at build-time.
+Embedders should be aware that the mitigations may come with a performance trade-off. The actual impact depends significantly on your workload. For workloads such as Speedometer the impact is negligible but for more extreme computational workloads it can be as much as 15%. If you fully trust the JavaScript and WebAssembly code that your embedded V8 instance executes, you may choose to disable these JIT mitigations by specifying the flag `--no-untrusted-code-mitigations` at runtime. The `v8_untrusted_code_mitigations` GN flag can be used to disable the mitigations at build-time.
 
 ### Sandbox untrusted execution in a separate process
 
