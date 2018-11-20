@@ -1,5 +1,5 @@
 ---
-title: 'Cross-compiling for ARM'
+title: 'Cross-compiling and debugging for ARM/Android'
 ---
 First, make sure you can [build with GN](/docs/build-gn).
 
