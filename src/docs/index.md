@@ -20,7 +20,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
 - [Building V8 from source](/docs/build)
     - [Checking out the V8 source code](/docs/source-code)
     - [Building with GN](/docs/build-gn)
-    - [Cross-compiling for ARM](/docs/cross-compile-arm)
+    - [Cross-compiling and debugging for ARM/Android](/docs/cross-compile-arm)
     - [GUI and IDE setup](/docs/ide-setup)
 - [Contributing](/docs/contribute)
     - [V8’s public API and its stability](/docs/api)
@@ -39,6 +39,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Triaging issues](/docs/triage-issues)
 - Debugging
     - [ARM debugging with the simulator](/docs/debug-arm)
+    - [Cross-compiling and debugging for ARM/Android](/docs/cross-compile-arm)
     - [Debugging builtins with GDB](/docs/gdb)
     - [Debugging over the V8 Inspector Protocol](/docs/inspector)
     - [GDB JIT Compilation Interface integration](/docs/gdb-jit)
