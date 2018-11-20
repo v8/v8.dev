@@ -1,7 +1,7 @@
 ---
 title: 'What to do if your CL broke the Node.js integration build'
 ---
-[Node.js master](https://github.com/nodejs/node) uses V8 stable or beta. For additional integration, the V8 team builds Node with [V8 master](https://chromium.googlesource.com/v8/v8.git), i.e., with a V8 version from today. We provide integration bots for [Linux](https://build.chromium.org/p/client.v8.fyi/builders/V8%20Linux64%20-%20node.js%20integration), [Windows](https://build.chromium.org/p/client.v8.fyi/builders/V8%20Win64%20-%20node.js%20integration), and [Mac](https://build.chromium.org/p/client.v8.fyi/builders/V8%20Mac64%20-%20node.js%20integration). For each successful build, the integration bot provides an *Archive link* from which you can download a Node executable (click on the `Build #` and search for `Archive`).
+[Node.js master](https://github.com/nodejs/node) uses V8 stable or beta. For additional integration, the V8 team builds Node with [V8 master](https://chromium.googlesource.com/v8/v8.git), i.e., with a V8 version from today. We provide integration bots for [Linux](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20node.js%20integration), [Windows](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Win64%20-%20node.js%20integration), and [Mac](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Mac64%20-%20node.js%20integration). For each successful build, the integration bot provides an *Archive link* from which you can download a Node executable (click on the `Build #` and search for `Archive`).
 
 If the [`v8_node_linux64_rel` bot](https://ci.chromium.org/p/v8/builders/luci.v8.try/v8_node_linux64_rel) fails on the V8 Commit Queue, there is either a legitimate problem with your CL (fix it) or [Node](https://github.com/v8/node/) must be modified. If the Node tests failed, search for “Not OK” in the log files. **This document describes how to reproduce the problem locally and how to make changes to [V8’s Node fork](https://github.com/v8/node/) if your V8 CL causes the build to fail.**
 
@@ -48,7 +48,7 @@ To run the debug binary, run `./node_g` rather than `./node`.
 
 ## Make changes to Node.js
 
-If you need to change something in [Node](https://github.com/v8/node/) so your CL doesn’t break the [build](https://build.chromium.org/p/client.v8.fyi/builders/V8%20-%20node.js%20integration) anymore, do the following. **You need a GitHub account for this**.
+If you need to change something in [Node](https://github.com/v8/node/) so your CL doesn’t break the [build](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20node.js%20integration) anymore, do the following. **You need a GitHub account for this**.
 
 ### Get the Node sources
 

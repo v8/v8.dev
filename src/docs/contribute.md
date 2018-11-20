@@ -37,4 +37,4 @@ All submissions, including submissions by project members, require review. We us
 
 ### Look out for breakage or regressions
 
-Once you have codereview approval, you can land your patch using the commit queue. It runs a bunch of tests and commits your patch if all tests pass. Once your change is committed, it is a good idea to watch [the buildbot console](https://build.chromium.org/p/client.v8/console) until the bots turn green after your change, because the console runs a few more tests than the commit queue.
+Once you have codereview approval, you can land your patch using the commit queue. It runs a bunch of tests and commits your patch if all tests pass. Once your change is committed, it is a good idea to watch [the buildbot console](https://ci.chromium.org/p/v8/g/main/console) until the bots turn green after your change, because the console runs a few more tests than the commit queue.
