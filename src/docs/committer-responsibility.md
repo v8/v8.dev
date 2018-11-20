@@ -5,7 +5,7 @@ When you’re committing to the V8 repositories, ensure that you follow these gu
 
 1. Find the right reviewer for your changes and for patches you’re asked to review.
 1. Be available on IM and/or email before and after you land the change.
-1. Watch the [waterfall](http://build.chromium.org/p/client.v8/console) until all bots turn green after your change.
+1. Watch the [waterfall](https://ci.chromium.org/p/v8/g/main/console) until all bots turn green after your change.
 1. When landing a TBR change (To Be Reviewed), make sure to notify the people whose code you’re changing. Usually just send the review e-mail.
 
 In short, do the right thing for the project, not the easiest thing to get code committed, and above all: use your best judgement.

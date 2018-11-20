@@ -29,6 +29,6 @@ Running the script with no options will provide a summary of options as well.
 
 ## Code coverage bot
 
-For each change that landed, we run a x64 coverage analysis — see the [coverage bot](https://build.chromium.org/p/client.v8/builders/V8%20Linux64%20-%20gcov%20coverage). We don't run bots for coverage for other architectures.
+For each change that landed, we run a x64 coverage analysis — see the [coverage bot](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20gcov%20coverage). We don't run bots for coverage for other architectures.
 
 To get the report for a particular run, you want to list the build steps, find the “gsutil coverage report” one (towards the end), and open the “report” under it.
