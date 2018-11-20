@@ -124,14 +124,14 @@ tar -xvf arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 
 ## Profile
 
-- Compile a binary, push it to the device, keep a copy of it on the host
+- Compile a binary, push it to the device, keep a copy of it on the host:
 
     ```bash
     adb shell cp /data/local/tmp/v8/bin/d8 /data/local/tmp/v8/bin/d8-version.under.test
     cp out.gn/arm.release/d8 ./d8-version.under.test
     ```
 
-- get a profiling log and copy it to the host:
+- Get a profiling log and copy it to the host:
 
     ```bash
     adb push benchmarks /data/local/tmp
@@ -140,9 +140,9 @@ tar -xvf arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
     adb pull /data/local/tmp/benchmarks/v8.log ./
     ```
 
-- open `v8.log` in your favorite editor and edit the first line to match the full path of the `d8-version.under.test` binary on your workstation (instead of the `/data/local/tmp/v8/bin/` path it had on the device)
+- Open `v8.log` in your favorite editor and edit the first line to match the full path of the `d8-version.under.test` binary on your workstation (instead of the `/data/local/tmp/v8/bin/` path it had on the device)
 
-- run the tick processor with the host’s `d8` and an appropriate `nm` binary:
+- Run the tick processor with the host’s `d8` and an appropriate `nm` binary:
 
     ```bash
     cp out/x64.release/d8 .  # only required once
