@@ -49,7 +49,7 @@ Anyone who wants to implement a feature in V8 must contact [v8-users@googlegroup
 - Clarify the feature status with regard to the criteria in the guidelines on this page (TC39 or WebAssembly Community Group acceptance, interest from browser vendors, testing plans) in an “intent to implement” email.
 - Provide a design doc to clarify V8 code base impact.
 - The implementation should also consider DevTools support. Refer to the [_debugger support checklist for new language features_](https://docs.google.com/document/d/1_DBgJ9eowJJwZYtY6HdiyrizzWzwXVkG5Kt8s3TccYE/edit) for more details.
-- Implement the feature under a `--harmony-X` flag for JavaScript or a `--experimental-wasm-X` flag for WebAssembly.
+- Implement the feature under a `--harmony-X` flag for JavaScript or an `--experimental-wasm-X` flag for WebAssembly.
 - Develop conformance and performance tests in parallel.
 
 ### Staging
