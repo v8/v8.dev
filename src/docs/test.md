@@ -59,7 +59,7 @@ If you don’t want to run all the `JSTests`, you can provide a `filter` argumen
 tools/run_perf.py --arch x64 --binary-override-path out/x64.release/d8 --filter JSTests/TypedArrays test/js-perf-test/JSTests.json
 ```
 
-## Updating the bytecode expectations
+## Updating the bytecode expectations (rebaselining)
 
 Sometimes the bytecode expectations may change resulting in `cctest` failures. To update the golden files, build `test/cctest/generate-bytecode-expectations` by running:
 
