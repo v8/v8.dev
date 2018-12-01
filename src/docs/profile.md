@@ -170,9 +170,9 @@ But what if you want the code to run faster on all browsers? You should first **
 ./chrome --js-flags='--prof' --no-sandbox 'http://localhost:8080/'
 ```
 
-When preparing the test case, make sure it begins its work immediately upon load, and simply close Chrome when the computation is done (hit Alt+F4), so that you only have the ticks you care about in the log file. Also note that web workers aren’t yet profiled correctly with this technique.
+When preparing the test case, make sure it begins its work immediately upon load, and close Chrome when the computation is done (hit Alt+F4), so that you only have the ticks you care about in the log file. Also note that web workers aren’t yet profiled correctly with this technique.
 
-Then, process the `v8.log` file with the tick-processor script that ships with V8 (or the new practical web version):
+Then, process the `v8.log` file with the `tick-processor` script that ships with V8 (or the new practical web version):
 
 ```bash
 v8/tools/linux-tick-processor v8.log
@@ -190,7 +190,7 @@ Statistical profiling result from null, (14306 ticks, 0 unaccounted, 0 excluded)
      27    0.2%    0.0%  /.../chrome/src/out/Release/lib/libwebkit.so
 ```
 
-The top section shows that V8 is spending more time inside an OS-specific system library than in its own code. Let’s look at what’s responsible for it by examining the “bottom up” output section, where you can read indented lines as “was called by” (and lines starting with a * mean that the function has been optimized by Crankshaft):
+The top section shows that V8 is spending more time inside an OS-specific system library than in its own code. Let’s look at what’s responsible for it by examining the “bottom up” output section, where you can read indented lines as “was called by” (and lines starting with a `*` mean that the function has been optimized by TurboFan):
 
 ```
 [Bottom up (heavy) profile]:
@@ -208,7 +208,7 @@ More than **44% of the total time is spent executing the `exp()` function inside
 
 If you look at the JavaScript code, you’ll see that `exp()` is used solely to produce a smooth grayscale palette. There are countless ways to produce a smooth grayscale palette, but let’s suppose you really really like exponential gradients. Here is where algorithmic optimization comes into play.
 
-You’ll notice that `exp()` is called with an argument in the range `-4 < x < 0`, so we can safely replace it with its Taylor approximation for that range, which delivers the same smooth gradient with only a multiplication and a couple of divisions:
+You’ll notice that `exp()` is called with an argument in the range `-4 < x < 0`, so we can safely replace it with its [Taylor approximation](https://en.wikipedia.org/wiki/Taylor_series) for that range, which delivers the same smooth gradient with only a multiplication and a couple of divisions:
 
 ```
 exp(x) ≈ 1 / ( 1 - x + x * x / 2) for -4 < x < 0
