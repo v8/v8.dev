@@ -46,17 +46,18 @@
 
   // Google Analytics.
   var UA_ID = 'UA-65961526-1';
-  self.dataLayer = [];
-  self.gtag = function() {
-    self.dataLayer.push(arguments);
+  self.GoogleAnalyticsObject = 'ga';
+  ga.l = +new Date();
+  ga.q = [];
+  self.ga = function() {
+    ga.q.push(arguments);
   };
-  gtag('js', new Date());
-  gtag('config', UA_ID, {
-    'referrer': document.referrer.split('?')[0],
-  });
+  ga('create', UA_ID, 'auto');
+  ga('set', 'referrer', document.referrer.split('?')[0]);
+  ga('send', 'pageview');
   var firstScript = document.scripts[0];
   var scriptElement = document.createElement('script');
-  scriptElement.src = 'https://www.googletagmanager.com/gtag/js?id=' + UA_ID;
+  scriptElement.src = 'https://www.google-analytics.com/analytics.js';
   firstScript.parentNode.insertBefore(scriptElement, firstScript);
 
 }());

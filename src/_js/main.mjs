@@ -44,18 +44,16 @@ if (location.search.includes('utm_source')) {
 
 // Google Analytics.
 const UA_ID = 'UA-65961526-1';
-self.dataLayer = [];
-self.gtag = function() {
-  // Note: This needs to be an actual `arguments` object. Proper arrays
-  // (such as those produced by rest parameters) prevent any analytics
-  // from being collected at all. :(
-  self.dataLayer.push(arguments);
+self.GoogleAnalyticsObject = 'ga';
+ga.l = Date.now();
+ga.q = [];
+self.ga = (...args) => {
+  ga.q.push(args);
 };
-gtag('js', new Date());
-gtag('config', UA_ID, {
-  'referrer': document.referrer.split('?')[0],
-});
+ga('create', UA_ID, 'auto');
+ga('set', 'referrer', document.referrer.split('?')[0]);
+ga('send', 'pageview');
 const firstScript = document.scripts[0];
 const scriptElement = document.createElement('script');
-scriptElement.src = `https://www.googletagmanager.com/gtag/js?id=${ UA_ID }`;
+scriptElement.src = 'https://www.google-analytics.com/analytics.js';
 firstScript.parentNode.insertBefore(scriptElement, firstScript);
