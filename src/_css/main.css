@@ -21,6 +21,7 @@
   /* Derived colors. */
   --darkblue: #0A50C2;
   --lightestgray: #D6D6D6;
+  --lightyellow: #FDEEB5;
   --yellow: #FAD956;
   --orange: #F8A602;
 
@@ -139,6 +140,9 @@ hr {
 }
 .footnotes {
   font-size: 0.8em;
+}
+.footnote-item:target {
+  background: var(--lightyellow);
 }
 .retweet {
   display: inline-block;
