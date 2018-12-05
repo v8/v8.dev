@@ -163,7 +163,7 @@ For spreading strings (`[...string]`), we measured a roughly 5× improvement, as
 
 <figure>
   <img src="/_img/spread-elements/spread-set.png" srcset="/_img/spread-elements/spread-set@2x.png 2x" alt="">
-  <figcaption>Performance improvement of spreading a set with 100,000 integers (magenta, about 18×), shown here in comparison with a `for`-`of` loop (red)</figcaption>
+  <figcaption>Performance improvement of spreading a set with 100,000 integers (magenta, about 18×), shown here in comparison with a <code>for</code>-<code>of</code> loop (red)</figcaption>
 </figure>
 
 ## Improving `Array.from` performance
