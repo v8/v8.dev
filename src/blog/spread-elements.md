@@ -24,9 +24,9 @@ const result = [1, ...a, 4, ...b];
 As another example, any string can be spread to create an array of its characters (Unicode code points):
 
 ```js
-const str = 'こにちは';
+const str = 'こんにちは';
 const result = [...str];
-// → ['こ', 'に', 'ち', 'は']
+// → ['こ', 'ん', 'に', 'ち', 'は']
 ```
 
 Similarly, any set can be spread to create an array of its elements, sorted by insertion order:
