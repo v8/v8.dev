@@ -172,7 +172,7 @@ Fortunately, our fast paths for spread elements can be reused for `Array.from` i
 
 <figure>
   <img src="/_img/spread-elements/array-from-array-of-doubles.png" srcset="/_img/spread-elements/array-from-array-of-doubles@2x.png 2x" alt="">
-  <figcaption>Performance improvement of `Array.from(array)` where `array` contains 100 doubles</figcaption>
+  <figcaption>Performance improvement of <code>Array.from(array)</code> where <code>array</code> contains 100 doubles</figcaption>
 </figure>
 
 ## Conclusion
