@@ -170,6 +170,11 @@ For spreading strings (`[...string]`), we measured a roughly 5× improvement, as
 
 Fortunately, our fast paths for spread elements can be reused for `Array.from` in the case where `Array.from` is called with an iterable object and without a mapping function, for example, `Array.from([1, 2, 3])`. The reuse is possible because in this case, the behavior of `Array.from` is exactly the same as that of spreading. It results in an enormous performance improvement, shown below for an array with 100 doubles.
 
+<figure>
+  <img src="/_img/spread-elements/array-from-array-of-doubles.png" srcset="/_img/spread-elements/array-from-array-of-doubles@2x.png 2x" alt="">
+  <figcaption>Performance improvement of `Array.from(array)` where `array` contains 100 doubles</figcaption>
+</figure>
+
 ## Conclusion
 
 V8 v7.2 / Chrome 72 greatly improves  the performance of spread elements when they occur at the front of the array literal, for example `[...x]` or `[...x, 1, 2]`. The improvement applies to spreading arrays, primitive strings, sets, maps keys, maps values, and — by extension — to `Array.from(x)`.
