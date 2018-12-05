@@ -6,6 +6,7 @@ tags:
   - ECMAScript
   - benchmarks
 description: 'V8 v7.2 / significantly speeds up Array.from(array) as well as [...spread] for arrays, strings, sets, and maps.'
+tweet: '1070344545685118976'
 ---
 During his three-months internship on the V8 team, Hai Dang worked on improving the performance of `[...array]`, `[...string]`, `[...set]`, `[...map.keys()]`, and `[...map.values()]` (when the spread elements are at the start of the array literal). He even made `Array.from(iterable)` much faster as well. This article explains some of the gory details of his changes, which are included in V8 starting with v7.2.
 
