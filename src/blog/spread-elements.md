@@ -142,7 +142,7 @@ Note that although `slice` is included in this graph, the comparison with it is 
 The filling of holes with `undefined` that our fast path has to perform is not as simple as it sounds: it may require converting the whole array to a different elements kind. The next graph measures such a situation. The setup is the same as above, except that this time the 600 array elements are unboxed doubles and the array has the `HOLEY_DOUBLE_ELEMENTS` elements kind. Since this elements kind cannot hold tagged values such as `undefined`, spreading involves a costly elements kind transition, which is why the score for `[...a]` is much lower than in the previous graph. Nevertheless, it is still much faster than `clone(a)`.
 
 <figure>
-  <img src="/_img/spread-elements/spread-holey-smi-array.png" srcset="/_img/spread-elements/spread-holey-smi-array@2x.png 2x" alt="">
+  <img src="/_img/spread-elements/spread-holey-double-array.png" srcset="/_img/spread-elements/spread-holey-double-array@2x.png 2x" alt="">
   <figcaption>Performance improvement of spreading a holey array of doubles (<a href="/blog/elements-kinds"><code>HOLEY_DOUBLE_ELEMENTS</code></a>)</figcaption>
 </figure>
 
