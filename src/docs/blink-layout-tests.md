@@ -1,7 +1,7 @@
 ---
-title: 'Blink layout tests'
+title: 'Blink web tests (a.k.a. layout tests)'
 ---
-We continuously run [layout tests](https://chromium.googlesource.com/chromium/src/+/master/docs/testing/web_tests.md) on our [FYI waterfall](https://ci.chromium.org/p/v8/g/fyi/console?branch=master) to prevent integration problems with Chromium.
+We continuously run [Blink’s web tests (formerly known as “layout tests”)](https://chromium.googlesource.com/chromium/src/+/master/docs/testing/web_tests.md) on our [FYI waterfall](https://ci.chromium.org/p/v8/g/fyi/console?branch=master) to prevent integration problems with Chromium.
 
 On test failures, the bots compare the results of V8 Tip-of-Tree with Chromium’s pinned V8 version, to only flag newly introduced V8 problems (with false positives < 5%). Blame assignment is trivial as the [Linux release](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8-Blink%20Linux%2064) bot tests all revisions.
 
