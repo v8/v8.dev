@@ -28,7 +28,7 @@ git submodule update --init
 ./waf configure build
 ```
 
-If anything goes wrong, be sure to check out [cquery’s getting started guide](https://github.com/cquery-project/cquery/wiki/Getting-started).
+If anything goes wrong, be sure to check out [cquery’s getting started guide](https://github.com/cquery-project/cquery/wiki).
 
 You can use `git pull && git submodule update` to update cquery at a later time (don't forget to rebuild via `./waf configure build`).
 
