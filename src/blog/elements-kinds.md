@@ -335,7 +335,7 @@ Built-in methods (such as `Array.prototype.forEach`) can deal with this kind of 
 
 Another example of monomorphism vs. polymorphism in V8 involves object shapes, also known as the hidden class of an object. To learn about that case, check out [Vyacheslav’s article](https://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html).
 
-## Debugging elements kinds
+## Debugging elements kinds { #debugging }
 
 To figure out a given object’s “elements kind”, get a debug build of `d8` (see [“Building from source”](/docs/build)), and run:
 
