@@ -38,10 +38,10 @@ const md = markdownIt(markdownItConfig)
   .use(markdownItAttrs)
   .use(markdownItAnchor, markdownItAnchorConfig);
 
-module.exports = function(eleventyConfig) {
+module.exports = (eleventyConfig) => {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight, {
-    init: function({ Prism }) {
+    init({ Prism }) {
       installPrismLanguages(Prism);
     },
   });
