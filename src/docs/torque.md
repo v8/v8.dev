@@ -93,6 +93,7 @@ Torque code is packaged in individual source files. Each source file consists of
 
 <pre><code class="language-grammar">Declaration :
   AbstractTypeDeclaration
+  ClassDeclaration
   TypeAliasDeclaration
   CallableDeclaration
   ConstDeclaration
@@ -197,6 +198,63 @@ type int32 generates 'TNode<Int32T>' constexpr 'int32_t';
 type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 ```
 
+#### Class types
+
+Class types must be subclasses of HeapObject and correspond directly to HeapObject classes defined on the V8 C++-side. 
+
+<pre><code class="language-grammar">ClassDeclaration :
+  <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
+    ScalarFieldDeclarations
+    StrongFieldDeclarations
+    WeakFieldDeclarations
+  <b>}</b>
+
+ScalarFieldDeclarations: <b>scalar:</b> FieldDeclaration;
+
+StrongFieldDeclarations: <b>strong:</b><sub>opt</sub> FieldDeclaration;
+
+WeakFieldDeclarations: <b>weak:</b> FieldDeclaration;
+
+FieldDeclaration: Identifier <b>:</b> Type <b>;</b>
+</pre>
+
+An example class:
+
+```torque
+class JSFunction extends JSObject' {
+ strong:
+  shared_function_info: SharedFunctionInfo;
+  context: Context;
+  feedback_cell: Smi;
+ weak:
+  code: Code;
+  prototype_or_initial_map: Object;
+}
+```
+
+On the Torque side, the field declarations in classes implicitly generate field getters and setters, e.g.:
+
+```torque
+operator ‘.shared_function_info’ macro LoadJSFunctionSharedFunctionInfo(JSFunction): SharedFunctionInfo;
+operator ‘.=shared_function_info’ macro StoreJSFunctionSharedFunctionInfo(JSFunction, SharedFunctionInfo);
+```
+
+On the C++-side, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the following code that can be used to define C++-accessible field offsets in js-objects.h, e.g.:
+
+```cpp
+#define JSFUNCTION_FIELDS(V) \
+V(kStartOfStrongFieldsOffset, 0) \
+V(kSharedFunctionInfoOffset, kTaggedSize) \
+V(kContextOffset, kTaggedSize) \
+V(kFeedbackCellOffset, kTaggedSize) \
+V(kEndOfStrongFieldsOffset, 0) \
+V(kStartOfWeakFieldsOffset, 0) \
+V(kCodeOffset, kTaggedSize) \
+V(kPrototypeOrInitialMapOffset, kTaggedSize) \
+V(kEndOfWeakFieldsOffset, 0) \
+V(kSize, 0)  
+```
+
 #### Union types
 
 Union types express that a value belongs to one of several possible types. We only allow union types for tagged values, because they can be distinguished at runtime using the map pointer. For example, JavaScript numbers are either Smi values or allocated HeapNumber objects.
@@ -229,14 +287,19 @@ type CompareBuiltinFn = builtin(Context, Object, Object, Object) => Number;
 
 There are two special types indicated by the keywords `void` and `never`. `void` is used as the return type for callables that do not return a value, and `never` is used as the return type for callables that never actually return (i.e. only exit through exceptional paths).
 
+#### Transient types
+
+Types marked with the keyword `transient` have special semantics. They prevent improper use of JavaScript objects whose shape can change through side-effects. `transient` types must be sub-types of type HeapObject, and they are only valid from their point of definition until the first call that is marked with keyword `transitioning`. Any right-hand-side access of an object with a `transient` type after a invocation of a `transitioning` callable.
+
 ### Callables
 
-Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides three types of callables: `macro`s, `builtin`s, and `runtime`s.
+Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides three types of callables: `macro`s, `builtin`s, `runtime`s and `intrinsics`s.
 
 <pre><code class="language-grammar">CallableDeclaration :
   MacroDeclaration
   BuiltinDeclaration
-  RuntimeDeclaration</code></pre>
+  RuntimeDeclaration
+  IntrinsicDeclaration</code></pre>
 
 #### `macro` callables
 
@@ -245,8 +308,8 @@ Macros are a callable that correspond to a chunk of generated CSA-producing C++.
 `macro` declarations in Torque take the following form:
 
 <pre><code class="language-grammar">MacroDeclaration :
-  <b>macro</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
-  <b>extern macro</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypes ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> <b>;</b>
+   <b>transitioning<sub>opt</sub></b> <b>macro</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
+  <b>extern</b> <b>transitioning<sub>opt</sub></b> <b>macro</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypes ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> <b>;</b>
 </code></pre>
 
 Every non-`extern` Torque `macro` uses the `StatementBlock` body of the `macro` to create a CSA-generating function in its namespace’s generated `Assembler` class. This code looks just like other code that you might find in `code-stub-assembler.cc`, albeit a bit less readable because it’s machine-generated. `macro`s that are marked `extern` have no body written in Torque and simply provide the interface to hand-written C++ CSA code so that it’s usable from Torque.
@@ -274,8 +337,8 @@ macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object):
 `builtin` declarations in Torque have the following form:
 
 <pre><code class="language-grammar">MacroDeclaration :
-  <b>javascript<sub>opt</sub></b> <b>builtin</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParametersOrVarArgs ReturnType<sub>opt</sub> StatementBlock
-  <b>extern javascript<sub>opt</sub> builtin</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
+  <b>transitioning<sub>opt</sub></b> <b>javascript<sub>opt</sub></b> <b>builtin</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParametersOrVarArgs ReturnType<sub>opt</sub> StatementBlock
+  <b>extern <b>transitioning<sub>opt</sub></b> javascript<sub>opt</sub> builtin</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
 </code></pre>
 
 There is only one copy of the code for a Torque builtin, and that is in the generated builtin code object. Unlike `macro`s, when `builtin`s are called from Torque code, the CSA code is not inlined at the callsite, but instead a call is generated to the builtin.
@@ -289,12 +352,47 @@ There is only one copy of the code for a Torque builtin, and that is in the gene
 `runtime` declarations in Torque have the following form:
 
 <pre><code class="language-grammar">MacroDeclaration :
-  <b>extern runtime</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
+  <b>extern <b>transitioning<sub>opt</sub></b> runtime</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
 </code></pre>
 
 The `extern runtime` specified with name <i>IdentifierName</i> corresponds to the runtime function specified by Runtime::k<i>IdentifierName</i>.
 
-Like builtins, `runtime`s cannot have labels.
+Like `buildtin`s, `runtime`s cannot have labels.
+
+#### `intrinsic` callables
+
+`intrinsic`s are builtin Torque callables that provide access to internal funtionality that can't be otherwise implemented in Torque. They are declared in Torque, but not defined, since the implementation is provided by the Torque compiler. `intrinsic` declarations use the following grammar:
+
+<pre><code class="language-grammar">IntrinsicDeclaration :
+  <b>intrinsic</b> <b>%</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> <b>;</b>
+</code></pre>
+
+For the most part, "user" Torque code should rarely have to use `intrinsic`s directly. The currently supported intrinsics are:
+
+```torque
+// %RawObjectCast downcasts from Object to a subtype of Object without
+// rigorous testing if the object is actually the destination type.
+// RawObjectCasts should *never* (well, almost never) be used anywhere in 
+// Torque code except for in Torque-based UnsafeCast operators preceeded by an 
+// appropriate type assert()
+intrinsic %RawObjectCast<A: type>(o: Object): A;
+
+// %RawPointerCast downcasts from RawPtr to a subtype of RawPtr without
+// rigorous testing if the object is actually the destination type.
+intrinsic %RawPointerCast<A: type>(p: RawPtr): A;
+
+// %RawConstexprCast converts one compile-time constant value to another.
+// Both the source and destination types should be 'constexpr'. 
+// %RawConstexprCast translate to static_casts in the generated C++ code.
+intrinsic %RawConstexprCast<To: type, From: type>(f: From): To;
+
+// %FromConstexpr converts a constexpr value into into a non-constexpr
+// value. Currently, only conversion to the following non-constexpr types
+// are supported: Smi, Number, String, uintptr, intptr, and int32
+intrinsic %FromConstexpr<To: type, From: type>(b: From): To;
+```
+
+Like `buildtin`s and `runtime`s, `intrinsic`s cannot have labels.
 
 ### Explicit parameters
 
