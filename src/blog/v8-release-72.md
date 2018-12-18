@@ -28,7 +28,7 @@ We have focused on the parser on different occasions. The following graphs show 
 
 <figure>
   <img src="/_img/v8-release-72/relative-parse-times.svg" alt="">
-  <figcaption> V8 relative parse times (lower is better)</figcaption>
+  <figcaption>V8 parse times relative to V8 v7.2 (lower is better)</figcaption>
 </figure>
 
 All in all, the recent improvements have reduced the average parse percentage from 9.5% to 7.5% resulting in faster load times and more responsive pages.
