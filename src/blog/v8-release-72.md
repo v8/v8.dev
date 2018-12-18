@@ -114,7 +114,7 @@ lf.format(['Frank', 'Christine', 'Flora', 'Harrison']);
 
 For more information and usage examples, check out [our Web Fundamentals update on `Intl.ListFormat`](https://developers.google.com/web/updates/2018/12/intl-listformat).
 
-### Well-formed JSON.stringify
+### Well-formed `JSON.stringify`
 
 `JSON.stringify` was previously specified to return ill-formed Unicode strings if the input contains any lone surrogates:
 
@@ -132,7 +132,7 @@ JSON.stringify('\uD800');
 
 Note that `JSON.parse(stringified)` still produces the same results as before.
 
-### ECMAScript module namespace exports
+### Module namespace exports
 
 In [JavaScript modules](https://developers.google.com/web/fundamentals/primers/modules), it was already possible to use the following syntax:
 
