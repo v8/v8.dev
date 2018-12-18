@@ -3,7 +3,7 @@ title: 'V8 release v7.2'
 author: 'Andreas Haas, handler of traps'
 avatars:
   - andreas-haas
-date: 2018-12-18 15:44:37
+date: 2018-12-18 11:48:21
 tags:
   - release
 ---
@@ -37,7 +37,11 @@ All in all, the recent improvements have reduced the average parse percentage fr
 
 V8 v7.2 comes with [a faster `async`/`await` implementation](/blog/fast-async#await-under-the-hood). We have made [a spec proposal](https://github.com/tc39/ecma262/pull/1250) and are currently gathering web compatibility data in order for the change to be officially merged into the ECMAScript specification.
 
-### Improved Wasm performance
+### Spread elements
+
+V8 v7.2 greatly improves the performance of spread elements when they occur at the front of the array literal, for example `[...x]` or `[...x, 1, 2]`. The improvement applies to spreading arrays, primitive strings, sets, map keys, map values, and — by extension — to `Array.from(x)`. For more details, see [our in-depth article on speeding up spread elements](/blog/spread-elements).
+
+### WebAssembly
 
 We analyzed a number of WebAssembly benchmarks and used them to guide improved code generation in the top execution tier. In particular, V8 v7.2 enables node splitting in the optimizing compiler’s scheduler and loop rotation in the backend. We also improved wrapper caching and introduced custom wrappers that reduce overhead in calling imported JavaScript math functions. Additionally, we designed changes to the register allocator that improve performance for many code patterns that will land in a later version.
 
@@ -73,7 +77,7 @@ class Cat extends Animal {
 }
 ```
 
-…you can now write…:
+…you can now write:
 
 ```js
 class Animal {
