@@ -177,4 +177,4 @@ Fortunately, our fast paths for spread elements can be reused for `Array.from` i
 
 ## Conclusion
 
-V8 v7.2 / Chrome 72 greatly improves  the performance of spread elements when they occur at the front of the array literal, for example `[...x]` or `[...x, 1, 2]`. The improvement applies to spreading arrays, primitive strings, sets, maps keys, maps values, and — by extension — to `Array.from(x)`.
+V8 v7.2 / Chrome 72 greatly improves the performance of spread elements when they occur at the front of the array literal, for example `[...x]` or `[...x, 1, 2]`. The improvement applies to spreading arrays, primitive strings, sets, maps keys, maps values, and — by extension — to `Array.from(x)`.
