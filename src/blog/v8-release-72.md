@@ -158,4 +158,4 @@ export { utils };
 
 Please use `git log branch-heads/7.1..branch-heads/7.2 include/v8.h` to get a list of the API changes.
 
-Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 7.2 -t branch-heads/7.2` to experiment with the new features in V8 v7.1. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 7.2 -t branch-heads/7.2` to experiment with the new features in V8 v7.2. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
