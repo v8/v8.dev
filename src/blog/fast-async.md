@@ -355,7 +355,7 @@ As it turns out, there’s already a  [`promiseResolve`](https://tc39.github.io/
   <img src="/_img/fast-async/await-code-comparison.svg" alt="">
 </figure>
 
-This operation returns promises unchanged, and only wraps other values into promises as necessary. This way you save one of the additional promises, plus two ticks on the microtask queue, for the common case that the value passed to `await` is already a promise. This new behavior is currently implemented behind the `--harmony-await-optimization` flag in V8 (starting with V8 v7.1). We’ve [proposed this change to the ECMAScript specification](https://github.com/tc39/ecma262/pull/1250) as well; the patch is supposed to be merged once we are sure that it’s web-compatible.
+This operation returns promises unchanged, and only wraps other values into promises as necessary. This way you save one of the additional promises, plus two ticks on the microtask queue, for the common case that the value passed to `await` is already a promise. This new behavior is already [enabled by default in V8 v7.2](/blog/v8-release-72#async%2Fawait). For V8 v7.1, the new behavior can be enabled using the `--harmony-await-optimization` flag. We’ve [proposed this change to the ECMAScript specification](https://github.com/tc39/ecma262/pull/1250) as well; the patch is supposed to be merged once we are sure that it’s web-compatible.
 
 Here’s how the new and improved `await` works behind the scenes, step by step:
 
