@@ -36,7 +36,7 @@ All in all, the recent improvements have reduced the average parse percentage fr
 
 ### `async`/`await`
 
-V8 v7.2 comes with [a faster `async`/`await` implementation](/blog/fast-async#await-under-the-hood). We have made [a spec proposal](https://github.com/tc39/ecma262/pull/1250) and are currently gathering web compatibility data in order for the change to be officially merged into the ECMAScript specification.
+V8 v7.2 comes with [a faster `async`/`await` implementation](/blog/fast-async#await-under-the-hood), enabled by default. We have made [a spec proposal](https://github.com/tc39/ecma262/pull/1250) and are currently gathering web compatibility data in order for the change to be officially merged into the ECMAScript specification.
 
 ### Spread elements
 
