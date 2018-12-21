@@ -33,6 +33,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Flake bisect](/docs/flake-bisect)
     - [Handling of ports](/docs/ports)
     - [Merging & patching](/docs/merge-patch)
+    - [Benchmarking on your machine](/docs/benchmarking)
     - [Node.js integration build](/docs/node-integration)
     - [Reporting security bugs](/docs/security-bugs)
     - [Testing](/docs/test)
