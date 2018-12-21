@@ -1,9 +1,7 @@
 ---
 title: 'Running benchmarks locally'
 ---
-We have a simple workflow for running the "classic" benchmarks of SunSpider, Kraken and Octane.
-You can run with different binaries and flag combinations, and results are averaged over multiple
-runs.
+We have a simple workflow for running the “classic” benchmarks of SunSpider, Kraken and Octane. You can run with different binaries and flag combinations, and results are averaged over multiple runs.
 
 ## CPU
 
@@ -17,11 +15,11 @@ sudo tools/cpu.sh fast
 
 The commands `cpu.sh` understands are
 
-- fast, performance (alias for fast)
-- slow, powersave (alias for slow)
-- default, ondemand (alias for default)
-- dualcore (disables all but two cores), dual (alias for dualcore)
-- allcores (re-enables all available cores), all (alias for allcores).
+- `fast`, performance (alias for `fast`)
+- `slow`, powersave (alias for `slow`)
+- `default`, ondemand (alias for `default`)
+- `dualcore` (disables all but two cores), dual (alias for `dualcore`)
+- `allcores` (re-enables all available cores), all (alias for `allcores`).
 
 ## CSuite
 
@@ -35,9 +33,7 @@ test/benchmarks/csuite/csuite.py
     [-x "<optional extra d8 command line flags>"]
 ```
 
-First run in `baseline` mode to create the baselines, then in `compare` mode to get
-results. `CSuite` defaults to doing 10 runs for Octane, 100 for SunSpider, and 80
-for Kraken, but you can override these for quicker results with the `-r` option.
+First run in `baseline` mode to create the baselines, then in `compare` mode to get results. `CSuite` defaults to doing 10 runs for Octane, 100 for SunSpider, and 80 for Kraken, but you can override these for quicker results with the `-r` option.
 
 `CSuite` creates two subdirectories in the directory where you run from:
 
@@ -45,12 +41,11 @@ for Kraken, but you can override these for quicker results with the `-r` option.
 1. `./_results` - It writes the results into file master here. You could save these
   files with different names, and they'll show up in compare mode.
 
-In compare mode, you'll naturally use a different binary or at least different flags.
+In compare mode, you’ll naturally use a different binary or at least different flags.
 
-## Example Usage
+## Example usage
 
-Say you've built two versions of `d8`, and want to see what happens to SunSpider.
-First, create baselines:
+Say you’ve built two versions of `d8`, and want to see what happens to SunSpider. First, create baselines:
 
 ```bash
 $ test/benchmarks/csuite/csuite.py sunspider baseline out.gn/master/d8
@@ -95,14 +90,9 @@ $ test/benchmarks/csuite/csuite.py sunspider compare out.gn/x64.release/d8
 ---------------------------------------------------+----------+--------+
 ```
 
-The output of the previous run is cached in a subdirectory created in the current
-directory (`_benchmark_runner_data`). The aggregate results are also cached,
-in directory `_results`. These directories can be deleted after you've run the
-compare step.
+The output of the previous run is cached in a subdirectory created in the current directory (`_benchmark_runner_data`). The aggregate results are also cached, in directory `_results`. These directories can be deleted after you’ve run the compare step.
 
-Another situation is when you have the same binary, but want to see the results of
-different flags. Feeling rather droll, you'd like to see how Octane performs without
-an optimizing compiler. First the baseline:
+Another situation is when you have the same binary, but want to see the results of different flags. Feeling rather droll, you’d like to see how Octane performs without an optimizing compiler. First the baseline:
 
 ```bash
 $ test/benchmarks/csuite/csuite.py -r 1 octane baseline out.gn/x64.release/d8
@@ -112,9 +102,7 @@ Wrote /usr/local/google/home/mvstanton/src/v8/_results/master.
 Run octane again with compare mode to see results.
 ```
 
-Note the warning that one run isn't usually enough to be sure of many performance
-optimizations, however, our "change" should have a reproducable effect with only
-one run! Now let's compare, passing the `--noopt` flag to turn off [TurboFan](/docs/turbofan):
+Note the warning that one run usually isn’t enough to be sure of many performance optimizations, however, our “change” should have a reproducable effect with only one run! Now let’s compare, passing the `--noopt` flag to turn off [TurboFan](/docs/turbofan):
 
 ```bash
 $ test/benchmarks/csuite/csuite.py -r 1 octane compare out.gn/x64.release/d8 \
@@ -146,9 +134,6 @@ Normally, octane requires 10 runs to get stable results.
 
 Neat to see that `CodeLoad` and `zlib` were relatively unharmed.
 
-## Under the Hood
+## Under the hood
 
-`CSuite` is based on two scripts in the same directory, `benchmark.py` and
-`compare-baseline.py`. There are more options in those scripts. For example,
-you can record multiple baselines and do 3, 4, 5-way comparisons. `CSuite`
-is optimized for quick use, and sacrifices some flexibility.
+`CSuite` is based on two scripts in the same directory, `benchmark.py` and `compare-baseline.py`. There are more options in those scripts. For example, you can record multiple baselines and do 3-, 4-, or 5-way comparisons. `CSuite` is optimized for quick use, and sacrifices some flexibility.
