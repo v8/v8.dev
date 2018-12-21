@@ -30,7 +30,7 @@ test/benchmarks/csuite/csuite.py
     (sunspider | kraken | octane)
     (baseline | compare)
     <path to d8 binary>
-    [-x "<optional extra d8 command line flags>"]
+    [-x "<optional extra d8 command-line flags>"]
 ```
 
 First run in `baseline` mode to create the baselines, then in `compare` mode to get results. `CSuite` defaults to doing 10 runs for Octane, 100 for SunSpider, and 80 for Kraken, but you can override these for quicker results with the `-r` option.
