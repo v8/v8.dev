@@ -12,23 +12,23 @@ Build the `d8` shell following the instructions at [Building with GN](/docs/buil
 Before you run benchmarks, make sure you set your CPU frequency scaling governor to performance.
 
 ```bash
-$ sudo tools/cpu.sh fast
+sudo tools/cpu.sh fast
 ```
 
 The commands `cpu.sh` understands are
 
-  * fast, performance (alias for fast)
-  * slow, powersave (alias for slow)
-  * default, ondemand (alias for default)
-  * dualcore (disables all but two cores), dual (alias for dualcore)
-  * allcores (re-enables all available cores), all (alias for allcores).
+- fast, performance (alias for fast)
+- slow, powersave (alias for slow)
+- default, ondemand (alias for default)
+- dualcore (disables all but two cores), dual (alias for dualcore)
+- allcores (re-enables all available cores), all (alias for allcores).
 
 ## CSuite
 
 `CSuite` is our simple benchmark runner:
 
 ```bash
-$ test/benchmarks/csuite/csuite.py
+test/benchmarks/csuite/csuite.py
     (sunspider | kraken | octane)
     (baseline | compare)
     <path to d8 binary>
@@ -54,7 +54,6 @@ First, create baselines:
 
 ```bash
 $ test/benchmarks/csuite/csuite.py sunspider baseline out.gn/master/d8
-
 Wrote ./_results/master.
 Run sunspider again with compare mode to see results.
 ```
@@ -118,7 +117,7 @@ optimizations, however, our "change" should have a reproducable effect with only
 one run! Now let's compare, passing the `--noopt` flag to turn off [TurboFan](/docs/turbofan):
 
 ```bash
-$ test/benchmarks/csuite/csuite.py -r 1 octane compare out.gn/x64.release/d8
+$ test/benchmarks/csuite/csuite.py -r 1 octane compare out.gn/x64.release/d8 \
   -x "--noopt"
 
 Normally, octane requires 10 runs to get stable results.
