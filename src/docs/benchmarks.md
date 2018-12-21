@@ -37,9 +37,9 @@ First run in `baseline` mode to create the baselines, then in `compare` mode to 
 
 `CSuite` creates two subdirectories in the directory where you run from:
 
-1. `./_benchmark_runner_data` - This is cached output from the N runs.
-1. `./_results` - It writes the results into file master here. You could save these
-  files with different names, and they'll show up in compare mode.
+1. `./_benchmark_runner_data` — this is cached output from the N runs.
+1. `./_results` — it writes the results into file master here. You could save these
+  files with different names, and they’ll show up in compare mode.
 
 In compare mode, you’ll naturally use a different binary or at least different flags.
 
