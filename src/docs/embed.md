@@ -407,8 +407,8 @@ The same approach is used in V8 with templates. Each `FunctionTemplate` has a `P
 Local<FunctionTemplate> biketemplate = FunctionTemplate::New(isolate);
 biketemplate->PrototypeTemplate().Set(
     String::NewFromUtf8(isolate, "wheels"),
-    FunctionTemplate::New(isolate, MyWheelsMethodCallback)->GetFunction();
-)
+    FunctionTemplate::New(isolate, MyWheelsMethodCallback)->GetFunction()
+);
 ```
 
 This causes all instances of `biketemplate` to have a `wheels` method in their prototype chain which, when called, causes the C++ function `MyWheelsMethodCallback` to be called.
