@@ -30,7 +30,7 @@ Builtins are also visible in stack traces:
 
 Caveats:
 
-- Only works with embedded builtins (no ia32 yet, sorry).
+- Only works with embedded builtins.
 - Breakpoints can only be set at the start of the builtin.
 - The initial breakpoint in `Isolate::Init` is needed prior to setting the builtin breakpoint, since GDB modifies the binary and we verify a hash of the builtins section in the binary at startup. Otherwise, V8 complains about a hash mismatch:
 
