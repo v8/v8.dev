@@ -67,7 +67,9 @@ Only the first row is precise: the `Leak` object is indeed stored in the `global
 As of Chrome 66, DevTools traces through C++ DOM objects and precisely captures the objects and references between them. This is based on the powerful C++ object tracing mechanism that was introduced for cross-component garbage collection earlier. As a result, [the retaining path in DevTools](https://www.youtube.com/watch?v=ixadA7DFCx8) is actually correct now:
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/ixadA7DFCx8" width="640" height="298"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/ixadA7DFCx8" width="640" height="360"></iframe>
+  </div>
   <figcaption>Figure 3: Retaining path in Chrome 66</figcaption>
 </figure>
 

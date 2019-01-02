@@ -66,7 +66,9 @@ Figure 2 shows the percentage of garbage collection that was scheduled during id
 As well as improving the smoothness of page rendering, these idle periods also provide an opportunity to perform more aggressive garbage collection when the page becomes fully idle. Recent improvements in Chrome 45 take advantage of this to drastically reduce the amount of memory consumed by idle foreground tabs. Figure 3 shows a sneak peek at how memory usage of Gmail’s JavaScript heap can be reduced by about 45% when it becomes idle, compared to the same page in Chrome 43.
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/ij-AFUfqFdI" width="796" height="499"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/ij-AFUfqFdI" width="640" height="360"></iframe>
+  </div>
   <figcaption>Figure 3: Memory usage for Gmail on latest version of Chrome 45 (left) vs. Chrome 43</figcaption>
 </figure>
 

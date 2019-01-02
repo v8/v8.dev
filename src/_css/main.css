@@ -272,6 +272,25 @@ iframe {
 iframe + h2, iframe + h3 {
   margin-top: 1em;
 }
+/* https://alistapart.com/article/creating-intrinsic-ratios-for-video */
+.video {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  margin-bottom: 0.5em;
+  height: 0;
+}
+/* If we ever need other ratios, add them like so:
+.video-16\:9 {
+  padding-bottom: 56.25%;
+}
+*/
+.video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
 table {
   border-collapse: collapse;
   width: 100%;

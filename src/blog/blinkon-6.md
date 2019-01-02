@@ -12,7 +12,9 @@ The V8 BlinkOn talks are embedded below.
 ## Real-world JavaScript performance
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/xCx4uC7mn6Y" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/xCx4uC7mn6Y" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 - Length: 31:41
@@ -23,7 +25,9 @@ Outlines the history of how V8 measures JavaScript performance, the different er
 ## Ignition: an interpreter for V8
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 - Length: 36:39
@@ -34,7 +38,9 @@ Introduces V8’s new Ignition interpreter, explaining the architecture of the e
 ## How we measure and optimize for RAIL in V8’s GC
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/VITAyGT-CJI" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/VITAyGT-CJI" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 - Length: 27:11
@@ -45,7 +51,9 @@ Explains how V8 uses the Response, Animation, Idle, Loading (RAIL) metrics to ta
 ## ECMAScript 2015 and beyond
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/KrGOzEwqRDA" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/KrGOzEwqRDA" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 - Length: 28:52
@@ -56,7 +64,9 @@ Provides an update on the implementation of new language features in V8, how tho
 ## Tracing wrappers from V8 to Blink (lightning talk)
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/PMDRfYw4UYQ?start=3204" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/PMDRfYw4UYQ?start=3204" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 - Length: 2:31

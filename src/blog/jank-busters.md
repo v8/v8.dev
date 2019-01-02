@@ -29,7 +29,9 @@ Most of V8’s garbage collection is performed on the main rendering thread. Mov
 The impact of the discussed optimizations is clearly visible in WebGL-based games, for example [Turbolenz’s Oort Online demo](http://oortonline.gl/). The following video compares Chrome 41 to Chrome 46:
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/PgrCJpbTs9I" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/PgrCJpbTs9I" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 We are currently in the process of making more garbage collection components incremental, concurrent, and parallel, to shrink garbage collection pause times on the main thread even further. Stay tuned as we have some interesting patches in the pipeline.
