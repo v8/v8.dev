@@ -31,7 +31,9 @@ As the bytecode is generated, it passes through a series of inline-optimization 
 For further details on the implementation of Ignition, see our BlinkOn talk:
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 ## Future

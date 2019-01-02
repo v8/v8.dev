@@ -10,7 +10,7 @@ JavaScript performance continues to be one of the key aspects of Chrome's values
 
 Many modern language engines such as Chrome's V8 JavaScript engine dynamically manage memory for running applications so that developers don't need to worry about it themselves. The engine periodically passes over the memory allocated to the application, determines which data is no longer needed, and clears it out to free up room. This process is known as [garbage collection](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)).
 
-In Chrome, we strive to deliver a smooth, 60 frames per second (FPS) visual experience. Although V8 already attempts to perform garbage collection in small chunks, larger garbage collection operations can and do occur at unpredictable times -- sometimes in the middle of an animation -- pausing execution and preventing Chrome from hitting that 60 FPS goal.
+In Chrome, we strive to deliver a smooth, 60 frames per second (FPS) visual experience. Although V8 already attempts to perform garbage collection in small chunks, larger garbage collection operations can and do occur at unpredictable times — sometimes in the middle of an animation -- pausing execution and preventing Chrome from hitting that 60 FPS goal.
 
 Chrome 41 included a [task scheduler for the Blink rendering engine](https://blog.chromium.org/2015/04/scheduling-tasks-intelligently-for_30.html) which enables prioritization of latency-sensitive tasks to ensure Chrome remains responsive and snappy. As well as being able to prioritize work, this task scheduler has centralized knowledge of how busy the system is, what tasks need to be performed and how urgent each of these tasks are. As such, it can estimate when Chrome is likely to be idle and roughly how long it expects to remain idle.
 
@@ -66,7 +66,9 @@ Figure 2 shows the percentage of garbage collection that was scheduled during id
 As well as improving the smoothness of page rendering, these idle periods also provide an opportunity to perform more aggressive garbage collection when the page becomes fully idle. Recent improvements in Chrome 45 take advantage of this to drastically reduce the amount of memory consumed by idle foreground tabs. Figure 3 shows a sneak peek at how memory usage of Gmail’s JavaScript heap can be reduced by about 45% when it becomes idle, compared to the same page in Chrome 43.
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/ij-AFUfqFdI" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/ij-AFUfqFdI" width="640" height="360"></iframe>
+  </div>
   <figcaption>Figure 3: Memory usage for Gmail on latest version of Chrome 45 (left) vs. Chrome 43</figcaption>
 </figure>
 

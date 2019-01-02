@@ -12,7 +12,9 @@ tweet: '907608362191376384'
 Note: if you prefer watching a presentation over reading articles, then enjoy the video below!
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/m9cTaYI95Zc" width="640" height="360"></iframe>
+  <div class="video video-16:9">
+    <iframe src="https://www.youtube.com/embed/m9cTaYI95Zc" width="640" height="360"></iframe>
+  </div>
 </figure>
 
 JavaScript objects can have arbitrary properties associated with them. The names of object properties can contain any character. One of the interesting cases that a JavaScript engine can choose to optimize for are properties whose names are purely numeric, most specifically [array indices](https://tc39.github.io/ecma262/#sec-object-type).
