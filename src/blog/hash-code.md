@@ -20,7 +20,7 @@ For JavaScript objects that were used as keys, previously, the hash code was sto
 
 ```js
 function GetObjectHash(key) {
-  const hash = key[hashCodeSymbol];
+  let hash = key[hashCodeSymbol];
   if (IS_UNDEFINED(hash)) {
     hash = (MathRandom() * 0x40000000) | 0;
     if (hash === 0) hash = 1;
