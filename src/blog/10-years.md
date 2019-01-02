@@ -11,7 +11,7 @@ tweet: '1039559389324238850'
 This month marks the 10-year anniversary of shipping not just Google Chrome, but also the V8 project. This post gives an overview of major milestones for the V8 project in the past 10 years as well as the years before, when the project was still secret.
 
 <figure>
-  <iframe src="https://www.youtube.com/embed/G0vnrPTuxZA" width="966" height="543"></iframe>
+  <iframe src="https://www.youtube.com/embed/G0vnrPTuxZA" width="640" height="360"></iframe>
   <figcaption>A visualization of the V8 code base over time, created using <a href="http://gource.io/"><code>gource</code></a>.</figcaption>
 </figure>
 
