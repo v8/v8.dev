@@ -1,6 +1,6 @@
 ---
 title: 'Trash talk: the Orinoco garbage collector'
-author: Peter ‘the garbo’ Marshall ([@hooraybuffer](https://twitter.com/hooraybuffer))'
+author: Peter ‘the garbo’ Marshall ([@hooraybuffer](https://twitter.com/hooraybuffer))
 avatars:
   - 'peter-marshall'
 date: 2019-01-03 17:15:34
