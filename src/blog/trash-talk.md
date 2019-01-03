@@ -7,7 +7,7 @@ date: 2019-01-03 17:15:34
 tags:
   - internals
   - memory
-description: 'Orinoco, V8’s garbage collector, evolved from a sequential, stop-the-world implementation it into a mostly parallel and concurrent collector with incremental fallback.'
+description: 'Orinoco, V8’s garbage collector, evolved from a sequential stop-the-world implementation into a mostly parallel and concurrent collector with incremental fallback.'
 ---
 Over the past years the V8 garbage collector (GC) has changed a lot. The Orinoco project has taken a sequential, stop-the-world garbage collector and transformed it into a mostly parallel and concurrent collector with incremental fallback.
 
