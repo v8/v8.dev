@@ -141,7 +141,7 @@ Today, V8 uses parallel scavenging to distribute work across helper threads duri
   <figcaption>Parallel scavenging distributes scavenging work across multiple helper threads and the main thread.</figcaption>
 </figure>
 
-### Major GC
+### Major GC { #major-gc-state }
 
 Major GC in V8 starts with concurrent marking. As the heap approaches a dynamically computed limit, concurrent marking tasks are started. The helpers are each given a number of pointers to follow, and they mark each object they find as they follow all references from discovered objects. Concurrent marking happens entirely in the background while JavaScript is executing on the main thread. [Write barriers](https://dl.acm.org/citation.cfm?id=2025255) are used to keep track of new references between objects that JavaScript creates while the helpers are marking concurrently.
 
