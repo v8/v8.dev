@@ -218,7 +218,7 @@ FieldDeclaration: Identifier <b>:</b> Type <b>;</b>
 An example class:
 
 ```torque
-class JSFunction extends JSObject' {
+class JSFunction extends JSObject {
   shared_function_info: SharedFunctionInfo;
   context: Context;
   feedback_cell: Smi;
@@ -230,8 +230,8 @@ class JSFunction extends JSObject' {
 On the Torque side, the field declarations in classes implicitly generate field getters and setters, e.g.:
 
 ```torque
-operator ‘.shared_function_info’ macro LoadJSFunctionSharedFunctionInfo(JSFunction): SharedFunctionInfo;
-operator ‘.=shared_function_info’ macro StoreJSFunctionSharedFunctionInfo(JSFunction, SharedFunctionInfo);
+operator '.shared_function_info' macro LoadJSFunctionSharedFunctionInfo(JSFunction): SharedFunctionInfo;
+operator '.shared_function_info=' macro StoreJSFunctionSharedFunctionInfo(JSFunction, SharedFunctionInfo);
 ```
 
 As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in js-objects.h:
@@ -348,7 +348,7 @@ There is only one copy of the code for a Torque builtin, and that is in the gene
 
 The `extern runtime` specified with name <i>IdentifierName</i> corresponds to the runtime function specified by Runtime::k<i>IdentifierName</i>.
 
-Like `buildtin`s, `runtime`s cannot have labels.
+Like `builtin`s, `runtime`s cannot have labels.
 
 #### `intrinsic` callables
 
@@ -383,10 +383,10 @@ intrinsic %RawConstexprCast<To: type, From: type>(f: From): To;
 intrinsic %FromConstexpr<To: type, From: type>(b: From): To;
 
 // %Allocate allocates an unitialized object of size 'size' from V8's
-// GC heap and "reinterpret casts" the resuting object pointer to the
+// GC heap and "reinterpret casts" the resulting object pointer to the
 // specified Torque class, allowing constructors to subsequently use
 // standard field access operators to initialize the object.
-// This intrinsic should never be called from Torque code. It used
+// This intrinsic should never be called from Torque code. It's used
 // internally when desugaring the 'new' operator.
 intrinsic %Allocate<Class: type>(size: intptr): Class;
 ```
