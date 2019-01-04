@@ -200,35 +200,30 @@ type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 
 #### Class types
 
-Class types must be subclasses of HeapObject and correspond directly to HeapObject classes defined on the V8 C++-side. 
+Class types allow to define, allocate and manipulate the structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject. In order to minimize the expense of maintaining boilerplate object-accessing code between V8's C++ and Torque implementation, the Torque class definitions are used to generate C++ code whenever possible and appropriate to reduce the cost of keeping code across C++ and Torque synchronized by hand.
 
 <pre><code class="language-grammar">ClassDeclaration :
   <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
-    ScalarFieldDeclarations
-    StrongFieldDeclarations
-    WeakFieldDeclarations
+    ClassMethodDeclarations<b>*</b>
+    ClassFieldDeclaration<b>*</b>
   <b>}</b>
 
-ScalarFieldDeclarations: <b>scalar:</b> FieldDeclaration;
+ClassMethodDeclarations: <b>transitioning<sub>opt</sub></b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
 
-StrongFieldDeclarations: <b>strong:</b><sub>opt</sub> FieldDeclaration;
-
-WeakFieldDeclarations: <b>weak:</b> FieldDeclaration;
+ClassFieldDeclaration: <b>weak</b><sub>opt</sub> FieldDeclaration;
 
 FieldDeclaration: Identifier <b>:</b> Type <b>;</b>
-</pre>
+</code></pre>
 
 An example class:
 
 ```torque
 class JSFunction extends JSObject' {
- strong:
   shared_function_info: SharedFunctionInfo;
   context: Context;
   feedback_cell: Smi;
- weak:
-  code: Code;
-  prototype_or_initial_map: Object;
+  weak code: Code;
+  weak prototype_or_initial_map: Object | Map;
 }
 ```
 
@@ -239,7 +234,7 @@ operator ‘.shared_function_info’ macro LoadJSFunctionSharedFunctionInfo(JSFu
 operator ‘.=shared_function_info’ macro StoreJSFunctionSharedFunctionInfo(JSFunction, SharedFunctionInfo);
 ```
 
-On the C++-side, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the following code that can be used to define C++-accessible field offsets in js-objects.h, e.g.:
+On the C++-side, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in js-objects.h:
 
 ```cpp
 #define JSFUNCTION_FIELDS(V) \
@@ -252,7 +247,7 @@ V(kStartOfWeakFieldsOffset, 0) \
 V(kCodeOffset, kTaggedSize) \
 V(kPrototypeOrInitialMapOffset, kTaggedSize) \
 V(kEndOfWeakFieldsOffset, 0) \
-V(kSize, 0)  
+V(kSize, 0)
 ```
 
 #### Union types
@@ -280,16 +275,12 @@ Function pointers can only point to builtins defined in Torque, since this guara
 While function pointer types are anonymous (like in C), they can be bound to a type alias (like a `typedef` in C).
 
 ```torque
-type CompareBuiltinFn = builtin(Context, Object, Object, Object) => Number;
+type CompareBuiltinFn = builtin(implicit context: Context)(Object, Object, Object) => Number;
 ```
 
 #### Special types
 
 There are two special types indicated by the keywords `void` and `never`. `void` is used as the return type for callables that do not return a value, and `never` is used as the return type for callables that never actually return (i.e. only exit through exceptional paths).
-
-#### Transient types
-
-Types marked with the keyword `transient` have special semantics. They prevent improper use of JavaScript objects whose shape can change through side-effects. `transient` types must be sub-types of type HeapObject, and they are only valid from their point of definition until the first call that is marked with keyword `transitioning`. Any right-hand-side access of an object with a `transient` type after a invocation of a `transitioning` callable.
 
 ### Callables
 
@@ -372,8 +363,8 @@ For the most part, "user" Torque code should rarely have to use `intrinsic`s dir
 ```torque
 // %RawObjectCast downcasts from Object to a subtype of Object without
 // rigorous testing if the object is actually the destination type.
-// RawObjectCasts should *never* (well, almost never) be used anywhere in 
-// Torque code except for in Torque-based UnsafeCast operators preceeded by an 
+// RawObjectCasts should *never* (well, almost never) be used anywhere in
+// Torque code except for in Torque-based UnsafeCast operators preceeded by an
 // appropriate type assert()
 intrinsic %RawObjectCast<A: type>(o: Object): A;
 
@@ -382,7 +373,7 @@ intrinsic %RawObjectCast<A: type>(o: Object): A;
 intrinsic %RawPointerCast<A: type>(p: RawPtr): A;
 
 // %RawConstexprCast converts one compile-time constant value to another.
-// Both the source and destination types should be 'constexpr'. 
+// Both the source and destination types should be 'constexpr'.
 // %RawConstexprCast translate to static_casts in the generated C++ code.
 intrinsic %RawConstexprCast<To: type, From: type>(f: From): To;
 
@@ -390,6 +381,14 @@ intrinsic %RawConstexprCast<To: type, From: type>(f: From): To;
 // value. Currently, only conversion to the following non-constexpr types
 // are supported: Smi, Number, String, uintptr, intptr, and int32
 intrinsic %FromConstexpr<To: type, From: type>(b: From): To;
+
+// %Allocate allocates an unitialized object of size 'size' from V8's 
+// GC heap and "reinterpret casts" the resuting object pointer to the
+// specified Torque class, allowing constructors to subsequently use
+// standard field access operators to initialize the object. 
+// This intrinsic should never be called from Torque code. It used 
+// internally when desugaring the 'new' operator.
+intrinsic %Allocate<Class: type>(size: intptr): Class;
 ```
 
 Like `buildtin`s and `runtime`s, `intrinsic`s cannot have labels.
