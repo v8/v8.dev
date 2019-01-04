@@ -241,7 +241,7 @@ transient type FastJSArray extends JSArray
 ```
 
 For example, in the case of `FastJSArray`, the transient type is invalidated if the array changes to dictionary elements or if the global NoElementsProtector is invalidated.
-The way to express this in Torque is by annotating all callables that could potentially do that as `transitioning`. For example, calling a Javascript function can executy arbitrary Javascript, so it is `transitioning`.
+The way to express this in Torque is by annotating all callables that could potentially do that as `transitioning`. For example, calling a Javascript function can execute arbitrary Javascript, so it is `transitioning`.
 
 ```torque
 extern transitioning macro Call(implicit context: Context)
@@ -251,7 +251,7 @@ extern transitioning macro Call(implicit context: Context)
 The way this is policed in the type system is that it is illegal to access a value of a transient type across a transitioning operation.
 
 ```torque
-const fastArray : FastJSArry = Cast<FastJSArray>(array);
+const fastArray : FastJSArray = Cast<FastJSArray>(array) otherwise Bailout;
 Call(f, Undefined);
 return fastArray; // Type error: fastArray is invalid here.
 ```
