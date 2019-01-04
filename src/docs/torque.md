@@ -231,7 +231,7 @@ There are two special types indicated by the keywords `void` and `never`. `void`
 
 #### Transient types
 
-In V8, heap objects can change layout at runtime. To express object layouts that are subject to change or other temporary assumptions in the type system, Torque supports the concept of a "transient type". When declaring an abstract type, adding the keyword `transient` marks it as a transient type.
+In V8, heap objects can change layout at runtime. To express object layouts that are subject to change or other temporary assumptions in the type system, Torque supports the concept of a “transient type”. When declaring an abstract type, adding the keyword `transient` marks it as a transient type.
 
 ```torque
 // A HeapObject with a JSArray map, and either fast packed elements, or fast
@@ -240,8 +240,7 @@ transient type FastJSArray extends JSArray
     generates 'TNode<JSArray>';
 ```
 
-For example, in the case of `FastJSArray`, the transient type is invalidated if the array changes to dictionary elements or if the global NoElementsProtector is invalidated.
-The way to express this in Torque is by annotating all callables that could potentially do that as `transitioning`. For example, calling a Javascript function can execute arbitrary Javascript, so it is `transitioning`.
+For example, in the case of `FastJSArray`, the transient type is invalidated if the array changes to dictionary elements or if the global `NoElementsProtector` is invalidated. To express this in Torque, annotate all callables that could potentially do that as `transitioning`. For example, calling a JavaScript function can execute arbitrary JavaScript, so it is `transitioning`.
 
 ```torque
 extern transitioning macro Call(implicit context: Context)
