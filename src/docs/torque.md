@@ -229,6 +229,33 @@ type CompareBuiltinFn = builtin(Context, Object, Object, Object) => Number;
 
 There are two special types indicated by the keywords `void` and `never`. `void` is used as the return type for callables that do not return a value, and `never` is used as the return type for callables that never actually return (i.e. only exit through exceptional paths).
 
+#### Transient types
+
+In V8, heap objects can change layout at runtime. To express object layouts that are subject to change or other temporary assumptions in the type system, Torque supports the concept of a "transient type". When declaring an abstract type, adding the keyword `transient` marks it as a transient type.
+
+```torque
+// A HeapObject with a JSArray map, and either fast packed elements, or fast
+// holey elements when the global NoElementsProtector is not invalidated.
+transient type FastJSArray extends JSArray
+    generates 'TNode<JSArray>';
+```
+
+For example, in the case of `FastJSArray`, the transient type is invalidated if the array changes to dictionary elements or if the global NoElementsProtector is invalidated.
+The way to express this in Torque is by annotating all callables that could potentially do that as `transitioning`. For example, calling a Javascript function can execute arbitrary Javascript, so it is `transitioning`.
+
+```torque
+extern transitioning macro Call(implicit context: Context)
+                               (Callable, Object): Object;
+```
+
+The way this is policed in the type system is that it is illegal to access a value of a transient type across a transitioning operation.
+
+```torque
+const fastArray : FastJSArray = Cast<FastJSArray>(array) otherwise Bailout;
+Call(f, Undefined);
+return fastArray; // Type error: fastArray is invalid here.
+```
+
 ### Callables
 
 Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides three types of callables: `macro`s, `builtin`s, and `runtime`s.
