@@ -200,7 +200,7 @@ type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 
 #### Class types
 
-Class types allow to define, allocate and manipulate the structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject. In order to minimize the expense of maintaining boilerplate object-accessing code between V8's C++ and Torque implementation, the Torque class definitions are used to generate C++ code whenever possible and appropriate to reduce the cost of keeping code across C++ and Torque synchronized by hand.
+Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8's C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
 
 <pre><code class="language-grammar">ClassDeclaration :
   <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
@@ -234,7 +234,7 @@ operator ‘.shared_function_info’ macro LoadJSFunctionSharedFunctionInfo(JSFu
 operator ‘.=shared_function_info’ macro StoreJSFunctionSharedFunctionInfo(JSFunction, SharedFunctionInfo);
 ```
 
-On the C++-side, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in js-objects.h:
+As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in js-objects.h:
 
 ```cpp
 #define JSFUNCTION_FIELDS(V) \
