@@ -382,11 +382,11 @@ intrinsic %RawConstexprCast<To: type, From: type>(f: From): To;
 // are supported: Smi, Number, String, uintptr, intptr, and int32
 intrinsic %FromConstexpr<To: type, From: type>(b: From): To;
 
-// %Allocate allocates an unitialized object of size 'size' from V8's 
+// %Allocate allocates an unitialized object of size 'size' from V8's
 // GC heap and "reinterpret casts" the resuting object pointer to the
 // specified Torque class, allowing constructors to subsequently use
-// standard field access operators to initialize the object. 
-// This intrinsic should never be called from Torque code. It used 
+// standard field access operators to initialize the object.
+// This intrinsic should never be called from Torque code. It used
 // internally when desugaring the 'new' operator.
 intrinsic %Allocate<Class: type>(size: intptr): Class;
 ```
