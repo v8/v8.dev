@@ -284,7 +284,7 @@ There are two special types indicated by the keywords `void` and `never`. `void`
 
 ### Callables
 
-Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides several different types of callables: `macro`s, `builtin`s, `runtime`s and `intrinsics`s.
+Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides several different types of callables: `macro`s, `builtin`s, `runtime`s and `intrinsic`s.
 
 <pre><code class="language-grammar">CallableDeclaration :
   MacroDeclaration
