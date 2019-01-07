@@ -200,7 +200,7 @@ type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 
 #### Class types
 
-Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8's C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
+Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
 
 <pre><code class="language-grammar">ClassDeclaration :
   <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
@@ -252,7 +252,7 @@ V(kSize, 0)
 
 #### Union types
 
-Union types express that a value belongs to one of several possible types. We only allow union types for tagged values, because they can be distinguished at runtime using the map pointer. For example, JavaScript numbers are either Smi values or allocated HeapNumber objects.
+Union types express that a value belongs to one of several possible types. We only allow union types for tagged values, because they can be distinguished at runtime using the map pointer. For example, JavaScript numbers are either Smi values or allocated `HeapNumber` objects.
 
 ```torque
 type Number = Smi | HeapNumber;
@@ -378,13 +378,13 @@ Like `builtin`s, `runtime`s cannot have labels.
 
 #### `intrinsic` callables
 
-`intrinsic`s are builtin Torque callables that provide access to internal funtionality that can't be otherwise implemented in Torque. They are declared in Torque, but not defined, since the implementation is provided by the Torque compiler. `intrinsic` declarations use the following grammar:
+`intrinsic`s are builtin Torque callables that provide access to internal funtionality that can’t be otherwise implemented in Torque. They are declared in Torque, but not defined, since the implementation is provided by the Torque compiler. `intrinsic` declarations use the following grammar:
 
 <pre><code class="language-grammar">IntrinsicDeclaration :
   <b>intrinsic</b> <b>%</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> <b>;</b>
 </code></pre>
 
-For the most part, "user" Torque code should rarely have to use `intrinsic`s directly. The currently supported intrinsics are:
+For the most part, “user” Torque code should rarely have to use `intrinsic`s directly. The currently supported intrinsics are:
 
 ```torque
 // %RawObjectCast downcasts from Object to a subtype of Object without
@@ -417,11 +417,11 @@ intrinsic %FromConstexpr<To: type, From: type>(b: From): To;
 intrinsic %Allocate<Class: type>(size: intptr): Class;
 ```
 
-Like `buildtin`s and `runtime`s, `intrinsic`s cannot have labels.
+Like `builtin`s and `runtime`s, `intrinsic`s cannot have labels.
 
 ### Explicit parameters
 
-Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses the V8's internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
+Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses V8’s internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
 
 <pre><code class="language-grammar">ExplicitParameters :
   <b>(</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list*</sub> <b>)</b>
