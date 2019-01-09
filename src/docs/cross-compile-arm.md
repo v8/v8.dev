@@ -23,10 +23,10 @@ Enable developer mode on your phone or tablet, and turn on USB debugging, via in
 
 Use [the `tools/dev/gm.py` script](/docs/build-gn#gm) to automatically build V8 tests and run them on the device.
 
-    ```bash
-    alias gm=/path/to/v8/tools/dev/gm.py
-    gm android_arm.release.check
-    ```
+```bash
+alias gm=/path/to/v8/tools/dev/gm.py
+gm android_arm.release.check
+```
 
 This command pushes the binaries and tests to the `/data/local/tmp/v8` directory on the device.
 
