@@ -18,7 +18,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ### JavaScript parsing
 
-On average web pages spend 9.5% of the V8 time at startup on parsing JavaScript. Thus we have focused on shipping V8's fastest JavaScript parser yet with v7.2. We have drastically improved parsing speed across the board. Since v7.0 the parsing speed improved by roughly 30% on desktop. The following graph documents the impressive improvements on our real-world Facebook loading benchmark over the last months.
+On average web pages spend 9.5% of the V8 time at startup on parsing JavaScript. Thus we have focused on shipping V8’s fastest JavaScript parser yet with v7.2. We have drastically improved parsing speed across the board. Since v7.0 the parsing speed improved by roughly 30% on desktop. The following graph documents the impressive improvements on our real-world Facebook loading benchmark over the last months.
 
 <figure>
   <img src="/_img/v8-release-72/facebook-parse-time.png" srcset="/_img/v8-release-72/facebook-parse-time@2x.png 2x" alt="">
@@ -52,7 +52,7 @@ Trap handlers are improving the general throughput of WebAssembly code. They are
 
 ## Async stack traces
 
-As [mentioned earlier](/blog/fast-async#improved-developer-experience), we've added a new feature called [zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `error.stack` property with asynchronous call frames. It's currently available behind the `--async-stack-traces` command-line flag.
+As [mentioned earlier](/blog/fast-async#improved-developer-experience), we’ve added a new feature called [zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `error.stack` property with asynchronous call frames. It’s currently available behind the `--async-stack-traces` command-line flag.
 
 ## JavaScript language features
 
