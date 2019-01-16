@@ -349,7 +349,7 @@ macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object):
 
 #### `builtin` callables
 
-`builtin`s are similar to `macro`s in that they can either be fully defined in Torque or marked `extern`. In the Torque-based builtin case, the body for the builtin is used to generate a V8 builtin that can be called just like any other V8 builtin, including automatically adding the relevant information in `builtin-definitions.h`. Like `macro`s, Torque `builtin`s that are mared `extern` have no Torque-based body and simply provide an interface to existing V8 `builtin`s so that they can be used from Torque code.
+`builtin`s are similar to `macro`s in that they can either be fully defined in Torque or marked `extern`. In the Torque-based builtin case, the body for the builtin is used to generate a V8 builtin that can be called just like any other V8 builtin, including automatically adding the relevant information in `builtin-definitions.h`. Like `macro`s, Torque `builtin`s that are marked `extern` have no Torque-based body and simply provide an interface to existing V8 `builtin`s so that they can be used from Torque code.
 
 `builtin` declarations in Torque have the following form:
 
@@ -361,6 +361,23 @@ macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object):
 There is only one copy of the code for a Torque builtin, and that is in the generated builtin code object. Unlike `macro`s, when `builtin`s are called from Torque code, the CSA code is not inlined at the callsite, but instead a call is generated to the builtin.
 
 `builtin`s cannot have labels.
+
+A call to a `builtins` can optionally be marked as a [tailcall](https://en.wikipedia.org/wiki/Tail_call) if it's the final call in a function. The compiler may be able to avoid creating a new stack frame in this case. Simply add `tail` before the call, like this example from the `Array.prototype.unshift` implementation:
+
+```torque
+
+macro TryFastArrayUnshift(
+    context: Context, receiver: Object, arguments: constexpr Arguments): never
+    labels Slow {
+  const array: FastJSArray = Cast<FastJSArray>(receiver) otherwise Slow;
+
+  // ...<snip>...
+  
+  tail ArrayUnshift(
+      context, LoadTargetFromFrame(), Undefined,
+      Convert<int32>(arguments.length));
+}
+```
 
 #### `runtime` callables
 
@@ -375,6 +392,8 @@ There is only one copy of the code for a Torque builtin, and that is in the gene
 The `extern runtime` specified with name <i>IdentifierName</i> corresponds to the runtime function specified by Runtime::k<i>IdentifierName</i>.
 
 Like `builtin`s, `runtime`s cannot have labels.
+
+You can also call a `runtime` function as a tailcall when appropriate. Simply include the `tail` keyword before the call.
 
 #### `intrinsic` callables
 
