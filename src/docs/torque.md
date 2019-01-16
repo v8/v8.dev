@@ -362,22 +362,7 @@ There is only one copy of the code for a Torque builtin, and that is in the gene
 
 `builtin`s cannot have labels.
 
-A call to a `builtins` can optionally be marked as a [tailcall](https://en.wikipedia.org/wiki/Tail_call) if it's the final call in a function. The compiler may be able to avoid creating a new stack frame in this case. Simply add `tail` before the call, like this example from the `Array.prototype.unshift` implementation:
-
-```torque
-
-macro TryFastArrayUnshift(
-    context: Context, receiver: Object, arguments: constexpr Arguments): never
-    labels Slow {
-  const array: FastJSArray = Cast<FastJSArray>(receiver) otherwise Slow;
-
-  // ...<snip>...
-  
-  tail ArrayUnshift(
-      context, LoadTargetFromFrame(), Undefined,
-      Convert<int32>(arguments.length));
-}
-```
+If you are coding the implementation of a `builtin`, you can craft a [tailcall](https://en.wikipedia.org/wiki/Tail_call) to a builtin or a runtime function iff (if and only if) it's the final call in the builtin. The compiler may be able to avoid creating a new stack frame in this case. Simply add `tail` before the call, as in `tail MyBuiltin(foo, bar);`.
 
 #### `runtime` callables
 
