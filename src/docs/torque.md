@@ -331,7 +331,7 @@ Macros are a callable that correspond to a chunk of generated CSA-producing C++.
 
 Every non-`extern` Torque `macro` uses the `StatementBlock` body of the `macro` to create a CSA-generating function in its namespace’s generated `Assembler` class. This code looks just like other code that you might find in `code-stub-assembler.cc`, albeit a bit less readable because it’s machine-generated. `macro`s that are marked `extern` have no body written in Torque and simply provide the interface to hand-written C++ CSA code so that it’s usable from Torque.
 
-`macro` definitions specify implicit and explict parameters, an optional return type and optoinal labels. Parameters and return types will be discussed in more detail below, but for now it suffices to know that they work somewhat like TypeScript parameters, which as discussed in the Function Types section of the TypeScript documentation [here](https://www.typescriptlang.org/docs/handbook/functions.html).
+`macro` definitions specify implicit and explict parameters, an optional return type and optional labels. Parameters and return types will be discussed in more detail below, but for now it suffices to know that they work somewhat like TypeScript parameters, which as discussed in the Function Types section of the TypeScript documentation [here](https://www.typescriptlang.org/docs/handbook/functions.html).
 
 Labels are a mechanism for exceptional exit from a `macro`. They map 1:1 to CSA labels and are added as `CodeStubAssemblerLabels*`-typed parameters to the C++ method generated for the `macro`. Their exact semantics are discussed below, but for the purpose of a `macro` declartion, the comma-separated list of a `macro`’s labels is optionally provided with the `labels` keywords and positioned after the `macro`’s parameter lists and return type.
 
@@ -480,6 +480,36 @@ When comparing a pair of corresponding parameters of two overloads…
     - it doesn’t require an implicit conversion, while the other does.
 
 If no overload is strictly better than all alternatives, this results in a compile error.
+
+### Deferred blocks
+
+A statement block can optionally be marked as `deferred`, which is a signal to the compiler that it's entered less often. The compiler may choose to locate these blocks at the end of the function, thus improving cache locality for the non-deferred regions of code. For example, in this code from the `Array.prototype.forEach` implementation, we expect to remain on the "fast" path, and only rarely take the bailout case:
+
+```torque
+  let k: Number = 0;
+  try {
+    return FastArrayForEach(o, len, callbackfn, thisArg)
+        otherwise Bailout;
+  }
+  label Bailout(kValue: Smi) deferred {
+    k = kValue;
+  }
+```
+
+Here is another example, where the dictionary elements case is marked as deferred to improve code generation for the more likely cases (from the `Array.prototype.join` implementation):
+
+```torque
+  if (IsElementsKindLessThanOrEqual(kind, HOLEY_ELEMENTS)) {
+    loadFn = LoadJoinElement<FastSmiOrObjectElements>;
+  } else if (IsElementsKindLessThanOrEqual(kind, HOLEY_DOUBLE_ELEMENTS)) {
+    loadFn = LoadJoinElement<FastDoubleElements>;
+  } else if (kind == DICTIONARY_ELEMENTS)
+    deferred {
+      const dict: NumberDictionary =
+          UnsafeCast<NumberDictionary>(array.elements);
+      const nofElements: Smi = GetNumberDictionaryNumberOfElements(dict);
+      // <etc>...
+```
 
 ## Porting CSA code to Torque
 
