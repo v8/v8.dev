@@ -10,6 +10,7 @@ description: 'V8 is Google’s open source high-performance JavaScript and WebAs
 <h2>Latest blog posts</h2>
 
 {% set posts = collections.posts | head(10) %}
+{% set start = collections.posts | length %}
 {% include "posts.njk" %}
 
 <p>More articles can be found in <a href="/blog">the blog archive</a>.</p>
