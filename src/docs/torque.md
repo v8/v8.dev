@@ -59,14 +59,14 @@ Graphically, the build process looks like this:
   <img src="/_img/docs/torque/build-process.svg" alt="">
 </figure>
 
-## Torque tooling
+## Torque tooling { #tooling }
 
 Basic tooling and development environment support is available for Torque.
 
 - There is a Visual Studio code syntax highlighting plugin available for Torque: `tools/torque/vscode-torque`
 - There is also a formatting tool that should be used after changing `.tq` files: `tools/torque/format-torque.py -i <filename>`
 
-## Troubleshooting builds involving Torque
+## Troubleshooting builds involving Torque { #troubleshooting }
 
 Why do you need to know this? Understanding how Torque files get converted into machine code is important because different problems (and bugs) can potentially arise in the different stages of translating Torque into the binary bits embedded in the snapshot:
 
@@ -75,7 +75,7 @@ Why do you need to know this? Understanding how Torque files get converted into 
 - Even once `mksnapshot` successfully builds, it can fail during execution if a Torque-provided builtin has a bug. Many builtins run as part of snapshot creation, including Torque-generated ones. For example, `Array.prototype.splice`, a Torque-authored builtin, is called as part of the JavaScript snapshot initialization process to setup the default JavaScript environment. If there is a bug in the implementation, `mksnapshot` crashes during execution. When `mksnapshot` crashes, it’s sometimes useful to call `mksnapshot` passing the `--gdb-jit-full` flag, which generates extra debug information that provides useful context, e.g. names for Torque-generated builtins in `gdb` stack crawls.
 - Of course, even if Torque-authored code makes it through `mksnapshot`, it still may be buggy or crash. Adding test cases to `torque-test.tq` and `torque-test.cc` is a good way to ensure that your Torque code does what you actually expect. If your Torque code does end up crashing in `d8` or `chrome`, the `--gdb-jit-full` flag is again very useful.
 
-## `constexpr`: compile-time vs. run-time
+## `constexpr`: compile-time vs. run-time { #constexpr }
 
 Understanding the Torque build process is also important to understanding a core feature in the Torque language: `constexpr`.
 
