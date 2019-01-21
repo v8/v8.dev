@@ -1,4 +1,4 @@
-<ol reversed {% if start %}start="{{ start }}"{% endif %}>
+<ol reversed{% if start %} start="{{ start }}"{% endif %}>
 {% for post in posts %}
   <li>
     <a href="{{ post.url | url | clean }}">{% if post.data.title %}{{ post.data.title | markdown | safe }}{% else %}<code>{{ post.url }}</code>{% endif %}</a>
