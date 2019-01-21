@@ -17,6 +17,7 @@ const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAttrs = require('markdown-it-attrs');
 const markdownItFootnote = require('markdown-it-footnote');
+const markdownItTableOfContents = require('markdown-it-table-of-contents');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
 const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 
@@ -36,7 +37,22 @@ const markdownItAnchorConfig = {
 const md = markdownIt(markdownItConfig)
   .use(markdownItFootnote)
   .use(markdownItAttrs)
-  .use(markdownItAnchor, markdownItAnchorConfig);
+  .use(markdownItAnchor, markdownItAnchorConfig)
+  .use(markdownItTableOfContents, {
+    includeLevel: [1, 2, 3, 4, 5],
+    // This is a (hacky) workaround for:
+    // https://github.com/Oktavilla/markdown-it-table-of-contents/issues/38
+    slugify: (string) => {
+      const match = string.match(/\{\s+#([^\s]+)\s+\}$/);
+      const slug = match ? match[1] : string.trim().toLowerCase().replace(/\s+/g, '-');
+      return encodeURIComponent(slug);
+    },
+    format: (string) => {
+      const match = string.match(/\s+\{\s+#([^\s]+)\s+\}$/);
+      const heading = match ? string.slice(0, -match[0].length) : string;
+      return md.renderInline(heading);
+    },
+  });
 
 module.exports = (eleventyConfig) => {
   eleventyConfig.addPlugin(pluginRss);
