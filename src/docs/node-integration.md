@@ -32,6 +32,12 @@ cd $NODE
 ./configure --build-v8-with-gn && make -j48 test
 ```
 
+Note that you may need to install `libstdc++-8-dev` as build dependency.
+
+```bash
+sudo apt-get install libstdc++-8-dev
+```
+
 You can run single tests.
 
 ```bash
