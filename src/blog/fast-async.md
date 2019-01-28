@@ -458,7 +458,7 @@ Error: BEEP BEEP
     at async foo (index.js:2:3)
 ```
 
-In the stack trace, the topmost function comes first, followed by the rest of the synchronous stack trace, followed by the asynchronous call to `bar` in function `foo`. This change is implemented in V8 behind the new `--async-stack-traces` flag. **Update**: As of V8 v7.3, `--async-stack-traces` is now enabled by default.
+In the stack trace, the topmost function comes first, followed by the rest of the synchronous stack trace, followed by the asynchronous call to `bar` in function `foo`. This change is implemented in V8 behind the new `--async-stack-traces` flag. **Update**: As of V8 v7.3, `--async-stack-traces` is enabled by default.
 
 However, if you compare this to the async stack trace in Chrome DevTools above, you’ll notice that the actual call site to `foo` is missing from the asynchronous part of the stack trace. As mentioned before, this approach utilizes the fact that for `await` the resume and suspend locations are the same — but for regular [`Promise#then()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) or [`Promise#catch()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch) calls, this is not the case. For more background, see Mathias Bynens’s explanation on [why `await` beats `Promise#then()`](https://mathiasbynens.be/notes/async-stack-traces).
 
