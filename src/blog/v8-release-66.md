@@ -10,6 +10,8 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ## JavaScript language features
 
+### `Function.prototype.toString` revision { #function-tostring }
+
 [`Function.prototype.toString()`](https://tc39.github.io/Function-prototype-toString-revision/) now returns exact slices of source code text, including whitespace and comments. Here’s an example comparing the old and the new behavior:
 
 ```js
@@ -29,7 +31,11 @@ foo.toString();
 // → 'function /* comment */ foo () {}'
 ```
 
+### JSON ⊂ ECMAScript { #json-ecmascript }
+
 Line separator (U+2028) and paragraph separator (U+2029) symbols are now allowed in string literals, [matching JSON](https://github.com/tc39/proposal-json-superset). Previously, these symbols were treated as line terminators within string literals, and so using them resulted in a `SyntaxError` exception.
+
+### Optional `catch` binding { #optional-catch-binding }
 
 The `catch` clause of `try` statements can now be [used without a parameter](https://tc39.github.io/proposal-optional-catch-binding/). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
 
@@ -40,6 +46,8 @@ try {
   handleException();
 }
 ```
+
+### One-sided string trimming { #string-trimming }
 
 In addition to `String.prototype.trim()`, V8 now implements [`String.prototype.trimStart()` and `String.prototype.trimEnd()`](https://github.com/tc39/proposal-string-left-right-trim). This functionality was previously available through the non-standard `trimLeft()` and `trimRight()` methods, which remain as aliases of the new methods for backward compatibility.
 
@@ -52,6 +60,8 @@ string.trimEnd();
 string.trim();
 // → 'hello world'
 ```
+
+### `Array.prototype.values` { #array-values }
 
 [The `Array.prototype.values()` method](https://tc39.github.io/ecma262/#sec-array.prototype.values) gives arrays the same iteration interface as the ES2015 `Map` and `Set` collections: all can now be iterated over by `keys`, `values`, or `entries` by calling the same-named method. This change has the potential to be incompatible with existing JavaScript code. If you discover odd or broken behavior on a website, please try to disable this feature via `chrome://flags/#enable-array-prototype-values` and [file an issue](https://bugs.chromium.org/p/v8/issues/entry?template=Defect+report+from+user).
 
