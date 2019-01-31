@@ -5,7 +5,7 @@ All internal errors thrown in V8 capture a stack trace when they are created. Th
 
 ## Basic stack traces
 
-By default, almost all errors thrown by V8 have a `stack` property that holds the topmost 10 stack frames, formatted as a string. Here's an example of a fully formatted stack trace:
+By default, almost all errors thrown by V8 have a `stack` property that holds the topmost 10 stack frames, formatted as a string. Here’s an example of a fully formatted stack trace:
 
 ```
 ReferenceError: FAIL is not defined
