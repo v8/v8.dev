@@ -128,7 +128,7 @@ V8 now implements [a stage 3 proposal](https://github.com/tc39/proposal-well-for
 
 ```js
 JSON.stringify('\uD800');
-// → '"\ud800"'
+// → '"\\ud800"'
 ```
 
 Note that `JSON.parse(stringified)` still produces the same results as before.
