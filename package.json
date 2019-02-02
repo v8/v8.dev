@@ -19,6 +19,8 @@
   },
   "husky": {
     "hooks": {
+      "post-merge": "post-npm-install",
+      "post-rebase": "post-npm-install",
       "pre-commit": "npm run lint"
     }
   },
@@ -41,6 +43,7 @@
     "markdown-it-footnote": "^3.0.1",
     "markdownlint-cli": "^0.13.0",
     "minify-xml": "^1.0.3",
+    "post-npm-install": "^1.0.0",
     "postcss-cli": "^6.1.1",
     "postcss-custom-properties": "^8.0.9",
     "superstatic": "^6.0.4",
