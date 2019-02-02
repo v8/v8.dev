@@ -5,11 +5,11 @@ This document introduces some key V8 concepts and provides a `hello world` examp
 
 ## Audience
 
-This document is intended for C++ programmers who want to embed the V8 JavaScript engine within a C++ application. It will help you to make your own application’s C++ objects and methods available to JavaScript, and to make JavaScript objects and functions available to your C++ application.
+This document is intended for C++ programmers who want to embed the V8 JavaScript engine within a C++ application. It helps you to make your own application’s C++ objects and methods available to JavaScript, and to make JavaScript objects and functions available to your C++ application.
 
 ## Hello world
 
-Let's look at a [Hello World example](https://chromium.googlesource.com/v8/v8/+/branch-heads/6.8/samples/hello-world.cc) that takes a JavaScript statement as a string argument, executes it as JavaScript code, and prints the result to standard out.
+Let’s look at a [Hello World example](https://chromium.googlesource.com/v8/v8/+/branch-heads/6.8/samples/hello-world.cc) that takes a JavaScript statement as a string argument, executes it as JavaScript code, and prints the result to standard out.
 
 First, some key concepts:
 
@@ -62,9 +62,9 @@ Follow the steps below to run the example yourself:
     ./hello_world
     ```
 
-1. You will see `Hello, World!`. Yay!
+1. It prints `Hello, World!`. Yay!
 
-If you are looking for an example which is in sync with master simply check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/master/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
+If you are looking for an example which is in sync with master, check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/master/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
 
 ## More example code
 
@@ -72,7 +72,7 @@ The following samples are provided as part of the source code download.
 
 ### [`process.cc`](https://github.com/v8/v8/blob/master/samples/process.cc)
 
-This sample provides the code necessary to extend a hypothetical HTTP request processing application - which could be part of a web server, for example - so that it is scriptable. It takes a JavaScript script as an argument, which must provide a function called `Process`. The JavaScript `Process` function can be used to, for example, collect information such as how many hits each page served by the fictional web server gets.
+This sample provides the code necessary to extend a hypothetical HTTP request processing application — which could be part of a web server, for example — so that it is scriptable. It takes a JavaScript script as an argument, which must provide a function called `Process`. The JavaScript `Process` function can be used to, for example, collect information such as how many hits each page served by the fictional web server gets.
 
 ### [`shell.cc`](https://github.com/v8/v8/blob/master/samples/shell.cc)
 
@@ -99,10 +99,12 @@ There are several types of handles:
     Note: The handle stack is not part of the C++ call stack, but the handle scopes are embedded in the C++ stack. Handle scopes can only be stack-allocated, not allocated with `new`.
 
 - Persistent handles provide a reference to a heap-allocated JavaScript Object, just like a local handle. There are two flavors, which differ in the lifetime management of the reference they handle. Use a persistent handle when you need to keep a reference to an object for more than one function call, or when handle lifetimes do not correspond to C++ scopes. Google Chrome, for example, uses persistent handles to refer to Document Object Model (DOM) nodes. A persistent handle can be made weak, using `PersistentBase::SetWeak`, to trigger a callback from the garbage collector when the only references to an object are from weak persistent handles.
+
     - A `UniquePersistent<SomeType>` handle relies on C++ constructors and destructors to manage the lifetime of the underlying object.
     - A `Persistent<SomeType>` can be constructed with its constructor, but must be explicitly cleared with `Persistent::Reset`.
 
-- There are other types of handles which are rarely used, that we will only briefly mention here
+- There are other types of handles which are rarely used, that we will only briefly mention here:
+
     - `Eternal` is a persistent handle for JavaScript objects that are expected to never be deleted. It is cheaper to use because it relieves the garbage collector from determining the liveness of that object.
     - Both `Persistent` and `UniquePersistent` cannot be copied, which makes them unsuitable as values with pre-C++11 standard library containers. `PersistentValueMap` and `PersistentValueVector` provide container classes for persistent values, with map and vector-like semantics. C++11 embedders do not require these, since C++11 move semantics solve the underlying problem.
 
@@ -181,6 +183,7 @@ In JavaScript there is a strong duality between functions and objects. To create
 
     - accessor callbacks are invoked when a specific object property is accessed by a script
     - interceptor callbacks are invoked when any object property is accessed by a script
+
   [Accessors](#accessors) and [interceptors](#interceptors) are discussed later in this document.
 
 The following code provides an example of creating a template for the global object and setting the built-in global functions.
@@ -380,11 +383,11 @@ JavaScript is a *class-free*, object-oriented language, and as such, it uses pro
 Class-based object-oriented languages, such as Java and C++, are founded on the concept of two distinct entities: classes and instances. JavaScript is a prototype-based language and so does not make this distinction: it simply has objects. JavaScript does not natively support the declaration of class hierarchies; however, JavaScript’s prototype mechanism simplifies the process of adding custom properties and methods to all instances of an object. In JavaScript, you can add custom properties to objects. For example:
 
 ```js
-// Create an object “bicycle”
+// Create an object named `bicycle`.
 function bicycle() {}
-// Create an instance of bicycle called roadbike
+// Create an instance of `bicycle` called `roadbike`.
 var roadbike = new bicycle();
-// Define a custom property, wheels, on roadbike
+// Define a custom property, `wheels`, on `roadbike`.
 roadbike.wheels = 2;
 ```
 
