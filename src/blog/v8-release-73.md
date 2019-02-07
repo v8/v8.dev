@@ -76,7 +76,7 @@ for (const match of string.matchAll(regex)) {
 // → repo: v8.dev
 ```
 
-For more details, read [our Web Fundamentals article on `String.prototype.matchAll`](TODO).
+<!-- For more details, read [our Web Fundamentals article on `String.prototype.matchAll`](TODO). -->
 
 ### `Atomics.notify`
 
