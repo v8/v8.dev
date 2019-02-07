@@ -20,7 +20,7 @@ Related to the above-mentioned `--async-stack-traces` flag, we’re also enablin
 
 ### Faster Wasm startup
 
-Via optimizations to the internals of Liftoff, we improved compilation speed significantly, without regressing the quality of the generated code. For most workloads, compilation time reduced by 15–25%.
+Via optimizations to the internals of Liftoff, we improved WebAssembly compilation speed significantly without regressing the quality of the generated code. For most workloads, compilation time reduced by 15–25%.
 
 <figure>
   <img src="/_img/v8-release-73/liftoff-epic.svg" alt="">
