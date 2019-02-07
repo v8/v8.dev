@@ -19,7 +19,7 @@ module.exports = {
   ],
   swDest: 'dist/sw.js',
   swSrc: 'src/sw.js',
-  templatedUrls: {
+  templatedURLs: {
     '/': [
       'index.html',
     ],
