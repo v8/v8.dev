@@ -84,6 +84,6 @@ For more details, read [our Web Fundamentals article on `String.prototype.matchA
 
 ## V8 API
 
-Please use `git log branch-heads/7.2..branch-heads/7.3 include/v8.h` to get a list of the API changes. 
+Please use `git log branch-heads/7.2..branch-heads/7.3 include/v8.h` to get a list of the API changes.
 
 Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 7.3 -t branch-heads/7.3` to experiment with the new features in V8 v7.3. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
