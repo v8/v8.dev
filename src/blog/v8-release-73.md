@@ -12,7 +12,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ## Async stack traces
 
-We are turning on [zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces) by default, which was so far behind [the `--async-stack-traces` flag](/blog/fast-async#improved-developer-experience). This makes it easier to diagnose problems in production with heavily asynchronous code, as the `error.stack` property that is usually sent to log files/services provides more insight into what caused the problem.
+We are turning on [the `--async-stack-traces` flag](/blog/fast-async#improved-developer-experience) by default. [Zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces) make it easier to diagnose problems in production with heavily asynchronous code, as the `error.stack` property that is usually sent to log files/services now provides more insight into what caused the problem.
 
 ## Faster `await`
 
