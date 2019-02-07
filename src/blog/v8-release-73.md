@@ -18,7 +18,7 @@ We are turning on [zero-cost async stack traces](https://bit.ly/v8-zero-cost-asy
 
 Related to the above-mentioned `--async-stack-traces` flag, we’re also enabling the `--harmony-await-optimization` flag by default, which is a prerequisite for the `--async-stack-traces`. See [faster async functions and promises](/blog/fast-async#await-under-the-hood) for more details.
 
-### Faster Wasm Startup
+### Faster Wasm startup
 
 Via optimizations to the internals of Liftoff, we improved compilation speed significantly, without regressing the quality of the generated code. For most workloads, compilation time reduced by 15–25%.
 
@@ -29,7 +29,7 @@ Via optimizations to the internals of Liftoff, we improved compilation speed sig
 
 ## JavaScript language features
 
-In v7.3 we added a couple of new language features.
+V8 v7.3 comes with several new JavaScript language features.
 
 ### `Object.fromEntries`
 
