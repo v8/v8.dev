@@ -25,12 +25,15 @@ Clone cquery from [cquery](https://github.com/cquery-project/cquery) in a direct
 git clone https://github.com/cquery-project/cquery "$CQUERY_DIR"
 cd "$CQUERY_DIR"
 git submodule update --init
-./waf configure build
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+make install -j8
 ```
 
 If anything goes wrong, be sure to check out [cquery’s getting started guide](https://github.com/cquery-project/cquery/wiki).
 
-You can use `git pull && git submodule update` to update cquery at a later time (don't forget to rebuild via `./waf configure build`).
+You can use `git pull && git submodule update` to update cquery at a later time (don't forget to rebuild via `cmake .. -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES && make install -j8`).
 
 ### Install and configure cquery-plugin for VSCode
 
