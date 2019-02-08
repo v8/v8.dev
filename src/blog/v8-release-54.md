@@ -26,7 +26,7 @@ Our work to streamline V8's parser not only helped reduce memory consumption, it
 Our [internal startup test suite](https://www.youtube.com/watch?v=xCx4uC7mn6Y) that measures real-world JavaScript performance improved by a median of 5%. The [Speedometer](http://browserbench.org/Speedometer/) benchmark also benefits from these optimizations, improving by [~10 to 13% compared to v5.2](https://chromeperf.appspot.com/report?sid=f5414b72e864ffaa4fd4291fa74bf3fd7708118ba534187d36113d8af5772c86&start_rev=393766&end_rev=416239).
 
 <figure>
-  <img src="/_img/v8-release-54/speedometer.png" alt="">
+  <img src="/_img/v8-release-54/speedometer.png" intrinsicsize="938x334" alt="">
 </figure>
 
 ## V8 API

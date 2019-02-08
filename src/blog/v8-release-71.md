@@ -27,7 +27,7 @@ function mapAdd(a, x) {
 Note that `x` is a free variable of the local closure `y => y + x`. V8 v7.1 can now fully elide the context allocation of `x`, yielding an improvement of up to **40%** in some cases.
 
 <figure>
-  <img src="/_img/v8-release-71/improved-escape-analysis.svg" alt="">
+  <img src="/_img/v8-release-71/improved-escape-analysis.svg" intrinsicsize="705x371" alt="">
   <figcaption>Performance improvement with new escape analysis (lower is better)</figcaption>
 </figure>
 

@@ -23,7 +23,7 @@ To recap: snapshots are critical for startup performance, and they are deseriali
 A snapshot contains everything needed to fully initialize a new Isolate, including language constants (e.g., the `undefined` value), internal bytecode handlers used by the interpreter, built-in objects (e.g., `String`), and the functions installed on built-in objects (e.g., `String.prototype.replace`) together with their executable `Code` objects.
 
 <figure>
-  <img src="/_img/lazy-deserialization/startup-snapshot-size.png" alt="">
+  <img src="/_img/lazy-deserialization/startup-snapshot-size.png" intrinsicsize="908x251" alt="">
   <figcaption>Startup snapshot size in bytes from 2016-01 to 2017-09. The x-axis shows V8 revision numbers.</figcaption>
 </figure>
 
@@ -56,7 +56,7 @@ In addition to built-in functions, we have also implemented [lazy deserializatio
 We evaluated memory savings by loading the top 1000 most popular websites using Chrome 65 on an Android device, with and without lazy deserialization.
 
 <figure>
-  <img src="/_img/lazy-deserialization/memory-savings.png" alt="">
+  <img src="/_img/lazy-deserialization/memory-savings.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 On average, V8’s heap size decreased by 540 KB, with 25% of the tested sites saving more than 620 KB, 50% saving more than 540 KB, and 75% saving more than 420 KB.

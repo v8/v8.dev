@@ -15,7 +15,7 @@ In a [previous blog post](/blog/jank-busters), we introduced the problem of jank
 V8 implements a [generational garbage collector](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)#Generational) where objects may move within the young generation, from the young to the old generation, and within the old generation. Moving objects is expensive since the underlying memory of objects needs to be copied to new locations and the pointers to those objects are also subject to updating. Figure 1 shows the phases and how they were executed before Orinoco. Essentially, objects were moved first and then pointers between those objects were updated afterwards, all in sequential order, resulting in observable jank.
 
 <figure>
-  <img src="/_img/orinoco/sequential.png" alt="">
+  <img src="/_img/orinoco/sequential.png" intrinsicsize="629x162" alt="">
   <figcaption>Figure 1: Sequential moving of objects and updating pointers</figcaption>
 </figure>
 
@@ -24,7 +24,7 @@ V8 partitions its heap memory into fixed-size chunks, called pages, that are ass
 Since there are no dependencies between young generation evacuation and old generation compaction, Orinoco now performs these phases in parallel, as shown in Figure 2. The result of these improvements is a reduction of compaction time of 75% from ~7ms to under 2ms on average.
 
 <figure>
-  <img src="/_img/orinoco/parallel.png" alt="">
+  <img src="/_img/orinoco/parallel.png" intrinsicsize="625x302" alt="">
   <figcaption>Figure 2: Parallel moving of objects and updating pointers</figcaption>
 </figure>
 
@@ -33,14 +33,14 @@ The second optimization introduced by Orinoco improves how garbage collection tr
 Previously, V8 implemented remembered sets as arrays of pointer addresses, or _store buffers_. There was one store buffer for the young generation and one for each of the fragmented old generation pages. The store buffer of a page contains addresses of all incoming pointers as shown in Figure 3. Entries are appended to a store buffer in a _write barrier_, which guards write operations in JavaScript code. This may result in duplicate entries since a store buffer may include a pointer multiple times and two different store buffers may include the same pointer. Duplicate entries make parallelization of the pointer update phase difficult because of the data race caused by two threads trying to update the same pointer.
 
 <figure>
-  <img src="/_img/orinoco/old-remembered-set.png" alt="">
+  <img src="/_img/orinoco/old-remembered-set.png" intrinsicsize="618x382" alt="">
   <figcaption>Figure 3: Old remembered set</figcaption>
 </figure>
 
 Orinoco removes this complexity by reorganizing the remembered set to simplify parallelization and make sure that threads get disjoint sets of pointers to update. Instead of storing incoming interesting pointers in an array, each page now stores the offsets of interesting pointers originating from that page in buckets of bitmaps as shown in Figure 4. Each bucket is either empty or points to a bitmap of a fixed length. A bit in the bitmap corresponds to a pointer offset in the page. If a bit is set then the pointer is interesting and is in the remembered set. Using this data-structure we can parallelize pointer updates based on pages. The absence of duplicate entries and the dense representation of pointers also allowed us to remove complex code for handling remembered set overflow. In our long running Gmail benchmark, this change [reduced](https://drive.google.com/file/d/0BxRQ51WfVicyMk9nYUk5YVY1VjQ/view) the maximum pause time of compacting garbage collection by 45% from 42ms to 23 ms.
 
 <figure>
-  <img src="/_img/orinoco/new-remembered-set.png" alt="">
+  <img src="/_img/orinoco/new-remembered-set.png" intrinsicsize="622x402" alt="">
   <figcaption>Figure 4: New remembered set</figcaption>
 </figure>
 

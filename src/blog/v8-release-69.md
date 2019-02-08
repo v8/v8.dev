@@ -25,7 +25,7 @@ V8 v6.9 ships with support for embedded built-ins on x64 platforms. Other platfo
 WebAssembly got a new baseline compiler for much faster startup of complex websites with big WebAssembly modules (such as Google Earth and AutoCAD). Depending on the hardware we are seeing speedups of more than 10×. For more details, refer to [the detailed Liftoff blog post](/blog/liftoff).
 
 <figure>
-  <img src="/_img/v8-liftoff.svg" width="256" height="256" alt="">
+  <img src="/_img/v8-liftoff.svg" width="256" height="256" intrinsicsize="187x187" alt="">
   <figcaption>Logo for Liftoff, V8’s baseline compiler for WebAssembly</figcaption>
 </figure>
 

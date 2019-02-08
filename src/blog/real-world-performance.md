@@ -10,7 +10,7 @@ Over the last year the V8 team has developed a new methodology to measure and un
 The old adage “what gets measured gets improved” is particularly true in the world of JavaScript virtual machine (VM) development. Choosing the right metrics to guide performance optimization is one of the most important things a VM team can do over time. The following timeline roughly illustrates how JavaScript benchmarking has evolved since the initial release of V8:
 
 <figure>
-  <img src="/_img/real-world-performance/evolution.png" alt="">
+  <img src="/_img/real-world-performance/evolution.png" intrinsicsize="698x351" alt="">
   <figcaption>Evolution of JavaScript benchmarks</figcaption>
 </figure>
 
@@ -35,7 +35,7 @@ Analyzing these new, real-world performance metrics and comparing them to tradit
 From these measurements, we discovered that Octane performance was actually a poor proxy for performance on the majority of our 25 tested websites. You can see in the chart below: Octane’s color bar distribution is very different than any other workload, especially those for the real-world websites. When running Octane, V8’s bottleneck is often the execution of JavaScript code. However, most real-world websites instead stress V8’s parser and compiler. We realized that optimizations made for Octane often lacked impact on real-world web pages, and in some cases these [optimizations made real-world websites slower](http://benediktmeurer.de/2016/12/16/the-truth-about-traditional-javascript-benchmarks/#a-closer-look-at-octane).
 
 <figure>
-  <img src="/_img/real-world-performance/startup-distribution.png" alt="">
+  <img src="/_img/real-world-performance/startup-distribution.png" intrinsicsize="1600x945" alt="">
   <figcaption>Distribution of time running all of Octane, running the line-items of Speedometer, and loading websites from our test suite on Chrome 57</figcaption>
 </figure>
 

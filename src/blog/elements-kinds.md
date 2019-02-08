@@ -98,7 +98,7 @@ To recap:
 V8 implements this tag transitioning system as a [lattice](https://en.wikipedia.org/wiki/Lattice_%28order%29). Here’s a simplified visualization of that featuring only the most common elements kinds:
 
 <figure>
-  <img src="/_img/elements-kinds/lattice.svg" alt="">
+  <img src="/_img/elements-kinds/lattice.svg" intrinsicsize="960x540" alt="">
 </figure>
 
 It’s only possible to transition downwards through the lattice. Once a single floating-point number is added to an array of Smis, it is marked as DOUBLE, even if you later overwrite the float with a Smi. Similarly, once a hole is created in an array, it’s marked as holey forever, even when you fill it later.

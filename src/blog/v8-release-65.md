@@ -27,7 +27,7 @@ Our measurements show that with this API, the WebAssembly compilation in Chrome 
 For the graph below we measure the time it takes to download and compile a WebAssembly module with 67 MB and about 190,000 functions. We do the measurements with 25 Mbit/sec, 50 Mbit/sec, and 100 Mbit/sec download speed.
 
 <figure>
-  <img src="/_img/v8-release-65/wasm-streaming-compilation.png" alt="">
+  <img src="/_img/v8-release-65/wasm-streaming-compilation.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 When the download time is longer than the compile time of the WebAssembly module, e.g. in the graph above with 25 Mbit/sec and 50 Mbit/sec, then `WebAssembly.compileStreaming()` finishes compilation almost immediately after the last bytes are downloaded.
@@ -54,7 +54,7 @@ Furthermore, we’ve widened the fast path on all these builtins. At first we wo
 The following image shows the improvement delta compared to V8 v6.4 in our inlined builtins, broken down into integer arrays, double arrays, and double arrays with holes. Time is in milliseconds.
 
 <figure>
-  <img src="/_img/v8-release-65/performance-improvements.png" alt="">
+  <img src="/_img/v8-release-65/performance-improvements.png" intrinsicsize="1598x988" alt="">
 </figure>
 
 ## V8 API

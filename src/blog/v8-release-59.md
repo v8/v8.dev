@@ -18,7 +18,7 @@ A dedicated blog post will delve deeper into this topic soon.
 [WebAssembly TrapIf support](https://chromium.googlesource.com/v8/v8/+/98fa962e5f342878109c26fd7190573082ac3abe) significantly reduced the time spent compiling code (~30%).
 
 <figure>
-  <img src="/_img/v8-release-59/angrybots.png" alt="">
+  <img src="/_img/v8-release-59/angrybots.png" intrinsicsize="600x371" alt="">
 </figure>
 
 ## V8 API
