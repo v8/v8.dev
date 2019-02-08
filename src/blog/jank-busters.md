@@ -11,7 +11,7 @@ tags:
 Jank, or in other words visible stutters, can be noticed when Chrome fails to render a frame within 16.66ms (disrupting 60 frames per second motion). As of today most of the V8 garbage collection work is performed on the main rendering thread, c.f. Figure 1, often resulting in jank when too many objects need to be maintained. Eliminating jank has always been a high priority for the V8 team ([1](https://blog.chromium.org/2011/11/game-changer-for-interactive.html), [2](https://www.youtube.com/watch?v=3vPOlGRH6zk), [3](/blog/free-garbage-collection)). This blog discusses a few optimizations that were implemented between M41 and M46 which significantly reduce garbage collection pauses resulting in better user experience.
 
 <figure>
-  <img src="/_img/jank-busters/gc-main-thread.png" alt="">
+  <img src="/_img/jank-busters/gc-main-thread.png" intrinsicsize="798x137" alt="">
   <figcaption>Figure 1: Garbage collection performed on the main thread</figcaption>
 </figure>
 
@@ -22,7 +22,7 @@ Another source of jank is the bookkeeping associated with tracking the lifetimes
 Most of V8’s garbage collection is performed on the main rendering thread. Moving garbage collection operations to concurrent threads reduces the waiting time for the garbage collector and further reduces jank. This is an inherently complicated task since the main JavaScript application and the garbage collector may simultaneous observe and modify the same objects. Until now, concurrency was limited to sweeping the old generation of the regular object JS heap. Recently, we also implemented concurrent sweeping of the code and map space of the V8 heap. Additionally, we implemented concurrent unmapping of unused pages to reduce the work that has to be performed on the main thread, c.f. Figure 2.
 
 <figure>
-  <img src="/_img/jank-busters/gc-concurrent-threads.png" alt="">
+  <img src="/_img/jank-busters/gc-concurrent-threads.png" intrinsicsize="800x260" alt="">
   <figcaption>Figure 2: Some garbage collection operations performed on the concurrent garbage collection threads.</figcaption>
 </figure>
 

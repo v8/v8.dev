@@ -11,7 +11,7 @@ Roughly three months ago, I joined the V8 team (Google Munich) as an intern and 
 Let’s (very) briefly recap the V8 pipeline for a JavaScript function: V8’s interpreter, Ignition, collects profiling information about that function while interpreting it. Once the function becomes hot, this information is passed to V8’s compiler, TurboFan, which generates optimized machine code. When the profiling information is no longer valid — for example because one of the profiled objects gets a different type during runtime — the optimized machine code might become invalid. In that case, V8 needs to deoptimize it.
 
 <figure>
-  <img src="/_img/lazy-unlinking/v8-overview.png" alt="">
+  <img src="/_img/lazy-unlinking/v8-overview.png" intrinsicsize="1600x1154" alt="">
   <figcaption>An overview of V8, as seen in <a href="https://medium.com/reloading/javascript-start-up-performance-69200f43b201">JavaScript Start-up Performance</a></figcaption>
 </figure>
 
@@ -33,7 +33,7 @@ for (var i = 0; i < 1000; i++) f1(0);
 Each function also has a trampoline to the interpreter — more details in these [slides](https://docs.google.com/presentation/d/1Z6oCocRASCfTqGq1GCo1jbULDGS-w-nzxkbVF7Up0u0/edit#slide=id.p) — and will keep a pointer to this trampoline in its `SharedFunctionInfo` (SFI). This trampoline will be used whenever V8 needs to go back to unoptimized code. Thus, upon deoptimization, triggered by passing an argument of a different type, for example, the Deoptimizer can simply set the code field of the JavaScript function to this trampoline.
 
 <figure>
-  <img src="/_img/lazy-unlinking/v8-overview.png" alt="">
+  <img src="/_img/lazy-unlinking/v8-overview.png" intrinsicsize="1600x1154" alt="">
   <figcaption>An overview of V8, as seen in <a href="https://medium.com/reloading/javascript-start-up-performance-69200f43b201">JavaScript Start-up Performance</a></figcaption>
 </figure>
 
@@ -80,7 +80,7 @@ for (var i = 0; i < 1000; i++) {
 When running this benchmark, we could observe that V8 spent around 98% of its execution time on garbage collection. We then removed this data structure, and instead used an approach for _lazy unlinking_, and this was what we observed on x64:
 
 <figure>
-  <img src="/_img/lazy-unlinking/microbenchmark-results.png" alt="">
+  <img src="/_img/lazy-unlinking/microbenchmark-results.png" intrinsicsize="1240x766" alt="">
 </figure>
 
 Although this is just a micro-benchmark that creates many JavaScript functions and triggers many garbage collection cycles, it gives us an idea of the overhead introduced by this data structure. Other more realistic applications where we saw some overhead, and which motivated this work, were the [router benchmark](https://github.com/delvedor/router-benchmark) implemented in Node.js and [ARES-6 benchmark suite](http://browserbench.org/ARES-6/).
@@ -156,7 +156,7 @@ We now look at the performance gains and regressions obtained with this project.
 The following plot shows us some improvements and regressions, relative to the previous commit. Note that the higher, the better.
 
 <figure>
-  <img src="/_img/lazy-unlinking/x64.png" alt="">
+  <img src="/_img/lazy-unlinking/x64.png" intrinsicsize="1200x880" alt="">
 </figure>
 
 The `promises` benchmarks are the ones where we see greater improvements, observing almost 33% gain for the `bluebird-parallel` benchmark, and 22.40% for `wikipedia`. We also observed a few regressions in some benchmarks. This is related to the issue explained above, on checking whether the code is marked for deoptimization.
@@ -164,7 +164,7 @@ The `promises` benchmarks are the ones where we see greater improvements, observ
 We also see improvements in the ARES-6 benchmark suite. Note that in this chart too, the higher the better. These programs used to spend considerable amount of time in GC-related activities. With lazy unlinking we improve performance by 1.9% overall. The most notable case is the `Air steadyState` where we get an improvement of around 5.36%.
 
 <figure>
-  <img src="/_img/lazy-unlinking/ares6.png" alt="">
+  <img src="/_img/lazy-unlinking/ares6.png" intrinsicsize="600x371" alt="">
 </figure>
 
 ### AreWeFastYet results
@@ -172,12 +172,12 @@ We also see improvements in the ARES-6 benchmark suite. Note that in this chart 
 The performance results for the Octane and ARES-6 benchmark suites also showed up on the AreWeFastYet tracker. We looked at these performance results on September 5th, 2017, using the provided default machine (macOS 10.10 64-bit, Mac Pro, shell).
 
 <figure>
-  <img src="/_img/lazy-unlinking/awfy-octane.png" alt="">
+  <img src="/_img/lazy-unlinking/awfy-octane.png" intrinsicsize="1236x734" alt="">
   <figcaption>Cross-browser results on Octane as seen on AreWeFastYet</figcaption>
 </figure>
 
 <figure>
-  <img src="/_img/lazy-unlinking/awfy-ares6.png" alt="">
+  <img src="/_img/lazy-unlinking/awfy-ares6.png" intrinsicsize="1236x756" alt="">
   <figcaption>Cross-browser results on ARES-6 as seen on AreWeFastYet</figcaption>
 </figure>
 
@@ -188,11 +188,11 @@ We can also see performance improvements in the `router-benchmark`. The followin
 For the first experiment, we saw that the `router` and `express` tests perform about twice as many operations than before, in the same amount of time. For the second experiment, we saw even greater improvement. In some of the cases, such as `routr`, `server-router` and `router`, the benchmark performs approximately 3.80×, 3× and 2× more operations, respectively. This happens because V8 accumulates more optimized JavaScript functions, test after test. Thus, whenever executing a given test, if a garbage collection cycle is triggered, V8 has to visit the optimized functions from the current test and from the previous ones.
 
 <figure>
-  <img src="/_img/lazy-unlinking/router.png" alt="">
+  <img src="/_img/lazy-unlinking/router.png" intrinsicsize="600x371" alt="">
 </figure>
 
 <figure>
-  <img src="/_img/lazy-unlinking/router-integrated.png" alt="">
+  <img src="/_img/lazy-unlinking/router-integrated.png" intrinsicsize="600x371" alt="">
 </figure>
 
 ### Further optimization

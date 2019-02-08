@@ -34,7 +34,7 @@ The V8 team recently began tracking performance improvements against a corpus of
 V8’s performance on the [Bluebird ES6 Promise benchmark suite](https://github.com/petkaantonov/bluebird/tree/master/benchmark) improved by 20-40% in V8 version 5.3, varying by architecture and benchmark.
 
 <figure>
-  <img src="/_img/v8-release-53/promise.png" alt="">
+  <img src="/_img/v8-release-53/promise.png" intrinsicsize="1999x642" alt="">
   <figcaption>V8’s Promise performance over time on a Nexus 5x</figcaption>
 </figure>
 

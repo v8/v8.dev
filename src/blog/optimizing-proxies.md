@@ -43,7 +43,7 @@ g(1, 2);
 ```
 
 <figure>
-  <img src="/_img/optimizing-proxies/0.png" alt="">
+  <img src="/_img/optimizing-proxies/0.png" intrinsicsize="1024x768" alt="">
 </figure>
 
 After porting the trap execution to CSA all of the execution happens in the JS runtime, reducing the number of jumps between languages from 4 to 0.
@@ -51,7 +51,7 @@ After porting the trap execution to CSA all of the execution happens in the JS r
 This change resulted in the following performance improvements::
 
 <figure>
-  <img src="/_img/optimizing-proxies/1.png" alt="">
+  <img src="/_img/optimizing-proxies/1.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 Our JS performance score shows an improvement between **49% and 74%**. This score roughly measures how many times the given microbenchmark can be executed in 1000ms. For some tests the code is run multiple times in order to get an accurate enough measurement given the timer resolution. The code for all of the following benchmarks can be found [in our js-perf-test directory](https://github.com/v8/v8/blob/5a5783e3bff9e5c1c773833fa502f14d9ddec7da/test/js-perf-test/Proxies/proxies.js).
@@ -61,7 +61,7 @@ Our JS performance score shows an improvement between **49% and 74%**. This scor
 The next section shows the results from optimizing call and construct traps (a.k.a. [`"apply"`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler/apply)" and [`"construct"`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler/construct)).
 
 <figure>
-  <img src="/_img/optimizing-proxies/2.png" alt="">
+  <img src="/_img/optimizing-proxies/2.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 The performance improvements when _calling_ proxies are significant — up to **500%** faster! Still, the improvement for proxy construction is quite modest, especially in cases where no actual trap is defined — only about **25%** gain. We investigated this by running the following command with the [`d8` shell](/docs/build):
@@ -107,7 +107,7 @@ The next section describes how we optimized the other most common operations —
 Eventually we managed to get a working port to CSA with the following results:
 
 <figure>
-  <img src="/_img/optimizing-proxies/3.png" alt="">
+  <img src="/_img/optimizing-proxies/3.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 After landing the change, we noticed the size of the Android `.apk` for Chrome had grown by **~160KB**, which is more than expected for a helper function of roughly 20 lines, but fortunately we track such statistics. It turned out this function is called twice from another function, which is called 3 times, from another called 4 times. The cause of the problem turned out to be the aggressive inlining. Eventually we solved the issue by turning the inline function into a separate code stub, thus saving precious KBs — the end version had only **~19KB** increase in `.apk` size.
@@ -117,7 +117,7 @@ After landing the change, we noticed the size of the Android `.apk` for Chrome h
 The next section shows the results from optimizing the [`has`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler/has) trap. Although at first we thought it would be easier (and reuse most of the code of the `get` trap), it turned out to have its own peculiarities. A particularly hard-to-track-down problem was the prototype chain walking when calling the `in` operator. The improvement results achieved vary between **71% and 428%**. Again the gain is more prominent in cases where the trap is present.
 
 <figure>
-  <img src="/_img/optimizing-proxies/4.png" alt="">
+  <img src="/_img/optimizing-proxies/4.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 ## Set trap
@@ -125,7 +125,7 @@ The next section shows the results from optimizing the [`has`](https://developer
 The next section talks about porting the [`set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler/set) trap. This time we had to differentiate between [named](/blog/fast-properties) and indexed properties ([elements](/blog/elements-kinds)). These two main types are not part of the JS language, but are essential for V8's efficient property storage. The initial implementation still bailed out to the runtime for elements, which causes crossing the language boundaries again. Nevertheless we achieved improvements between **27% and 438%** for cases when the trap is set, at the cost of a decrease of up to **23%** when it's not. This performance regression is due to the overhead of additional check for differentiating between indexed and named properties. For indexed properties, there is no improvement yet. Here are the complete results:
 
 <figure>
-  <img src="/_img/optimizing-proxies/5.png" alt="">
+  <img src="/_img/optimizing-proxies/5.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 ## Real-world usage
@@ -139,7 +139,7 @@ The jsdom-proxy-benchmark project compiles the [ECMAScript specification](https:
 - Gain in speed around 2.4 seconds which is **~17% better**
 
 <figure>
-  <img src="/_img/optimizing-proxies/6.png" alt="">
+  <img src="/_img/optimizing-proxies/6.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 - [Converting `NamedNodeMap` to use `Proxy`](https://github.com/domenic/jsdom-proxy-benchmark/issues/1#issuecomment-329047990) increased processing time by
@@ -147,7 +147,7 @@ The jsdom-proxy-benchmark project compiles the [ECMAScript specification](https:
     - **0.5 s** on V8 6.3 (Node v9.0.0-v8-canary-20170910)
 
 <figure>
-  <img src="/_img/optimizing-proxies/7.png" alt="">
+  <img src="/_img/optimizing-proxies/7.png" intrinsicsize="1028x634" alt="">
 </figure>
 
 Note: These results were provided by [Timothy Gu](https://github.com/TimothyGu). Thanks!
@@ -160,7 +160,7 @@ Chai.js is a popular assertion library which makes heavy use of proxies. We've c
 - [Node v9.0.0-v8-canary-20170924](https://nodejs.org/download/v8-canary/v9.0.0-v8-canary20170924898da64843/node-v9.0.0-v8-canary20170924898da64843-linux-x64.tar.gz) (with only half of the traps ported): **3.1809 ± 0.17 s**
 
 <figure>
-  <img src="/_img/optimizing-proxies/8.png" alt="">
+  <img src="/_img/optimizing-proxies/8.png" intrinsicsize="1200x742" alt="">
 </figure>
 
 ## Optimization approach

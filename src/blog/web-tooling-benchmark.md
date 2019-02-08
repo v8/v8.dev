@@ -37,7 +37,7 @@ lead to accesses of the property `"-1"`, because the code didn’t check whether
 Our strong focus on real-world performance and especially on improving popular Node.js workloads is shown by the constant improvements in V8’s score on the benchmark over the last couple of releases:
 
 <figure>
-  <img src="/_img/web-tooling-benchmark/chart.png" alt="">
+  <img src="/_img/web-tooling-benchmark/chart.png" intrinsicsize="1198x738" alt="">
 </figure>
 
 Since V8 v5.8, which is the last V8 release before [switching to the Ignition+TurboFan architecture](/blog/launching-ignition-and-turbofan), V8’s score on the tooling benchmark has improved by around **60%**.

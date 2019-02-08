@@ -158,14 +158,14 @@ The output shows the `object` after it’s sorted. Again, there is no right answ
 V8 has two pre-processing steps before it actually sorts anything. First, if the object to sort has holes and elements on the prototype chain, they are copied from the prototype chain to the object itself. This frees us from caring about the prototype chain during all remaining steps. This is currently only done for non-`JSArray`s but other engines do it for `JSArray`s as well.
 
 <figure>
-  <img src="/_img/array-sort/copy-prototype.svg" alt="">
+  <img src="/_img/array-sort/copy-prototype.svg" intrinsicsize="641x182" alt="">
   <figcaption>Copying from the prototype chain</figcaption>
 </figure>
 
 The second pre-processing step is the removal of holes. All elements in the sort-range are moved to the beginning of the object. `undefined`s are moved after that. This is even required by the spec to some degree as it requires us to *always* sort `undefined`s to the end. The result is that a user-provided comparison function will never get called with an `undefined` argument. After the second pre-processing step the sorting algorithm only needs to consider non-`undefined`s, potentially reducing the number of elements it actually has to sort.
 
 <figure>
-  <img src="/_img/array-sort/remove-array-holes.svg" alt="">
+  <img src="/_img/array-sort/remove-array-holes.svg" intrinsicsize="815x297" alt="">
   <figcaption>Removing holes and moving <code>undefined</code>s to the end</figcaption>
 </figure>
 
@@ -208,7 +208,7 @@ Runs that are found this way are tracked using a stack that remembers a starting
 - `|B| > |A|`
 
 <figure>
-  <img src="/_img/array-sort/runs-stack.svg" alt="">
+  <img src="/_img/array-sort/runs-stack.svg" intrinsicsize="770x427" alt="">
   <figcaption>Runs stack before and after merging <code>A</code> with <code>B</code></figcaption>
 </figure>
 
@@ -263,7 +263,7 @@ A fast-path then simply becomes a set of function pointers. This means we only n
 ### Sort state
 
 <figure>
-  <img src="/_img/array-sort/sort-state.svg" alt="">
+  <img src="/_img/array-sort/sort-state.svg" intrinsicsize="570x710" alt="">
 </figure>
 
 The picture above shows the “sort state”. It’s a `FixedArray` that keeps track of all the things needed while sorting. Each time `Array#sort` is called, such a sort state is allocated. Entry 4 to 7 are the set of function pointers discussed above that comprise a fast-path.
@@ -287,13 +287,13 @@ Before we started with `Array#sort`, we added a lot of different micro-benchmark
 Keep in mind that in these cases the JIT compiler can do a lot of work, since sorting is nearly all we do. This also allows the optimizing compiler to inline the comparison function in the JavaScript version, while we have the call overhead from the builtin to JavaScript in the Torque case. Still, we perform better in nearly all cases.
 
 <figure>
-  <img src="/_img/array-sort/micro-bench-basic.svg" alt="">
+  <img src="/_img/array-sort/micro-bench-basic.svg" intrinsicsize="616x371" alt="">
 </figure>
 
 The next chart shows the impact of Timsort when processing arrays that are already sorted completely, or have sub-sequences that are already sorted one-way or another. The chart uses Quicksort as a baseline and shows the speedup of Timsort (up to 17× in the case of “DownDown” where the array consists of two reverse-sorted sequences). As can be seen, expect in the case of random data, Timsort performs better in all other cases, even though we are sorting `PACKED_SMI_ELEMENTS`, where Quicksort outperformed Timsort in the microbenchmark above.
 
 <figure>
-  <img src="/_img/array-sort/micro-bench-presorted.svg" alt="">
+  <img src="/_img/array-sort/micro-bench-presorted.svg" intrinsicsize="600x371" alt="">
 </figure>
 
 ### Web Tooling Benchmark
@@ -301,7 +301,7 @@ The next chart shows the impact of Timsort when processing arrays that are alrea
 The [Web Tooling Benchmark](https://github.com/v8/web-tooling-benchmark) is a collection of workloads of tools usually used by web developers such as Babel and TypeScript. The chart uses JavaScript Quicksort as a baseline and compares the speedup of Timsort against it. In almost all benchmarks we retain the same performance with the exception of chai.
 
 <figure>
-  <img src="/_img/array-sort/web-tooling-benchmark.svg" alt="">
+  <img src="/_img/array-sort/web-tooling-benchmark.svg" intrinsicsize="990x612" alt="">
 </figure>
 
 The chai benchmark spends *a third* of its time inside a single comparison function (a string distance calculation). The benchmark is the test suite of chai itself. Due to the data, Timsort needs some more comparisons in this case, which has a bigger impact on the overall runtime, as such a big portion of time is spent inside that particular comparison function.

@@ -18,7 +18,7 @@ Compilers tend to become complex over time as new language features are supporte
 The TurboFan JIT implements more aggressive optimizations than CrankShaft through a number of advanced techniques. JavaScript enters the compiler pipeline in a mostly unoptimized form and is translated and optimized to progressively lower forms until machine code is generated. The centerpiece of the design is a more relaxed sea-of-nodes internal representation (IR) of the code which allows more effective reordering and optimization.
 
 <figure>
-  <img src="/_img/turbofan-jit/example-graph.png" alt="">
+  <img src="/_img/turbofan-jit/example-graph.png" intrinsicsize="841x388" alt="">
   <figcaption>Example TurboFan graph</figcaption>
 </figure>
 

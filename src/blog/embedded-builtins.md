@@ -21,7 +21,7 @@ Much has changed in this space over the last years.
 In 2016, V8 [began](/blog/speeding-up-regular-expressions) experimenting with builtins implemented in [CodeStubAssembler](/blog/csa) (CSA). This turned out to both be convenient (platform-independent, readable) and to produce efficient code, so CSA builtins became ubiquitous. For a variety of reasons, CSA builtins tend to produce larger code, and the size of V8 builtins roughly tripled as more and more were ported to CSA. By mid-2017, their per-Isolate overhead had grown significantly and we started thinking about a systematic solution.
 
 <figure>
-  <img src="/_img/embedded-builtins/snapshot-size.png" alt="">
+  <img src="/_img/embedded-builtins/snapshot-size.png" intrinsicsize="904x250" alt="">
   <figcaption>V8 snapshot size (including builtins) from 2015 until 2017</figcaption>
 </figure>
 
@@ -58,7 +58,7 @@ call <offset>
 ```
 
 <figure>
-  <img src="/_img/embedded-builtins/pc-relative-call.png" alt="">
+  <img src="/_img/embedded-builtins/pc-relative-call.png" intrinsicsize="487x457" alt="">
   <figcaption>A pc-relative call</figcaption>
 </figure>
 
@@ -69,7 +69,7 @@ In order to share builtins across processes, generated code must be immutable as
 To address both issues, we introduced an indirection through a dedicated, so-called root register, which holds a pointer into a known location within the current Isolate.
 
 <figure>
-  <img src="/_img/embedded-builtins/isolate-layout.png" alt="">
+  <img src="/_img/embedded-builtins/isolate-layout.png" intrinsicsize="727x412" alt="">
   <figcaption>Isolate layout</figcaption>
 </figure>
 
@@ -103,14 +103,14 @@ We initially evaluated two alternatives. Builtins could either be shared by `mma
 An executable binary file is split into several sections. For example, an ELF binary contains data in the `.data` (initialized data), `.ro_data` (initialized read-only data), and `.bss` (uninitialized data) sections, while native executable code is placed in `.text`. Our goal was to pack the builtins code into the `.text` section alongside native code.
 
 <figure>
-  <img src="/_img/embedded-builtins/binary-format.png" alt="">
+  <img src="/_img/embedded-builtins/binary-format.png" intrinsicsize="637x466" alt="">
   <figcaption>Sections of an executable binary file</figcaption>
 </figure>
 
 This was done by introducing a new build step that used V8’s internal compiler pipeline to generate native code for all builtins and output their contents in `embedded.cc`. This file is then compiled into the final V8 binary.
 
 <figure>
-  <img src="/_img/embedded-builtins/build-process.png" alt="">
+  <img src="/_img/embedded-builtins/build-process.png" intrinsicsize="892x202" alt="">
   <figcaption>The (simplified) V8 embedded build process</figcaption>
 </figure>
 
@@ -134,14 +134,14 @@ Contents of the `.text` section are mapped into read-only executable memory at r
 But V8’s `Code` objects consist not only of the instruction stream, but also have various pieces of (sometimes isolate-dependent) metadata. Normal run-of-the-mill `Code` objects pack both metadata and the instruction stream into a variable-sized `Code` object that is located on the managed heap.
 
 <figure>
-  <img src="/_img/embedded-builtins/code-on-heap.png" alt="">
+  <img src="/_img/embedded-builtins/code-on-heap.png" intrinsicsize="787x592" alt="">
   <figcaption>On-heap <code>Code</code> object layout</figcaption>
 </figure>
 
 As we’ve seen, embedded builtins have their native instruction stream located outside the managed heap, embedded into the `.text` section. To preserve their metadata, each embedded builtin also has a small associated `Code` object on the managed heap, called the _off-heap trampoline_. Metadata is stored on the trampoline as for standard `Code` objects, while the inlined instruction stream simply contains a short sequence which loads the address of the embedded instructions and jumps there.
 
 <figure>
-  <img src="/_img/embedded-builtins/code-off-heap.png" alt="">
+  <img src="/_img/embedded-builtins/code-off-heap.png" intrinsicsize="892x502" alt="">
   <figcaption>Off-heap <code>Code</code> object layout</figcaption>
 </figure>
 
@@ -156,7 +156,7 @@ We began to hunt for optimization opportunities, and identified major sources of
 Our work thus concentrated on 1. reducing indirections, and 2. improving the builtin calling sequence. To address the former, we altered the Isolate object layout to turn most object loads into a single root-relative load. The global builtins constant pool still exists, but only contains infrequently-accessed objects.
 
 <figure>
-  <img src="/_img/embedded-builtins/isolate-layout-optimized.png" alt="">
+  <img src="/_img/embedded-builtins/isolate-layout-optimized.png" intrinsicsize="487x502" alt="">
   <figcaption>Optimized Isolate layout</figcaption>
 </figure>
 
@@ -169,7 +169,7 @@ With these optimizations, we were able to limit regressions on Speedometer 2.0 t
 We evaluated the impact of embedded builtins on x64 over the top 10k most popular websites, and compared against both lazy- and eager deserialization (described above).
 
 <figure>
-  <img src="/_img/embedded-builtins/results.png" alt="">
+  <img src="/_img/embedded-builtins/results.png" intrinsicsize="1200x742" alt="">
   <figcaption>V8 heap size reduction vs. eager and lazy deserialization</figcaption>
 </figure>
 

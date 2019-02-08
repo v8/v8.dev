@@ -17,7 +17,7 @@ Chrome 41 included a [task scheduler for the Blink rendering engine](https://blo
 An example of this occurs when Chrome is showing an animation on a web page. The animation will update the screen at 60 FPS, giving Chrome around 16.6 ms of time to perform the update. As such, Chrome will start work on the current frame as soon as the previous frame has been displayed, performing input, animation and frame rendering tasks for this new frame. If Chrome completes all this work in less than 16.6 ms, then it has nothing else to do for the remaining time until it needs to start rendering the next frame. Chrome’s scheduler enables V8 to take advantage of this _idle time period_ by scheduling special _idle tasks_ when Chrome would otherwise be idle.
 
 <figure>
-  <img src="/_img/free-garbage-collection/frame-rendering.png" alt="">
+  <img src="/_img/free-garbage-collection/frame-rendering.png" intrinsicsize="624x136" alt="">
   <figcaption>Figure 1: Frame rendering with idle tasks</figcaption>
 </figure>
 
@@ -59,7 +59,7 @@ In order to evaluate the impact of running garbage collection during idle time, 
 Figure 2 shows the percentage of garbage collection that was scheduled during idle time. The workstation’s faster hardware results in more overall idle time compared to the Nexus 6, thereby enabling a greater percentage of garbage collection to be scheduled during this idle time (43% compared to 31% on the Nexus 6) resulting in about 7% improvement on our [jank metric](https://www.chromium.org/developers/design-documents/rendering-benchmarks).
 
 <figure>
-  <img src="/_img/free-garbage-collection/idle-time-gc.png" alt="">
+  <img src="/_img/free-garbage-collection/idle-time-gc.png" intrinsicsize="600x363" alt="">
   <figcaption>Figure 2: The percentage of garbage collection that occurs during idle time</figcaption>
 </figure>
 

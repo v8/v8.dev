@@ -14,7 +14,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 Async functions are now approximately as fast as the same code written with promises. The execution performance of async functions quadrupled according to our [microbenchmarks](https://codereview.chromium.org/2577393002). During the same period, overall promise performance also doubled.
 
 <figure>
-  <img src="/_img/v8-release-57/async.png" alt="">
+  <img src="/_img/v8-release-57/async.png" intrinsicsize="1200x742" alt="">
   <figcaption>Async performance improvements in V8 on Linux x64</figcaption>
 </figure>
 

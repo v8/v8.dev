@@ -14,7 +14,7 @@ With Ignition, V8 compiles JavaScript functions to a concise bytecode, which is 
 In Chrome 53, Ignition will be enabled for Android devices which have limited RAM (512 MB or less), where memory savings are most needed. Results from early experiments in the field show that Ignition reduces the memory of each Chrome tab by around 5%.
 
 <figure>
-  <img src="/_img/ignition-interpreter/ignition-pipeline.png" alt="">
+  <img src="/_img/ignition-interpreter/ignition-pipeline.png" intrinsicsize="602x249" alt="">
   <figcaption>V8’s compilation pipeline with Ignition enabled</figcaption>
 </figure>
 

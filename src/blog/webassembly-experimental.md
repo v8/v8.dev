@@ -14,7 +14,7 @@ Starting today, experimental support for WebAssembly is available in V8 and Chro
 The WebAssembly project website has a [demo](https://webassembly.github.io/demo/) showcasing the runtime’s usage in a 3D game. In browsers that support WebAssembly, the demo page will load and instantiate a wasm module that uses WebGL and other web platform APIs to render an interactive game. In other browsers, the demo page falls back to an asm.js version of the same game.
 
 <figure>
-  <img src="/_img/webassembly-experimental/tanks.jpg" alt="">
+  <img src="/_img/webassembly-experimental/tanks.jpg" intrinsicsize="1116x681" alt="">
   <figcaption><a href="https://webassembly.github.io/demo/">WebAssembly demo</a></figcaption>
 </figure>
 

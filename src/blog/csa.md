@@ -31,7 +31,7 @@ With the advent of TurboFan the answer to this question is finally “yes”. Tu
 This combination of functionality made a robust and maintainable alternative to hand-written assembly builtins feasible for the first time. The team built a new V8 component—dubbed the CodeStubAssembler or CSA—that defines a portable assembly language built on top of TurboFan’s backend. The CSA adds an API to generate TurboFan machine-level IR directly without having to write and parse JavaScript or apply TurboFan’s JavaScript-specific optimizations. Although this fast-path to code generation is something that only V8 developers can use to speed up the V8 engine internally, this efficient path for generating optimized assembly code in a cross-platform way directly benefits all developers’ JavaScript code in the builtins constructed with the CSA, including the performance-critical bytecode handlers for V8’s interpreter, [Ignition](/docs/ignition).
 
 <figure>
-  <img src="/_img/csa/csa.png" alt="">
+  <img src="/_img/csa/csa.png" intrinsicsize="414x496" alt="">
   <figcaption>The CSA and JavaScript compilation pipelines</figcaption>
 </figure>
 
