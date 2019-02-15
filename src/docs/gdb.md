@@ -1,21 +1,22 @@
 ---
 title: 'Debugging builtins with GDB'
 ---
-As of V8 v6.9, there's a more convenient way to debug CSA / ASM / Torque builtins in GDB (and possibly other debuggers).
+As of V8 v6.9, there’s a more convenient way to debug CSA / ASM / Torque builtins in GDB (and possibly other debuggers).
 
 It’s now possible to create breakpoints from within GDB:
 
 ```
-(gdb) br i::Isolate::Init
-Breakpoint 1 at 0x7ffff706742b: i::Isolate::Init. (2 locations)
+(gdb) tb i::Isolate::Init
+Temporary breakpoint 1 at 0x7ffff706742b: i::Isolate::Init. (2 locations)
 (gdb) r
-Thread 1 "d8" hit Breakpoint 1, 0x00007ffff7c55bc0 in Isolate::Init
-(gdb) dis 1
+Thread 1 "d8" hit Temporary breakpoint 1, 0x00007ffff7c55bc0 in Isolate::Init
 (gdb) br Builtins_RegExpPrototypeExec
 Breakpoint 2 at 0x7ffff7ac8784
 (gdb) c
 Thread 1 "d8" hit Breakpoint 2, 0x00007ffff7ac8784 in Builtins_RegExpPrototypeExec ()
 ```
+
+Note that it works well to use a temporary breakpoint (shortcut `tb` in GDB) instead of a regular breakpoint (`br`) for this, since you only need it at process start.
 
 Builtins are also visible in stack traces:
 
