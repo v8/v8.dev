@@ -1,7 +1,7 @@
 ---
 title: 'Debugging builtins with GDB'
 ---
-As of V8 v6.9, there's a more convenient way to debug CSA / ASM / Torque builtins in GDB (and possibly other debuggers).
+As of V8 v6.9, there’s a more convenient way to debug CSA / ASM / Torque builtins in GDB (and possibly other debuggers).
 
 It’s now possible to create breakpoints from within GDB:
 
@@ -15,6 +15,8 @@ Breakpoint 2 at 0x7ffff7ac8784
 (gdb) c
 Thread 1 "d8" hit Breakpoint 2, 0x00007ffff7ac8784 in Builtins_RegExpPrototypeExec ()
 ```
+
+Note that it works well to use a temporary breakpoint (shortcut `tb` in GDB) instead of a regular breakpoint (`br`) for this, since you only need it at process start.
 
 Builtins are also visible in stack traces:
 
@@ -37,4 +39,3 @@ Caveats:
     # Fatal error in ../../src/isolate.cc, line 117
     # Check failed: d.Hash() == d.CreateHash() (11095509419988753467 vs. 3539781814546519144).
     ```
-- It works well to use a temporary breakpoint (shortcut ``tb`` in GDB) for this, since you only need it at process start.
