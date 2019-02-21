@@ -34,6 +34,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Handling of ports](/docs/ports)
     - [Merging & patching](/docs/merge-patch)
     - [Node.js integration build](/docs/node-integration)
+    - [New Node.js integration build](/docs/node-next-generation)
     - [Reporting security bugs](/docs/security-bugs)
     - [Running benchmarks locally](/docs/benchmarks)
     - [Testing](/docs/test)
