@@ -24,6 +24,6 @@ There is an important limitation to this: the snapshot can only capture V8’s h
 - defining and calling API callbacks (i.e. functions created via `v8::FunctionTemplate`)
 - creating typed arrays, since the backing store may be allocated outside of V8
 
-And of course, values derived from sources such as Math.random or Date.now are fixed once the snapshot has been captured. They are no longer really random nor reflect the current time.
+And of course, values derived from sources such as `Math.random` or `Date.now` are fixed once the snapshot has been captured. They are no longer really random nor reflect the current time.
 
 Limitations aside, startup snapshots remain a great way to save time on initialization. We can shave off 100 ms from the startup spent on loading the TypeScript compiler in our example above (on a regular desktop computer). We're looking forward to seeing how you might put custom snapshots to use!
