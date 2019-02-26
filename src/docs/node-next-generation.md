@@ -2,7 +2,7 @@
 title: 'Next generation Node.js build'
 ---
 
-Due to various issues with the `--build-v8-with-gn` build. We are going to transition to a purely GN-based solution. This will become the default workflow.
+Due to various issues with the `--build-v8-with-gn` build, we are going to transition to a purely GN-based solution. This will become the default workflow.
 
 ## Source
 
@@ -29,13 +29,13 @@ JOBS=4 make test
 
 ## Make changes to Node.js
 
-Node.js is also set up as a DEPS dependency of node-ci. You may want to apply changes to Node.js to fix breakages that V8 changes may cause. V8 tests against a [fork of Node.js](https://github.com/v8/node/). You will need a GitHub account if you want to make changes to that fork.
+Node.js is also set up as a `DEPS` dependency of node-ci. You may want to apply changes to Node.js to fix breakages that V8 changes may cause. V8 tests against a [fork of Node.js](https://github.com/v8/node). You need a GitHub account to make changes to that fork.
 
 ### Get the Node sources
 
 Fork [V8’s Node.js repository on GitHub](https://github.com/v8/node/) (click the fork button) unless you already did previously.
 
-Add your both your fork and V8's fork as remotes to the existing checkout:
+Add your both your fork and V8’s fork as remotes to the existing checkout:
 
 ```bash
 git remote add v8 http://github.com/v8/node
@@ -50,12 +50,12 @@ Make your changes to the Node.js checkout, and commit them. Then push the change
 git push <your-user-name> make-changes
 ```
 
-Once the pull request has been merged to V8's fork of Node.js, you need to update node-ci's DEPS file, and create a CL.
+Once the pull request has been merged to V8’s fork of Node.js, you need to update node-ci’s `DEPS` file, and create a CL.
 
 ```bash
 git checkout -b update-deps
 gclient setdep --var=node_revision=`(cd node && git rev-parse make-changes)`
 git add DEPS
-git commit -m "Update Node"
+git commit -m 'Update Node'
 git cl upload
 ```
