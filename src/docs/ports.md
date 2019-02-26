@@ -3,16 +3,9 @@ title: 'Handling of ports'
 ---
 This document describes how ports should be handled.
 
-## MIPS
+## MIPS (not officially supported)
 
-### Straight-forward MIPS ports
-
-Do them yourself.
-
-### More complicated MIPS ports
-
-1. CC the MIPS team in the CL. Use the mailing list <v8-mips-ports@googlegroups.com> for that purpose.
-1. The MIPS team will land a CL afterwards to fix the port.
+Contact/CC the MIPS team in the CL if needed. Use the mailing list <v8-mips-ports@googlegroups.com> for that purpose.
 
 ## PPC (not officially supported)
 
