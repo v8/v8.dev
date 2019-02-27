@@ -22,7 +22,7 @@
   });
 
   // A user right-clicking the logo probably wants to download it.
-  if (self.location.pathname !== '/logo') {
+  if (location.pathname !== '/logo') {
     var logo = document.querySelector('#header a');
     logo.addEventListener('contextmenu', (event) => {
       event.preventDefault();

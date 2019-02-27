@@ -20,7 +20,7 @@ toggle.addEventListener('click', (event) => {
 });
 
 // A user right-clicking the logo probably wants to download it.
-if (self.location.pathname !== '/logo') {
+if (location.pathname !== '/logo') {
   const logo = document.querySelector('#header a');
   logo.addEventListener('contextmenu', (event) => {
     event.preventDefault();
