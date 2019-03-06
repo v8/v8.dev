@@ -357,7 +357,7 @@ As it turns out, there’s already a  [`promiseResolve`](https://tc39.github.io/
   <img src="/_img/fast-async/await-code-comparison.svg" intrinsicsize="949x376" alt="">
 </figure>
 
-This operation returns promises unchanged, and only wraps other values into promises as necessary. This way you save one of the additional promises, plus two ticks on the microtask queue, for the common case that the value passed to `await` is already a promise. This new behavior is already [enabled by default in V8 v7.2](/blog/v8-release-72#async%2Fawait). For V8 v7.1, the new behavior can be enabled using the `--harmony-await-optimization` flag. We’ve [proposed this change to the ECMAScript specification](https://github.com/tc39/ecma262/pull/1250) as well; the patch is supposed to be merged once we are sure that it’s web-compatible.
+This operation returns promises unchanged, and only wraps other values into promises as necessary. This way you save one of the additional promises, plus two ticks on the microtask queue, for the common case that the value passed to `await` is already a promise. This new behavior is already [enabled by default in V8 v7.2](/blog/v8-release-72#async%2Fawait). For V8 v7.1, the new behavior can be enabled using the `--harmony-await-optimization` flag. We’ve [proposed this change to the ECMAScript specification](https://github.com/tc39/ecma262/pull/1250) as well.
 
 Here’s how the new and improved `await` works behind the scenes, step by step:
 
@@ -401,9 +401,9 @@ Comparing `await` in Node.js 10 to the optimized `await` that’s likely going t
   <img src="/_img/fast-async/benchmark-optimization.svg" intrinsicsize="600x371" alt="">
 </figure>
 
-**`async`/`await` outperforms hand-written promise code now**. The key takeaway here is that we significantly reduced the overhead of async functions — not just in V8, but across all JavaScript engines, by patching the spec[^3].
+**`async`/`await` outperforms hand-written promise code now**. The key takeaway here is that we significantly reduced the overhead of async functions — not just in V8, but across all JavaScript engines, by patching the spec.
 
-[^3]: As mentioned, [the patch](https://github.com/tc39/ecma262/pull/1250) hasn’t been merged into the ECMAScript specification just yet. The plan is to do so once we’ve made sure that the change doesn’t break the web.
+**Update**: As of Chrome 72, `--harmony-await-optimization` is enabled by default, as [the patch](https://github.com/tc39/ecma262/pull/1250) to the ECMAScript specification was merged.
 
 ## Improved developer experience
 
