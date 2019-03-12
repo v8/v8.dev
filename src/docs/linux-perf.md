@@ -19,7 +19,7 @@ sudo apt-get install linux-generic-lts-wily
 Install dependencies:
 
 ```bash
-sudo apt-get install libdw-dev libunwind8-dev systemtap-sdt-dev libaudit-dev
+sudo apt-get install libdw-dev libunwind8-dev systemtap-sdt-dev libaudit-dev \
     libslang2-dev binutils-dev liblzma-dev
 ```
 
@@ -56,11 +56,11 @@ Once you have the right kernel, perf tool and build of V8, you can add the `--pe
 
 ```bash
 cd <path_to_your_v8_checkout>
-echo '(function f() {
-    var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s; 
+echo '(function f() { \
+    var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s; \
   })();' > test.js
-<path_to_kernel_checkout>/tip/tools/perf/perf record -k mono 
-    out.gn/x64.release/d8 --perf-prof --nowrite-protect-code-memory 
+<path_to_kernel_checkout>/tip/tools/perf/perf record -k mono \
+    out.gn/x64.release/d8 --perf-prof --nowrite-protect-code-memory \
     test.js
 ```
 
@@ -69,7 +69,7 @@ echo '(function f() {
 After execution finishes, you must combine the static information gathered from the `perf` tool with the performance samples output by V8 for JIT code:
 
 ```bash
-<path_to_kernel_checkout>/tip/tools/perf/perf inject -j -i perf.data 
+<path_to_kernel_checkout>/tip/tools/perf/perf inject -j -i perf.data \
     -o perf.data.jitted
 ```
 
