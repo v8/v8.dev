@@ -6,7 +6,6 @@ avatars:
 date: 2019-03-13 13:03:19
 tags:
   - internals
-tweet: '1029382366693937162'
 ---
 V8 now supports JavaScript execution without allocating executable memory at runtime.
 
