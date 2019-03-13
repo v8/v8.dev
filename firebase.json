@@ -22,6 +22,11 @@
         "source": "/bugs",
         "destination": "https://bugs.chromium.org/p/v8/issues/list",
         "type": 301
+      },
+      {
+        "source": "/blog/jitless-v8",
+        "destination": "https://v8.dev/blog/jitless",
+        "type": 301
       }
     ],
     "headers": [
