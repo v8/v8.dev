@@ -23,32 +23,32 @@ Constructors can implement their own [`Symbol.hasInstance`](https://developer.mo
 
 Iterators created as part of a [`for`-`of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loop (or other built-in iteration, such as the [spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) operator) are now checked for a close method which is called if the loop terminates early. This can be used for clean-up duty after the iteration has finished.
 
-### RegExp subclassing exec method
+### RegExp subclassing `exec` method
 
-RegExp subclasses can overwrite the exec method to change just the core matching algorithm, with the guarantee that this is called by higher level functions like String.prototype.replace.
+RegExp subclasses can overwrite the `exec` method to change just the core matching algorithm, with the guarantee that this is called by higher-level functions like `String.prototype.replace`.
 
 ### Function name inference
 
-Function names inferred for function expressions are now typically made available in the [name](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name) property of functions, following the ES2015 formalization of these rules. This may change existing stack traces and provide different names from previous V8 versions. It also gives useful names to properties and methods with computed property names:
+Function names inferred for function expressions are now typically made available in the [`name`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name) property of functions, following the ES2015 formalization of these rules. This may change existing stack traces and provide different names from previous V8 versions. It also gives useful names to properties and methods with computed property names:
 
 ```js
 class Container {
-   ...
-   [Symbol.iterator]() { ... }
-   ...
+  ...
+  [Symbol.iterator]() { ... }
+  ...
 }
-let c = new Container;
-// Logs "[Symbol.iterator]".
+const c = new Container;
 console.log(c[Symbol.iterator].name);
+// → '[Symbol.iterator]'
 ```
 
-### Array.prototype.values
+### `Array.prototype.values`
 
-Analogous to other collection types, the [values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/values) method on Array returns an iterator over the contents of the Array.
+Analogous to other collection types, the [`values`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/values) method on `Array` returns an iterator over the contents of the array.
 
 ## Performance improvements
 
-Release 5.1 also brings a few notable performance improvements to the following JavaScript features:
+V8 v5.1 also brings a few notable performance improvements to the following JavaScript features:
 
 - Executing loops like `for`-`in`
 - `Object.assign`
@@ -62,7 +62,7 @@ Release 5.1 also brings a few notable performance improvements to the following 
 
 ## WASM
 
-V8 v5.1 has a preliminary support for [WASM](/blog/webassembly-experimental). You can enable it via the flag `--expose_wasm` in `d8`. Alternatively you can try out the [WASM demos](https://webassembly.github.io/demo/) with Chrome 51 (Beta Channel).
+V8 v5.1 has a preliminary support for [WebAssembly](/blog/webassembly-experimental). You can enable it via the flag `--expose_wasm` in `d8`. Alternatively you can try out the [Wasm demos](https://webassembly.github.io/demo/) with Chrome 51 (Beta Channel).
 
 ## Memory
 
@@ -76,6 +76,6 @@ The impact is reduced jank and memory consumption in times of need.
 
 ## V8 API
 
-Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
+Please check out our [summary of API changes](https://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
 
 Developers with an [active V8 checkout](https://code.google.com/p/v8-wiki/wiki/UsingGit) can use `git checkout -b 5.1 -t branch-heads/5.1` to experiment with the new features in V8 v5.1. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
