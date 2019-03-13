@@ -28,7 +28,7 @@ Since JIT-less mode disables the optimizing compiler, it comes with a performanc
 
 <figure>
   <img src="/_img/jitless/benchmarks.svg" intrinsicsize="626x387" alt="">
-  <figcaption>JIT-less vs. default V8, scores are normalized to 100 for V8’s default configuration.</figcaption>
+  <figcaption>JIT-less vs. default V8. Scores are normalized to 100 for V8’s default configuration.</figcaption>
 </figure>
 
 Speedometer 2.0 is around 40% slower in JIT-less mode. Roughly half of the regression can be attributed to the disabled optimizing compiler. The other half is caused by the regular expression interpreter, which was originally intended as a debugging aid, and will see performance improvements in the future.
