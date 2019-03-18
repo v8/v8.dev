@@ -49,6 +49,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Stack trace API](/docs/stack-trace-api)
     - [Using D8](/docs/d8)
 - Embedding V8
+    - [CLI](/docs/cli)
     - [Guide to embedding V8](/docs/embed)
     - [Version numbers](/docs/version-numbers)
     - [Built-in functions](/docs/builtin-functions)
