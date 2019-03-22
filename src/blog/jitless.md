@@ -41,3 +41,9 @@ Finally, we measured a simulated browsing session on the Living Room YouTube app
 Memory consumption only changed slightly, with a median of 1.7% decrease of V8’s heap size for loading a representative set of websites.
 
 We encourage embedders on restricted platforms or with special security requirements to consider V8’s new JIT-less mode, available now in V8 v7.4. As always, questions and feedback are welcome at the [v8-users](https://groups.google.com/forum/#!forum/v8-users) discussion group.
+
+## FAQ
+
+*What's the difference between `--jitless` and `--no-opt`?*
+
+`--no-opt` disables the TurboFan optimizing compiler. `--jitless` disables all runtime allocation of executable memory.
