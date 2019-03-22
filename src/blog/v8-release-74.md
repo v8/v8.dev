@@ -102,7 +102,7 @@ In V8 v7.4, we allow entire basic blocks to become dead, if no `Jump` bytecode (
 
 ### Private class fields
 
-V8 v7.2 added support for the public class fields syntax. Class fields simplify class syntax by avoiding the need for constructor functions just to define instance properties. Starting in V8 v7.3, you can mark a field as private by prepending it with a `#` prefix.
+V8 v7.2 added support for the public class fields syntax. Class fields simplify class syntax by avoiding the need for constructor functions just to define instance properties. Starting in V8 v7.4, you can mark a field as private by prepending it with a `#` prefix.
 
 ```js
 class IncreasingCounter {
