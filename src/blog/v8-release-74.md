@@ -61,8 +61,10 @@ We found an additional issue in V8’s preparser, which most commonly runs on a 
 ### Bytecode flushing
 
 Bytecode compiled from JavaScript source takes up a significant chunk of V8 heap space, typically around 15%, including related meta-data. There are many functions which are only executed during initialization, or rarely used after having been compiled.
+
 In order to reduce V8’s memory overhead, we have implemented support for flushing compiled bytecode from functions during garbage collection if they haven’t been executed recently. In order to enable this, we keep track of the age of a function’s bytecode, incrementing the age during garbage collections, and resetting it to zero when the function is executed. Any bytecode which crosses an aging threshold is eligible to be collected by the next garbage collection, and the function resets to lazily recompile its bytecode if it is ever executed again in the future.
-Our experiment with bytecode flushing show that it provides significant memory savings for users of Chrome, reducing the amount of memory in V8’s heap by between 5–15% while not regressing performance or significantly increasing the amount of CPU time spent compiling JavaScript code.
+
+Our experiments with bytecode flushing show that it provides significant memory savings for users of Chrome, reducing the amount of memory in V8’s heap by between 5–15% while not regressing performance or significantly increasing the amount of CPU time spent compiling JavaScript code.
 
 <figure>
   <img src="/_img/v8-release-74/bytecode-flushing.svg" intrinsicsize="600x271" alt="">
