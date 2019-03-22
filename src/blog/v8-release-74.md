@@ -14,7 +14,7 @@ V8 now supports *JavaScript* execution without allocating executable memory at r
 
 ## WebAssembly Threads/Atomics shipped
 
-WebAssembly Threads/Atomics are now enabled on non-Android operating systems. This is the continuation of the [origin trial/preview we enabled in V8 v7.0](/blog/v8-release-70#a-preview-of-webassembly-threads). A Web Fundamentals article explains [how to use WebAssembly Atomics with Emscripten](https://developers.google.com/web/updates/2018/10/wasm-threads).
+WebAssembly Threads/Atomics are now enabled on non-Android operating systems. This concludes the [origin trial/preview we enabled in V8 v7.0](/blog/v8-release-70#a-preview-of-webassembly-threads). A Web Fundamentals article explains [how to use WebAssembly Atomics with Emscripten](https://developers.google.com/web/updates/2018/10/wasm-threads).
 
 This unlocks the usage of multiple cores on a user’s machine via WebAssembly, enabling new, computation-heavy use cases on the web.
 
