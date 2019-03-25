@@ -8,7 +8,6 @@ tags:
   - internals
   - parsing
 ---
-
 To run a JavaScript program, the source text needs to be processed so V8 can understand it. V8 starts out by parsing the source into an abstract syntax tree (AST), a set of objects that represent the program structure. That AST gets compiled to bytecode by Ignition. The performance of these parse + compile phases is important: V8 cannot run code before compilation is done. In this series of blog posts, we focus on parsing, and the work done in V8 to ship a blazingly fast parser.
 
 In fact, we start the series one stage before the parser. V8’s parser consumes ‘tokens’ provided by the ‘scanner’. Tokens are blocks of one or more characters that have a single semantic meaning: a string, an identifier, an operator like `++`. The scanner constructs these tokens by combining consecutive characters in an underlying character stream.
