@@ -7,6 +7,7 @@ date: 2019-03-25 13:33:37
 tags:
   - internals
   - parsing
+tweet: '1110205101652787200'
 ---
 To run a JavaScript program, the source text needs to be processed so V8 can understand it. V8 starts out by parsing the source into an abstract syntax tree (AST), a set of objects that represent the program structure. That AST gets compiled to bytecode by Ignition. The performance of these parse + compile phases is important: V8 cannot run code before compilation is done. In this series of blog posts, we focus on parsing, and the work done in V8 to ship a blazingly fast parser.
 
