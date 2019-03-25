@@ -1,6 +1,6 @@
 ---
 title: 'Blazingly fast parsing, part 1: optimizing the scanner'
-author: 'Toon Verwaest ([@tverwaes](https://twitter.com/tverwaes)), Scandalous optimizer'
+author: 'Toon Verwaest ([@tverwaes](https://twitter.com/tverwaes)), scandalous optimizer'
 avatars:
   - 'toon-verwaest'
 date: 2019-03-25 13:33:37
@@ -16,23 +16,23 @@ In fact, we start the series one stage before the parser. V8’s parser consumes
 The scanner consumes a stream of Unicode characters. These Unicode characters are always decoded from a stream of UTF-16 code units. Only a single encoding is supported to avoid branching or specializing the scanner and parser for various encodings, and we chose UTF-16 since that’s the encoding of JavaScript strings, and source positions need to be provided relative to that encoding. The [`UTF16CharacterStream`](https://cs.chromium.org/chromium/src/v8/src/scanner.h?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=46) provides a (possibly buffered) UTF-16 view over the underlying Latin1, UTF-8, or UTF-16 encoding that V8 receives from Chrome, which Chrome in turn received from the network. In addition to supporting more than one encoding, the separation between scanner and character stream allows V8 to transparently scan as if the entire source is available, even though we may only have received a portion of the data over the network so far.
 
 <figure>
-  <img src="/_img/scanner/overview.svg">
+  <img src="/_img/scanner/overview.svg" alt="">
 </figure>
 
-The interface between the scanner and the character stream is a method named [`Utf16CharacterStream::Advance()`](https://cs.chromium.org/chromium/src/v8/src/scanner.h?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=54) that returns either the next UTF-16 code unit, or -1 to flag end of input. UTF-16 cannot encode every Unicode character in a single code unit. Characters outside the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) are encoded as two code units, also called surrogate pairs. The scanner operates on Unicode characters rather than UTF-16 code units though, so it wraps this low-level stream interface in a [`Scanner::Advance()`](https://cs.chromium.org/chromium/src/v8/src/scanner.h?sq=package:chromium&g=0&rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=569) method that decodes UTF-16 code units into full Unicode characters. The currently decoded character is buffered and picked up by scan methods, such as [`Scanner::ScanString`](https://cs.chromium.org/chromium/src/v8/src/scanner.cc?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=775).
+The interface between the scanner and the character stream is a method named [`Utf16CharacterStream::Advance()`](https://cs.chromium.org/chromium/src/v8/src/scanner.h?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=54) that returns either the next UTF-16 code unit, or -1 to flag end of input. UTF-16 cannot encode every Unicode character in a single code unit. Characters outside the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) are encoded as two code units, also called surrogate pairs. The scanner operates on Unicode characters rather than UTF-16 code units though, so it wraps this low-level stream interface in a [`Scanner::Advance()`](https://cs.chromium.org/chromium/src/v8/src/scanner.h?sq=package:chromium&g=0&rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=569) method that decodes UTF-16 code units into full Unicode characters. The currently decoded character is buffered and picked up by scan methods, such as [`Scanner::ScanString()`](https://cs.chromium.org/chromium/src/v8/src/scanner.cc?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=775).
 
-The scanner [chooses](https://cs.chromium.org/chromium/src/v8/src/scanner.cc?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=422) a specific scanner method or token based on a maximum lookahead of 4 characters, the longest ambiguous sequence of characters in JavaScript[^1]. Once a method like ScanString is chosen, it consumes the remainder of characters for that token, buffering the first character that’s not part of the token for the next scanned token. In the case of ScanString it also copies the scanned characters into a buffer encoded as Latin1 or UTF-16, while decoding escape sequences.
+The scanner [chooses](https://cs.chromium.org/chromium/src/v8/src/scanner.cc?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=422) a specific scanner method or token based on a maximum lookahead of 4 characters, the longest ambiguous sequence of characters in JavaScript[^1]. Once a method like ScanString is chosen, it consumes the remainder of characters for that token, buffering the first character that’s not part of the token for the next scanned token. In the case of `ScanString` it also copies the scanned characters into a buffer encoded as Latin1 or UTF-16, while decoding escape sequences.
 
 [^1]: `<!--` is the start of an HTML comment, whereas `<!-` scans as “less than”, “not”, “minus”.
 
 ## Whitespace
 
-Tokens can be separated by various types of whitespace, e.g., newline, space, tab, single line comments, multiline comments, etc. One type of whitespace can be followed by other types of whitespace. Whitespace adds meaning if it causes a line break between two tokens: that possibly results in [automatic semicolon insertion](https://tc39.github.io/ecma262/#sec-automatic-semicolon-insertion). So before scanning the next token, all whitespace is skipped keeping track of whether a newline occured. Most real-world production JavaScript code is minified, and so multi-character whitespace luckily isn’t very common. For that reason V8 uniformly scans each type of whitespace independently as if they were regular tokens. E.g., if the first token character is ‘/’ followed by another ‘/’, V8 scans this as a single-line comment which returns `Token::WHITESPACE`. That loop simply continues scanning tokens [until](https://cs.chromium.org/chromium/src/v8/src/scanner.cc?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=671) we find a token other than `Token::WHITESPACE`. This means that if the next token is not preceded by whitespace, we immediately start scanning the relevant token without needing to explicitly check for whitespace.
+Tokens can be separated by various types of whitespace, e.g., newline, space, tab, single line comments, multiline comments, etc. One type of whitespace can be followed by other types of whitespace. Whitespace adds meaning if it causes a line break between two tokens: that possibly results in [automatic semicolon insertion](https://tc39.github.io/ecma262/#sec-automatic-semicolon-insertion). So before scanning the next token, all whitespace is skipped keeping track of whether a newline occured. Most real-world production JavaScript code is minified, and so multi-character whitespace luckily isn’t very common. For that reason V8 uniformly scans each type of whitespace independently as if they were regular tokens. E.g., if the first token character is `/` followed by another `/`, V8 scans this as a single-line comment which returns `Token::WHITESPACE`. That loop simply continues scanning tokens [until](https://cs.chromium.org/chromium/src/v8/src/scanner.cc?rcl=edf3dab4660ed6273e5d46bd2b0eae9f3210157d&l=671) we find a token other than `Token::WHITESPACE`. This means that if the next token is not preceded by whitespace, we immediately start scanning the relevant token without needing to explicitly check for whitespace.
 
 The loop itself however adds overhead to each scanned token: it requires a branch to verify the token that we’ve just scanned. It would be better to continue the loop only if the token we have just scanned could be a `Token::WHITESPACE`. Otherwise we should just break out of the loop. We do this by moving the loop itself into a separate [helper method](https://cs.chromium.org/chromium/src/v8/src/parsing/scanner-inl.h?rcl=d62ec0d84f2ec8bc0d56ed7b8ed28eaee53ca94e&l=178) from which we return immediately when we’re certain the token isn’t `Token::WHITESPACE`. Even though these kinds of changes may seem really small, they remove overhead for each scanned token. This especially makes a difference for really short tokens like punctuation:
 
 <figure>
-  <img src="/_img/scanner/punctuation.svg">
+  <img src="/_img/scanner/punctuation.svg" alt="">
 </figure>
 
 ## Identifier scanning
@@ -44,13 +44,13 @@ Most JS source is written using ASCII characters though. Of the ASCII-range char
 All the improvements mentioned in this post add up to the following difference in identifier scanning performance:
 
 <figure>
-  <img src="/_img/scanner/identifiers-1.svg">
+  <img src="/_img/scanner/identifiers-1.svg" alt="">
 </figure>
 
 It may seem counterintuitive that longer identifiers scan faster. That might make you think that it’s beneficial for performance to increase the identifier length. Scanning longer identifiers is simply faster in terms of MB/s because we stay longer in a very tight loop without returning to the parser. What you care about from the point-of-view of the performance of your application, however, is how fast we can scan full tokens. The following graph roughly shows the number of tokens we scan per second relative to the token length:
 
 <figure>
-  <img src="/_img/scanner/identifiers-2.svg">
+  <img src="/_img/scanner/identifiers-2.svg" alt="">
 </figure>
 
 Here it becomes clear that using shorter identifiers is beneficial for the parse performance of your application: we’re able to scan more tokens per second. This means that sites that we seem to parse faster in MB/s simply have lower information density, and actually produce fewer tokens per second.
@@ -68,7 +68,7 @@ If an identifier can be a keyword according to the flags, we could find a subset
 Better is to use a technique called [perfect hashing](https://en.wikipedia.org/wiki/Perfect_hash_function). Since the list of keywords is static, we can compute a perfect hash function that for each identifier gives us at most one candidate keyword. V8 uses [gperf](https://www.gnu.org/software/gperf/) to compute this function. The [result](https://cs.chromium.org/chromium/src/v8/src/parsing/keywords-gen.h) computes a hash from the length and first two identifier characters to find the single candidate keyword. We only compare the identifier with the keyword if the length of that keyword matches the input identifier length. This especially speeds up the case where an identifier isn’t a keyword since we need fewer branches to figure it out.
 
 <figure>
-  <img src="/_img/scanner/keywords.svg">
+  <img src="/_img/scanner/keywords.svg" alt="">
 </figure>
 
 ## Surrogate pairs
@@ -77,13 +77,13 @@ As mentioned earlier, our scanner operates on a UTF-16 encoded stream of charact
 
 ## `AdvanceUntil`
 
-The interface between the scanner and the `UTF16CharacterStream` makes the boundary quite stateful. The stream keeps track of its position in the buffer, which it increments after each consumed code unit. The scanner buffers a received code unit before going back to the scan method that requested the character. That method reads the buffered character and continues based on its value. This provides nice layering, but is fairly slow. Last fall, our intern Florian Sattler came up with an improved interface that keeps the benefits of the layering while providing much faster access to code units in the stream. A templatized function [AdvanceUntil](https://cs.chromium.org/chromium/src/v8/src/parsing/scanner.h?rcl=d4096d05abfc992a150de884c25361917e06c6a9&l=72), specialized for a specific scan helper, calls the helper for each character in the stream until the helper returns false. This essentially provides the scanner direct access to the underlying data without breaking abstractions. It actually simplifies the scan helper functions since they do not need to deal with EndOfInput.
+The interface between the scanner and the `UTF16CharacterStream` makes the boundary quite stateful. The stream keeps track of its position in the buffer, which it increments after each consumed code unit. The scanner buffers a received code unit before going back to the scan method that requested the character. That method reads the buffered character and continues based on its value. This provides nice layering, but is fairly slow. Last fall, our intern Florian Sattler came up with an improved interface that keeps the benefits of the layering while providing much faster access to code units in the stream. A templatized function [`AdvanceUntil`](https://cs.chromium.org/chromium/src/v8/src/parsing/scanner.h?rcl=d4096d05abfc992a150de884c25361917e06c6a9&l=72), specialized for a specific scan helper, calls the helper for each character in the stream until the helper returns false. This essentially provides the scanner direct access to the underlying data without breaking abstractions. It actually simplifies the scan helper functions since they do not need to deal with EndOfInput.
 
 <figure>
-  <img src="/_img/scanner/advanceuntil.svg">
+  <img src="/_img/scanner/advanceuntil.svg" alt="">
 </figure>
 
-AdvanceUntil is especially useful to speed up scan functions that may need to consume large numbers of characters. We used it to speed up identifiers already shown earlier, but also strings[^2] and comments.
+`AdvanceUntil` is especially useful to speed up scan functions that may need to consume large numbers of characters. We used it to speed up identifiers already shown earlier, but also strings[^2] and comments.
 
 [^2]: Strings and identifiers that cannot be encoded in Latin1 are currently more expensive since we first try to buffer them as Latin1, converting them to UTF-16 once we encounter a character that cannot be encoded in Latin1.
 
