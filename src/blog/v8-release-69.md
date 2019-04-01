@@ -39,6 +39,32 @@ V8 v6.9 reduces Mark-Compact garbage collection pause times by improving `WeakMa
 
 `WeakMap` processing uses a fixed-point iteration algorithm that can degrade to quadratic runtime behavior in certain cases. With the new release, V8 is now able to switch to another algorithm that is guaranteed to finish in linear time if the GC does not finish within a certain number of iterations. Previously, worst-case examples could be constructed that took the GC a few seconds to finish even with a relatively small heap, while the linear algorithm finishes within a few milliseconds.
 
+## Language features
+
+V8 v6.9 supports `Array.prototype.flat` and `Array.prototype.flatMap`.
+
+`Array.prototype.flat` flattens a given array recursively up to the specified `depth`, which defaults to `1`:
+
+```js
+// Flatten one level:
+const array = [1, [2, [3]]];
+array.flat();
+// → [1, 2, [3]]
+
+// Flatten recursively until the array contains no more nested arrays:
+array.flat(Infinity);
+// → [1, 2, 3]
+```
+
+`Array.prototype.flatMap` is like `Array.prototype.map`, except it flattens the result into a new array.
+
+```js
+[2, 3, 4].flatMap((x) => [x, x * 2]);
+// → [2, 4, 3, 6, 4, 8]
+```
+
+For more details, see [our #Smooshgate write-up](https://developers.google.com/web/updates/2018/03/smooshgate).
+
 ## V8 API
 
 Please use `git log branch-heads/6.8..branch-heads/6.9 include/v8.h` to get a list of the API changes.
