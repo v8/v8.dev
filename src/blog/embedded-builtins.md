@@ -164,7 +164,7 @@ Calling sequences were significantly improved on two fronts. Builtin-to-builtin 
 
 With these optimizations, we were able to limit regressions on Speedometer 2.0 to roughly 0.5%.
 
-# Results
+## Results
 
 We evaluated the impact of embedded builtins on x64 over the top 10k most popular websites, and compared against both lazy- and eager deserialization (described above).
 
@@ -181,4 +181,4 @@ Significant additional memory savings are expected once bytecode handlers are al
 
 Embedded builtins are rolling out on x64 in Chrome 69, and mobile platforms will follow in Chrome 70. Support for ia32 is expected to be released in late 2018.
 
-Note: All diagrams were generated using Vyacheslav Egorov’s awesome [Shaky Diagramming](https://mrale.ph/blog/2012/11/25/shaky-diagramming.html) tool.
+*Note:* All diagrams were generated using Vyacheslav Egorov’s awesome [Shaky Diagramming](https://mrale.ph/blog/2012/11/25/shaky-diagramming.html) tool.

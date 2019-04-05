@@ -74,7 +74,7 @@ Thanks to [Groupon](https://twitter.com/GrouponEng), V8 now implements [`import.
 
 To assist with local-aware formatting of strings produced by internationalization formatters, developers can now use [`Intl.NumberFormat.prototype.formatToParts()`](https://github.com/tc39/proposal-intl-formatToParts) to format a number to a list of tokens and their type. Thanks to [Igalia](https://twitter.com/igalia) for implementing this in V8!
 
-# V8 API
+## V8 API
 
 Please use `git log branch-heads/6.3..branch-heads/6.4 include/v8.h` to get a list of the API changes.
 
