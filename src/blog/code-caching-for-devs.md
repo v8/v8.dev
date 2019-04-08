@@ -1,7 +1,7 @@
 ---
 title: 'Code caching for JavaScript developers'
 author: '[Leszek Swirski](https://twitter.com/leszekswirski), cache smasher'
-avatars: 
+avatars:
   - leszek-swirski
 date: 2019-04-08 13:33:37
 tags:
@@ -32,7 +32,7 @@ In summary:
 
 <figure>
   <img src="/_img/code-caching-for-devs/overview.svg" intrinsicsize="487x280" alt="">
-  <figcaption>Code caching is split into cold, warm, and hot runs, using the in-memory cache on warm runs and the disk-cache on hot runs.</figcaption>
+  <figcaption>Code caching is split into cold, warm, and hot runs, using the in-memory cache on warm runs and the disk cache on hot runs.</figcaption>
 </figure>
 
 Based on this description, we can give our best tips for improving your website’s use of the code caches.
@@ -122,10 +122,10 @@ Since this heuristic is applied early, it triggers a compile even if the functio
 
 ```js
 const foo = function() {
-   // Lazily skipped
+  // Lazily skipped
 };
 const bar = (function() {
-   // Eagerly compiled
+  // Eagerly compiled
 });
 ```
 
