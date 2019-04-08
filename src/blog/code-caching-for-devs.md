@@ -18,16 +18,16 @@ While other blog posts and presentations offer more detail on our code caching i
 
 The `Isolate` cache operates on scripts compiled in the same V8 Isolate (i.e. same process, roughly “the same website’s pages when navigating in the same tab”). It is “best-effort” in the sense that it tries to be as fast and as minimal as possible, using data already available to us, at the cost of a potentially lower hit-rate and lack of caching across processes.
 
-  1. When V8 compiles a script, the compiled bytecode is stored in a hashtable (on the V8 heap), keyed by the script’s source code.
-  2. When Chrome asks V8 to compile another script, V8 first checks if that script’s source code matches anything in this hashtable. If yes, we simply return the existing bytecode.
+1. When V8 compiles a script, the compiled bytecode is stored in a hashtable (on the V8 heap), keyed by the script’s source code.
+1. When Chrome asks V8 to compile another script, V8 first checks if that script’s source code matches anything in this hashtable. If yes, we simply return the existing bytecode.
 
 This cache is fast and effectively free, yet we observe it getting an 80% hit rate in the real world.
 
 The on-disk code cache is managed by Chrome (specifically, by Blink), and it fills the gap that the `Isolate` cache cannot: sharing code caches between processes, and between multiple Chrome sessions. It takes advantage of the existing HTTP resource cache, which manages caching and expiring data received from the web.
 
-  1. When a JS file is first requested (i.e. a _cold run_), Chrome downloads it and gives it to V8 to compile. It also stores the file in the browser’s on-disk cache.
-  2. When the JS file is requested a second time (i.e. a _warm run_), Chrome takes the file from the browser cache and once again gives it to V8 to compile. This time, however, the compiled code is serialized, and is attached to the cached script file as metadata.
-  3. The third time (i.e. a _hot run_), Chrome takes both the file and the file’s metadata from the cache, and hands both to V8. V8 deserializes the metadata and can skip compilation.
+1. When a JS file is first requested (i.e. a _cold run_), Chrome downloads it and gives it to V8 to compile. It also stores the file in the browser’s on-disk cache.
+1. When the JS file is requested a second time (i.e. a _warm run_), Chrome takes the file from the browser cache and once again gives it to V8 to compile. This time, however, the compiled code is serialized, and is attached to the cached script file as metadata.
+1. The third time (i.e. a _hot run_), Chrome takes both the file and the file’s metadata from the cache, and hands both to V8. V8 deserializes the metadata and can skip compilation.
 
 In summary:
 
@@ -38,7 +38,7 @@ In summary:
 
 Based on this description, we can give our best tips for improving your website’s use of the code caches.
 
-## Tip 1: Do Nothing
+## Tip 1: do nothing { #do-nothing }
 
 Ideally, the best thing you as a JS developer can do to improve code caching is “nothing”. This actually means two things: passively doing nothing, and actively doing nothing.
 
@@ -62,7 +62,7 @@ Code caches are (currently) associated with the URL of a script, as that makes t
 
 Of course, this can also be used to force cache clearing, though that is also an implementation detail; we may one day decide to associate caches with the source text rather than source URL, and this advice will no longer be valid.
 
-### Don’t change execution behaviour
+### Don’t change execution behavior
 
 One of the more recent optimizations to our code caching implementation is to only [serialize the compiled code after it has executed](/blog/improved-code-caching#increasing-the-amount-of-code-that-is-cached). This is to try to catch lazily compiled functions, which are only compiled during execution, not during the initial compile.
 
@@ -78,7 +78,7 @@ if (Math.random() > 0.5) {
 
 In this case, only `A()` or `B()` is compiled and executed on the warm run, and entered into the code cache, yet either could be executed in subsequent runs. Instead, try to keep your execution deterministic to keep it on the cached path.
 
-## Tip 2: Do Something
+## Tip 2: do something { #do-something }
 
 Certainly the advice to do “nothing”, whether passively or actively, is not very satisfying. So in addition to doing “nothing”, given our current heuristics and implementation, there are some things you can do. Please remember, though, that heurisics can change, this advice may change, and there is no substitute for profiling.
 
@@ -86,7 +86,7 @@ Certainly the advice to do “nothing”, whether passively or actively, is not 
   <img src="/_img/code-caching-for-devs/with-great-power.jpg" intrinsicsize="500x209" alt="" title="Uncle Ben suggests that Peter Parker should be cautious when optimizing his web app’s cache behavior.">
 </figure>
 
-### Split out libraries from code using them
+### Split out libraries from code using them { #split }
 
 Code caching is done on a coarse, per-script basis, meaning that changes to any part of the script invalidate the cache for the entire script. If your shipping code consists of both stable and changing parts in a single script, e.g. libraries and business logic, then changes to the business logic code invalidate the cache of the library code.
 
@@ -94,18 +94,18 @@ Instead, you can split out the stable library code into a separate script, and i
 
 This has additional benefits if the libraries are shared across different pages on your website: since the code cache is attached to the script, the code cache for the libraries is also shared between pages.
 
-### Merge libraries into code using them
+### Merge libraries into code using them { #merge }
 
 Code caching is done after each script is executed, meaning that the code cache of a script will include exactly those functions in that script that were compiled when the script finishes executing. This has several important consequences for library code:
 
-  1. The code cache won’t include functions from earlier scripts.
-  2. The code cache won’t include lazily compiled functions called by later scripts.
+1. The code cache won’t include functions from earlier scripts.
+1. The code cache won’t include lazily compiled functions called by later scripts.
 
 In particular, if a library consists of entirely lazily compiled functions, those functions won’t be cached even if they are used later.
 
 One solution to this is to merge libraries and their uses into a single script, so that the code caching “sees” which parts of the library are used. This is unfortunately the exact opposite of the advice above, because there are no silver bullets. In general, we don’t recommend merging all your scripts JS into a single large bundle; splitting it up into multiple smaller scripts tends to be more beneficial overall for reasons other than code caching (e.g. multiple network requests, streaming compilation, page interactivity, etc.).
 
-### Take advantage of IIFE heuristics
+### Take advantage of IIFE heuristics { #iife }
 
 Only the functions that are compiled by the time the script finishes executing count towards the code cache, so there are many kinds of function that won’t be cached despite executing at some later point. Event handlers (even `onload`), promise chains, unused library functions, and anything else that is lazily compiled without being called by the time `</script>` is seen, all stays lazy and is not cached.
 
@@ -132,7 +132,7 @@ const bar = (function() {
 
 This means that functions that should be in the code cache can be forced into it by wrapping them in parentheses. This can, however, make startup time suffer if the hint is applied incorrectly, and in general this is somewhat of an abuse of heuristics, so our advice is to avoid doing this unless it is necessary.
 
-### Group small files together
+### Group small files together { #group }
 
 Chrome has a minimum size for code caches, currently set to [1 KiB of source code](https://cs.chromium.org/chromium/src/third_party/blink/renderer/bindings/core/v8/v8_code_cache.cc?l=91&rcl=2f81d000fdb5331121cba7ff81dfaaec25b520a5). This means that smaller scripts are not cached at all, since we consider the overheads to be greater than the benefits.
 
