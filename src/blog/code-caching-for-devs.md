@@ -192,7 +192,7 @@ None of the above suggestions is guaranteed to speed up your web app. Unfortunat
 `chrome://tracing` records instrumented traces of Chrome during some period of time, where the resulting trace visualization looks something like this:
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-visualization.png" intrinsicsize="722x672" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-visualization.png" srcset="/_img/code-caching-for-devs/chrome-tracing-visualization@2x.png 2x" intrinsicsize="722x672" alt="">
   <figcaption>The <code>chrome://tracing</code> UI with a recording of a warm cache run</figcaption>
 </figure>
 
@@ -206,11 +206,11 @@ google-chrome --user-data-dir="$(mktemp -d)"
 When collecting a trace, you have to select what categories to trace. In most cases you can simply select the “Web developer” set of categories, but you can also pick categories manually. The important category for code caching is `v8`.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-1.png" intrinsicsize="721x607" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-1.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-1@2x.png 2x" intrinsicsize="721x607" alt="">
 </figure>
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-2.png" intrinsicsize="721x607" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-2.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-2@2x.png 2x" intrinsicsize="721x607" alt="">
 </figure>
 
 After recording a trace with the `v8` category, look for `v8.compile` slices in the trace. (Alternatively, you could enter `v8.compile` in the tracing UI’s search box.) These list the file being compiled, and some metadata about the compilation.
@@ -218,19 +218,19 @@ After recording a trace with the `v8` category, look for `v8.compile` slices in 
 On a cold run of a script, there is no information about code caching — this means that the script was not involved in producing or consuming cache data.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-cold-run.png" intrinsicsize="405x318" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-cold-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-cold-run@2x.png 2x" intrinsicsize="405x318" alt="">
 </figure>
 
 On a warm run, there are two `v8.compile` entries per script: one for the actual compilation (as above), and one (after execution) for producing the cache. You can recognize the latter as it has `cacheProduceOptions` and `producedCacheSize` metadata fields.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-warm-run.png" intrinsicsize="404x386" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-warm-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-warm-run@2x.png 2x" intrinsicsize="404x386" alt="">
 </figure>
 
 On a hot run, you’ll see a `v8.compile` entry for consuming the cache, with metadata fields `cacheConsumeOptions` and `consumedCacheSize`. All sizes are expressed in bytes.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-hot-run.png" intrinsicsize="406x363" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-hot-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-hot-run@2x.png 2x" intrinsicsize="406x363" alt="">
 </figure>
 
 ## Conclusion
