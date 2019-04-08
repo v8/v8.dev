@@ -1,5 +1,5 @@
 ---
-title: 'Code caching for JS developers'
+title: 'Code caching for JavaScript developers'
 author: '[Leszek Swirski](https://twitter.com/leszekswirski), cache smasher'
 avatars: 
   - leszek-swirski
