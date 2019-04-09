@@ -9,7 +9,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ## Performance improvements
 
-Visiting all the elements of the Maps and Sets — either via [iteration](http://exploringjs.com/es6/ch_iteration.html) or the [`Map.prototype.forEach`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach) / [`Set.prototype.forEach`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach) methods — became significantly faster, with a raw performance improvement of up to 11× since V8 version 6.0. Check the [dedicated blog post](http://benediktmeurer.de/2017/07/14/faster-collection-iterators/) for additional information.
+Visiting all the elements of the Maps and Sets — either via [iteration](http://exploringjs.com/es6/ch_iteration.html) or the [`Map.prototype.forEach`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach) / [`Set.prototype.forEach`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach) methods — became significantly faster, with a raw performance improvement of up to 11× since V8 version 6.0. Check the [dedicated blog post](https://benediktmeurer.de/2017/07/14/faster-collection-iterators/) for additional information.
 
 <figure>
   <img src="/_img/v8-release-61/iterating-collections.png" intrinsicsize="1600x988" alt="">

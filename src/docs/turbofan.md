@@ -5,8 +5,8 @@ TurboFan is one of V8’s optimizing compilers leveraging a concept called [“S
 
 ## Articles and blog posts
 
-- [A tale of TurboFan](http://benediktmeurer.de/2017/03/01/v8-behind-the-scenes-february-edition)
-- [Ignition + TurboFan and ES2015](http://benediktmeurer.de/2016/11/25/v8-behind-the-scenes-november-edition)
+- [A tale of TurboFan](https://benediktmeurer.de/2017/03/01/v8-behind-the-scenes-february-edition)
+- [Ignition + TurboFan and ES2015](https://benediktmeurer.de/2016/11/25/v8-behind-the-scenes-november-edition)
 - [An introduction to speculative optimization in V8](https://ponyfoo.com/articles/an-introduction-to-speculative-optimization-in-v8)
 
 ## Talks
