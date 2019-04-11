@@ -2,7 +2,6 @@
   "private": true,
   "scripts": {
     "lint": "markdownlint src/**/*.md",
-    "intrinsicsize": "node add-intrinsicsize.js",
     "eleventy": "eleventy",
     "html": "html-minifier --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css",
@@ -10,6 +9,7 @@
     "json": "json-minify src/.webmanifest > dist/.webmanifest",
     "xml": "minify-xml --in-place dist/sitemap.xml && minify-xml --in-place dist/blog.atom",
     "sw": "workbox injectManifest workbox-config.js && minify dist/sw.js --outFile dist/sw.js",
+    "img": "node add-intrinsicsize.js",
     "clean": "rm -rf -- dist",
     "build": "npm run clean && npm run css && npm run js && npm run json && npm run eleventy && npm run sw && npm run xml && npm run html",
     "watch": "npm run build && npx eleventy --watch",
