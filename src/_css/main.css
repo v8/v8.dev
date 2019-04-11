@@ -70,7 +70,7 @@ body {
   font-size: 16px;
   position: absolute;
   bottom: 0;
-  background: url(../_img/v8-outline.svg) no-repeat center center;
+  background: url(/_img/v8-outline.svg) no-repeat center center;
   background-size: 80%;
   width: 6.5em;
   height: 6.5em;
