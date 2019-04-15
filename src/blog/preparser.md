@@ -4,11 +4,11 @@ author: 'Toon Verwaest ([@tverwaes](https://twitter.com/tverwaes) and Marja Höl
 avatars:
   - 'toon-verwaest'
   - 'marja-holtta'
-date: 2019-03-25 13:33:37
+date: 2019-04-15 17:03:37
 tags:
   - internals
   - parsing
-tweet: ''
+tweet: '1117807107972243456'
 ---
 This is the second part of our series explaining how V8 parses JavaScript as fast as possible. The first part explained how we made V8’s [scanner](/blog/scanner) fast.
 
