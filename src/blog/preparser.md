@@ -45,7 +45,7 @@ First the receiver (i.e. the `this` value for `f`, which is `globalThis` since i
 
 <figure>
   <img src="/_img/preparser/stack-1.svg" width="173" height="333" intrinsicsize="173x333" alt="">
-  <figcaption>Stack layout of a call to function `f` with arguments `a`, `b, and local variable `c` allocated on the stack.</figcaption>
+  <figcaption>Stack layout of a call to function <code>f</code> with arguments <code>a</code>, <code>b</code>, and local variable <code>c</code> allocated on the stack.</figcaption>
 </figure>
 
 The problem with this setup is that functions can reference variables declared in outer functions. Inner functions can outlive the activation in which they were created:
@@ -69,7 +69,7 @@ In the above example, the reference from `inner` to the local variable `d` decla
 
 <figure>
   <img src="/_img/preparser/stack-2.svg" width="428" height="292" intrinsicsize="428x292" alt="">
-  <figcaption>Stack layout of a call to `make_f` with the argument copied to a context allocated on the heap for later use by `inner` that captures `d`.</figcaption>
+  <figcaption>Stack layout of a call to <code>make_f</code> with the argument copied to a context allocated on the heap for later use by <code>inner</code> that captures <code>d</code>.</figcaption>
 </figure>
 
 This means that for each variable declared in a function, we need to know whether an inner function references the variable, so we can decide whether to allocate the variable on the stack or in a heap-allocated context. When we evaluate a function literal, we allocate a closure that points both to the code for the function, as well as the current context: the object that contains the variable values it may need access to.
