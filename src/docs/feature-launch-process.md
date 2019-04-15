@@ -4,6 +4,9 @@ title: 'Implementing and shipping JavaScript/WebAssembly language features'
 
 In general, V8 uses the [Blink Intent process](https://www.chromium.org/blink/launching-features) for JavaScript and WebAssembly language features. The differences are layed out in the errata below. Please follow the Blink Intent process, except the errata tells you otherwhise.
 
+If you have any questions on this topic questions, please send hablich@chromium.org and
+v8-dev@googlegroups.com an email. 
+
 ## Errata
 
 ### TAG review for JavaScript features is not required
