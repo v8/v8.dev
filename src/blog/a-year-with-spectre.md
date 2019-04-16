@@ -1,20 +1,18 @@
 ---
 title: 'A year with Spectre: a V8 perspective'
 author: 'Ben L. Titzer and Jaroslav Sevcik'
-date: 2019-04-17 12:31:31
+date: 2019-04-18 16:45:31
 tags:
-  - release
-tweet: '1109094755936489472'
+  - security
 ---
-
 On January 3, 2018, Google Project Zero and others [disclosed](https://googleprojectzero.blogspot.com/2018/01/reading-privileged-memory-with-side.html) the first three of a new class of vulnerabilities that affect CPUs that perform speculative execution, dubbed [Spectre](https://spectreattack.com/spectre.pdf) and [Meltdown](https://meltdownattack.com/meltdown.pdf). Using the [speculative execution](https://en.wikipedia.org/wiki/Speculative_execution) mechanisms of CPUs, an attacker could temporarily bypass both implicit and explicit safety checks in code that prevent programs from reading unauthorized data in memory. While processor speculation was designed to be a microarchitectural detail, invisible at the architectural level, carefully crafted programs could read unauthorized information in speculation and disclose it through side channels such as the execution time of a program fragment.
 
 When it was shown that JavaScript could be used to mount Spectre attacks, the V8 team became involved in tackling the problem. We formed an emergency response team and worked closely with other teams at Google, our partners at other browser vendors, and our hardware partners. In concert with them, we proactively engaged in both offensive research (constructing proof-of-concept gadgets) and defensive research (mitigations for potential attacks).
 
 A Spectre attack consists of two parts:
 
-_Leak of otherwise-inaccessible data into hidden CPU state._ All known Spectre attacks use speculation to leak bits of inaccessible data into CPU caches.
-_Extract the hidden state_ to recover the inaccessible data. For this, the attacker needs a clock of sufficient precision. (Surprisingly low-resolution clocks can be sufficient, especially with techniques such as edge thresholding.)
+1. _Leak of otherwise-inaccessible data into hidden CPU state._ All known Spectre attacks use speculation to leak bits of inaccessible data into CPU caches.
+1. _Extract the hidden state_ to recover the inaccessible data. For this, the attacker needs a clock of sufficient precision. (Surprisingly low-resolution clocks can be sufficient, especially with techniques such as edge thresholding.)
 
 In theory, it would be sufficient to defeat either of the two components of an attack. Since we do not know of any way to defeat any of the parts perfectly, we designed and deployed mitigations that greatly reduce the amount of information that is leaked into CPU caches _and_ mitigations that make it hard to recover the hidden state.
 
@@ -34,8 +32,8 @@ It became clear early on in our offensive research that timer mitigations alone 
 
 To read inaccessible data using Spectre, the attacker tricks the CPU into speculatively executing code that reads normally inaccessible data and encodes it into the cache. The attack can be broken in two ways:
 
-Prevent speculative execution of code.
-Prevent speculative execution from reading inaccessible data.
+1. Prevent speculative execution of code.
+1. Prevent speculative execution from reading inaccessible data.
 
 We have experimented with (1) by inserting the recommended speculation barrier instructions, such as Intel’s `LFENCE`, on every critical conditional branch, and by using [retpolines](https://support.google.com/faqs/answer/7625886) for indirect branches. Unfortunately, such heavy-handed mitigations greatly reduce performance (2–3× slowdown on the Octane benchmark). Instead, we chose approach (2), inserting mitigation sequences that prevent reading secret data due to mis-speculation. Let us illustrate the technique on the following code snippet:
 
@@ -51,7 +49,7 @@ We reserve one CPU register which we call the poison to track whether code is ex
 
 ```js/0,3,4
 let poison = 1;
-. . .
+// …
 if (condition) {
   poison *= condition;
   return a[i] * poison;
