@@ -436,6 +436,17 @@ img {
   color: #C27628;
 }
 
+pre mark .token.property,
+pre mark .token.entity,
+pre mark .token.url,
+pre mark .token.attr-name,
+pre mark .token.keyword,
+pre mark .token.number,
+pre mark .token.operator,
+pre mark .token.punctuation {
+  color: #333;
+}
+
 .token.regex {
   color: #9B71C6;
 }
