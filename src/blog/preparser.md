@@ -1,6 +1,6 @@
 ---
 title: 'Blazingly fast parsing, part 2: lazy parsing'
-author: 'Toon Verwaest ([@tverwaes](https://twitter.com/tverwaes) and Marja Hölttä ([@marjakh](https://twitter.com/marjakh)), sparser parsers'
+author: 'Toon Verwaest ([@tverwaes](https://twitter.com/tverwaes)) and Marja Hölttä ([@marjakh](https://twitter.com/marjakh)), sparser parsers'
 avatars:
   - 'toon-verwaest'
   - 'marja-holtta'
