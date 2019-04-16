@@ -1,6 +1,9 @@
 ---
 title: 'A year with Spectre: a V8 perspective'
 author: 'Ben L. Titzer and Jaroslav Sevcik'
+avatars:
+  - 'ben-titzer'
+  - 'jaroslav-sevcik'
 date: 2019-04-18 16:45:31
 tags:
   - security
