@@ -151,6 +151,15 @@ locale.toString();
 // → 'es-419-u-ca-gregory-hc-h12'
 ```
 
+### Hashbang grammar
+
+JavaScript programs can now start with `#!`, a so-called [hashbang](https://github.com/tc39/proposal-hashbang). The rest of the line following the hashbang is treated as a single-line comment. This matches de facto usage in command-line JavaScript hosts, such as Node.js. The following is now a syntactically valid JavaScript program:
+
+```js
+#!/usr/bin/env node
+console.log(42);
+```
+
 ## V8 API
 
 Please use `git log branch-heads/7.3..branch-heads/7.4 include/v8.h` to get a list of the API changes.
