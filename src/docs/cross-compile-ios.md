@@ -8,11 +8,11 @@ This page serves as a brief introduction to building V8 for iOS targets.
 
 - A macOS (OS X) host machine with Xcode installed.
 - A 64-bit target iOS device (legacy 32-bit iOS devices are unsupported).
-- V8 7.5 or newer.
+- V8 v7.5 or newer.
 
 ## Initial setup
 
-Follow the instructions to [build V8](/docs/build).
+Follow [the instructions to build V8](/docs/build).
 
 Fetch additional tools needed for iOS cross-compilation by adding `target_os` in your `.gclient` configuration file, located in the parent directory of the `v8` source directory:
 
@@ -27,7 +27,7 @@ After updating `.gclient`, run `gclient sync` to download the additional tools.
 
 This section shows how to build a monolithic V8 version for use on either a physical iOS device or the Xcode iOS simulator. The output of this build is a `v8_monolith.a` file that contains all V8 libraries as well as the V8 snapshot.
 
-Set up gn build files by running `gn args out/release-ios` and inserting the following keys:
+Set up GN build files by running `gn args out/release-ios` and inserting the following keys:
 
 ```python
 enable_ios_bitcode = true
@@ -48,4 +48,4 @@ Now build:
 ninja -C out/release-ios v8_monolith
 ```
 
-Finally, add the generated `v8_monolith.a` file to your Xcode project as a static library. Further documentation on embedding V8 in your application is available at [Getting started with embedding V8](/docs/embed).
+Finally, add the generated `v8_monolith.a` file to your Xcode project as a static library. For further documentation on embedding V8 in your application, see [Getting started with embedding V8](/docs/embed).
