@@ -25,7 +25,7 @@ After updating `.gclient`, run `gclient sync` to download the additional tools.
 
 ## Manual build
 
-This section shows how to build a monolithic V8 version for use on either a physical iOS device or the Xcode iOS simulator. The output of this build is a `v8_monolith.a` file that contains all V8 libraries as well as the V8 snapshot.
+This section shows how to build a monolithic V8 version for use on either a physical iOS device or the Xcode iOS simulator. The output of this build is a `libv8_monolith.a` file that contains all V8 libraries as well as the V8 snapshot.
 
 Set up GN build files by running `gn args out/release-ios` and inserting the following keys:
 
@@ -36,6 +36,7 @@ is_component_build = false
 is_debug = false
 target_cpu = "arm64"                  # "x64" for a simulator build.
 target_os = "ios"
+use_custom_libcxx = false             # Use Xcode's libcxx.
 use_xcode_clang = true
 v8_enable_i18n_support = false        # Produces a smaller binary.
 v8_monolithic = true                  # Enable the v8_monolith target.
@@ -48,4 +49,4 @@ Now build:
 ninja -C out/release-ios v8_monolith
 ```
 
-Finally, add the generated `v8_monolith.a` file to your Xcode project as a static library. For further documentation on embedding V8 in your application, see [Getting started with embedding V8](/docs/embed).
+Finally, add the generated `libv8_monolith.a` file to your Xcode project as a static library. For further documentation on embedding V8 in your application, see [Getting started with embedding V8](/docs/embed).
