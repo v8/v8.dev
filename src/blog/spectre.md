@@ -7,6 +7,7 @@ avatars:
 date: 2019-04-18 16:45:31
 tags:
   - security
+tweet: '1120661732836499461'
 ---
 On January 3, 2018, Google Project Zero and others [disclosed](https://googleprojectzero.blogspot.com/2018/01/reading-privileged-memory-with-side.html) the first three of a new class of vulnerabilities that affect CPUs that perform speculative execution, dubbed [Spectre](https://spectreattack.com/spectre.pdf) and [Meltdown](https://meltdownattack.com/meltdown.pdf). Using the [speculative execution](https://en.wikipedia.org/wiki/Speculative_execution) mechanisms of CPUs, an attacker could temporarily bypass both implicit and explicit safety checks in code that prevent programs from reading unauthorized data in memory. While processor speculation was designed to be a microarchitectural detail, invisible at the architectural level, carefully crafted programs could read unauthorized information in speculation and disclose it through side channels such as the execution time of a program fragment.
 
