@@ -47,7 +47,7 @@ if (condition) {
 }
 ```
 
-For simplicity, let us assume condition is `0` or `1`. The code above is vulnerable if the CPU speculatively reads from `a[i]` when `i` is out-of-bounds, accessing normalling inaccessible data. The important observation is that in such case, the speculation tries to read `a[i]` when `condition` is `0`. Our mitigation rewrites this program so that it behaves exactly like the original program but does not leak any speculatively loaded data.
+For simplicity, let us assume condition is `0` or `1`. The code above is vulnerable if the CPU speculatively reads from `a[i]` when `i` is out-of-bounds, accessing normally inaccessible data. The important observation is that in such case, the speculation tries to read `a[i]` when `condition` is `0`. Our mitigation rewrites this program so that it behaves exactly like the original program but does not leak any speculatively loaded data.
 
 We reserve one CPU register which we call the poison to track whether code is executing in a mispredicted branch. The poison register is maintained across all branches and calls in generated code, so that any mispredicted branch causes the poison register to become `0`. Then we instrument all memory accesses so that they unconditionally mask the result of all loads with the current value of the poison register. This does not prevent the processor from predicting (or mispredicting) branches, but destroys the information of (potentially out-of-bounds) loaded values due to mispredicted branches. The instrumented code is shown below (assuming that `a` is a number array).
 
