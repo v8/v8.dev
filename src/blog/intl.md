@@ -7,6 +7,7 @@ avatars:
 tags:
   - ECMAScript
   - Intl
+tweet: '1121424877142122500'
 ---
 [The ECMAScript Internationalization API Specification](https://tc39.github.io/ecma402/) (ECMA-402, or `Intl`) provides key locale-specific functionality such as date formatting, number formatting, plural form selection, and collation. The Chrome V8 and Google Internationalization teams have been collaborating on adding features to V8’s ECMA-402 implementation, while cleaning up technical debt and improving performance and interoperability with other browsers.
 
