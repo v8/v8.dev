@@ -22,9 +22,7 @@ For WebAssembly features, explicit correctness tests in the [WebAssembly Spec Te
 
 ### Who to CC { #cc }
 
-CC v8-users@googlegroups.com on all Intent to * emails
-
-Every “intent to `$something`” email (e.g. “intent to implement”) should CC <v8-users@googlegroups.com> in addition to <blink-dev@chromium.org>. This way, other embedders of V8 are kept in the loop too.
+**Every** “intent to `$something`” email (e.g. “intent to implement”) should CC <v8-users@googlegroups.com> in addition to <blink-dev@chromium.org>. This way, other embedders of V8 are kept in the loop too.
 
 ### Link to the spec repo { #spec }
 
