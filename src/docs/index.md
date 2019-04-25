@@ -30,7 +30,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Blink web tests (a.k.a. layout tests)](/docs/blink-layout-tests)
     - [Evaluating code coverage](/docs/evaluate-code-coverage)
     - [Release process](/docs/release-process)
-    - [Feature launch process](/docs/feature-launch-process)
+    - [Implementing and shipping JavaScript/WebAssembly language features](/docs/feature-launch-process)
     - [Flake bisect](/docs/flake-bisect)
     - [Handling of ports](/docs/ports)
     - [Merging & patching](/docs/merge-patch)
