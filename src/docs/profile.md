@@ -57,21 +57,6 @@ $V8_PATH/tools/linux-tick-processor --preprocess > v8.json
 
 Open [`tools/profview/index.html`](https://github.com/v8/v8/blob/master/tools/profview/index.html) in your browser and select the `v8.json` file there.
 
-## Snapshot-based VM build and builtins reporting
-
-When a snapshot-based VM build is being used, code objects from a snapshot that don't correspond to functions are reported with generic names like _"A builtin from the snapshot"_, because their real names are not stored in the snapshot. To see the names the following steps must be taken:
-
-- `--log-snapshot-positions` flag must be passed to VM (along with `--prof`); this way, for deserialized objects the `(memory address, snapshot offset)` pairs are being emitted into profiler log;
-
-- `--snapshot-log=<log file from mksnapshot>` flag must be passed to the tick processor script; a log file from the `mksnapshot` program (a snapshot log) contains address-offset pairs for serialized objects, and their names; using the snapshot log, names can be mapped onto deserialized objects during profiler log processing; the snapshot log file is called `snapshot.log` and resides alongside with V8's compiled files.
-
-An example of usage:
-
-```bash
-out/ia32.release/d8 --prof --log-snapshot-positions script.js
-tools/linux-tick-processor --snapshot-log=out/ia32.release/obj.target/v8_snapshot/geni/snapshot.log v8.log
-```
-
 ## Example output
 
 ```
