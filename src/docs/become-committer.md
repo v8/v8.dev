@@ -30,6 +30,10 @@ Once you get approval from the existing committers, we'll send you instructions 
 
 In the worst case, this can drag out for two weeks. Keep writing patches! Even in the rare cases where a nomination fails, the objection is usually something easy to address like “more patches” or “not enough people are familiar with this person’s work.”
 
+### How do I become an OWNER?
+
+In general only active Googlers can become and maintain OWNER status. The exceptions to this are features that are maintained by third-parties like certain ports or build configs.
+
 ### Setting up push access to the repository
 
 When you are accepted as a committer make sure to [set up push access to the repo](/docs/source-code#instructions).
