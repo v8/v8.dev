@@ -27,7 +27,6 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [V8’s public API and its stability](/docs/api)
     - [Becoming a V8 committer](/docs/become-committer)
     - [Committer’s responsibility](/docs/committer-responsibility)
-    - [Becoming a V8 OWNER](/docs/become-owner)
     - [Blink web tests (a.k.a. layout tests)](/docs/blink-layout-tests)
     - [Evaluating code coverage](/docs/evaluate-code-coverage)
     - [Release process](/docs/release-process)
