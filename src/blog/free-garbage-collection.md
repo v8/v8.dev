@@ -67,7 +67,7 @@ As well as improving the smoothness of page rendering, these idle periods also p
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/ij-AFUfqFdI" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/ij-AFUfqFdI" width="640" height="360" loading="lazy"></iframe>
   </div>
   <figcaption>Figure 3: Memory usage for Gmail on latest version of Chrome 45 (left) vs. Chrome 43</figcaption>
 </figure>

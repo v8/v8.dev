@@ -13,7 +13,7 @@ Note: if you prefer watching a presentation over reading articles, then enjoy th
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/m9cTaYI95Zc" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/m9cTaYI95Zc" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 

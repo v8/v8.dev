@@ -17,7 +17,7 @@ Over the past years the V8 garbage collector (GC) has changed a lot. The Orinoco
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/Scxz6jVS4Ls" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/Scxz6jVS4Ls" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 

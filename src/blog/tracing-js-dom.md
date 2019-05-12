@@ -68,7 +68,7 @@ As of Chrome 66, DevTools traces through C++ DOM objects and precisely captures 
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/ixadA7DFCx8" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/ixadA7DFCx8" width="640" height="360" loading="lazy"></iframe>
   </div>
   <figcaption>Figure 3: Retaining path in Chrome 66</figcaption>
 </figure>

@@ -13,7 +13,7 @@ The V8 BlinkOn talks are embedded below.
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/xCx4uC7mn6Y" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/xCx4uC7mn6Y" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 
@@ -26,7 +26,7 @@ Outlines the history of how V8 measures JavaScript performance, the different er
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 
@@ -39,7 +39,7 @@ Introduces V8’s new Ignition interpreter, explaining the architecture of the e
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/VITAyGT-CJI" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/VITAyGT-CJI" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 
@@ -52,7 +52,7 @@ Explains how V8 uses the Response, Animation, Idle, Loading (RAIL) metrics to ta
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/KrGOzEwqRDA" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/KrGOzEwqRDA" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 
@@ -65,7 +65,7 @@ Provides an update on the implementation of new language features in V8, how tho
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/PMDRfYw4UYQ?start=3204" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/PMDRfYw4UYQ?start=3204" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 

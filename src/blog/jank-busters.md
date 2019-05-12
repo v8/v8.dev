@@ -30,7 +30,7 @@ The impact of the discussed optimizations is clearly visible in WebGL-based game
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/PgrCJpbTs9I" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/PgrCJpbTs9I" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 

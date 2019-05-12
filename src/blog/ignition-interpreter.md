@@ -32,7 +32,7 @@ For further details on the implementation of Ignition, see our BlinkOn talk:
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/r5OWCtuKiAk" width="640" height="360" loading="lazy"></iframe>
   </div>
 </figure>
 

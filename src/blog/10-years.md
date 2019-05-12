@@ -12,7 +12,7 @@ This month marks the 10-year anniversary of shipping not just Google Chrome, but
 
 <figure>
   <div class="video video-16:9">
-    <iframe src="https://www.youtube.com/embed/G0vnrPTuxZA" width="640" height="360"></iframe>
+    <iframe src="https://www.youtube.com/embed/G0vnrPTuxZA" width="640" height="360" loading="lazy"></iframe>
   </div>
   <figcaption>A visualization of the V8 code base over time, created using <a href="http://gource.io/"><code>gource</code></a>.</figcaption>
 </figure>
