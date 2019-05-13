@@ -8,9 +8,9 @@ If you have any questions on this topic, please send hablich@chromium.org and v8
 
 ## Errata
 
-### TAG review for JavaScript features is not required { #tag }
+### TAG review { #tag }
 
-JavaScript features do not need to go through a TAG review, as they already get significant scrutiny as part of the [TC39 staging process](https://tc39.github.io/process-document/).
+For smaller JavaScript or WebAssembly features, a TAG review is not required, as TC39 and the Wasm CG already provide significant technical oversight. If the feature is large or cross-cutting (e.g., requires changes to other Web Platform APIs or modifications to Chromium), TAG review is recommended.
 
 ### Instead of WPT, Test262 and WebAssembly spec tests are sufficient { #tests }
 
