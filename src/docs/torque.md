@@ -209,17 +209,25 @@ Class types make it possible to define, allocate and manipulate structured objec
   <b>}</b>
 
 ClassAnnotation :
+  <b>@abstract</b>
+  <b>@dirtyInstantiatedAbstractClass</b>
+  <b>@hasSameInstanceTypeAsParent</b>
   <b>@generatePrint</b>
   <b>@noVerifier</b>
+  <b>@generateCppClass</b>
 
 ClassMethodDeclaration :
   <b>transitioning<sub>opt</sub></b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
 
 ClassFieldDeclaration :
-  IfdefAnnotation<sub>opt</sub> <b>@noVerifier<sub>opt</sub></b> <b>weak</b><sub>opt</sub> FieldDeclaration;
+  ConditionalAnnotation<sub>opt</sub> <b>@noVerifier<sub>opt</sub></b> <b>weak</b><sub>opt</sub> FieldDeclaration;
 
-IfdefAnnotation :
-  <b>@ifdef</b> <b>(</b> Identifier <b>)</b>
+ConditionalAnnotation :
+  ConditionalAnnotationTag <b>(</b> Identifier <b>)</b>
+
+ConditionalAnnotationTag :
+  <b>@if</b>
+  <b>@ifnot</b>
 
 FieldDeclaration :
   Identifier <b>:</b> Type <b>;</b>
@@ -266,9 +274,17 @@ V(kSize, 0) \
 
 If the `@generatePrint` annotation is added, then the generator will implement a C++ function that prints the field values as defined by the Torque layout. Using the JSFunction example, the signature would be `void JSFunction::JSFunctionPrint(std::ostream& os)`.
 
-The Torque compiler also generates verification code for all `extern` classes, unless the class opts out with the `@noVerifier` annotation. For example, the JSFunction class definition above will generate a C++ method `void ClassVerifiersFromDSL::JSFunctionVerify(JSFunction o, Isolate* isolate)` which verifies that its fields are valid according to the Torque type definition. This generated function can be called from the corresponding verifier function in src/objects-debug.cc. (To run those verifiers before and after every GC, build with `v8_enable_verify_heap = true` and run with `--verify-heap`.) One subtle behavior to note: verifiers must often accept partially-intialized objects, so the generated verifier will accept `undefined` in any field on any class deriving from `JSObject`.
+`@generateCppClass` instructs the Torque compiler to generate a C++ class template with most of the usual boilerplate that is required for a class definition, such as constructors, cast functions, and field getter/setter functions. The runtime class can inherit from this template. For example, `Tuple2` inherits from `TorqueGeneratedTuple2<Tuple2, Struct>`.
 
-`@ifdef` marks fields that should be included in some build configurations but not others. It accepts values from the list in `BuildFlags`, in src/torque/torque-parser.cc.
+The Torque compiler also generates verification code for all `extern` classes, unless the class opts out with the `@noVerifier` annotation. For example, the JSFunction class definition above will generate a C++ method `void TorqueGeneratedClassVerifiers::JSFunctionVerify(JSFunction o, Isolate* isolate)` which verifies that its fields are valid according to the Torque type definition. This generated function can be called from the corresponding verifier function in src/objects-debug.cc. (To run those verifiers before and after every GC, build with `v8_enable_verify_heap = true` and run with `--verify-heap`.) One subtle behavior to note: verifiers must often accept partially-intialized objects, so the generated verifier will accept `undefined` in any field on any class deriving from `JSObject`.
+
+`@if` and `@ifnot` mark fields that should be included in some build configurations but not others. They accept values from the list in `BuildFlags`, in src/torque/torque-parser.cc.
+
+`@abstract` indicates that the class itself is not instantiated, and does not have its own instance type: the instance types that logically belong to the class are the instance types of the derived classes.
+
+`@dirtyInstantiatedAbstractClass` indicates that a class is used as both an abstract base class and a concrete class.
+
+`@hasSameInstanceTypeAsParent` indicates classes that have the same instance types as their parent class, but rename some fields, or possibly have a different map. In such cases, the parent class is not abstract.
 
 #### Union types
 
