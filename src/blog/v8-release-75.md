@@ -40,10 +40,10 @@ The proposal also provides a way to copy a constant region into linear memory or
 ;; Define a passive data segment.
 (data $hello passive "Hello WebAssembly")
 
-;; Copy “Hello” into memory at address 10.
+;; Copy "Hello" into memory at address 10.
 (memory.init (i32.const 10) (i32.const 0) (i32.const 5))
 
-;; Copy “WebAssembly” into memory at address 1000.
+;; Copy "WebAssembly" into memory at address 1000.
 (memory.init (i32.const 1000) (i32.const 6) (i32.const 11))
 ```
 
