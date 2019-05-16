@@ -36,7 +36,7 @@ The proposal also provides a way to copy a constant region into linear memory or
 
 ```wasm
 ;; Define a passive data segment.
-(data $hello passive “Hello WebAssembly”)
+(data $hello passive "Hello WebAssembly")
 
 ;; Copy “Hello” into memory at address 10.
 (memory.init (i32.const 10) (i32.const 0) (i32.const 5))
@@ -88,11 +88,15 @@ As of Chrome 75, V8 can stream scripts directly from network into the streaming 
 
 While previous Chrome versions had streaming parsing and compilation, the script source data coming in from the network always had to make its way to the Chrome main thread first before being forwarded to the streamer, for historical reasons. This meant that often, the streaming parser would be waiting for data that has arrived from the network already, but hadn’t been forwarded to the streaming task yet because it was blocked by other things happening on the main thread (such as HTML parsing, layout, or other JavaScript execution).
 
-<image>
+<figure>
+  <img src="/_img/v8-release-75/before.jpg" srcset="/_img/v8-release-75/before@2x.jpg 2x" intrinsicsize="1133x638" alt="">
+</figure>
 
 In Chrome 75, we connect the network “data pipe” directly to V8, allowing us to read network data directly during streaming parsing, skipping the dependency on the main thread.
 
-<image>
+<figure>
+  <img src="/_img/v8-release-75/after.jpg" srcset="/_img/v8-release-75/after@2x.jpg 2x" intrinsicsize="1133x638" alt="">
+</figure>
 
 This allows us to finish streaming compiles earlier, improving the loading time of pages using streaming compilation, as well as reducing the number of concurrent (but stalled) streaming parse tasks, which reduces memory consumption.
 
