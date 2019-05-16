@@ -1,6 +1,8 @@
 ---
 title: 'V8 release v7.5'
 author: 'Dan Elphick, scourge of the deprecated'
+avatars:
+  - 'dan-elphick'
 date: 2019-05-16 15:00:00
 tags:
   - release
