@@ -17,7 +17,7 @@ We are planning to roll out implicit caching of WebAssembly compilation artifact
 
 In case you want to use a similar feature in your V8 embedding, please take inspiration from Chromium’s implementation.
 
-### Bulk memory
+### Bulk memory operations
 
 [The bulk memory proposal](https://github.com/webassembly/bulk-memory-operations) adds new instructions to WebAssembly for updating large regions of memory or tables.
 
