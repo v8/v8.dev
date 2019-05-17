@@ -93,12 +93,14 @@ While previous Chrome versions had streaming parsing and compilation, the script
 
 <figure>
   <img src="/_img/v8-release-75/before.jpg" srcset="/_img/v8-release-75/before@2x.jpg 2x" intrinsicsize="1133x638" alt="">
+  <figcaption>Stalled background parsing tasks in Chrome 74 and older</figcaption>
 </figure>
 
 In Chrome 75, we connect the network “data pipe” directly to V8, allowing us to read network data directly during streaming parsing, skipping the dependency on the main thread.
 
 <figure>
   <img src="/_img/v8-release-75/after.jpg" srcset="/_img/v8-release-75/after@2x.jpg 2x" intrinsicsize="1133x638" alt="">
+  <figcaption>In Chrome 75+, background parsing tasks are no longer blocked by activity on the main thread.</figcaption>
 </figure>
 
 This allows us to finish streaming compiles earlier, improving the loading time of pages using streaming compilation, as well as reducing the number of concurrent (but stalled) streaming parse tasks, which reduces memory consumption.
