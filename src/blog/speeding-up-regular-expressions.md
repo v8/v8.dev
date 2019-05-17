@@ -14,7 +14,7 @@ V8’s RegExp implementation is built on top of [Irregexp](https://blog.chromium
 
 Historically, various components of V8 have been implemented in JavaScript. Until recently, `regexp.js` has been one of them, hosting the implementation of the RegExp constructor, all of its properties as well as its prototype’s properties.
 
-Unfortunately this approach has disadvantages, including unpredictable performance and expensive transitions to the C++ runtime for low-level functionality. The recent addition of built-in subclassing in ES6 (allowing JavaScript developers to provide their own customized RegExp implementation) has resulted in a further RegExp performance penalty, even if the RegExp built-in is not subclassed. These regressions could not be be fully addressed in the self-hosted JavaScript implementation.
+Unfortunately this approach has disadvantages, including unpredictable performance and expensive transitions to the C++ runtime for low-level functionality. The recent addition of built-in subclassing in ES6 (allowing JavaScript developers to provide their own customized RegExp implementation) has resulted in a further RegExp performance penalty, even if the RegExp built-in is not subclassed. These regressions could not be fully addressed in the self-hosted JavaScript implementation.
 
 We therefore decided to migrate the RegExp implementation away from JavaScript.  However, preserving performance turned out to be more difficult than expected. An initial migration to a full C++ implementation was significantly slower, reaching only around 70% of the original implementation’s performance.  After some investigation, we found several causes:
 
