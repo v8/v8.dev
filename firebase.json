@@ -27,6 +27,11 @@
         "source": "/blog/jitless-v8",
         "destination": "https://v8.dev/blog/jitless",
         "type": 301
+      },
+      {
+        "source": "/docs/node-next-generation",
+        "destination": "https://v8.dev/docs/node-integration",
+        "type": 301
       }
     ],
     "headers": [
