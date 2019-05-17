@@ -2,7 +2,6 @@ const fs = require('fs');
 
 const glob = require('glob');
 const imageSize = require('image-size');
-require('string.prototype.matchall').shim();
 
 const files = glob.sync('src/**/*.{html,md}');
 for (const file of files) {
