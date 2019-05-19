@@ -80,7 +80,7 @@ In this case, only `A()` or `B()` is compiled and executed on the warm run, and 
 
 ## Tip 2: do something { #do-something }
 
-Certainly the advice to do “nothing”, whether passively or actively, is not very satisfying. So in addition to doing “nothing”, given our current heuristics and implementation, there are some things you can do. Please remember, though, that heurisics can change, this advice may change, and there is no substitute for profiling.
+Certainly the advice to do “nothing”, whether passively or actively, is not very satisfying. So in addition to doing “nothing”, given our current heuristics and implementation, there are some things you can do. Please remember, though, that heuristics can change, this advice may change, and there is no substitute for profiling.
 
 <figure>
   <img src="/_img/code-caching-for-devs/with-great-power.jpg" intrinsicsize="500x209" alt="" title="Uncle Ben suggests that Peter Parker should be cautious when optimizing his web app’s cache behavior.">
