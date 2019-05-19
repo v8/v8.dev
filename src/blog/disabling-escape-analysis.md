@@ -34,7 +34,7 @@ V8 v6.1 and older used an escape analysis implementation that was complex and ge
 
 However, [a Chrome security vulnerability](https://chromereleases.googleblog.com/2017/09/stable-channel-update-for-desktop_21.html) involving the old escape analysis implementation in V8 v6.1 has been discovered and responsibly disclosed to us. To protect our users, we’ve turned off escape analysis in Chrome 61. Node.js should not be affected as the exploit depends on execution of untrusted JavaScript.
 
-Turning off escape analysis negatively impacts performance because it disables the abovementioned optimizations. Specifically, the following ES2015 features might suffer temporary slowdowns:
+Turning off escape analysis negatively impacts performance because it disables the above mentioned optimizations. Specifically, the following ES2015 features might suffer temporary slowdowns:
 
 - destructuring
 - `for`-`of` iteration
