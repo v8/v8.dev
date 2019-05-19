@@ -165,7 +165,7 @@ const b2 = [1.1,  , 3];  // Double Holey, b2[1] reads from the prototype
 **Takeaway from this section:**
 
 - There are fast and dictionary-mode indexed properties and elements.
-- Fast properties can be packed or they can can contain holes which indicate that an indexed property has been deleted.
+- Fast properties can be packed or they can contain holes which indicate that an indexed property has been deleted.
 - Elements are specialized on their content to speed up Array functions and reduce GC overhead.
 
 Understanding how properties work is key to many optimizations in V8. For JavaScript developers many of these internal decisions are not visible directly, but they explain why certain code patterns are faster than others. Changing the property or element type typically causes V8 to create a different HiddenClass which can lead to type pollution which [prevents V8 from generating optimal code](http://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html). Stay tuned for further posts on how the VM-internals of V8 work.
