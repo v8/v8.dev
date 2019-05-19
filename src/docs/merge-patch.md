@@ -90,7 +90,7 @@ git push
 
 ### Step 3: The end
 
-Chrome/Chromium should should pick of the change when they build automatically.
+Chrome/Chromium should pick up the change when they build automatically.
 
 ## FAQ
 
