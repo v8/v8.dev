@@ -1,9 +1,9 @@
 language: node_js
 script:
   - npm run ci
-
 deploy:
   provider: script
-  script: firebase deploy --token "${FIREBASE_TOKEN}" --message "Deploy @ ${TRAVIS_COMMIT}";
+  script:
+    - firebase deploy --token "${FIREBASE_TOKEN}" --message "Deploy @ ${TRAVIS_COMMIT}"
   on:
     branch: master
