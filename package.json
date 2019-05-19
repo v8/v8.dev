@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "lint": "markdownlint src/**/*.md",
+    "lint": "markdownlint \"src/**/*.md\"",
     "eleventy": "eleventy",
     "html": "html-minifier --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css",

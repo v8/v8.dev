@@ -3,11 +3,11 @@ permalink: /logo/
 title: V8 logos
 layout: layouts/base.njk
 ---
-# V8 logos
+## V8 logos
 
 Download the official V8 logos here in vector format (SVG). The SVG files have been minified and optimized for online usage.
 
-## V8
+### V8
 
 <a href="/_img/v8.svg" class="logo-download" download>
   <figure>
@@ -22,7 +22,7 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   </figure>
 </a>
 
-## Ignition
+### Ignition
 
 <a href="/_img/v8-ignition.svg" class="logo-download" download>
   <figure>
@@ -37,7 +37,7 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   </figure>
 </a>
 
-## TurboFan
+### TurboFan
 
 <a href="/_img/v8-turbofan.svg" class="logo-download" download>
   <figure>
@@ -52,7 +52,7 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   </figure>
 </a>
 
-## Liftoff
+### Liftoff
 
 <a href="/_img/v8-liftoff.svg" class="logo-download" download>
   <figure>
@@ -67,7 +67,7 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   </figure>
 </a>
 
-## Orinoco
+### Orinoco
 
 <a href="/_img/v8-orinoco.svg" class="logo-download" download>
   <figure>
