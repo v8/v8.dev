@@ -13,6 +13,11 @@
 
 const installPrismLanguages = (Prism) => {
 
+  // Add support for numeric separators.
+  // TODO: Remove this once a `prism-js` version containing
+  // https://github.com/PrismJS/prism/pull/1895 is released.
+  Prism.languages.javascript.number = /\b(?:(?:0[xX](?:[\dA-Fa-f](?:_[\dA-Fa-f])?)+|0[bB](?:[01](?:_[01])?)+|0[oO](?:[0-7](?:_[0-7])?)+)n?|(?:\d(?:_\d)?)+n|NaN|Infinity)\b|(?:\b(?:\d(?:_\d)?)+\.?(?:\d(?:_\d)?)*|\B\.(?:\d(?:_\d)?)+)(?:[Ee][+-]?(?:\d(?:_\d)?)+)?/;
+
   // Based on the grammar defined at the bottom of:
   // https://cs.chromium.org/chromium/src/v8/src/torque/torque-parser.cc
   Prism.languages.torque = {
