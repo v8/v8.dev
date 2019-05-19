@@ -33,7 +33,7 @@ V8 v5.6 delivers a number of key improvements in memory and performance footprin
 
 Developers typically start using new language features with the help of transpilers because of two challenges: backwards-compatibility and performance concerns.
 
-V8’s goal is to reduce the performance gap between transpilers and V8’s “native” ES.next performance in order to eliminate the latter challenge. We’ve made great progress in bringing the performance of new language features on-par with their transpiled ES5 equivalents. In this release you will find the the performance of ES2015 features is significantly faster than in previous V8 releases, and in some cases ES2015 feature performance is approaching that of transpiled ES5 equivalents.
+V8’s goal is to reduce the performance gap between transpilers and V8’s “native” ES.next performance in order to eliminate the latter challenge. We’ve made great progress in bringing the performance of new language features on-par with their transpiled ES5 equivalents. In this release you will find the performance of ES2015 features is significantly faster than in previous V8 releases, and in some cases ES2015 feature performance is approaching that of transpiled ES5 equivalents.
 
 Particularly the [spread](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Spread_operator) operator should now be ready to be used natively. Instead of writing…
 
