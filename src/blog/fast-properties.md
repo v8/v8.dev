@@ -66,7 +66,7 @@ However, if we create a new object that gets a different property added, in this
   <img src="/_img/fast-properties/transition-trees.png" intrinsicsize="1600x291" alt="">
 </figure>
 
-**Takeway from this section:**
+**Takeaway from this section:**
 
 - Objects with the same structure (same properties in the same order) have the same HiddenClass
 - By default every new named property added causes a new HiddenClass to be created.
