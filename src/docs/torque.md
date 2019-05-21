@@ -203,29 +203,49 @@ type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
 
 <pre><code class="language-grammar">ClassDeclaration :
-  <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
-    ClassMethodDeclarations<b>*</b>
+  ClassAnnotation<b>*</b> <b>extern<sub>opt</sub></b> <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
+    ClassMethodDeclaration<b>*</b>
     ClassFieldDeclaration<b>*</b>
   <b>}</b>
 
-ClassMethodDeclarations: <b>transitioning<sub>opt</sub></b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
+ClassAnnotation :
+  <b>@abstract</b>
+  <b>@dirtyInstantiatedAbstractClass</b>
+  <b>@hasSameInstanceTypeAsParent</b>
+  <b>@generatePrint</b>
+  <b>@noVerifier</b>
+  <b>@generateCppClass</b>
 
-ClassFieldDeclaration: <b>weak</b><sub>opt</sub> FieldDeclaration;
+ClassMethodDeclaration :
+  <b>transitioning<sub>opt</sub></b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
 
-FieldDeclaration: Identifier <b>:</b> Type <b>;</b>
+ClassFieldDeclaration :
+  ConditionalAnnotation<sub>opt</sub> <b>@noVerifier<sub>opt</sub></b> <b>weak</b><sub>opt</sub> FieldDeclaration;
+
+ConditionalAnnotation :
+  ConditionalAnnotationTag <b>(</b> Identifier <b>)</b>
+
+ConditionalAnnotationTag :
+  <b>@if</b>
+  <b>@ifnot</b>
+
+FieldDeclaration :
+  Identifier <b>:</b> Type <b>;</b>
 </code></pre>
 
 An example class:
 
 ```torque
-class JSFunction extends JSObject {
+extern class JSFunction extends JSObject {
   shared_function_info: SharedFunctionInfo;
   context: Context;
-  feedback_cell: Smi;
+  feedback_cell: FeedbackCell;
   weak code: Code;
-  weak prototype_or_initial_map: Object | Map;
+  @noVerifier weak prototype_or_initial_map: JSReceiver | Map;
 }
 ```
+
+`extern` signifies that this class is defined in C++, rather than existing only for Torque-internal use.
 
 On the Torque side, the field declarations in classes implicitly generate field getters and setters, e.g.:
 
@@ -237,7 +257,8 @@ operator '.shared_function_info=' macro StoreJSFunctionSharedFunctionInfo(JSFunc
 As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in js-objects.h:
 
 ```cpp
-#define JSFUNCTION_FIELDS(V) \
+#define TORQUE_GENERATED_JSFUNCTION_FIELDS(V) \
+V(kStartOfPointerFieldsOffset, 0) \
 V(kStartOfStrongFieldsOffset, 0) \
 V(kSharedFunctionInfoOffset, kTaggedSize) \
 V(kContextOffset, kTaggedSize) \
@@ -247,8 +268,23 @@ V(kStartOfWeakFieldsOffset, 0) \
 V(kCodeOffset, kTaggedSize) \
 V(kPrototypeOrInitialMapOffset, kTaggedSize) \
 V(kEndOfWeakFieldsOffset, 0) \
-V(kSize, 0)
+V(kEndOfTaggedFieldsOffset, 0) \
+V(kSize, 0) \
 ```
+
+If the `@generatePrint` annotation is added, then the generator will implement a C++ function that prints the field values as defined by the Torque layout. Using the JSFunction example, the signature would be `void JSFunction::JSFunctionPrint(std::ostream& os)`.
+
+`@generateCppClass` instructs the Torque compiler to generate a C++ class template with most of the usual boilerplate that is required for a class definition, such as constructors, cast functions, and field getter/setter functions. The runtime class can inherit from this template. For example, `Tuple2` inherits from `TorqueGeneratedTuple2<Tuple2, Struct>`.
+
+The Torque compiler also generates verification code for all `extern` classes, unless the class opts out with the `@noVerifier` annotation. For example, the JSFunction class definition above will generate a C++ method `void TorqueGeneratedClassVerifiers::JSFunctionVerify(JSFunction o, Isolate* isolate)` which verifies that its fields are valid according to the Torque type definition. This generated function can be called from the corresponding verifier function in src/objects-debug.cc. (To run those verifiers before and after every GC, build with `v8_enable_verify_heap = true` and run with `--verify-heap`.) One subtle behavior to note: verifiers must often accept partially-intialized objects, so the generated verifier will accept `undefined` in any field on any class deriving from `JSObject`.
+
+`@if` and `@ifnot` mark fields that should be included in some build configurations but not others. They accept values from the list in `BuildFlags`, in src/torque/torque-parser.cc.
+
+`@abstract` indicates that the class itself is not instantiated, and does not have its own instance type: the instance types that logically belong to the class are the instance types of the derived classes.
+
+`@dirtyInstantiatedAbstractClass` indicates that a class is used as both an abstract base class and a concrete class.
+
+`@hasSameInstanceTypeAsParent` indicates classes that have the same instance types as their parent class, but rename some fields, or possibly have a different map. In such cases, the parent class is not abstract.
 
 #### Union types
 
