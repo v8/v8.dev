@@ -258,7 +258,6 @@ As described above, the fields definied in Torque classes generate C++ code that
 
 ```cpp
 #define TORQUE_GENERATED_JSFUNCTION_FIELDS(V) \
-V(kStartOfPointerFieldsOffset, 0) \
 V(kStartOfStrongFieldsOffset, 0) \
 V(kSharedFunctionInfoOffset, kTaggedSize) \
 V(kContextOffset, kTaggedSize) \
@@ -268,9 +267,10 @@ V(kStartOfWeakFieldsOffset, 0) \
 V(kCodeOffset, kTaggedSize) \
 V(kPrototypeOrInitialMapOffset, kTaggedSize) \
 V(kEndOfWeakFieldsOffset, 0) \
-V(kEndOfTaggedFieldsOffset, 0) \
 V(kSize, 0) \
 ```
+
+Note that markers for the strong and weak fields sections are automatically inserted. Torque enforces that each of those sections is unique and continuous, while scalar values can occur anywhere outside of these two sections.
 
 If the `@generatePrint` annotation is added, then the generator will implement a C++ function that prints the field values as defined by the Torque layout. Using the JSFunction example, the signature would be `void JSFunction::JSFunctionPrint(std::ostream& os)`.
 
