@@ -1,0 +1,12 @@
+---
+title: 'Feature tags'
+permalink: /features/tags/
+layout: layouts/base.njk
+---
+<h1>Feature tags</h1>
+
+<ul>
+{% for tag in collections.tagList %}
+  <li><a href="/features/tags/{{ tag | slug }}">{{ tag }}</a></li>
+{% endfor %}
+</ul>

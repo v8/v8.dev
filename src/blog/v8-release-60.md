@@ -17,7 +17,7 @@ For a brief, low-level tutorial, see the spec [tutorial page](https://github.com
 
 This release introduces rest properties for object destructuring assignment and spread properties for object literals. Object rest/spread properties are Stage 3 ES.next features.
 
-Spread properties also offer a terse alternative to Object.assign() in many situations.
+Spread properties also offer a terse alternative to `Object.assign()` in many situations.
 
 ```js
 // Rest properties for object destructuring assignment:
@@ -38,7 +38,7 @@ console.log(personCopy);
 // { firstName: 'Sebastian', lastName: 'Markbåge', country: 'USA', state: 'CA' }
 ```
 
-For more information, see the [usage post on Web Fundamentals](https://developers.google.com/web/updates/2017/06/object-rest-spread).
+For more information, see [our explainer on object rest and spread properties](/features/object-rest-spread).
 
 ## ES2015 Performance
 

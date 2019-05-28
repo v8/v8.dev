@@ -9,7 +9,7 @@ tags:
 description: 'V8 v7.0 includes WebAssembly threads, Symbol.prototype.description, and embedded built-ins on more platforms!'
 tweet: '1051857446279532544'
 ---
-Every six weeks, we create a new branch of V8 as part of our [release process](https://github.com/v8/v8/wiki/Release-Process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.0), which is in beta until its release in coordination with Chrome 70 Stable in several weeks. V8 v7.0 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.0), which is in beta until its release in coordination with Chrome 70 Stable in several weeks. V8 v7.0 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## Embedded built-ins
 
@@ -31,4 +31,4 @@ The [WebAssembly Community Group](https://www.w3.org/community/webassembly/) has
 
 Please use `git log branch-heads/6.9..branch-heads/7.0 include/v8.h` to get a list of the API changes.
 
-Developers with an [active V8 checkout](https://github.com/v8/v8/wiki/Using-Git) can use `git checkout -b 7.0 -t branch-heads/7.0` to experiment with the new features in V8 v7.0. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 7.0 -t branch-heads/7.0` to experiment with the new features in V8 v7.0. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

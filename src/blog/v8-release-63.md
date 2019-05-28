@@ -33,11 +33,11 @@ The mentioned items are a non-exhaustive list of speed improvements. Lot’s of 
 
 ## ECMAScript language features
 
-V8 shipped the following stage 3 features: [Dynamic module import via `import()`](https://developers.google.com/web/updates/2017/11/dynamic-import), [`Promise.prototype.finally()`](https://developers.google.com/web/updates/2017/10/promise-finally) and [async iterators/generators](https://github.com/tc39/proposal-async-iteration).
+V8 shipped the following stage 3 features: [dynamic module import via `import()`](/features/dynamic-import), [`Promise.prototype.finally()`](/features/promise-finally) and [async iterators/generators](https://github.com/tc39/proposal-async-iteration).
 
-With [dynamic module import](https://developers.google.com/web/updates/2017/11/dynamic-import) it is very straightforward to import modules based on runtime conditions. This comes in handy when an application should lazy-load certain code modules.
+With [dynamic module import](/features/dynamic-import) it is very straightforward to import modules based on runtime conditions. This comes in handy when an application should lazy-load certain code modules.
 
-[`Promise.prototype.finally`](https://developers.google.com/web/updates/2017/10/promise-finally) introduces a way to easily clean up after a promise is settled.
+[`Promise.prototype.finally`](/features/promise-finally) introduces a way to easily clean up after a promise is settled.
 
 Iterating with async functions got more ergonomic with the introduction of [async iterators/generators](https://github.com/tc39/proposal-async-iteration).
 

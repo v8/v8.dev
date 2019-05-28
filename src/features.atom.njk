@@ -1,0 +1,29 @@
+---
+permalink: /features.atom
+excludeFromSitemap: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>V8 JavaScript and WebAssembly language features</title>
+  <subtitle>{{ metadata.feed.subtitle }}</subtitle>
+  <link href="{{ metadata.url }}features.atom" rel="self"/>
+  <link href="{{ metadata.url }}features"/>
+  <updated>{{ collections.features | head(1) | rssLastUpdatedDate }}</updated>
+  <id>{{ metadata.url }}features</id>
+  <author>
+    <name>{{ metadata.author.name }}</name>
+  </author>
+  {%- for post in collections.features | head(10) %}
+  {% set absolutePostUrl %}{{ post.url | url | absoluteUrl(metadata.url) | clean }}{% endset %}
+  <entry>
+    <title>{{ post.data.title }}</title>
+    <link href="{{ absolutePostUrl }}"/>
+    <updated>{{ post.date | rssDate }}</updated>
+    <id>{{ absolutePostUrl }}</id>
+    <author>
+      <name>{{ post.data.author | markdown | striptags }}</name>
+    </author>
+    <content type="html">{{ post.templateContent | htmlToAbsoluteUrls(absolutePostUrl) }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

@@ -58,7 +58,7 @@ As [mentioned earlier](/blog/fast-async#improved-developer-experience), we’ve 
 
 ### Public class fields
 
-V8 v7.2 adds support for [public class fields](https://developers.google.com/web/updates/2018/12/class-fields). Instead of:
+V8 v7.2 adds support for [public class fields](/features/class-fields). Instead of:
 
 ```js
 class Animal {
@@ -95,11 +95,11 @@ class Cat extends Animal {
 }
 ```
 
-Support for [private class fields](https://developers.google.com/web/updates/2018/12/class-fields#private_class_fields) is planned for a future V8 release.
+Support for [private class fields](/features/class-fields#private-class-fields) is planned for a future V8 release.
 
 ### `Intl.ListFormat`
 
-V8 v7.2 adds support for [the `Intl.ListFormat` proposal](https://developers.google.com/web/updates/2018/12/intl-listformat), enabling localized formatting of lists.
+V8 v7.2 adds support for [the `Intl.ListFormat` proposal](/features/intl-listformat), enabling localized formatting of lists.
 
 ```js
 const lf = new Intl.ListFormat('en');
@@ -113,29 +113,27 @@ lf.format(['Frank', 'Christine', 'Flora', 'Harrison']);
 // → 'Frank, Christine, Flora, and Harrison'
 ```
 
-For more information and usage examples, check out [our Web Fundamentals update on `Intl.ListFormat`](https://developers.google.com/web/updates/2018/12/intl-listformat).
+For more information and usage examples, check out [our `Intl.ListFormat` explainer](/features/intl-listformat).
 
 ### Well-formed `JSON.stringify`
 
-`JSON.stringify` was previously specified to return ill-formed Unicode strings if the input contains any lone surrogates:
+`JSON.stringify` now outputs escape sequences for lone surrogates, making its output valid Unicode (and representable in UTF-8):
 
 ```js
+// Old behavior:
 JSON.stringify('\uD800');
 // → '"�"'
-```
 
-V8 now implements [a stage 3 proposal](https://github.com/tc39/proposal-well-formed-stringify) that changes `JSON.stringify` so it outputs escape sequences for lone surrogates, making its output valid Unicode (and representable in UTF-8):
-
-```js
+// New behavior:
 JSON.stringify('\uD800');
 // → '"\\ud800"'
 ```
 
-Note that `JSON.parse(stringified)` still produces the same results as before.
+For more information, see [our well-formed `JSON.stringify` explainer](/features/well-formed-json-stringify).
 
 ### Module namespace exports
 
-In [JavaScript modules](https://developers.google.com/web/fundamentals/primers/modules), it was already possible to use the following syntax:
+In [JavaScript modules](/features/modules), it was already possible to use the following syntax:
 
 ```js
 import * as utils from './utils.mjs';

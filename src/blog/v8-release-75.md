@@ -57,7 +57,7 @@ Large numeric literals are difficult for the human eye to parse quickly, especia
    1019436871.42
 ```
 
-To improve readability, [a new JavaScript language feature](https://github.com/tc39/proposal-numeric-separator) enables underscores as separators in numeric literals. So, the above can now be rewritten to group the digits per thousand, for example:
+To improve readability, [a new JavaScript language feature](/features/numeric-separators) enables underscores as separators in numeric literals. So, the above can now be rewritten to group the digits per thousand, for example:
 
 ```js
 1_000_000_000_000
@@ -66,22 +66,7 @@ To improve readability, [a new JavaScript language feature](https://github.com/t
 
 Now it’s easier to tell that the first number is a trillion, and the second number is in the order of 1 billion.
 
-Numeric separators help improve readability for all kinds of numeric literals:
-
-```js
-// A decimal integer literal with its digits grouped per thousand:
-1_000_000_000_000
-// A decimal literal with its digits grouped per thousand:
-1_000_000.220_720
-// A binary integer literal with its bits grouped per octet:
-0b01010110_00111000
-// A binary integer literal with its bits grouped per nibble:
-0b0101_0110_0011_1000
-// A hexadecimal integer literal with its digits grouped by byte:
-0x40_76_38_6A_73
-// A BigInt literal with its digits grouped per thousand:
-4_642_473_943_484_686_707n
-```
+For more examples and additional information about numeric separators, see [our explainer](/features/numeric-separators).
 
 ## Performance
 

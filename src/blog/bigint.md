@@ -6,7 +6,7 @@ tags:
   - ECMAScript
 tweet: '991705626391732224'
 ---
-Over the past couple of months, we have implemented support for [BigInts](https://developers.google.com/web/updates/2018/05/bigint) in V8, as currently specified by [this proposal](https://github.com/tc39/proposal-bigint), to be included in a future version of ECMAScript. The following post tells the story of our adventures.
+Over the past couple of months, we have implemented support for [BigInts](/features/bigint) in V8, as currently specified by [this proposal](https://github.com/tc39/proposal-bigint), to be included in a future version of ECMAScript. The following post tells the story of our adventures.
 
 ## TL;DR
 
@@ -23,7 +23,7 @@ const such_many = 2n ** 222n;
 // → 6739986666787659948666753771754907668409286105635143120275902562304n
 ```
 
-For details about the new functionality and how it could be used, refer to [our in-depth Web Fundamentals article on BigInt](https://developers.google.com/web/updates/2018/05/bigint). We are looking forward to seeing the awesome things you’ll build with them!
+For details about the new functionality and how it could be used, refer to [our in-depth article on BigInt](/features/bigint). We are looking forward to seeing the awesome things you’ll build with them!
 
 [^1]: _Now_ if you run Chrome Beta, Dev, or Canary, or a [preview Node.js version](https://github.com/v8/node/tree/vee-eight-lkgr), otherwise _soon_ (Chrome 67, Node.js master probably around the same time).
 
@@ -76,7 +76,7 @@ Perhaps surprisingly, we had to spend quite a bit of effort on getting seemingly
 
 With BigInts, however, this implementation suddenly becomes invalid, because multiplying a BigInt with a Number (like `-1`) must throw a `TypeError`[^4]. The parser would have to desugar `-x` to `x * (-1n)` if `x` is a BigInt — but the parser has no way of knowing what `x` will evaluate to. So we had to stop relying on this early desugaring, and instead add proper support for unary operations on both Numbers and BigInts everywhere.
 
-[^4]: Mixing `BigInt` and `Number` operand types is generally not allowed. That’s somewhat unusual for JavaScript, but there is [an explanation](https://developers.google.com/web/updates/2018/05/bigint#operators) for this decision.
+[^4]: Mixing `BigInt` and `Number` operand types is generally not allowed. That’s somewhat unusual for JavaScript, but there is [an explanation](/features/bigint#operators) for this decision.
 
 ## A bit of fun with bitwise ops
 

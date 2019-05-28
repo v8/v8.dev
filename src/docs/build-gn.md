@@ -130,4 +130,4 @@ You can also test your most recently compiled build (in `out.gn`):
 tools/run-tests.py --gn
 ```
 
-**Build issues? File a bug at [v8.dev/bug](https://v8.dev/bug) or ask for help on <v8-users@googlegroups.com>.**
+**Build issues? File a bug at [v8.dev/bug](/bug) or ask for help on <v8-users@googlegroups.com>.**

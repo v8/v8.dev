@@ -1,7 +1,7 @@
 ---
 title: 'Triaging issues'
 ---
-This document explains how to deal with issues in [V8’s bug tracker](https://v8.dev/bugs).
+This document explains how to deal with issues in [V8’s bug tracker](/bugs).
 
 ## How to get an issue triaged
 

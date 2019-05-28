@@ -1,3 +1,8 @@
+# @alrra/browser-logos image dependencies, managed through npm:
+src/_css/img/safari.png
+src/_css/img/chrome.svg
+src/_css/img/firefox.svg
+# Other ignores:
 dist/
 .firebase/
 firebase-debug.log

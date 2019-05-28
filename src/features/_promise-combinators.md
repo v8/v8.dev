@@ -1,0 +1,138 @@
+---
+title: 'Promise combinators'
+author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
+avatars:
+  - 'mathias-bynens'
+date: 2019-05-16
+tags:
+  - ECMAScript
+  - io19
+---
+Since the introduction of promises in ES2015, JavaScript has supported exactly two promise combinators: the static methods `Promise.all` and `Promise.race`.
+
+Two new proposals are currently making their way through the standardization process: `Promise.allSettled`, and `Promise.any`. With those additions, there’ll be a total of four promise combinators in JavaScript, each enabling different use cases.
+
+Here’s an overview of the four combinators:
+
+| name                 | description                                     | status                                                                      |
+| -------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
+| `Promise.allSettled` | does not short-circuit                          | [proposal](https://github.com/tc39/proposal-promise-allSettled)             |
+| `Promise.all`        | short-circuits when an input value is rejected  | added in ES2015 ✅                                                          |
+| `Promise.race`       | short-circuits when an input value is settled   | added in ES2015 ✅                                                          |
+| `Promise.any`        | short-circuits when an input value is fulfilled | [proposal](https://github.com/tc39/proposal-promise-any)                    |
+
+Let’s take a look at an example use case for each combinator.
+
+## `Promise.all`
+
+<feature-support chrome="32"
+                 firefox="29"
+                 safari="8"
+                 nodejs="0.12"
+                 babel="yes"></feature-support>
+
+`Promise.all` lets you know when either all input promises have fulfilled or when one of them rejects.
+
+Imagine the user clicks a button and you want to load some stylesheets so you can render a completely new UI. This program kicks off an HTTP request for each stylesheet in parallel:
+
+```js
+const promises = [
+  fetch('/component-a.css'),
+  fetch('/component-b.css'),
+  fetch('/component-c.css'),
+];
+try {
+  const styleResponses = await Promise.all(promises);
+  enableStyles(styleResponses);
+  renderNewUi();
+} catch (reason) {
+  displayError(reason);
+}
+```
+
+You only want to start rendering the new UI once _all_ requests succeeded. If something goes wrong, you want to instead display an error message as soon as possible, without waiting for other any other work to finish.
+
+In such a case, you could use `Promise.all`: you want to know when all promises are fulfilled, _or_ as soon as one of them rejects.
+
+## `Promise.race`
+
+<feature-support chrome="32"
+                 firefox="29"
+                 safari="8"
+                 nodejs="0.12"
+                 babel="yes"></feature-support>
+
+`Promise.race` is useful if you want to run multiple promises, and either…
+
+1. do something with the first successful result that comes in (in case one of the promises fulfills), _or_
+1. do something as soon as one of the promises rejects.
+
+That is, if one of the promises rejects, you want to preserve that rejection to treat the error case separately. The following example does exactly that:
+
+```js
+try {
+  const result = await Promise.race([
+    performHeavyComputation(),
+    rejectAfterTimeout(2000),
+  ]);
+  renderResult(result);
+} catch (error) {
+  renderError(error);
+}
+```
+
+We kick off a computationally expensive task that might take a long time, but we race it against a promise that rejects after 2 seconds. Depending on the first promise to fulfill or reject, we either render the computed result, or the error message, in two separate code paths.
+
+## `Promise.allSettled`
+
+<feature-support chrome="76 /blog/v8-release-76#TODO"
+                 firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
+                 safari="no"
+                 nodejs="no"
+                 babel="no"></feature-support>
+
+`Promise.allSettled` gives you a signal when all the input promises are _settled_, which means they’re either _fulfilled_ or _rejected_. This is useful in cases where you don’t care about the state of the promise, you just want to know when the work is done, regardless of whether it was successful.
+
+For example, you can kick off a series of independent API calls and use `Promise.allSettled` to make sure they’re all completed before doing something else, like removing a loading spinner:
+
+```js
+const promises = [
+  fetch('/api-call-1'),
+  fetch('/api-call-2'),
+  fetch('/api-call-3'),
+];
+// Imagine some of these requests fail, and some succeed.
+
+await Promise.allSettled(promises);
+// All API calls have finished (either failed or succeeded).
+removeLoadingIndicator();
+```
+
+## `Promise.any`
+
+<feature-support chrome="no"
+                 firefox="no"
+                 safari="no"
+                 nodejs="no"
+                 babel="no"></feature-support>
+
+`Promise.any` gives you a signal as soon as one of the promises fulfills. This is similar to `Promise.race`, except `any` doesn’t reject early when one of the promises rejects.
+
+```js
+const promises = [
+  fetch('/endpoint-a').then(() => 'a'),
+  fetch('/endpoint-b').then(() => 'b'),
+  fetch('/endpoint-c').then(() => 'c'),
+];
+try {
+  const first = await Promise.any(promises);
+  // Any of the promises was fulfilled.
+  console.log(first);
+  // → e.g. 'b'
+} catch (error) {
+  // All of the promises were rejected.
+  console.log(error);
+}
+```
+
+This code example checks which endpoint responds the fastest, and then logs it. Only if _all_ of the requests fail do we end up in the `catch` block, where we can then handle the errors.

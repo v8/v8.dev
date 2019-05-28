@@ -54,7 +54,7 @@ Finally, [`postMessage` is supported for Wasm modules](https://github.com/WebAss
 
 ## JavaScript language features
 
-[The `Intl.RelativeTimeFormat` API](https://developers.google.com/web/updates/2018/10/intl-relativetimeformat) enables localized formatting of relative times (e.g. “yesterday”, “42 seconds ago”, or “in 3 months”) without sacrificing performance. Here's an example:
+[The `Intl.RelativeTimeFormat` API](/features/intl-relativetimeformat) enables localized formatting of relative times (e.g. “yesterday”, “42 seconds ago”, or “in 3 months”) without sacrificing performance. Here's an example:
 
 ```js
 // Create a relative time formatter for the English language that does
@@ -80,7 +80,7 @@ rtf.format(1, 'week');
 // → 'next week'
 ```
 
-Read [the Web Fundamentals article on `Intl.RelativeTimeFormat`](https://developers.google.com/web/updates/2018/10/intl-relativetimeformat) for more information.
+Read [our `Intl.RelativeTimeFormat` explainer](/features/intl-relativetimeformat) for more information.
 
 V8 v7.1 also adds support for [the `globalThis` proposal](https://github.com/tc39/proposal-global), enabling a universal mechanism to access the global object even in strict functions or modules regardless of the platform.
 
