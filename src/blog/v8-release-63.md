@@ -31,15 +31,17 @@ The mentioned items are a non-exhaustive list of speed improvements. Lot’s of 
 
 [Write barriers are switched over to using the CodeStubAssembler](https://chromium.googlesource.com/v8/v8/+/dbfdd4f9e9741df0a541afdd7516a34304102ee8). This saves around 100 KB of memory per isolate.
 
-## ECMAScript language features
+## JavaScript language features
 
-V8 shipped the following stage 3 features: [Dynamic module import via `import()`](https://developers.google.com/web/updates/2017/11/dynamic-import), [`Promise.prototype.finally()`](https://developers.google.com/web/updates/2017/10/promise-finally) and [async iterators/generators](https://github.com/tc39/proposal-async-iteration).
+V8 now supports the following stage 3 features: [dynamic module import via `import()`](https://developers.google.com/web/updates/2017/11/dynamic-import), [`Promise.prototype.finally()`](https://developers.google.com/web/updates/2017/10/promise-finally) and [async iterators/generators](https://github.com/tc39/proposal-async-iteration).
 
 With [dynamic module import](https://developers.google.com/web/updates/2017/11/dynamic-import) it is very straightforward to import modules based on runtime conditions. This comes in handy when an application should lazy-load certain code modules.
 
 [`Promise.prototype.finally`](https://developers.google.com/web/updates/2017/10/promise-finally) introduces a way to easily clean up after a promise is settled.
 
 Iterating with async functions got more ergonomic with the introduction of [async iterators/generators](https://github.com/tc39/proposal-async-iteration).
+
+On the `Intl` side, [`Intl.PluralRules`](https://developers.google.com/web/updates/2017/10/intl-pluralrules) is now supported. This API enables performant internationalized pluralizations.
 
 ## Inspector/Debugging
 
