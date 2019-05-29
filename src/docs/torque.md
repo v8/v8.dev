@@ -1,19 +1,19 @@
 ---
 title: 'V8 Torque user manual'
 ---
-V8 Torque is a language that allows developers contributing to the V8 project to express changes in the VM by focusing on their _intent_ of their changes to the VM, rather than preoccupying themselves with unrelated implementation details. The language was designed to be simple enough to make it easy to directly translate the [ECMAScript specification](https://tc39.github.io/ecma262/) into an implementation in V8, but powerful enough to express the low-level V8 optimization tricks in a robust way, like creating fast-paths based on tests for specific object-shapes.
+V8 Torque is a language that allows developers contributing to the V8 project to express changes in the VM by focusing on the _intent_ of their changes to the VM, rather than preoccupying themselves with unrelated implementation details. The language was designed to be simple enough to make it easy to directly translate the [ECMAScript specification](https://tc39.github.io/ecma262/) into an implementation in V8, but powerful enough to express the low-level V8 optimization tricks in a robust way, like creating fast-paths based on tests for specific object-shapes.
 
 Torque will be familiar to V8 engineers and JavaScript developers, combining a TypeScript-like syntax that eases both writing and understanding V8 code with syntax and types that reflects concepts that are already common in the [`CodeStubAssembler`](/blog/csa). With a strong type system and structured control flow, Torque ensures correctness by construction. Torque’s expressiveness is sufficient to express almost all of the functionality that is [currently found in V8’s builtins](/docs/builtin-functions). It also is very interoperable with `CodeStubAssembler` builtins and `macro`s written in C++, allowing Torque code to use hand-written CSA functionality and vice-versa.
 
-Torque provides language constructs to represent high-level, semantically-rich tidbits of V8 implementation, and the Torque Compiler converts these morsels into efficient assembly code using the `CodeStubAssembler`. Both Torque’s language structure and the Torque compiler’s error checking ensure correctness in ways that were previously laborious and error-prone with direct usage of the `CodeStubAssembler`. Traditionally, writing optimal code with the `CodeStubAssembler` required V8 engineers to carry a lot of specialized knowledge in their heads — much of which was never formally captured in any written documentation — to avoid subtle pitfalls in their implementation. Without that knowledge, the learning curve for writing efficient builtins was steep. Even armed with the necessary knowledge, non-obvious and non-policed gotchas often led to correctness or [security](https://bugs.chromium.org/p/chromium/issues/detail?id=775888) [bugs](https://bugs.chromium.org/p/chromium/issues/detail?id=785804). With Torque, many of these pitfalls can be avoided and recognized automatically by the Torque compiler.
+Torque provides language constructs to represent high-level, semantically-rich tidbits of V8 implementation, and the Torque compiler converts these morsels into efficient assembly code using the `CodeStubAssembler`. Both Torque’s language structure and the Torque compiler’s error checking ensure correctness in ways that were previously laborious and error-prone with direct usage of the `CodeStubAssembler`. Traditionally, writing optimal code with the `CodeStubAssembler` required V8 engineers to carry a lot of specialized knowledge in their heads — much of which was never formally captured in any written documentation — to avoid subtle pitfalls in their implementation. Without that knowledge, the learning curve for writing efficient builtins was steep. Even armed with the necessary knowledge, non-obvious and non-policed gotchas often led to correctness or [security](https://bugs.chromium.org/p/chromium/issues/detail?id=775888) [bugs](https://bugs.chromium.org/p/chromium/issues/detail?id=785804). With Torque, many of these pitfalls can be avoided and recognized automatically by the Torque compiler.
 
 ## Getting started
 
-Most source written in Torque is checked into the V8 repository under [the `src/builtins` directory](https://github.com/v8/v8/tree/master/src/builtins), with the file extension `.tq`. (The actual Torque Compiler can be found under [`src/torque`](https://github.com/v8/v8/tree/master/src/torque).). Tests for Torque functionality are checked in under [`test/torque`](https://github.com/v8/v8/tree/master/test/torque).
+Most source written in Torque is checked into the V8 repository under [the `src/builtins` directory](https://github.com/v8/v8/tree/master/src/builtins), with the file extension `.tq`. (The actual Torque compiler can be found under [`src/torque`](https://github.com/v8/v8/tree/master/src/torque).). Tests for Torque functionality are checked in under [`test/torque`](https://github.com/v8/v8/tree/master/test/torque).
 
-To give you a flavor of the language, let’s write a V8 builtin that prints “Hello World!”. To do this, we’ll add a Torque `macro` in a test case and call it from the `cctest` test framework.
+To give you a taste of the language, let’s write a V8 builtin that prints “Hello World!”. To do this, we’ll add a Torque `macro` in a test case and call it from the `cctest` test framework.
 
-First, open up the `test/torque/test-torque.tq` file and add the following code at the end (but before the last closing `}`):
+Begin by opening up the `test/torque/test-torque.tq` file and add the following code at the end (but before the last closing `}`):
 
 ```torque
 macro PrintHelloWorld() {
@@ -21,7 +21,7 @@ macro PrintHelloWorld() {
 }
 ```
 
-Now, open up `test/cctest/torque/test-torque.cc` and add the following test case that uses the new Torque code to build a code stub:
+Next, open up `test/cctest/torque/test-torque.cc` and add the following test case that uses the new Torque code to build a code stub:
 
 ```cpp
 TEST(HelloWorld) {
@@ -37,7 +37,7 @@ TEST(HelloWorld) {
 }
 ```
 
-Now [build the `cctest` executable](/docs/test) and finally execute the `cctest` test to print ‘Hello world’:
+Then [build the `cctest` executable](/docs/test), and finally execute the `cctest` test to print ‘Hello world’:
 
 ```bash
 $ out/x64.debug/cctest test-torque/HelloWorld
@@ -46,7 +46,7 @@ Hello world!
 
 ## How Torque generates code
 
-The Torque compiler doesn’t create machine code directly, but rather generates C++ code that calls V8’s existing `CodeStubAssembler` interface. The `CodeStubAssembler` uses the TurboFan compiler’s backend to generate efficient code. Torque compilation therefore requires multiple steps:
+The Torque compiler doesn’t create machine code directly, but rather generates C++ code that calls V8’s existing `CodeStubAssembler` interface. The `CodeStubAssembler` uses the [TurboFan compiler’s](https://v8.dev/docs/turbofan) backend to generate efficient code. Torque compilation therefore requires multiple steps:
 
 1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files, outputting corresponding `*-gen.cc` files (one `.cc` file per Torque namespace). The `.cc` files that are generated use TurboFan’s `CodeStubAssembler` interface for generating code.
 1. The `gn` build then compiles the generated `.cc` files from step 1 into the `mksnapshot` executable.
@@ -191,7 +191,7 @@ ConstexprDeclaration :
 
 `IdentifierName` specifies the name of the abstract type, and `ExtendsDeclaration` optionally specifies the type from which the declared type derives. `GeneratesDeclaration` optionally specifies a string literal which corresponds to the C++ `TNode` type used in `CodeStubAssembler` code to contain a runtime value of its type. `ConstexprDeclaration` is a string literal specifying the C++ type corresponding to the `constexpr` version of the Torque type for build-time (`mksnapshot`-time) evaluation.
 
-Here’s an example from `base.tq` for Torque’s signed 31- and 32-bit signed integer types:
+Here’s an example from `base.tq` for Torque’s 31- and 32-bit signed integer types:
 
 ```torque
 type int32 generates 'TNode<Int32T>' constexpr 'int32_t';
@@ -254,7 +254,7 @@ operator '.shared_function_info' macro LoadJSFunctionSharedFunctionInfo(JSFuncti
 operator '.shared_function_info=' macro StoreJSFunctionSharedFunctionInfo(JSFunction, SharedFunctionInfo);
 ```
 
-As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in js-objects.h:
+As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code, e.g. the JSFunction class definition above generates the following C++-accessible field offsets in `js-objects.h`:
 
 ```cpp
 #define TORQUE_GENERATED_JSFUNCTION_FIELDS(V) \
@@ -276,9 +276,9 @@ If the `@generatePrint` annotation is added, then the generator will implement a
 
 `@generateCppClass` instructs the Torque compiler to generate a C++ class template with most of the usual boilerplate that is required for a class definition, such as constructors, cast functions, and field getter/setter functions. The runtime class can inherit from this template. For example, `Tuple2` inherits from `TorqueGeneratedTuple2<Tuple2, Struct>`.
 
-The Torque compiler also generates verification code for all `extern` classes, unless the class opts out with the `@noVerifier` annotation. For example, the JSFunction class definition above will generate a C++ method `void TorqueGeneratedClassVerifiers::JSFunctionVerify(JSFunction o, Isolate* isolate)` which verifies that its fields are valid according to the Torque type definition. This generated function can be called from the corresponding verifier function in src/objects-debug.cc. (To run those verifiers before and after every GC, build with `v8_enable_verify_heap = true` and run with `--verify-heap`.) One subtle behavior to note: verifiers must often accept partially-intialized objects, so the generated verifier will accept `undefined` in any field on any class deriving from `JSObject`.
+The Torque compiler also generates verification code for all `extern` classes, unless the class opts out with the `@noVerifier` annotation. For example, the JSFunction class definition above will generate a C++ method `void TorqueGeneratedClassVerifiers::JSFunctionVerify(JSFunction o, Isolate* isolate)` which verifies that its fields are valid according to the Torque type definition. This generated function can be called from the corresponding verifier function in `src/objects-debug.cc`. (To run those verifiers before and after every GC, build with `v8_enable_verify_heap = true` and run with `--verify-heap`.) One subtle behavior to note: verifiers must often accept partially-intialized objects, so the generated verifier will accept `undefined` in any field on any class deriving from `JSObject`.
 
-`@if` and `@ifnot` mark fields that should be included in some build configurations but not others. They accept values from the list in `BuildFlags`, in src/torque/torque-parser.cc.
+`@if` and `@ifnot` mark fields that should be included in some build configurations but not others. They accept values from the list in `BuildFlags`, in `src/torque/torque-parser.cc`.
 
 `@abstract` indicates that the class itself is not instantiated, and does not have its own instance type: the instance types that logically belong to the class are the instance types of the derived classes.
 
