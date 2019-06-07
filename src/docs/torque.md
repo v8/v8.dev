@@ -126,7 +126,7 @@ namespace string {
     IsJSArray(o);  // ERROR, not visible in this namespace
   }
   // …
-}
+};
 
 namespace array {
   // OK, namespace has been re-opened.
@@ -410,7 +410,7 @@ If you are coding the implementation of a `builtin`, you can craft a [tailcall](
   <b>extern <b>transitioning<sub>opt</sub></b> runtime</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
 </code></pre>
 
-The `extern runtime` specified with name <i>IdentifierName</i> corresponds to the runtime function specified by Runtime::k<i>IdentifierName</i>.
+The `extern runtime` specified with name <i>IdentifierName</i> corresponds to the runtime function specified by <code>Runtime::k<i>IdentifierName</i></code>.
 
 Like `builtin`s, `runtime`s cannot have labels.
 

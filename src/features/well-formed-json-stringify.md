@@ -26,7 +26,7 @@ Note that `JSON.parse(stringified)` still produces the same results as before.
 
 This feature is a small fix that was long overdue in JavaScript. It’s one less thing to worry about as a JavaScript developer.
 
-## Feature support
+## Feature support { #support }
 
 <feature-support chrome="72 /blog/v8-release-72#well-formed-json.stringify"
                  firefox="64"
