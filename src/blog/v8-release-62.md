@@ -70,7 +70,7 @@ More details about these features are available in our blog post titled [Upcomin
 
 ## Template literal revision
 
-The restriction on escape sequences in template literals has been loosened [per the relevant proposal](https://tc39.github.io/proposal-template-literal-revision/). This enables new use cases for template tags, such as writing a LaTeX processor.
+The restriction on escape sequences in template literals has been loosened [per the relevant proposal](https://tc39.es/proposal-template-literal-revision/). This enables new use cases for template tags, such as writing a LaTeX processor.
 
 ```js
 const latex = (strings) => {

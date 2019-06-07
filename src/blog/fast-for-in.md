@@ -27,7 +27,7 @@ In the rest of this blog post we will explain how we managed to speed up this co
 
 _**TL;DR;** The for-in iteration semantics are fuzzy for performance reasons._
 
-When we look at the [spec-text of `for`-`in`, it’s written in an unexpectedly fuzzy way](https://tc39.github.io/ecma262/#sec-for-in-and-for-of-statements), which is observable across different implementations. Let's look at an example when iterating over a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object with the proper traps set.
+When we look at the [spec-text of `for`-`in`, it’s written in an unexpectedly fuzzy way](https://tc39.es/ecma262/#sec-for-in-and-for-of-statements), which is observable across different implementations. Let's look at an example when iterating over a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object with the proper traps set.
 
 ```js
 const proxy = new Proxy({ a: 1, b: 1},

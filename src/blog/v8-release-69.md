@@ -31,7 +31,7 @@ WebAssembly got a new baseline compiler for much faster startup of complex websi
 
 ### Faster `DataView` operations
 
-[`DataView`](https://tc39.github.io/ecma262/#sec-dataview-objects) methods have been reimplemented in V8 Torque, which spares a costly call to C++ compared to the former runtime implementation. Moreover, we now inline calls to `DataView` methods when compiling JavaScript code in TurboFan, resulting in even better peak performance for hot code. Using `DataView`s is now as efficient as using `TypedArray`s, finally making `DataView`s a viable choice in performance-critical situations. We’ll be covering this in more detail in an upcoming blog post about `DataView`s, so stay tuned!
+[`DataView`](https://tc39.es/ecma262/#sec-dataview-objects) methods have been reimplemented in V8 Torque, which spares a costly call to C++ compared to the former runtime implementation. Moreover, we now inline calls to `DataView` methods when compiling JavaScript code in TurboFan, resulting in even better peak performance for hot code. Using `DataView`s is now as efficient as using `TypedArray`s, finally making `DataView`s a viable choice in performance-critical situations. We’ll be covering this in more detail in an upcoming blog post about `DataView`s, so stay tuned!
 
 ### Faster processing of `WeakMap`s during garbage collection
 

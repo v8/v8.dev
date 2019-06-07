@@ -284,7 +284,7 @@ class Sleep {
 })();
 ```
 
-Let’s see what V8 does for `await` under the hood, following the [specification](https://tc39.github.io/ecma262/#await). Here’s a simple async function `foo`:
+Let’s see what V8 does for `await` under the hood, following the [specification](https://tc39.es/ecma262/#await). Here’s a simple async function `foo`:
 
 ```js
 async function foo(v) {
@@ -312,7 +312,7 @@ In a nutshell, the initial steps for `await v` are:
 1. Attach handlers for resuming the async function later.
 1. Suspend the async function and return the `implicit_promise` to the caller.
 
-Let’s go through the individual operations step by step. Assume that the thing that is being `await`ed is already a promise, which was fulfilled with the value `42`. Then the engine creates a new `promise` and resolves that with whatever’s being `await`ed. This does deferred chaining of these promises on the next turn, expressed via what the specification calls a [`PromiseResolveThenableJob`](https://tc39.github.io/ecma262/#sec-promiseresolvethenablejob).
+Let’s go through the individual operations step by step. Assume that the thing that is being `await`ed is already a promise, which was fulfilled with the value `42`. Then the engine creates a new `promise` and resolves that with whatever’s being `await`ed. This does deferred chaining of these promises on the next turn, expressed via what the specification calls a [`PromiseResolveThenableJob`](https://tc39.es/ecma262/#sec-promiseresolvethenablejob).
 
 <figure>
   <img src="/_img/fast-async/await-step-1.svg" intrinsicsize="813x542" alt="">
@@ -324,19 +324,19 @@ Then the engine creates another so-called `throwaway` promise. It’s called *th
   <img src="/_img/fast-async/await-step-2.svg" intrinsicsize="813x542" alt="">
 </figure>
 
-Execution continues in the caller, and eventually the call stack becomes empty. Then the JavaScript engine starts running the microtasks: it runs the previously scheduled [`PromiseResolveThenableJob`](https://tc39.github.io/ecma262/#sec-promiseresolvethenablejob), which schedules a new [`PromiseReactionJob`](https://tc39.github.io/ecma262/#sec-promisereactionjob) to chain the `promise` onto the value passed to `await`. Then, the engine returns to processing the microtask queue, since the microtask queue must be emptied before continuing with the main event loop.
+Execution continues in the caller, and eventually the call stack becomes empty. Then the JavaScript engine starts running the microtasks: it runs the previously scheduled [`PromiseResolveThenableJob`](https://tc39.es/ecma262/#sec-promiseresolvethenablejob), which schedules a new [`PromiseReactionJob`](https://tc39.es/ecma262/#sec-promisereactionjob) to chain the `promise` onto the value passed to `await`. Then, the engine returns to processing the microtask queue, since the microtask queue must be emptied before continuing with the main event loop.
 
 <figure>
   <img src="/_img/fast-async/await-step-3.svg" intrinsicsize="813x542" alt="">
 </figure>
 
-Next up is the [`PromiseReactionJob`](https://tc39.github.io/ecma262/#sec-promisereactionjob), which fulfills the `promise` with the value from the promise we’re `await`ing — `42` in this case — and schedules the reaction onto the `throwaway` promise. The engine then returns to the microtask loop again, which contains a final microtask to be processed.
+Next up is the [`PromiseReactionJob`](https://tc39.es/ecma262/#sec-promisereactionjob), which fulfills the `promise` with the value from the promise we’re `await`ing — `42` in this case — and schedules the reaction onto the `throwaway` promise. The engine then returns to the microtask loop again, which contains a final microtask to be processed.
 
 <figure>
   <img src="/_img/fast-async/await-step-4-final.svg" intrinsicsize="813x542" alt="">
 </figure>
 
-Now this second [`PromiseReactionJob`](https://tc39.github.io/ecma262/#sec-promisereactionjob) propagates the resolution to the `throwaway` promise, and resumes the suspended execution of the async function, returning the value `42` from the `await`.
+Now this second [`PromiseReactionJob`](https://tc39.es/ecma262/#sec-promisereactionjob) propagates the resolution to the `throwaway` promise, and resumes the suspended execution of the async function, returning the value `42` from the `await`.
 
 <figure>
   <img src="/_img/fast-async/await-overhead.svg" intrinsicsize="957x465" alt="">
@@ -351,7 +351,7 @@ Summarizing what we’ve learned, for each `await` the engine has to create **tw
 
 Let’s have a look at where this overhead comes from. The first line is responsible for creating the wrapper promise. The second line immediately resolves that wrapper promise with the `await`ed value `v`. These two lines are responsible for one additional promise plus two out of the three microticks. That’s quite expensive if `v` is already a promise (which is the common case, since applications normally `await` on promises). In the unlikely case that a developer `await`s on e.g. `42`, the engine still needs to wrap it into a promise.
 
-As it turns out, there’s already a  [`promiseResolve`](https://tc39.github.io/ecma262/#sec-promise-resolve) operation in the specification that only performs the wrapping when needed:
+As it turns out, there’s already a  [`promiseResolve`](https://tc39.es/ecma262/#sec-promise-resolve) operation in the specification that only performs the wrapping when needed:
 
 <figure>
   <img src="/_img/fast-async/await-code-comparison.svg" intrinsicsize="949x376" alt="">
@@ -365,13 +365,13 @@ Here’s how the new and improved `await` works behind the scenes, step by step:
   <img src="/_img/fast-async/await-new-step-1.svg" intrinsicsize="792x545" alt="">
 </figure>
 
-Let’s assume again that we `await` a promise that was fulfilled with `42`. Thanks to the magic of [`promiseResolve`](https://tc39.github.io/ecma262/#sec-promise-resolve) the `promise` now just refers to the same promise `v`, so there’s nothing to do in this step. Afterwards the engine continues exactly like before, creating the `throwaway` promise, scheduling a [`PromiseReactionJob`](https://tc39.github.io/ecma262/#sec-promisereactionjob) to resume the async function on the next tick on the microtask queue, suspending execution of the function, and returning to the caller.
+Let’s assume again that we `await` a promise that was fulfilled with `42`. Thanks to the magic of [`promiseResolve`](https://tc39.es/ecma262/#sec-promise-resolve) the `promise` now just refers to the same promise `v`, so there’s nothing to do in this step. Afterwards the engine continues exactly like before, creating the `throwaway` promise, scheduling a [`PromiseReactionJob`](https://tc39.es/ecma262/#sec-promisereactionjob) to resume the async function on the next tick on the microtask queue, suspending execution of the function, and returning to the caller.
 
 <figure>
   <img src="/_img/fast-async/await-new-step-2.svg" intrinsicsize="648x548" alt="">
 </figure>
 
-Then eventually when all JavaScript execution finishes, the engine starts running the microtasks, so it executes the [`PromiseReactionJob`](https://tc39.github.io/ecma262/#sec-promisereactionjob). This job propagates the resolution of `promise` to `throwaway`, and resumes the execution of the async function, yielding `42` from the `await`.
+Then eventually when all JavaScript execution finishes, the engine starts running the microtasks, so it executes the [`PromiseReactionJob`](https://tc39.es/ecma262/#sec-promisereactionjob). This job propagates the resolution of `promise` to `throwaway`, and resumes the execution of the async function, yielding `42` from the `await`.
 
 <figure>
   <img src="/_img/fast-async/await-overhead-removed.svg" intrinsicsize="955x383" alt="">

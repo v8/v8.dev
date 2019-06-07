@@ -23,7 +23,7 @@ The [WebAssembly Community Group](https://www.w3.org/community/webassembly/) has
 
 ## JavaScript language features
 
-[A `description` property](https://tc39.github.io/proposal-Symbol-description/) is being added to `Symbol.prototype`. This provides a more ergonomic way of accessing the description of a `Symbol`. Previously, the description could be only be accessed indirectly through `Symbol.prototype.toString()`. Thanks to Igalia for contributing this implementation!
+[A `description` property](https://tc39.es/proposal-Symbol-description/) is being added to `Symbol.prototype`. This provides a more ergonomic way of accessing the description of a `Symbol`. Previously, the description could be only be accessed indirectly through `Symbol.prototype.toString()`. Thanks to Igalia for contributing this implementation!
 
 `Array.prototype.sort` is now stable in V8 v7.0. Previously, V8 used an unstable QuickSort for arrays with more than 10 elements. Now, we use the stable TimSort algorithm. See [our blog post](/blog/array-sort) for more details.
 

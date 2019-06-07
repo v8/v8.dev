@@ -30,7 +30,7 @@ Node* value = Load(MachineType::IntPtr(), addr);
 
 // And high-level:
 // Performs the JS operation ToString(object).
-// ToString semantics are specified at https://tc39.github.io/ecma262/#sec-tostring.
+// ToString semantics are specified at https://tc39.es/ecma262/#sec-tostring.
 Node* object = /* ... */;
 Node* string = ToString(context, object);
 ```

@@ -10,7 +10,7 @@ tags:
 ---
 > `Math.random()` returns a `Number` value with positive sign, greater than or equal to `0` but less than `1`, chosen randomly or pseudo-randomly with approximately uniform distribution over that range, using an implementation-dependent algorithm or strategy. This function takes no arguments.
 
-— _[ES 2015, section 20.2.2.27](http://tc39.github.io/ecma262/#sec-math.random)_
+— _[ES 2015, section 20.2.2.27](http://tc39.es/ecma262/#sec-math.random)_
 
 `Math.random()` is the most well-known and frequently-used source of randomness in Javascript. In V8 and most other Javascript engines, it is implemented using a [pseudo-random number generator](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) (PRNG). As with all PRNGs, the random number is derived from an internal state, which is altered by a fixed algorithm for every new random number. So for a given initial state, the sequence of random numbers is deterministic. Since the bit size n of the internal state is limited, the numbers that a PRNG generates will eventually repeat themselves. The upper bound for the period length of this [permutation cycle](https://en.wikipedia.org/wiki/Cyclic_permutation) is 2<sup>n</sup>.
 

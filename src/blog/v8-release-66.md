@@ -12,7 +12,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ### `Function.prototype.toString` revision { #function-tostring }
 
-[`Function.prototype.toString()`](https://tc39.github.io/Function-prototype-toString-revision/) now returns exact slices of source code text, including whitespace and comments. Here’s an example comparing the old and the new behavior:
+[`Function.prototype.toString()`](https://tc39.es/Function-prototype-toString-revision/) now returns exact slices of source code text, including whitespace and comments. Here’s an example comparing the old and the new behavior:
 
 ```js
 // Note the comment between the `function` keyword
@@ -37,7 +37,7 @@ Line separator (U+2028) and paragraph separator (U+2029) symbols are now allowed
 
 ### Optional `catch` binding { #optional-catch-binding }
 
-The `catch` clause of `try` statements can now be [used without a parameter](https://tc39.github.io/proposal-optional-catch-binding/). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
+The `catch` clause of `try` statements can now be [used without a parameter](https://tc39.es/proposal-optional-catch-binding/). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
 
 ```js
 try {
@@ -63,7 +63,7 @@ string.trim();
 
 ### `Array.prototype.values` { #array-values }
 
-[The `Array.prototype.values()` method](https://tc39.github.io/ecma262/#sec-array.prototype.values) gives arrays the same iteration interface as the ES2015 `Map` and `Set` collections: all can now be iterated over by `keys`, `values`, or `entries` by calling the same-named method. This change has the potential to be incompatible with existing JavaScript code. If you discover odd or broken behavior on a website, please try to disable this feature via `chrome://flags/#enable-array-prototype-values` and [file an issue](https://bugs.chromium.org/p/v8/issues/entry?template=Defect+report+from+user).
+[The `Array.prototype.values()` method](https://tc39.es/ecma262/#sec-array.prototype.values) gives arrays the same iteration interface as the ES2015 `Map` and `Set` collections: all can now be iterated over by `keys`, `values`, or `entries` by calling the same-named method. This change has the potential to be incompatible with existing JavaScript code. If you discover odd or broken behavior on a website, please try to disable this feature via `chrome://flags/#enable-array-prototype-values` and [file an issue](https://bugs.chromium.org/p/v8/issues/entry?template=Defect+report+from+user).
 
 ## Code caching after execution
 

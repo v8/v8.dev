@@ -102,7 +102,7 @@ That’s clearly an impressive speedup, but we must be very careful about when i
 
 ### Own `Symbol.iterator` property
 
-Normally, an array `arr` does not have its own [`Symbol.iterator`](https://tc39.github.io/ecma262/#sec-symbol.iterator) property, so when looking up that symbol, it will be found on the array’s prototype. In the example below, the prototype is bypassed by defining the `Symbol.iterator` property directly on `arr` itself. After this modification, looking up `Symbol.iterator` on `arr` results in an empty iterator, and thus the spread of `arr` yields no elements and the array literal evaluates to an empty array.
+Normally, an array `arr` does not have its own [`Symbol.iterator`](https://tc39.es/ecma262/#sec-symbol.iterator) property, so when looking up that symbol, it will be found on the array’s prototype. In the example below, the prototype is bypassed by defining the `Symbol.iterator` property directly on `arr` itself. After this modification, looking up `Symbol.iterator` on `arr` results in an empty iterator, and thus the spread of `arr` yields no elements and the array literal evaluates to an empty array.
 
 ```js
 const arr = [1, 2, 3];
@@ -115,7 +115,7 @@ const result = [...arr];
 
 ### Modified `%ArrayIteratorPrototype%`
 
-The `next` method can also be modified directly on [`%ArrayIteratorPrototype%`](https://tc39.github.io/ecma262/#sec-%arrayiteratorprototype%-object), the prototype of array iterators (which affects all arrays).
+The `next` method can also be modified directly on [`%ArrayIteratorPrototype%`](https://tc39.es/ecma262/#sec-%arrayiteratorprototype%-object), the prototype of array iterators (which affects all arrays).
 
 ```js
 Object.getPrototypeOf([][Symbol.iterator]()).next = function() {

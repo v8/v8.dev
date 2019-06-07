@@ -26,7 +26,7 @@ symbol.toString();
 //           ^^^
 ```
 
-[The new `Symbol.prototype.description` getter](https://tc39.github.io/proposal-Symbol-description/) provides a more ergonomic way of accessing the description of a `Symbol`:
+[The new `Symbol.prototype.description` getter](https://tc39.es/proposal-Symbol-description/) provides a more ergonomic way of accessing the description of a `Symbol`:
 
 ```js
 const symbol = Symbol('foo');

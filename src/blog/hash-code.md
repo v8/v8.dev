@@ -40,7 +40,7 @@ Another problem with the private symbol approach was that it triggered a [hidden
 
 A JavaScript object (`JSObject`) in V8 uses two words (apart from its header): one word for storing a pointer to the elements backing store, and another word for storing a pointer to the properties backing store.
 
-The elements backing store is used for storing properties that look like [array indices](https://tc39.github.io/ecma262/#sec-array-index), whereas the properties backing store is used for storing properties whose keys are strings or symbols. See this [V8 blog post](/blog/fast-properties) by Camillo Bruni for more information about these backing stores.
+The elements backing store is used for storing properties that look like [array indices](https://tc39.es/ecma262/#sec-array-index), whereas the properties backing store is used for storing properties whose keys are strings or symbols. See this [V8 blog post](/blog/fast-properties) by Camillo Bruni for more information about these backing stores.
 
 ```js
 const x = {};

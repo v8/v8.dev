@@ -7,7 +7,7 @@ date: 2017-08-30 13:33:37
 tags:
   - internals
 ---
-In this blog post we would like to explain how V8 handles JavaScript properties internally. From a JavaScript point of view there are only a few distinctions necessary for properties. JavaScript objects mostly behave like dictionaries, with string keys and arbitrary objects as values. The specification does however treat integer-indexed properties and other properties differently [during iteration](https://tc39.github.io/ecma262/#sec-ordinaryownpropertykeys). Other than that, the different properties behave mostly the same, independent of whether they are integer indexed or not.
+In this blog post we would like to explain how V8 handles JavaScript properties internally. From a JavaScript point of view there are only a few distinctions necessary for properties. JavaScript objects mostly behave like dictionaries, with string keys and arbitrary objects as values. The specification does however treat integer-indexed properties and other properties differently [during iteration](https://tc39.es/ecma262/#sec-ordinaryownpropertykeys). Other than that, the different properties behave mostly the same, independent of whether they are integer indexed or not.
 
 However, under the hood V8 does rely on several different representations of properties for performance and memory reasons. In this blog post we are going to explain how V8 can provide fast property access while handling dynamically-added properties. Understanding how properties work is essential for explaining how optimizations such as [inline caches](http://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html) work in V8.
 
@@ -25,7 +25,7 @@ The following diagram shows what a basic JavaScript object looks like in memory.
 
 Elements and properties are stored in two separate data structures which makes adding and accessing properties or elements more efficient for different usage patterns.
 
-Elements are mainly used for the various [`Array.prototype` methods](https://tc39.github.io/ecma262/#sec-properties-of-the-array-prototype-object) such as `pop` or `slice`. Given that these functions access properties in consecutive ranges, V8 also represents them as simple arrays internally — most of the time. Later in this post we will explain how we sometimes switch to a sparse dictionary-based representation to save memory.
+Elements are mainly used for the various [`Array.prototype` methods](https://tc39.es/ecma262/#sec-properties-of-the-array-prototype-object) such as `pop` or `slice`. Given that these functions access properties in consecutive ranges, V8 also represents them as simple arrays internally — most of the time. Later in this post we will explain how we sometimes switch to a sparse dictionary-based representation to save memory.
 
 Named properties are stored in a similar way in a separate array. However, unlike elements, we cannot simply use the key to deduce their position within the properties array; we need some additional metadata. In V8 every JavaScript object has a HiddenClass associated. The HiddenClass stores information about the shape of an object, and among other things, a mapping from property names to indices into the properties. To complicate things we sometimes use a dictionary for the properties instead of a simple array. We will explain this in more detail in a dedicated section.
 
