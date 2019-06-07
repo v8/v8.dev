@@ -21,6 +21,7 @@ const pluginRss = require('@11ty/eleventy-plugin-rss');
 const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 
 const installPrismLanguages = require('./prism-languages.js');
+const expandFeatureSupport = require('./feature-support.js');
 
 const markdownItConfig = {
   html: true,
@@ -78,11 +79,34 @@ module.exports = (eleventyConfig) => {
     return array.slice(0, n);
   });
 
+  eleventyConfig.addFilter('filterBlogPosts', (array) => {
+    return array.filter(post =>
+                        post.inputPath.startsWith('./src/blog/'));
+  });
+
+  eleventyConfig.addFilter('filterFeaturePosts', (array) => {
+    return array.filter(post =>
+                        post.inputPath.startsWith('./src/features/'));
+  });
+
   // Create a collection for blog posts only.
   eleventyConfig.addCollection('posts', (collection) => {
     return collection.getFilteredByGlob('src/blog/*.md')
                      .sort((a, b) => b.date - a.date);
   });
+
+  // Create a collection for feature explainers only.
+  eleventyConfig.addCollection('features', (collection) => {
+    return collection.getFilteredByGlob('src/features/*.md')
+                     .sort((a, b) => b.date - a.date);
+  });
+
+  // Patch the Markdown renderer to recognize <feature-support>.
+  const oldRender = md.render.bind(md);
+  md.render = (input) => {
+    const preprocessed = expandFeatureSupport(input);
+    return oldRender(preprocessed);
+  };
 
   // Treat `*.md` files as Markdown.
   eleventyConfig.setLibrary('md', md);
@@ -107,6 +131,7 @@ module.exports = (eleventyConfig) => {
   eleventyConfig.addPassthroughCopy('src/favicon.ico');
   eleventyConfig.addPassthroughCopy('src/robots.txt');
   eleventyConfig.addPassthroughCopy('src/_img');
+  eleventyConfig.addPassthroughCopy('src/_css/img');
 
   return {
     templateFormats: [

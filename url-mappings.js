@@ -12,7 +12,7 @@
 // limitations under the License.
 
 const oldToNew = new Map([
-  // Old blog URLs.
+  // Old V8 blog URLs.
   ['https://v8project.blogspot.com/2018/09/dataview.html', 'https://v8.dev/blog/dataview'],
   ['https://v8project.blogspot.com/2018/09/10-years.html', 'https://v8.dev/blog/10-years'],
   ['https://v8project.blogspot.com/2018/08/liftoff.html', 'https://v8.dev/blog/liftoff'],
@@ -142,6 +142,17 @@ const oldToNew = new Map([
   ['https://github.com/v8/v8/wiki/TurboFan', 'https://v8.dev/docs/turbofan'],
   ['https://github.com/v8/v8/wiki/CodeStubAssembler-Builtins', 'https://v8.dev/docs/csa-builtins'],
   ['https://github.com/v8/v8/wiki', 'https://v8.dev/docs'],
+
+  // Old Web Fundamentals blog posts.
+  ['https://developers.google.com/web/fundamentals/primers/modules', 'https://v8.dev/features/modules'],
+  ['https://developers.google.com/web/updates/2017/06/object-rest-spread', 'https://v8.dev/features/object-rest-spread'],
+  ['https://developers.google.com/web/updates/2017/10/intl-pluralrules', 'https://v8.dev/features/intl-pluralrules'],
+  ['https://developers.google.com/web/updates/2017/10/promise-finally', 'https://v8.dev/features/promise-finally'],
+  ['https://developers.google.com/web/updates/2017/11/dynamic-import', 'https://v8.dev/features/dynamic-import'],
+  ['https://developers.google.com/web/updates/2018/05/bigint', 'https://v8.dev/features/bigint'],
+  ['https://developers.google.com/web/updates/2018/10/intl-relativetimeformat', 'https://v8.dev/features/intl-relativetimeformat'],
+  ['https://developers.google.com/web/updates/2018/12/class-fields', 'https://v8.dev/features/class-fields'],
+  ['https://developers.google.com/web/updates/2018/12/intl-listformat', 'https://v8.dev/features/intl-listformat'],
 ]);
 
 // for (const [oldUrl, newUrl] of oldToNew) {

@@ -8,11 +8,12 @@ pagination:
   filter:
     - all
     - posts
+    - features
     - tagList
 permalink: /blog/tags/{{ tag | slug }}/
 layout: layouts/base.njk
 ---
 <h1>Blog posts tagged “{{ tag }}”</h1>
 
-{% set posts = collections[ tag ] | reverse %}
+{% set posts = collections[ tag ] | filterBlogPosts | reverse %}
 {% include "posts.njk" %}

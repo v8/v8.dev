@@ -98,7 +98,7 @@ body {
   padding-left: 0.5em;
   vertical-align: middle;
 }
-nav .current a {
+#header nav .current a {
   background: #FFF;
 }
 #header nav a:hover, #header nav a:focus {
@@ -321,7 +321,7 @@ main .meta {
   font-size: 14px;
   margin-top: -0.2em;
 }
-.tag {
+.tag:not(.token) {
   border: 0;
   background: #EEE;
   color: #000;
@@ -374,7 +374,7 @@ img {
   #header h1 a {
     display: none;
   }
-  nav .current a {
+  #header nav .current a {
     background: #333;
     color: #FFF;
   }
@@ -418,7 +418,7 @@ img {
 
 .token.tag,
 .token.boolean {
-  color: #FFD893;
+  color: var(--orange);
 }
 
 .token.atrule,

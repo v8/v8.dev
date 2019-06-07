@@ -1,0 +1,85 @@
+.feature-support {
+  display: grid;
+  grid-gap: 0.5em;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  background: #FFF;
+  padding-left: 0;
+}
+:target .feature-support {
+  background: #FFECA9;
+}
+
+.environment {
+  overflow: hidden;
+  position: relative;
+}
+.environment:not(.has-link)::after {
+  display: block;
+  content: '';
+  padding-top: 100%;
+}
+.feature-support a {
+  display: block;
+  padding: 100% 0 0 0;
+  border-bottom: 0;
+}
+.environment.has-support {
+  background: #376D37;
+}
+.environment.no-support {
+  background: #CCC;
+}
+.environment.no-support .icon {
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
+.environment .support {
+  text-indent: -5000px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.environment .version {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  line-height: 1;
+  color: #000;
+  text-indent: 0;
+  padding: 0.1em 0.2em;
+}
+.environment .version::after {
+  content: '+';
+}
+.environment .icon {
+  text-indent: -5000px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.icon {
+  background-size: 78%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.icon.chrome {
+  background-image: url(img/chrome.svg);
+}
+.icon.firefox {
+  background-image: url(img/firefox.svg);
+}
+.icon.safari {
+  background-image: url(img/safari.png);
+}
+.icon.nodejs {
+  background-image: url(img/nodejs.svg);
+}
+.icon.babel {
+  background-image: url(img/babel.svg);
+}

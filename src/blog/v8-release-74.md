@@ -129,7 +129,7 @@ counter.#count = 42;
 // → SyntaxError
 ```
 
-For more information, read our [WebFu article on public and private class fields](https://developers.google.com/web/updates/2018/12/class-fields).
+For more information, read our [explainer on public and private class fields](/features/class-fields).
 
 ### `Intl.Locale`
 

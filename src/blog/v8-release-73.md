@@ -76,7 +76,7 @@ for (const match of string.matchAll(regex)) {
 // → repo: v8.dev
 ```
 
-For more details, read [our Web Fundamentals article on `String.prototype.matchAll`](https://developers.google.com/web/updates/2019/02/string-matchall).
+For more details, read [our `String.prototype.matchAll` explainer](/features/string-matchall).
 
 ### `Atomics.notify`
 

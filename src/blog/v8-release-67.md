@@ -10,7 +10,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ## JavaScript language features
 
-V8 v6.7 ships with BigInt support enabled by default. BigInts are a new numeric primitive in JavaScript that can represent integers with arbitrary precision. Read [the Web Fundamentals article on BigInt](https://developers.google.com/web/updates/2018/05/bigint) for more info on how BigInts can be used in JavaScript, and check out [our write-up with more details about the V8 implementation](/blog/bigint).
+V8 v6.7 ships with BigInt support enabled by default. BigInts are a new numeric primitive in JavaScript that can represent integers with arbitrary precision. Read [our BigInt feature explainer](/features/bigint) for more info on how BigInts can be used in JavaScript, and check out [our write-up with more details about the V8 implementation](/blog/bigint).
 
 ## Untrusted code mitigations
 
