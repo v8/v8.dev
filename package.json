@@ -9,7 +9,7 @@
     "json": "json-minify src/.webmanifest > dist/.webmanifest",
     "xml": "minify-xml --in-place dist/sitemap.xml && minify-xml --in-place dist/blog.atom && minify-xml --in-place dist/features.atom",
     "sw": "workbox injectManifest workbox-config.js && minify dist/sw.js --outFile dist/sw.js",
-    "copy-img": "for browser in {chrome,firefox}; do cp ./node_modules/@browser-logos/${browser}/${browser}.svg src/_css/img/${browser}.svg; done; cp ./node_modules/@browser-logos/safari/safari_256x256.png src/_css/img/safari.png",
+    "copy-img": "for browser in chrome firefox; do cp ./node_modules/@browser-logos/${browser}/${browser}.svg src/_css/img/${browser}.svg; done; cp ./node_modules/@browser-logos/safari/safari_256x256.png src/_css/img/safari.png",
     "img": "node add-intrinsicsize.js",
     "clean": "rm -rf -- dist",
     "build": "npm run clean && npm run css && npm run js && npm run json && npm run copy-img && npm run eleventy && npm run sw && npm run xml && npm run html",
