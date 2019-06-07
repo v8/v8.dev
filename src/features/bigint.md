@@ -6,6 +6,7 @@ avatars:
 date: 2018-05-01
 tags:
   - ECMAScript
+  - ES2020
   - io19
 description: 'BigInts are a new numeric primitive in JavaScript that can represent integers with arbitrary precision. This article walks through some use cases and explains the new functionality in Chrome 67 by comparing BigInts to Numbers in JavaScript.'
 tweet: '990991035630206977'

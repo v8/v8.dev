@@ -6,6 +6,7 @@ avatars:
 date: 2017-11-21
 tags:
   - ECMAScript
+  - ES2020
 tweet: '932914724060254208'
 ---
 [Dynamic `import()`](https://github.com/tc39/proposal-dynamic-import) introduces a new function-like form of `import` that unlocks new capabilities compared to static `import`. This article compares the two and gives an overview of what's new.
