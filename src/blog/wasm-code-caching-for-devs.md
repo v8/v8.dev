@@ -3,12 +3,12 @@
 PR: [https://github.com/v8/v8.dev/pull/190](https://github.com/v8/v8.dev/pull/190)
 
 
-# Code caching for WebAssembly Developers
+## Code caching for WebAssembly Developers
 
 There’s a saying among developers that the fastest code is code that doesn’t run. Likewise, the fastest compiling code is code that doesn’t have to be compiled. WebAssembly code caching is a new optimization in Chrome and V8 that tries to avoid code compilation by caching the native code produced by the compiler. We’ve [written](/blog/code-caching) [about](/blog/improved-code-caching) [how](/blog/code-caching-for-devs) Chrome and V8 cache JavaScript code in the past, and best practices for taking advantage of this optimization. In this blog post, we will describe the operation of Chrome’s WebAssembly code cache and how developers can take advantage of it to speed up loading for applications with large WebAssembly modules.
 
 
-# WebAssembly Compilation Recap
+## WebAssembly Compilation Recap
 
 WebAssembly is a way to run non-JavaScript code on the Web. A web app can use WebAssembly by loading a `.wasm `resource, which contains partially compiled code from another language, such as C, C++, or Rust (and more to come.) The WebAssembly compiler’s job is to decode the `.wasm` resource, validate that it is well-formed, and then compile it to native machine code that can be executed on the user’s machine.
 
@@ -19,7 +19,7 @@ That’s where code caching comes in. Once TurboFan has finished compiling a lar
 WebAssembly code caching uses the same machinery in Chrome that is used for JavaScript code caching. We use the same type of storage, and the same double-keyed caching technique that keeps code compiled by different origins separate in accordance with [site-isolation](https://developers.google.com/web/updates/2018/07/site-isolation), an important Chrome security feature.
 
 
-# WebAssembly Code Caching Algorithm
+## WebAssembly Code Caching Algorithm
 
 For now, WebAssembly caching is only implemented for the streaming API calls, `compileStreaming` and `instantiateStreaming`. These operate on an HTTP fetch of a `.wasm `resource, making it easier to use Chrome’s resource fetching and caching mechanisms, and providing a handy resource URL to use as the key to identify the WebAssembly module. The caching algorithm works as follows:
 
@@ -33,7 +33,7 @@ For now, WebAssembly caching is only implemented for the streaming API calls, `c
 Based on this description, we can give some recommendations for improving your website’s use of the WebAssembly code cache.
 
 
-# Tip 1: Use the WebAssembly streaming API
+## Tip 1: Use the WebAssembly streaming API
 
 Since code caching only works with the streaming API, compile or instantiate your WebAssembly module with `compileStreaming` or `instantiateStreaming`, as in this JavaScript snippet:
 
@@ -52,22 +52,22 @@ Since code caching only works with the streaming API, compile or instantiate you
 This [article](https://developers.google.com/web/updates/2018/04/loading-wasm) goes into detail about the advantages of using the WebAssembly streaming API. Emscripten tries to use this API by default when it generates loader code for your app. Note that streaming requires that the `.wasm` resource has the correct MIME type, so the server must send the ‘`Content-type: application/wasm`’` `header in its response.
 
 
-# Tip 2: Be Cache-Friendly
+## Tip 2: Be Cache-Friendly
 
 Since code caching depends on the resource URL and whether the `.wasm` resource is up-to-date, developers should try to keep those both stable. If the `.wasm` resource is fetched from a different URL, it is considered different and V8 will have to compile the module again. Similarly, if the `.wasm` resource is no longer valid in the resource cache, then Chrome has to throw away any cached code.
 
 
-## Keep your code stable
+### Keep your code stable
 
 Whenever you ship a new WebAssembly module, it must be completely recompiled. Ship new versions of your code only when necessary to deliver new features or fix bugs. When your code hasn’t changed, let Chrome know. When the browser makes an HTTP request for a resource URL, such as a WebAssembly module, it includes the date and time of the last fetch of that URL. If the server knows that the file hasn’t changed, it can send back a 304 Not Modified response, which tells Chrome and V8 that the cached resource and therefore the cached code are still valid. On the other hand, returning a 200 OK response will update the cached `.wasm` resource, and invalidate the code cache, reverting WebAssembly back to a cold run. Follow web resource [best practices](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching) by using the response to inform the browser about whether the `.wasm `resource is cacheable, how long it’s expected to be valid, or when it was last modified.
 
 
-## Don’t change your code’s URL
+### Don’t change your code’s URL
 
 Cached compiled code is associated with the URL of the `.wasm` resource, which makes it easy to look up without having to scan the actual resource. This means that changing the URL of a resource (including any query parameters!) creates a new entry in our resource cache, which also requires a complete recompile and creates a new code cache entry.
 
 
-## Go big (but not too big!)
+### Go big (but not too big!)
 
 The principal heuristic of WebAssembly code caching is the size of the `.wasm` resource. If the `.wasm` resource is smaller than a certain threshold size, we don’t cache the compiled module bytes. The reasoning here is that V8 can compile small modules quickly, possibly faster than loading the compiled code from the cache. At the moment, the cutoff is for `.wasm `resources of 128 K bytes or more.
 
@@ -76,12 +76,12 @@ But bigger is better only up to a point. Because caches take up space on the use
 This size heuristic, like the rest of the caching behavior, may change as we determine what works best for users and developers.
 
 
-## Use ServiceWorker
+### Use ServiceWorker
 
 WebAssembly code caching is enabled for Workers and ServiceWorkers, so it’s possible to use them to load, compile, and cache a new version of code so it’s available the next time your app starts. Every web site must perform at least one full compilation of a WebAssembly module - use workers to hide that from your users.
 
 
-# Tracing
+## Tracing
 
 As a developer, you might want to check that your compiled module is being cached by Chrome. Unfortunately, WebAssembly code caching events are not currently exposed by default in Chrome’s Developer Tools, so the best way to find out whether your modules are being cached is to use the slightly lower-level `chrome://tracing` feature.
 
@@ -89,7 +89,7 @@ As a developer, you might want to check that your compiled module is being cache
 
 
 ```
-# Start a new Chrome browser session with a clean user profile
+### Start a new Chrome browser session with a clean user profile
 google-chrome --user-data-dir="$(mktemp -d)"
 ```
 
@@ -117,7 +117,7 @@ When caching is working correctly, a hot run will produce two events, `v8.wasm.s
 For more on using `chrome://tracing, `see this [excellent blog post](/blog/code-caching-for-devs)`.`
 
 
-# Conclusion
+## Conclusion
 
 For most developers, code caching should “just work”. It works best, like any cache, when things are stable. Chrome’s caching heuristics may change between versions, but code caching does have behaviors that can be used, and limitations which can be avoided. Careful analysis using `chrome://tracing` can help you tweak and optimize the use of the WebAssembly code cache by your web app.
 
