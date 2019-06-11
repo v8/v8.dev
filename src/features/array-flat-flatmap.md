@@ -8,6 +8,7 @@ tags:
   - ECMAScript
   - ES2019
   - io19
+tweet: '1138457106380709891'
 ---
 ## `Array.prototype.flat` { #flat }
 
