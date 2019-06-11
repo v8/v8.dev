@@ -197,11 +197,11 @@ None of the above suggestions is guaranteed to speed up your web app. Unfortunat
   <figcaption>The <code>chrome://tracing</code> UI with a recording of a warm cache run</figcaption>
 </figure>
 
-Tracing records the behaviour of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with no extensions installed, and with no other browser tabs open:
+Tracing records the behaviour of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with extensions disabled, and with no other browser tabs open:
 
 ```bash
-# Start a new Chrome browser session with a clean user profile
-google-chrome --user-data-dir="$(mktemp -d)"
+# Start a new Chrome browser session with a clean user profile and extensions disabled
+google-chrome --user-data-dir="$(mktemp -d)" --disable-extensions
 ```
 
 When collecting a trace, you have to select what categories to trace. In most cases you can simply select the “Web developer” set of categories, but you can also pick categories manually. The important category for code caching is `v8`.
