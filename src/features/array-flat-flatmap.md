@@ -3,7 +3,7 @@ title: '`Array.prototype.flat` and `Array.prototype.flatMap`'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2019-05-07
+date: 2019-06-11
 tags:
   - ECMAScript
   - ES2019
