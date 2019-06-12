@@ -3,7 +3,7 @@ title: 'Promise combinators'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2019-05-16
+date: 2019-06-12
 tags:
   - ECMAScript
   - io19
@@ -87,7 +87,7 @@ We kick off a computationally expensive task that might take a long time, but we
 
 <feature-support chrome="76"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
-                 safari="no"
+                 safari="no https://bugs.webkit.org/show_bug.cgi?id=197600"
                  nodejs="no"
                  babel="yes"></feature-support>
 
