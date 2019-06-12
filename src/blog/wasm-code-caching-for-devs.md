@@ -2,28 +2,23 @@
 **Target:** v8.dev/blog \
 PR: [https://github.com/v8/v8.dev/pull/190](https://github.com/v8/v8.dev/pull/190)
 
-
 ## Code caching for WebAssembly Developers
 
 There’s a saying among developers that the fastest code is code that doesn’t run. Likewise, the fastest compiling code is code that doesn’t have to be compiled. WebAssembly code caching is a new optimization in Chrome and V8 that tries to avoid code compilation by caching the native code produced by the compiler. We’ve [written](/blog/code-caching) [about](/blog/improved-code-caching) [how](/blog/code-caching-for-devs) Chrome and V8 cache JavaScript code in the past, and best practices for taking advantage of this optimization. In this blog post, we will describe the operation of Chrome’s WebAssembly code cache and how developers can take advantage of it to speed up loading for applications with large WebAssembly modules.
-
 
 ## WebAssembly Compilation Recap
 
 WebAssembly is a way to run non-JavaScript code on the Web. A web app can use WebAssembly by loading a `.wasm `resource, which contains partially compiled code from another language, such as C, C++, or Rust (and more to come.) The WebAssembly compiler’s job is to decode the `.wasm` resource, validate that it is well-formed, and then compile it to native machine code that can be executed on the user’s machine.
 
-V8 has two compilers for WebAssembly, Liftoff and TurboFan. [Liftoff](/blog/liftoff) is the baseline compiler, which compiles modules as quickly as possible so execution can begin as soon as possible. TurboFan is V8’s optimizing compiler for both JavaScript and WebAssembly. It runs in the background to generate high quality native code to give the web app optimal performance over the long term. For large WebAssembly modules, TurboFan can take significant amounts of time - 30 seconds to a minute or more - to completely finish compiling a WebAssembly module to native code.
+V8 has two compilers for WebAssembly, Liftoff and TurboFan. [Liftoff](/blog/liftoff) is the baseline compiler, which compiles modules as quickly as possible so execution can begin as soon as possible. TurboFan is V8’s optimizing compiler for both JavaScript and WebAssembly. It runs in the background to generate high quality native code to give a web app optimal performance over the long term. For large WebAssembly modules, TurboFan can take significant amounts of time - 30 seconds to a minute or more - to completely finish compiling a WebAssembly module to native code.
 
 That’s where code caching comes in. Once TurboFan has finished compiling a large WebAssembly module, Chrome can save the code in its cache so that the next time the module is loaded, we can skip both Liftoff and TurboFan compilation, leading to faster startup and reduced power consumption - compiling code is very CPU-intensive.
 
 WebAssembly code caching uses the same machinery in Chrome that is used for JavaScript code caching. We use the same type of storage, and the same double-keyed caching technique that keeps code compiled by different origins separate in accordance with [site-isolation](https://developers.google.com/web/updates/2018/07/site-isolation), an important Chrome security feature.
 
-
 ## WebAssembly Code Caching Algorithm
 
 For now, WebAssembly caching is only implemented for the streaming API calls, `compileStreaming` and `instantiateStreaming`. These operate on an HTTP fetch of a `.wasm `resource, making it easier to use Chrome’s resource fetching and caching mechanisms, and providing a handy resource URL to use as the key to identify the WebAssembly module. The caching algorithm works as follows:
-
-
 
 1. When a `.wasm` resource is first requested (i.e. a _cold run_), Chrome downloads it from the network and streams it to V8 to compile. Chrome also stores the `.wasm` resource in the browser’s resource cache, stored in the file system of the user’s device. This resource cache allows Chrome to load the resource faster the next time it’s needed.
 2. When TurboFan has completely finished compiling the module, and if the `.wasm` resource is large enough (currently 128 Kilobytes), Chrome will write the compiled code to the WebAssembly code cache. This code cache is physically separate from the resource cache in step 1.
@@ -32,11 +27,9 @@ For now, WebAssembly caching is only implemented for the streaming API calls, `c
 
 Based on this description, we can give some recommendations for improving your website’s use of the WebAssembly code cache.
 
-
 ## Tip 1: Use the WebAssembly streaming API
 
 Since code caching only works with the streaming API, compile or instantiate your WebAssembly module with `compileStreaming` or `instantiateStreaming`, as in this JavaScript snippet:
-
 
 ```
 (async () => {
@@ -48,24 +41,19 @@ Since code caching only works with the streaming API, compile or instantiate you
 })();
 ```
 
-
 This [article](https://developers.google.com/web/updates/2018/04/loading-wasm) goes into detail about the advantages of using the WebAssembly streaming API. Emscripten tries to use this API by default when it generates loader code for your app. Note that streaming requires that the `.wasm` resource has the correct MIME type, so the server must send the ‘`Content-type: application/wasm`’` `header in its response.
-
 
 ## Tip 2: Be Cache-Friendly
 
 Since code caching depends on the resource URL and whether the `.wasm` resource is up-to-date, developers should try to keep those both stable. If the `.wasm` resource is fetched from a different URL, it is considered different and V8 will have to compile the module again. Similarly, if the `.wasm` resource is no longer valid in the resource cache, then Chrome has to throw away any cached code.
 
-
 ### Keep your code stable
 
 Whenever you ship a new WebAssembly module, it must be completely recompiled. Ship new versions of your code only when necessary to deliver new features or fix bugs. When your code hasn’t changed, let Chrome know. When the browser makes an HTTP request for a resource URL, such as a WebAssembly module, it includes the date and time of the last fetch of that URL. If the server knows that the file hasn’t changed, it can send back a 304 Not Modified response, which tells Chrome and V8 that the cached resource and therefore the cached code are still valid. On the other hand, returning a 200 OK response will update the cached `.wasm` resource, and invalidate the code cache, reverting WebAssembly back to a cold run. Follow web resource [best practices](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching) by using the response to inform the browser about whether the `.wasm `resource is cacheable, how long it’s expected to be valid, or when it was last modified.
 
-
 ### Don’t change your code’s URL
 
 Cached compiled code is associated with the URL of the `.wasm` resource, which makes it easy to look up without having to scan the actual resource. This means that changing the URL of a resource (including any query parameters!) creates a new entry in our resource cache, which also requires a complete recompile and creates a new code cache entry.
-
 
 ### Go big (but not too big!)
 
@@ -75,47 +63,38 @@ But bigger is better only up to a point. Because caches take up space on the use
 
 This size heuristic, like the rest of the caching behavior, may change as we determine what works best for users and developers.
 
-
 ### Use ServiceWorker
 
 WebAssembly code caching is enabled for Workers and ServiceWorkers, so it’s possible to use them to load, compile, and cache a new version of code so it’s available the next time your app starts. Every web site must perform at least one full compilation of a WebAssembly module - use workers to hide that from your users.
 
-
 ## Tracing
 
-As a developer, you might want to check that your compiled module is being cached by Chrome. Unfortunately, WebAssembly code caching events are not currently exposed by default in Chrome’s Developer Tools, so the best way to find out whether your modules are being cached is to use the slightly lower-level `chrome://tracing` feature.
+As a developer, you might want to check that your compiled module is being cached by Chrome. WebAssembly code caching events are not exposed by default in Chrome’s Developer Tools, so the best way to find out whether your modules are being cached is to use the slightly lower-level `chrome://tracing` feature.
 
 `chrome://tracing` records instrumented traces of Chrome during some period of time. Tracing records the behavior of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with no extensions installed, and with no other browser tabs open:
-
 
 ```
 ### Start a new Chrome browser session with a clean user profile
 google-chrome --user-data-dir="$(mktemp -d)"
 ```
 
-
 Navigate to `chrome://tracing` and click ‘Record’ to begin a tracing session. On the dialog window that appears, click ‘Edit Categories’ and check the `'devtools.timeline' `category on the right side under `'Disabled by Default Categories`’ (you can uncheck any other pre-selected categories to reduce the amount of data collected). Then click the `'Record'` button on the dialog to begin the trace.
 
 In another tab load or reload your app. Let it run long enough, 10 seconds or more, to make sure TurboFan compilation completes. When done, click ‘Stop’ to end the trace. A timeline view of events appears. At the top right of the tracing window, there is a text box, just to the right of ‘View Options’. Type `'v8.wasm'` to filter out non-WebAssembly events. You should see one or more of the following events:
 
-`v8.wasm.streamFromResponseCallback` - The resource fetch passed to instantiateStreaming received a response.
-
-`v8.wasm.compiledModule` - TurboFan finished compiling the `.wasm` resource.
-
-`v8.wasm.cachedModule` - Chrome wrote the compiled module to the code cache.
-
-`v8.wasm.moduleCacheHit` - Chrome found the code in its cache while loading the `.wasm` resource.
-
-`v8.wasm.moduleCacheInvalid` - V8 wasn’t able to deserialize the cached code because it was out of date.
+* `v8.wasm.streamFromResponseCallback` - The resource fetch passed to instantiateStreaming received a response.
+* `v8.wasm.compiledModule` - TurboFan finished compiling the `.wasm` resource.
+* `v8.wasm.cachedModule` - Chrome wrote the compiled module to the code cache.
+* `v8.wasm.moduleCacheHit` - Chrome found the code in its cache while loading the `.wasm` resource.
+* `v8.wasm.moduleCacheInvalid` - V8 wasn’t able to deserialize the cached code because it was out of date.
 
 On a cold run, we expect to see `v8.wasm.streamFromResponseCallback` and `v8.wasm.compiledModule` events. This indicates that the WebAssembly module was received, and compilation succeeded. If neither event is observed, check that your WebAssembly streaming API calls are working correctly.
 
-After a cold run, if the size threshold was exceeded, we also expect to see a `v8.wasm.cachedModule` event, meaning that the compiled code was sent to the cache. It is possible that we see this event but that the write doesn’t succeed for some reason. There is currently no way to observe that event, but metadata on the events can show the size of the code. Very large code may not fit in the cache.
+After a cold run, if the size threshold was exceeded, we also expect to see a `v8.wasm.cachedModule` event, meaning that the compiled code was sent to the cache. It is possible that we get this event but that the write doesn’t succeed for some reason. There is currently no way to observe this, but metadata on the events can show the size of the code. Very large modules may not fit in the cache.
 
 When caching is working correctly, a hot run will produce two events, `v8.wasm.streamFromResponseCallback` and `v8.wasm.moduleCacheHit`. The metadata on these events allow you to see the size of the compiled code.
 
 For more on using `chrome://tracing, `see this [excellent blog post](/blog/code-caching-for-devs)`.`
-
 
 ## Conclusion
 
