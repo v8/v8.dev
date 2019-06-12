@@ -36,7 +36,7 @@ console.log(primesCopy); // [2, 3, 5, 7, 11]
 
 ## ES2018: object rest and spread properties 🆕 { #object-rest-spread }
 
-So what’s new, then? Well, [a stage 3 proposal](https://github.com/tc39/proposal-object-rest-spread) enables rest and spread properties for object literals, too.
+So what’s new, then? Well, [a proposal](https://github.com/tc39/proposal-object-rest-spread) enables rest and spread properties for object literals, too.
 
 ```js
 // Rest properties for object destructuring assignment:
