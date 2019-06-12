@@ -7,6 +7,7 @@ date: 2019-06-12
 tags:
   - ECMAScript
   - io19
+tweet: '1138819493956710400'
 ---
 Since the introduction of promises in ES2015, JavaScript has supported exactly two promise combinators: the static methods `Promise.all` and `Promise.race`.
 
