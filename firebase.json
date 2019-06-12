@@ -50,7 +50,7 @@
         }]
       },
       {
-        "source": "/blog.atom",
+        "source": "/*.atom",
         "headers": [{
           "key": "Content-Type",
           "value": "application/atom+xml;charset=utf-8"
