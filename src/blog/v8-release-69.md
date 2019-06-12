@@ -41,7 +41,7 @@ V8 v6.9 reduces Mark-Compact garbage collection pause times by improving `WeakMa
 
 ## JavaScript language features
 
-V8 v6.9 supports `Array.prototype.flat` and `Array.prototype.flatMap`.
+V8 v6.9 supports [`Array.prototype.flat` and `Array.prototype.flatMap`](/features/array-flat-flatmap).
 
 `Array.prototype.flat` flattens a given array recursively up to the specified `depth`, which defaults to `1`:
 
@@ -63,7 +63,7 @@ array.flat(Infinity);
 // → [2, 4, 3, 6, 4, 8]
 ```
 
-For more details, see [our #SmooshGate write-up](https://developers.google.com/web/updates/2018/03/smooshgate).
+For more details, see [our `Array.prototype.{flat,flatMap}` explainer](/features/array-flat-flatmap).
 
 ## V8 API
 
