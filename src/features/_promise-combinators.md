@@ -85,11 +85,11 @@ We kick off a computationally expensive task that might take a long time, but we
 
 ## `Promise.allSettled`
 
-<feature-support chrome="76 /blog/v8-release-76#TODO"
+<feature-support chrome="76"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
                  safari="no"
                  nodejs="no"
-                 babel="no"></feature-support>
+                 babel="yes"></feature-support>
 
 `Promise.allSettled` gives you a signal when all the input promises are _settled_, which means they’re either _fulfilled_ or _rejected_. This is useful in cases where you don’t care about the state of the promise, you just want to know when the work is done, regardless of whether it was successful.
 
