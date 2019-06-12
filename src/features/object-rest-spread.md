@@ -34,7 +34,7 @@ console.log(primesCopy); // [2, 3, 5, 7, 11]
                  nodejs="6"
                  babel="yes"></feature-support>
 
-## ES.next: object rest and spread properties 🆕 { #object-rest-spread }
+## ES2018: object rest and spread properties 🆕 { #object-rest-spread }
 
 So what’s new, then? Well, [a stage 3 proposal](https://github.com/tc39/proposal-object-rest-spread) enables rest and spread properties for object literals, too.
 
