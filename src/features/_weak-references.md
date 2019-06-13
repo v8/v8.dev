@@ -82,7 +82,9 @@ function getImageCached(name) {
 
 But there’s still a problem here: the `Map` still holds on to the `name` strings forever, because those are the keys in the cache. Ideally, those strings would be removed too. The `WeakRef` proposal has a solution for this as well! With the new `FinalizationGroup` API, we can register a callback to run when the garbage collector zaps a registered object. Such callbacks are known as _finalizers_.
 
+:::note
 **Note:** The finalization callback does not run immediately after garbage-collecting the image object. It just runs at some point in the future. Keep this in mind when writing code!
+:::
 
 Here, we register a callback to remove keys from the cache when the image objects are garbage-collected:
 
@@ -99,7 +101,9 @@ const finalizationGroup = new FinalizationGroup((iterator) => {
 });
 ```
 
+:::note
 **Note:** The `ref !== undefined` is required because we could’ve added a new `WeakRef` with the same `name` between the old `WeakRef` enqueueing the finalization callback and actually running the finalization callback.
+:::
 
 Our final implementation looks like this:
 

@@ -39,7 +39,9 @@ const max = Number.MAX_SAFE_INTEGER;
 // → 9_007_199_254_740_991
 ```
 
-Note: For readability, I’m grouping the digits in this large number per thousand, using underscores as separators. [The numeric literal separators proposal](/features/numeric-separators) enables exactly that for common JavaScript numeric literals.
+:::note
+**Note:** For readability, I’m grouping the digits in this large number per thousand, using underscores as separators. [The numeric literal separators proposal](/features/numeric-separators) enables exactly that for common JavaScript numeric literals.
+:::
 
 Incrementing it once gives the expected result:
 
@@ -148,7 +150,7 @@ The only exception to this rule are comparison operators such as `===` (as discu
 // → true
 ```
 
-Note: Because `BigInt`s and `Number`s generally don’t mix, please avoid overloading or magically “upgrading” your existing code to use `BigInt`s instead of `Number`s. Decide which of these two domains to operate in, and then stick to it. For _new_ APIs that operate on potentially large integers, `BigInt` is the best choice. `Number`s still make sense for integer values that are known to be in the safe integer range.
+Because `BigInt`s and `Number`s generally don’t mix, please avoid overloading or magically “upgrading” your existing code to use `BigInt`s instead of `Number`s. Decide which of these two domains to operate in, and then stick to it. For _new_ APIs that operate on potentially large integers, `BigInt` is the best choice. `Number`s still make sense for integer values that are known to be in the safe integer range.
 
 Another thing to note is that [the `>>>` operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Unsigned_right_shift), which performs an unsigned right shift, does not make sense for `BigInt`s since they’re always signed. For this reason, `>>>` does not work for `BigInt`s.
 

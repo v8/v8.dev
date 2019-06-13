@@ -150,7 +150,9 @@ The jsdom-proxy-benchmark project compiles the [ECMAScript specification](https:
   <img src="/_img/optimizing-proxies/7.png" intrinsicsize="1028x634" alt="">
 </figure>
 
-Note: These results were provided by [Timothy Gu](https://github.com/TimothyGu). Thanks!
+:::note
+**Note:** These results were provided by [Timothy Gu](https://github.com/TimothyGu). Thanks!
+:::
 
 ### Results from [Chai.js](https://chaijs.com/)
 

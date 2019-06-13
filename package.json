@@ -47,6 +47,7 @@
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-attrs": "^2.3.4",
+    "markdown-it-container": "^2.0.0",
     "markdown-it-footnote": "^3.0.1",
     "markdownlint-cli": "^0.16.0",
     "minify-xml": "^1.0.3",

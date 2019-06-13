@@ -13,7 +13,9 @@ tweet: '1080867305532416000'
 ---
 Over the past years the V8 garbage collector (GC) has changed a lot. The Orinoco project has taken a sequential, stop-the-world garbage collector and transformed it into a mostly parallel and concurrent collector with incremental fallback.
 
+:::note
 **Note:** If you prefer watching a presentation over reading articles, then enjoy the video below! If not, skip the video and read on.
+:::
 
 <figure>
   <div class="video video-16:9">

@@ -70,6 +70,7 @@ lf.format(['永鋒', '新宇', '芳遠', '澤遠']);
 
 The `options` parameter enables more advanced usage. Here’s an overview of the various options and their combinations, and how they correspond to the list patterns defined by [UTS#35](https://unicode.org/reports/tr35/tr35-general.html#ListPatterns):
 
+::: table-wrapper
 | Type                  | Options                                   | Description                                                                                     | Examples                         |
 | --------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------- |
 | standard (or no type) | `{}` (default)                            | A typical “and” list for arbitrary placeholders                                                 | `'January, February, and March'` |
@@ -77,6 +78,7 @@ The `options` parameter enables more advanced usage. Here’s an overview of the
 | unit                  | `{ type: 'unit' }`                        | A list suitable for wide units                                                                  | `'3 feet, 7 inches'`             |
 | unit-short            | `{ type: 'unit', style: 'short' }`        | A list suitable for short units                                                                 | `'3 ft, 7 in'`                   |
 | unit-narrow           | `{ type: 'unit', style: 'narrow' }`       | A list suitable for narrow units, where space on the screen is very limited                     | `'3′ 7″'`                        |
+:::
 
 Note that in many languages (such as English) there may not be a difference among many of these lists. In others, the spacing, the length or presence of a conjunction, and the separators may change.
 

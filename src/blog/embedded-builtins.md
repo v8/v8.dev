@@ -181,4 +181,6 @@ Significant additional memory savings are expected once bytecode handlers are al
 
 Embedded builtins are rolling out on x64 in Chrome 69, and mobile platforms will follow in Chrome 70. Support for ia32 is expected to be released in late 2018.
 
-*Note:* All diagrams were generated using Vyacheslav Egorov’s awesome [Shaky Diagramming](https://mrale.ph/blog/2012/11/25/shaky-diagramming.html) tool.
+:::note
+**Note:** All diagrams were generated using Vyacheslav Egorov’s awesome [Shaky Diagramming](https://mrale.ph/blog/2012/11/25/shaky-diagramming.html) tool.
+:::

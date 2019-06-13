@@ -81,7 +81,9 @@ formatWelshCats(42);  // '42 cath'
 
 To implement correct pluralization while supporting multiple languages, a database of languages and their pluralization rules is needed. [The Unicode CLDR](http://cldr.unicode.org/) includes this data, but to use it in JavaScript, it has to be embedded and shipped alongside your other JavaScript code, increasing load times, parse times, and memory usage. The `Intl.PluralRules` API shifts that burden to the JavaScript engine, enabling more performant internationalized pluralizations.
 
-Note: While CLDR data includes the form mappings per language, it doesn’t come with a list of singular/plural forms for individual words. You still have to translate and provide those yourself, just like before.
+:::note
+**Note:** While CLDR data includes the form mappings per language, it doesn’t come with a list of singular/plural forms for individual words. You still have to translate and provide those yourself, just like before.
+:::
 
 ## Ordinal numbers
 

@@ -16,6 +16,7 @@ const he = require('he');
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAttrs = require('markdown-it-attrs');
+const markdownItContainer = require('markdown-it-container');
 const markdownItFootnote = require('markdown-it-footnote');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
 const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
@@ -37,6 +38,8 @@ const markdownItAnchorConfig = {
 const md = markdownIt(markdownItConfig)
   .use(markdownItFootnote)
   .use(markdownItAttrs)
+  .use(markdownItContainer, 'note')
+  .use(markdownItContainer, 'table-wrapper')
   .use(markdownItAnchor, markdownItAnchorConfig);
 
 module.exports = (eleventyConfig) => {

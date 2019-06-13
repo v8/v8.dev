@@ -199,12 +199,14 @@ For the first experiment, we saw that the `router` and `express` tests perform a
 
 Now that V8 does not keep the linked-list of JavaScript functions in the context, we can remove the field `next` from the `JSFunction` class. Although this is a simple modification, it allows us to save the size of a pointer per function, which represent significant savings in several web pages:
 
+:::table-wrapper
 | Benchmark    | Kind                              | Memory savings (absolute) | Memory savings (relative) |
 | ------------ | --------------------------------- | ------------------------- | ------------------------- |
 | facebook.com | Average effective size            | 170 KB                    | 3.70%                     |
 | twitter.com  | Average size of allocated objects | 284 KB                    | 1.20%                     |
 | cnn.com      | Average size of allocated objects | 788 KB                    | 1.53%                     |
 | youtube.com  | Average size of allocated objects | 129 KB                    | 0.79%                     |
+:::
 
 ## Acknowledgments
 

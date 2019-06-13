@@ -175,7 +175,7 @@ pre {
   white-space: pre;
   overflow: auto;
 }
-pre, article footer {
+pre, article footer, .note {
   width: calc(100% + var(--offset) * 2);
   margin-left: calc(-1 * var(--offset));
   padding: 1em 1em 1em var(--offset);
@@ -291,6 +291,9 @@ iframe + h2, iframe + h3 {
   left: 0;
   height: 100%;
 }
+.table-wrapper {
+  overflow-x: auto;
+}
 table {
   border-collapse: collapse;
   width: 100%;
@@ -306,6 +309,10 @@ th, td {
 }
 tbody tr:nth-child(odd) {
   background-color: #EEE;
+}
+.note {
+  background: var(--lightyellow);
+  margin-bottom: 1em;
 }
 main nav {
   text-align: center;

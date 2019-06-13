@@ -80,7 +80,9 @@ This is just the beginning; there’s a lot more to follow in upcoming releases!
 
 [`String.prototype.padStart`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart) and [`String.prototype.padEnd`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd) are the latest stage 4 additions to ECMAScript. These library functions are officially shipped in v5.6.
 
-_Note: Unshipped again._
+:::note
+**Note:** Unshipped again.
+:::
 
 ## WebAssembly browser preview
 

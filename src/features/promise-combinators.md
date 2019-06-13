@@ -15,12 +15,14 @@ Two new proposals are currently making their way through the standardization pro
 
 Here’s an overview of the four combinators:
 
+:::table-wrapper
 | name                 | description                                     | status                                                                      |
 | -------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
 | `Promise.allSettled` | does not short-circuit                          | [proposal](https://github.com/tc39/proposal-promise-allSettled)             |
 | `Promise.all`        | short-circuits when an input value is rejected  | added in ES2015 ✅                                                          |
 | `Promise.race`       | short-circuits when an input value is settled   | added in ES2015 ✅                                                          |
 | `Promise.any`        | short-circuits when an input value is fulfilled | [proposal](https://github.com/tc39/proposal-promise-any)                    |
+:::
 
 Let’s take a look at an example use case for each combinator.
 

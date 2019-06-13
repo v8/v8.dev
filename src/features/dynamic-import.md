@@ -41,7 +41,9 @@ Here’s how to statically import and use the `./utils.mjs` module:
 </script>
 ```
 
-Note: The previous example uses the `.mjs` extension to signal that it's a module rather than a regular script. On the web, file extensions don't really matter, as long as the files are served with the correct MIME type (e.g. `text/javascript` for JavaScript files) in the `Content-Type` HTTP header. The `.mjs` extension is [especially useful](https://github.com/nodejs/node-eps/blob/master/002-es-modules.md#32-determining-if-source-is-an-es-module) on other platforms such as Node.js, where there’s no concept of MIME types or other hooks such as `type="module"` to determine whether something is a module or a regular script. We’re using the same extension here for consistency across platforms and to clearly make the distinction between modules and regular scripts.
+:::note
+**Note:** The previous example uses the `.mjs` extension to signal that it’s a module rather than a regular script. On the web, file extensions don’t really matter, as long as the files are served with the correct MIME type (e.g. `text/javascript` for JavaScript files) in the `Content-Type` HTTP header. The `.mjs` extension is [especially useful](https://github.com/nodejs/node-eps/blob/master/002-es-modules.md#32-determining-if-source-is-an-es-module) on other platforms such as Node.js, where there’s no concept of MIME types or other hooks such as `type="module"` to determine whether something is a module or a regular script. We’re using the same extension here for consistency across platforms and to clearly make the distinction between modules and regular scripts.
+:::
 
 This syntactic form for importing modules is a *static* declaration: it only accepts a string literal as the module specifier, and introduces bindings into the local scope via a pre-runtime “linking” process. The static `import` syntax can only be used at the top-level of the file.
 
@@ -89,7 +91,9 @@ Since `import()` returns a promise, it’s possible to use `async`/`await` inste
 </script>
 ```
 
-Note: Although `import()` _looks_ like a function call, it is specified as *syntax* that just happens to use parentheses (similar to [`super()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super)). That means that `import` doesn’t inherit from `Function.prototype` so you cannot `call` or `apply` it, and things like `const importAlias = import` don’t work — heck, `import` is not even an object! This doesn’t really matter in practice, though.
+:::note
+**Note:** Although `import()` _looks_ like a function call, it is specified as *syntax* that just happens to use parentheses (similar to [`super()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super)). That means that `import` doesn’t inherit from `Function.prototype` so you cannot `call` or `apply` it, and things like `const importAlias = import` don’t work — heck, `import` is not even an object! This doesn’t really matter in practice, though.
+:::
 
 Here’s an example of how dynamic `import()` enables lazy-loading modules upon navigation in a small single-page application:
 
@@ -123,7 +127,9 @@ Here’s an example of how dynamic `import()` enables lazy-loading modules upon 
 
 The lazy-loading capabilities enabled by dynamic `import()` can be quite powerful when applied correctly. For demonstration purposes, [Addy](https://twitter.com/addyosmani) modified [an example Hacker News PWA](https://hnpwa-vanilla.firebaseapp.com/) that statically imported all its dependencies, including comments, on first load. [The updated version](https://dynamic-import.firebaseapp.com/) uses dynamic `import()` to lazily load the comments, avoiding the load, parse, and compile cost until the user really needs them.
 
-Note: if your app imports scripts from another domain (either statically or dynamically), the scripts need to be returned with valid CORS headers (such as `Access-Control-Allow-Origin: *`). This is because unlike regular scripts, module scripts (and their imports) are fetched with CORS.
+:::note
+**Note:** If your app imports scripts from another domain (either statically or dynamically), the scripts need to be returned with valid CORS headers (such as `Access-Control-Allow-Origin: *`). This is because unlike regular scripts, module scripts (and their imports) are fetched with CORS.
+:::
 
 ## Recommendations
 

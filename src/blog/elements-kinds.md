@@ -9,7 +9,9 @@ tags:
   - presentations
 tweet: '907608362191376384'
 ---
-Note: if you prefer watching a presentation over reading articles, then enjoy the video below!
+:::note
+**Note:** If you prefer watching a presentation over reading articles, then enjoy the video below!
+:::
 
 <figure>
   <div class="video video-16:9">

@@ -107,7 +107,7 @@ As you now know, modules are different from classic scripts. On top of the platf
 
 For example, modules are evaluated only once, while classic scripts are evaluated however many times you add them to the DOM.
 
-```js
+```html
 <script src="classic.js"></script>
 <script src="classic.js"></script>
 <!-- classic.js executes multiple times. -->
@@ -131,7 +131,9 @@ Still, we recommend using the `.mjs` extension for modules, for two reasons:
 1. During development, it makes it crystal clear that the file is a module as opposed to a regular script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than regular scripts, so the difference is hugely important!
 2. It’s consistent with Node.js, where [the experimental modules implementation](https://nodejs.org/api/esm.html) only supports files with the `.mjs` extension.
 
-Note: To deploy `.mjs` on the web, your web server needs to be configured to serve files with this extension using the appropriate `Content-Type: text/javascript` header, as mentioned above. Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
+:::note
+**Note:** To deploy `.mjs` on the web, your web server needs to be configured to serve files with this extension using the appropriate `Content-Type: text/javascript` header, as mentioned above. Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
+:::
 
 ### Module specifiers { #specifiers }
 
@@ -194,7 +196,9 @@ So far we’ve only used static `import`. With static `import`, your entire modu
 
 Unlike static `import`, dynamic `import()` can be used from within regular scripts. It’s an easy way to incrementally start using modules in your existing code base. For more details, see [our article on dynamic `import()`](/features/dynamic-import).
 
-Note: [webpack has its own version of `import()`](https://developers.google.com/web/fundamentals/performance/webpack/use-long-term-caching) that cleverly splits the imported module into its own chunk, separate from the main bundle.
+:::note
+**Note:** [webpack has its own version of `import()`](https://developers.google.com/web/fundamentals/performance/webpack/use-long-term-caching) that cleverly splits the imported module into its own chunk, separate from the main bundle.
+:::
 
 ### `import.meta` { #import-meta }
 
@@ -277,7 +281,9 @@ We can then import `pluck` without the overhead of dealing with `drop` and `zip`
 import { pluck } from './pluck.mjs';
 ```
 
-Note: You could use a `default` export instead of a named export here, depending on your personal preference.
+:::note
+**Note:** You could use a `default` export instead of a named export here, depending on your personal preference.
+:::
 
 Not only does this keep your source code nice and simple, it also reduces the need for dead-code elimination as performed by bundlers. If one of the modules in your source tree is unused, then it never gets imported, and so the browser never downloads it. The modules that _do_ get used can be individually [code-cached](/blog/code-caching-for-devs) by the browser. (The infrastructure to make this happen already landed in V8, and [work is underway](https://bugs.chromium.org/p/chromium/issues/detail?id=841466) to enable it in Chrome as well.)
 

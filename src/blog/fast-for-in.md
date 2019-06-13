@@ -272,6 +272,7 @@ Perhaps counterintuitively this should just print out `a` instead of `a` and `b`
 
 To make things more complicated, ES6 introduced the [proxy](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object. This broke a lot of assumptions of the V8 code. To implement for-in in a spec-compliant manner, we have to trigger the following 5 out of a total of 13 different proxy traps.
 
+:::table-wrapper
 | Internal method       | Handler method             |
 | --------------------- | -------------------------- |
 | `[[GetPrototypeOf]]`  | `getPrototypeOf`           |
@@ -279,6 +280,7 @@ To make things more complicated, ES6 introduced the [proxy](https://developer.mo
 | `[[HasProperty]]`     | `has`                      |
 | `[[Get]]`             | `get`                      |
 | `[[OwnPropertyKeys]]` | `ownKeys`                  |
+:::
 
 This required a duplicate version of the original GetEnumKeys code which tried to follow the spec example implementation more closely. ES6 Proxies and lack of handling shadowing properties were the core motivation for us to refactor how we extract all the keys for for-in in early 2016.
 
@@ -360,6 +362,7 @@ Besides the initial improvements available in Chrome 51, a second performance tw
 
 To underline the importance of improving `for`-`in` we can rely on the data from a tool we built back in 2016 that allows us to extract V8 measurements over a set of websites. The following table shows the relative time spent in V8 C++ entry points (runtime functions and builtins) for Chrome 49 over a set of roughly [25 representative real-world websites](/blog/real-world-performance).
 
+:::table-wrapper
 | Position | Name                                  | Total time |
 | :------: | ------------------------------------- | ---------- |
 | 1        | `CreateObjectLiteral`                 | 1.10%      |
@@ -379,5 +382,6 @@ To underline the importance of improving `for`-`in` we can rely on the data from
 | 15       | `HasProperty`                         | 0.20%      |
 | 16       | `StringSplit`                         | 0.20%      |
 | 17       | `ForInFilter`                         | 0.10%      |
+:::
 
 The most important `for`-`in` helpers are at position 5 and 17, accounting for an average of 0.7% percent of the total time spent in scripting on a website. In Chrome 57 `ForInEnumerate` has dropped to 0.2% of the total time and `ForInFilter` is below the measuring threshold due to a fast path written in assembler.

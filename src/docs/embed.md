@@ -96,7 +96,7 @@ There are several types of handles:
 
     Local handles have the class `Local<SomeType>`.
 
-    Note: The handle stack is not part of the C++ call stack, but the handle scopes are embedded in the C++ stack. Handle scopes can only be stack-allocated, not allocated with `new`.
+    **Note:** The handle stack is not part of the C++ call stack, but the handle scopes are embedded in the C++ stack. Handle scopes can only be stack-allocated, not allocated with `new`.
 
 - Persistent handles provide a reference to a heap-allocated JavaScript Object, just like a local handle. There are two flavors, which differ in the lifetime management of the reference they handle. Use a persistent handle when you need to keep a reference to an object for more than one function call, or when handle lifetimes do not correspond to C++ scopes. Google Chrome, for example, uses persistent handles to refer to Document Object Model (DOM) nodes. A persistent handle can be made weak, using `PersistentBase::SetWeak`, to trigger a callback from the garbage collector when the only references to an object are from weak persistent handles.
 
@@ -118,7 +118,9 @@ Returning to [our very simple hello world example](#hello-world), in the followi
 
 When the destructor `HandleScope::~HandleScope` is called, the handle scope is deleted. Objects referred to by handles within the deleted handle scope are eligible for removal in the next garbage collection if there are no other references to them. The garbage collector can also remove the `source_obj`, and `script_obj` objects from the heap as they are no longer referenced by any handles or otherwise reachable from JavaScript. Since the context handle is a persistent handle, it is not removed when the handle scope is exited.  The only way to remove the context handle is to explicitly call `Reset` on it.
 
-Note: Throughout this document the term “handle” refers to a local handle. When discussing a persistent handle, that term is used in full.
+:::note
+**Note:** Throughout this document the term “handle” refers to a local handle. When discussing a persistent handle, that term is used in full.
+:::
 
 It is important to be aware of one common pitfall with this model: *you cannot return a local handle directly from a function that declares a handle scope*. If you do the local handle you’re trying to return will end up being deleted by the handle scope’s destructor immediately before the function returns. The proper way to return a local handle is construct an `EscapableHandleScope` instead of a `HandleScope` and to call the `Escape` method on the handle scope, passing in the handle whose value you want to return. Here’s an example of how that works in practice:
 

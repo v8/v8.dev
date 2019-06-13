@@ -94,7 +94,9 @@ We implemented this simple idea using [CSA](/blog/csa) for _fast_ arrays, i.e. a
   <figcaption>Performance improvement of spreading a fast array</figcaption>
 </figure>
 
+:::note
 **Note:** While not shown here, the fast path also applies when the spread elements are followed by other components (e.g. `[...arr, 1, 2, 3]`), but not when they are preceded by others (e.g. `[1, 2, 3, ...arr]`).
+:::
 
 ## Tread carefully down that fast path
 

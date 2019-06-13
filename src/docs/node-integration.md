@@ -49,7 +49,9 @@ git checkout -b make-changes
 
 Make your changes to the Node.js checkout, and commit them. Then push the changes to GitHub and create a pull request against the branch `node-ci-<sync-date>`.
 
-Note: `<sync-date>` is the date we sync'ed with upstream Node.js. Choose the latest date.
+:::note
+**Note:** `<sync-date>` is the date we sync’ed with upstream Node.js. Choose the latest date.
+:::
 
 ```bash
 git push <your-user-name> make-changes
