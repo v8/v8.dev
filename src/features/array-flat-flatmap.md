@@ -69,6 +69,8 @@ Since this pattern is so common in functional programming, there’s now a dedic
 
 `flatMap` is a little bit more efficient compared to doing a `map` followed by a `flat` separately.
 
+Interested in use cases for `flatMap`? Check out [Axel Rauschmayer’s explanation](https://exploringjs.com/impatient-js/ch_arrays.html#flatmap-mapping-to-zero-or-more-values).
+
 ## `Array#{flat,flatMap}` support { #support }
 
 <feature-support chrome="69 /blog/v8-release-69#javascript-language-features"
