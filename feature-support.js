@@ -41,7 +41,7 @@ function expandFeatureSupport(input) {
         </li>
       `);
     }
-    buf.push('</ul>');
+    buf.push('</ul><div class="feature-support-info"><a href="/features/support">about this feature support listing</a></div>');
     return buf.join('\n').replace(/\s+/g, ' ');
   });
 }

@@ -167,4 +167,12 @@ For more information about the remaining options and their behavior, see [the AP
 
 ## Conclusion
 
-`Intl.RelativeTimeFormat` is available by default in V8 v7.1.179 and Chrome 71. As this API becomes more widely available, you’ll find libraries such as [Moment.js](https://momentjs.com/), [Globalize](https://github.com/globalizejs/globalize), and [date-fns](https://date-fns.org/docs/) dropping their dependency on hardcoded CLDR databases in favor of the native relative time formatting functionality, thereby improving load-time performance, parse- and compile-time performance, run-time performance, and memory usage.
+`Intl.RelativeTimeFormat` is available by default in V8 v7.1 and Chrome 71. As this API becomes more widely available, you’ll find libraries such as [Moment.js](https://momentjs.com/), [Globalize](https://github.com/globalizejs/globalize), and [date-fns](https://date-fns.org/docs/) dropping their dependency on hardcoded CLDR databases in favor of the native relative time formatting functionality, thereby improving load-time performance, parse- and compile-time performance, run-time performance, and memory usage.
+
+## `Intl.RelativeTimeFormat` support { #support }
+
+<feature-support chrome="71 /blog/v8-release-71#javascript-language-features"
+                 firefox="65"
+                 safari="no"
+                 nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
+                 babel="no"></feature-support>

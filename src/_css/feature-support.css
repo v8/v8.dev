@@ -4,6 +4,7 @@
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   background: #FFF;
   padding-left: 0;
+  margin-bottom: 0.5em;
 }
 :target .feature-support {
   background: #FFECA9;
@@ -82,4 +83,9 @@
 }
 .icon.babel {
   background-image: url(img/babel.svg);
+}
+
+.feature-support-info {
+  text-align: right;
+  font-size: 80%;
 }
