@@ -12,7 +12,7 @@ tweet: '1138457106380709891'
 ---
 ## `Array.prototype.flat` { #flat }
 
-The array in this example is two levels deep: it contains an array which in turn contains another array.
+The array in this example is several levels deep: it contains an array which in turn contains another array.
 
 ```js
 const array = [1, [2, [3]]];
