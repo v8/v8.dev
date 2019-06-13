@@ -70,7 +70,7 @@ lf.format(['永鋒', '新宇', '芳遠', '澤遠']);
 
 The `options` parameter enables more advanced usage. Here’s an overview of the various options and their combinations, and how they correspond to the list patterns defined by [UTS#35](https://unicode.org/reports/tr35/tr35-general.html#ListPatterns):
 
-::: table-wrapper
+:::table-wrapper
 | Type                  | Options                                   | Description                                                                                     | Examples                         |
 | --------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------- |
 | standard (or no type) | `{}` (default)                            | A typical “and” list for arbitrary placeholders                                                 | `'January, February, and March'` |
