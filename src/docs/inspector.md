@@ -7,7 +7,7 @@ This page is intended to give embedders the basic tools they need to implement d
 
 ## Connecting to the Inspector
 
-V8’s [command-line debug shell `d8`](/docs/d8) includes a simple inspector integration through the [`InspectorFrontend`](https://cs.chromium.org/chromium/src/v8/src/d8.cc?type=cs&q=InspectorFrontend+package:%5Echromium$&l=1849) and [`InspectorClient`](https://cs.chromium.org/chromium/src/v8/src/d8.cc?type=cs&q=InspectorClient+package:%5Echromium$&l=1916). The client sets up a communication channel for messages sent from the embedder to V8:
+V8’s [command-line debug shell `d8`](/docs/d8) includes a simple inspector integration through the [`InspectorFrontend`](https://cs.chromium.org/chromium/src/v8/src/d8/d8.cc?l=2286&rcl=608c4a9c391f3b7cac68068d61f2a8996f216973) and [`InspectorClient`](https://cs.chromium.org/chromium/src/v8/src/d8/d8.cc?l=2355&rcl=608c4a9c391f3b7cac68068d61f2a8996f216973). The client sets up a communication channel for messages sent from the embedder to V8:
 
 ```cpp
 static void SendInspectorMessage(
