@@ -365,6 +365,13 @@ img {
     background-size: 5em;
     padding-right: 7em;
   }
+  ol {
+    padding-inline-start: calc(2 * var(--offset));
+  }
+  li pre {
+    width: calc(100% + 4 * var(--offset));
+    left: calc(-2 * var(--offset));
+  }
 }
 
 @media (max-width: 670px) {
