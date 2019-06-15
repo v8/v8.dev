@@ -178,7 +178,7 @@ Choosing a suitable pivot element has a big impact when it comes to Quicksort. V
 - The pivot was chosen as the median of the first, last, and a third element of the sub-array that gets sorted. For smaller arrays that third element is simply the middle element.
 - For larger arrays a sample was taken, then sorted and the median of the sorted sample served as the third element in the above calculation.
 
-One of the advantages of Quicksort is that it sorts in-place. The memory overhead comes from allocating a small array for the sample when sorting large arrays, and log(n) stack space. The downside is that it’s not a stable algorithm and there’s a chance the algorithm hits the worst-case scenario where QuickSort degrades to O(n^2).
+One of the advantages of Quicksort is that it sorts in-place. The memory overhead comes from allocating a small array for the sample when sorting large arrays, and log(n) stack space. The downside is that it’s not a stable algorithm and there’s a chance the algorithm hits the worst-case scenario where QuickSort degrades to 𝒪(n^2).
 
 ### Introducing V8 Torque
 
@@ -216,7 +216,7 @@ The image shows the case where `|A| > |B|` so `B` is merged with the smaller of 
 
 Note that Timsort only merges consecutive runs, this is needed to maintain stability, otherwise equal elements would be transferred between runs. Also the first invariant makes sure that run lengths grow at least as fast as the Fibonacci numbers, giving an upper bound on the size of the run stack when we know the maximum array length.
 
-One can now see that already-sorted sequences are sorted in O(n) as such an array would result in a single run that does not need to get merged. The worst case is O(n log n). These algorithmic properties together with the stable nature of Timsort were a few of the reasons why we chose Timsort over Quicksort in the end.
+One can now see that already-sorted sequences are sorted in 𝒪(n) as such an array would result in a single run that does not need to get merged. The worst case is 𝒪(n log n). These algorithmic properties together with the stable nature of Timsort were a few of the reasons why we chose Timsort over Quicksort in the end.
 
 ### Implementing Timsort in Torque
 

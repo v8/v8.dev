@@ -322,7 +322,7 @@ The Chrome team is working on improving the development-time experience with JS 
 
 We proposed a change to the module resolution algorithm that addressed a deficiency in speed and determinism. The new algorithm is now live in both [the HTML specification](https://github.com/whatwg/html/pull/2991) and [the ECMAScript specification](https://github.com/tc39/ecma262/pull/1006), and is implemented in [Chrome 63](http://crbug.com/763597). Expect this improvement to land in more browsers soon!
 
-The new algorithm is much more efficient and faster. The computational complexity of the old algorithm was quadratic, i.e. O(n²), in the size of the dependency graph, and so was Chrome’s implementation at the time. The new algorithm is linear, i.e. O(n).
+The new algorithm is much more efficient and faster. The computational complexity of the old algorithm was quadratic, i.e. 𝒪(n²), in the size of the dependency graph, and so was Chrome’s implementation at the time. The new algorithm is linear, i.e. 𝒪(n).
 
 Moreover, the new algorithm reports resolution errors in a deterministic way. Given a graph containing multiple errors, different runs of the old algorithm could report different errors as being responsible for the resolution failure. This made debugging unnecessarily difficult. The new algorithm is guaranteed to report the same error every time.
 

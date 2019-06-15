@@ -13,7 +13,7 @@ In this post, we want to give some background and history on the vulnerability a
 
 ## Hash flooding attack
 
-Hash tables are one of the most important data structures in computer science. They are widely used in V8, for example to store an object’s properties. On average, inserting a new entry is very efficient at [O(1)](https://en.wikipedia.org/wiki/Big_O_notation). However, hash collisions could lead to a worst case of O(n). That means that inserting n entries can take up to O(n²).
+Hash tables are one of the most important data structures in computer science. They are widely used in V8, for example to store an object’s properties. On average, inserting a new entry is very efficient at [𝒪(1)](https://en.wikipedia.org/wiki/Big_O_notation). However, hash collisions could lead to a worst case of 𝒪(n). That means that inserting n entries can take up to 𝒪(n²).
 
 In Node.js, [HTTP headers](https://nodejs.org/api/http.html#http_response_getheaders) are represented as JavaScript objects. Pairs of header name and values are stored as object properties. With cleverly prepared HTTP requests, an attacker could perform a denial-of-service attack. A Node.js process would become unresponsive, being busy with worst-case hash table insertions.
 
