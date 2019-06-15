@@ -100,7 +100,7 @@ When two people are merging at the same time a race condition can happen in the 
 
 ### Is there a TL;DR?
 
-1. [Create an issue on the issue tracker](https://code.google.com/p/v8/issues/entry?template=Merge%20request).
+1. [Create an issue on the issue tracker](https://bugs.chromium.org/p/v8/issues/entry?template=Merge%20request).
 1. Check status of the fix with `tools/release/mergeinfo.py`
 1. Add `Merge-Request-{Branch}` to the issue.
 1. Wait until somebody adds `Merge-Approved-{Branch}`.

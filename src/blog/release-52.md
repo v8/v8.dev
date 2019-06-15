@@ -5,7 +5,7 @@ date: 2016-06-04 13:33:37
 tags:
   - release
 ---
-Roughly every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s git master immediately before Chrome branches for a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.2](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.2), which will be in beta until it is released in coordination with Chrome 52 Stable. V8 5.2 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release in several weeks.
+Roughly every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before Chrome branches for a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.2](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.2), which will be in beta until it is released in coordination with Chrome 52 Stable. V8 5.2 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release in several weeks.
 
 ## ES2015 & ES2016 support
 
@@ -32,4 +32,4 @@ V8 v5.2 contains further optimizations to improve the performance of JavaScript 
 
 Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
 
-Developers with an [active V8 checkout](https://code.google.com/p/v8-wiki/wiki/UsingGit) can use `git checkout -b 5.2 -t branch-heads/5.2` to experiment with the new features in V8 v5.2. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](https://v8.dev/docs/source-code#using-git) can use `git checkout -b 5.2 -t branch-heads/5.2` to experiment with the new features in V8 v5.2. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

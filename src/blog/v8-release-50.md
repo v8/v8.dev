@@ -59,4 +59,4 @@ The implementation of rest parameters is 8-10x faster than that of the previous 
 
 Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
 
-Developers with an [active V8 checkout](https://code.google.com/p/v8-wiki/wiki/UsingGit) can use `git checkout -b 5.0 -t branch-heads/5.0` to experiment with the new features in V8 5.0. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an [active V8 checkout](https://v8.dev/docs/source-code#using-git) can use `git checkout -b 5.0 -t branch-heads/5.0` to experiment with the new features in V8 5.0. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
