@@ -178,7 +178,7 @@ Choosing a suitable pivot element has a big impact when it comes to Quicksort. V
 - The pivot was chosen as the median of the first, last, and a third element of the sub-array that gets sorted. For smaller arrays that third element is simply the middle element.
 - For larger arrays a sample was taken, then sorted and the median of the sorted sample served as the third element in the above calculation.
 
-One of the advantages of Quicksort is that it sorts in-place. The memory overhead comes from allocating a small array for the sample when sorting large arrays, and log(n) stack space. The downside is that it’s not a stable algorithm and there’s a chance the algorithm hits the worst-case scenario where QuickSort degrades to 𝒪(n^2).
+One of the advantages of Quicksort is that it sorts in-place. The memory overhead comes from allocating a small array for the sample when sorting large arrays, and log(n) stack space. The downside is that it’s not a stable algorithm and there’s a chance the algorithm hits the worst-case scenario where QuickSort degrades to 𝒪(n²).
 
 ### Introducing V8 Torque
 
