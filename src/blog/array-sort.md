@@ -153,21 +153,40 @@ The output shows the `object` after it’s sorted. Again, there is no right answ
 ['a2', 'a3', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 'e3', undefined, undefined, undefined]
 ```
 
-### What V8 does before actually sorting { #before-sort }
+### What V8 does before and after sorting { #before-sort }
 
-V8 has two pre-processing steps before it actually sorts anything. First, if the object to sort has holes and elements on the prototype chain, they are copied from the prototype chain to the object itself. This frees us from caring about the prototype chain during all remaining steps. This is currently only done for non-`JSArray`s but other engines do it for `JSArray`s as well.
+:::note
+**Note:** This section was updated in June 2019 to reflect changes to `Array#sort` pre- and post-processing in V8 v7.7.
+:::
 
-<figure>
-  <img src="/_img/array-sort/copy-prototype.svg" intrinsicsize="641x182" alt="">
-  <figcaption>Copying from the prototype chain</figcaption>
-</figure>
+V8 has one pre-processing step before it actually sorts anything and also one post-processing step. The basic idea is to collect all non-`undefined` values into a temporary list, sort this temporary list and then write the sorted values back into the actual array or object. This frees V8 from caring about interacting with accessors or the prototype chain during the sorting itself.
 
-The second pre-processing step is the removal of holes. All elements in the sort-range are moved to the beginning of the object. `undefined`s are moved after that. This is even required by the spec to some degree as it requires us to *always* sort `undefined`s to the end. The result is that a user-provided comparison function will never get called with an `undefined` argument. After the second pre-processing step the sorting algorithm only needs to consider non-`undefined`s, potentially reducing the number of elements it actually has to sort.
+The spec expects `Array#sort` to produce a sort-order that can conceptually be partitioned into three segments:
 
-<figure>
-  <img src="/_img/array-sort/remove-array-holes.svg" intrinsicsize="815x297" alt="">
-  <figcaption>Removing holes and moving <code>undefined</code>s to the end</figcaption>
-</figure>
+  1. All non-`undefined` values sorted w.r.t. to the comparison function.
+  1. All `undefined`s.
+  1. All holes, i.e. non-existing properties.
+
+The actual sorting algorithm only needs to be applied to the first segment. To achieve this, V8 has a pre-processing step works roughly as follows:
+
+  1. Let `length` be the value of the `”length”` property of the array or object to sort.
+  1. Let `numberOfUndefineds` be 0.
+  1. For each `value` in the range of `[0, length)`:
+    a. If `value` is a hole: do nothing
+    b. If `value` is `undefined`: increment `numberOfUndefineds` by 1.
+    c. Otherwise add `value` to a temporary list `elements`.
+
+After these steps are executed, all non-`undefined` values are contained in the temporary list `elements`. `undefined`s are simply counted, instead of added to `elements`. As mentioned above, the spec requires that `undefined`s must be sorted to the end. Except, `undefined` values are not actually passed to the user-provided comparison function, so we can get away with only counting the number of `undefined`s that occurred.
+
+The next step is to actually sort `elements`. See [the section about TimSort](/blog/array-sort#timsort) for a detailed description.
+
+After sorting is done, the sorted values have to be written back to the original array or object. The post-processing step consists of three phases that handle the conceptual segments:
+
+  1. Write back all values from `elements` to the original object in the range of `[0, elements.length)`.
+  1. Set all values from `[elements.length, elements.length + numberOfUndefineds)` to `undefined`.
+  1. Delete all values in the range from `[elements.length + numberOfUndefineds, length)`.
+
+Step 3 is needed in case the original object contained holes in the sorting range. Values in the range of `[elements.length + numberOfUndefineds, length)` have already been moved to the front and not performing step 3 would result in duplicate values.
 
 ## History
 
