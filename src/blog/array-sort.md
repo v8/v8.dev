@@ -155,7 +155,9 @@ The output shows the `object` after it’s sorted. Again, there is no right answ
 
 ### What V8 does before and after sorting { #before-sort }
 
-_Update June 2019: This section was updated to reflect changes to `Array#sort` pre- and post-processing in V8 v7.7_
+:::note
+**Note:** This section was updated in June 2019 to reflect changes to `Array#sort` pre- and post-processing in V8 v7.7.
+:::
 
 V8 has one pre-processing step before it actually sorts anything and also one post-processing step. The basic idea is to collect all non-`undefined` values into a temporary list, sort this temporary list and then write the sorted values back into the actual array or object. This frees V8 from caring about interacting with accessors or the prototype chain during the sorting itself.
 
@@ -171,7 +173,7 @@ The actual sorting algorithm only needs to be applied to the first segment. To a
   1. Let `numberOfUndefineds` be 0.
   1. For each `value` in the range of `[0, length)`:
     a. If `value` is a hole: do nothing
-    b. If ‘value’ is `undefined`: increment `numberOfUndefineds` by 1.
+    b. If `value` is `undefined`: increment `numberOfUndefineds` by 1.
     c. Otherwise add `value` to a temporary list `elements`.
 
 After these steps are executed, all non-`undefined` values are contained in the temporary list `elements`. `undefined`s are simply counted, instead of added to `elements`. As mentioned above, the spec requires that `undefined`s must be sorted to the end. Except, `undefined` values are not actually passed to the user-provided comparison function, so we can get away with only counting the number of `undefined`s that occurred.
@@ -215,7 +217,7 @@ The initial `Array#sort` Torque version was more or less a straight up port of t
 
 This worked reasonably well, but as it still utilized Quicksort, `Array#sort` remained unstable. [The request for a stable `Array#sort`](https://bugs.chromium.org/p/v8/issues/detail?id=90) is among the oldest tickets in V8’s bug tracker. Experimenting with Timsort as a next step offered us multiple things. First, we like that it’s stable and offers some nice algorithmic guarantees (see next section). Second, Torque was still a work-in-progress and implementing a more complex builtin such as `Array#sort` with Timsort resulted in lots of actionable feedback influencing Torque as a language.
 
-## Timsort { #timsort }
+## Timsort
 
 Timsort, initially developed by Tim Peters for Python in 2002, could best be described as an adaptive stable Mergesort variant. Even though the details are rather complex and are best described by [the man himself](https://github.com/python/cpython/blob/master/Objects/listsort.txt) or the [Wikipedia page](https://en.wikipedia.org/wiki/Timsort), the basics are easy to understand. While Mergesort usually works in recursive fashion, Timsort works iteratively. It processes an array from left to right and looks for so-called _runs_. A run is simply a sequence that is already sorted. This includes sequences that are sorted “the wrong way” as these sequences can simply be reversed to form a run. At the start of the sorting process a minimum run length is determined that depends on the length of the input. If Timsort can’t find natural runs of this minimum run length a run is “boosted artificially” using Insertion Sort.
 
