@@ -33,11 +33,11 @@ Please note that you wouldn’t see profiles in Developer Tools, because all the
 
 ## Android
 
-Chrome on Android has a number of unique points that make it a bit more complex to profile. 
- - The command line must be written via adb before starting Chrome on the device. As a result, quotes in the command line sometimes get lost, and it is best to seperate arguments in --js-flags with a comma rather than trying to use whitespace and quotes.
- - The path for the logfile must be specified as an absolute path to somewhere that is writable on Android's filesystem.
- - The sandboxing used for renderer processes on Android means that even with --no-sandbox, the renderer process still can't write to files on the filesystem, therefore --single-process needs to be passed to run the renderer in the same process as the browser process. 
-  - The .so is embedded in Chrome's APK which means symbolization needs to convert from APK memory addresses to the unstripped .so file in the builds.
+Chrome on Android has a number of unique points that make it a bit more complex to profile.
+- The command line must be written via adb before starting Chrome on the device. As a result, quotes in the command line sometimes get lost, and it is best to seperate arguments in --js-flags with a comma rather than trying to use whitespace and quotes.
+- The path for the logfile must be specified as an absolute path to somewhere that is writable on Android's filesystem.
+- The sandboxing used for renderer processes on Android means that even with --no-sandbox, the renderer process still can't write to files on the filesystem, therefore --single-process needs to be passed to run the renderer in the same process as the browser process. 
+- The .so is embedded in Chrome's APK which means symbolization needs to convert from APK memory addresses to the unstripped .so file in the builds.
   
 The following commands enable profiling on Android:
 
