@@ -197,7 +197,7 @@ None of the above suggestions is guaranteed to speed up your web app. Unfortunat
   <figcaption>The <code>chrome://tracing</code> UI with a recording of a warm cache run</figcaption>
 </figure>
 
-Tracing records the behaviour of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with extensions disabled, and with no other browser tabs open:
+Tracing records the behavior of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with extensions disabled, and with no other browser tabs open:
 
 ```bash
 # Start a new Chrome browser session with a clean user profile and extensions disabled
