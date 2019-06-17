@@ -200,7 +200,7 @@ view[0];
 
 The `BigInt64Array` flavor ensures that its values remain within the signed 64-bit limit.
 
-```
+```js
 // Highest possible BigInt value that can be represented as a
 // signed 64-bit integer.
 const max = 2n ** (64n - 1n) - 1n;
