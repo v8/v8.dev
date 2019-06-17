@@ -26,7 +26,7 @@ In tandem, we developed a tool called Runtime Call Stats which allowed us to pro
 
 We now monitor changes against a test suite of approximately 25 websites in order to guide V8 optimization. In addition to the aforementioned websites and others from the Alexa Top 100, we selected sites which were implemented using common frameworks (React, Polymer, Angular, Ember, and more), sites from a variety of different geographic locales, and sites or libraries whose development teams have collaborated with us, such as Wikipedia, Reddit, Twitter, and Webpack. We believe these 25 sites are representative of the web at large and that performance improvements to these sites will be directly reflected in similar speedups for sites being written today by JavaScript developers.
 
-For an in-depth presentation about the development of our test suite of websites and Runtime Call Stats, see the [BlinkOn 6 presentation on real-world performance](https://www.youtube.com/watch?v=xCx4uC7mn6Y). You can even [run the Runtime Call Stats tool yourself](https://docs.google.com/presentation/d/1Lq2DD28CGa7bxawVH_2OcmyiTiBn74dvC6vn2essroY/edit).
+For an in-depth presentation about the development of our test suite of websites and Runtime Call Stats, see the [BlinkOn 6 presentation on real-world performance](https://www.youtube.com/watch?v=xCx4uC7mn6Y). You can even [run the Runtime Call Stats tool yourself](/docs/rcs).
 
 ## Making a real difference
 
