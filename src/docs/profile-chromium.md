@@ -31,6 +31,23 @@ Please note that you wouldn’t see profiles in Developer Tools, because all the
 - `--logfile=%t.log` specifies a name pattern for log files. `%t` gets expanded into the current time in milliseconds, so each process gets its own log file. You can use prefixes and suffixes if you want, like this: `prefix-%t-suffix.log`.
 - `--prof` tells V8 to write statistical profiling information into the log file.
 
+## Android
+
+Chrome on Android has a number of unique points that make it a bit more complex to profile. 
+ - The command line must be written via adb before starting Chrome on the device. As a result, quotes in the command line sometimes get lost, and it is best to seperate arguments in --js-flags with a comma rather than trying to use whitespace and quotes.
+ - The path for the logfile must be specified as an absolute path to somewhere that is writable on Android's filesystem.
+ - The sandboxing used for renderer processes on Android means that even with --no-sandbox, the renderer process still can't write to files on the filesystem, therefore --single-process needs to be passed to run the renderer in the same process as the browser process. 
+  - The .so is embedded in Chrome's APK which means symbolization needs to convert from APK memory addresses to the unstripped .so file in the builds.
+  
+The following commands enable profiling on Android:
+
+```bash
+./build/android/adb_chrome_public_command_line --no-sandbox --single-process --js-flags='--logfile=/storage/emulated/0/Download/%t.log,--prof'
+<Close and relaunch Chome on the Android device>
+adb pull /storage/emulated/0/Download/<logfile>
+./src/v8/tools/linux-tick-processor --apk-embedded-library=out/Release/lib.unstripped/libchrome.so --preprocess <logfile>
+```
+
 ## Notes
 
 Under Windows, be sure to turn on `.MAP` file creation for `chrome.dll`, but not for `chrome.exe`.
