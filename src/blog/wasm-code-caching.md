@@ -38,8 +38,7 @@ Since code caching only works with the streaming API, compile or instantiate you
 ```js
 (async () => {
   const fetchPromise = fetch('fibonacci.wasm');
-  const module = await WebAssembly.compileStreaming(fetchPromise);
-  const instance = await WebAssembly.instantiate(module);
+  const { instance } = await WebAssembly.instantiateStreaming(fetchPromise);
   const result = instance.exports.fibonacci(42);
   console.log(result);
 })();
