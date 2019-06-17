@@ -7,6 +7,7 @@ date: 2019-06-17
 tags:
   - WebAssembly
   - internals
+tweet: '1140631433532334081'
 ---
 There’s a saying among developers that the fastest code is code that doesn’t run. Likewise, the fastest compiling code is code that doesn’t have to be compiled. WebAssembly code caching is a new optimization in Chrome and V8 that tries to avoid code compilation by caching the native code produced by the compiler. We’ve [written](/blog/code-caching) [about](/blog/improved-code-caching) [how](/blog/code-caching-for-devs) Chrome and V8 cache JavaScript code in the past, and best practices for taking advantage of this optimization. In this blog post, we describe the operation of Chrome’s WebAssembly code cache and how developers can take advantage of it to speed up loading for applications with large WebAssembly modules.
 
@@ -44,7 +45,7 @@ Since code caching only works with the streaming API, compile or instantiate you
 })();
 ```
 
-This [article](https://developers.google.com/web/updates/2018/04/loading-wasm) goes into detail about the advantages of using the WebAssembly streaming API. Emscripten tries to use this API by default when it generates loader code for your app. Note that streaming requires that the `.wasm` resource has the correct MIME type, so the server must send the `Content-type: application/wasm` header in its response.
+This [article](https://developers.google.com/web/updates/2018/04/loading-wasm) goes into detail about the advantages of using the WebAssembly streaming API. Emscripten tries to use this API by default when it generates loader code for your app. Note that streaming requires that the `.wasm` resource has the correct MIME type, so the server must send the `Content-Type: application/wasm` header in its response.
 
 ## Tip 2: be cache-friendly { #cache-friendly }
 
@@ -95,7 +96,7 @@ On a cold run, we expect to see `v8.wasm.streamFromResponseCallback` and `v8.was
 
 After a cold run, if the size threshold was exceeded, we also expect to see a `v8.wasm.cachedModule` event, meaning that the compiled code was sent to the cache. It is possible that we get this event but that the write doesn’t succeed for some reason. There is currently no way to observe this, but metadata on the events can show the size of the code. Very large modules may not fit in the cache.
 
-When caching is working correctly, a hot run will produce two events, `v8.wasm.streamFromResponseCallback` and `v8.wasm.moduleCacheHit`. The metadata on these events allow you to see the size of the compiled code.
+When caching is working correctly, a hot run produces two events: `v8.wasm.streamFromResponseCallback` and `v8.wasm.moduleCacheHit`. The metadata on these events allows you to see the size of the compiled code.
 
 For more on using `chrome://tracing`, see [our article on JavaScript (byte)code caching for developers](/blog/code-caching-for-devs).
 
