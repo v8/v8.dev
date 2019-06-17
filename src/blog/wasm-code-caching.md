@@ -75,11 +75,11 @@ WebAssembly code caching is enabled for workers and service workers, so it’s p
 
 As a developer, you might want to check that your compiled module is being cached by Chrome. WebAssembly code caching events are not exposed by default in Chrome’s Developer Tools, so the best way to find out whether your modules are being cached is to use the slightly lower-level `chrome://tracing` feature.
 
-`chrome://tracing` records instrumented traces of Chrome during some period of time. Tracing records the behavior of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with no extensions installed, and with no other browser tabs open:
+`chrome://tracing` records instrumented traces of Chrome during some period of time. Tracing records the behavior of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with extensions disabled, and with no other browser tabs open:
 
 ```bash
-### Start a new Chrome browser session with a clean user profile
-google-chrome --user-data-dir="$(mktemp -d)"
+# Start a new Chrome browser session with a clean user profile and extensions disabled
+google-chrome --user-data-dir="$(mktemp -d)" --disable-extensions
 ```
 
 Navigate to `chrome://tracing` and click ‘Record’ to begin a tracing session. On the dialog window that appears, click ‘Edit Categories’ and check the `devtools.timeline` category on the right side under ‘Disabled by Default Categories’ (you can uncheck any other pre-selected categories to reduce the amount of data collected). Then click the ‘Record’ button on the dialog to begin the trace.
