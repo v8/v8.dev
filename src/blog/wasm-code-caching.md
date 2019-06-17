@@ -3,7 +3,7 @@ title: 'Code caching for WebAssembly developers'
 author: '[Bill Budge](https://twitter.com/billb), putting the Ca-ching! in caching'
 avatars:
   - bill-budge
-date: 2019-06-13
+date: 2019-06-17
 tags:
   - WebAssembly
   - internals
@@ -35,7 +35,7 @@ Based on this description, we can give some recommendations for improving your w
 
 Since code caching only works with the streaming API, compile or instantiate your WebAssembly module with `compileStreaming` or `instantiateStreaming`, as in this JavaScript snippet:
 
-```
+```js
 (async () => {
   const fetchPromise = fetch('fibonacci.wasm');
   const module = await WebAssembly.compileStreaming(fetchPromise);
