@@ -188,7 +188,7 @@ These caches can include cached JS resources. However, since we expect service w
 
 ## Tracing
 
-None of the above suggestions is guaranteed to speed up your web app. Unfortunately, code caching information is not currently exposed in DevTools, so the most robust way to find out which of your web app's scripts are code-cached is to use the slightly lower-level `chrome://tracing`.
+None of the above suggestions is guaranteed to speed up your web app. Unfortunately, code caching information is not currently exposed in DevTools, so the most robust way to find out which of your web app’s scripts are code-cached is to use the slightly lower-level `chrome://tracing`.
 
 `chrome://tracing` records instrumented traces of Chrome during some period of time, where the resulting trace visualization looks something like this:
 
