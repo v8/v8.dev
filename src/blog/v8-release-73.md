@@ -41,16 +41,14 @@ const entries = Object.entries(object);
 // → [['x', 42], ['y', 50]]
 ```
 
-Unfortunately, there’s no easy way to go from the `entries` result back to an equivalent object… until now!
-
-V8 v7.3 supports `Object.fromEntries()`, a new built-in API that performs the inverse of `Object.entries`:
+Unfortunately, there’s no easy way to go from the `entries` result back to an equivalent object… until now! V8 v7.3 supports [`Object.fromEntries()`](/features/object-fromentries), a new built-in API that performs the inverse of `Object.entries`:
 
 ```js
 const result = Object.fromEntries(entries);
 // → { x: 42, y: 50 }
 ```
 
-With both `Object.entries` and `Object.fromEntries` in the language, it’s now easier than ever to [convert between `Map`s and ordinary objects in JavaScript](https://github.com/tc39/proposal-object-from-entries#when-is-this-useful).
+For more information and example use cases, see [our `Object.fromEntries` feature explainer](/features/object-fromentries).
 
 ### `String.prototype.matchAll`
 
