@@ -8,6 +8,7 @@ tags:
   - ECMAScript
   - ES2019
   - io19
+tweet: '1140993821897121796'
 ---
 `Object.fromEntries` is a useful addition to the built-in JavaScript library. Before explaining what it does, it helps to understand the pre-existing `Object.entries` API.
 
