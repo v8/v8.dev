@@ -52,8 +52,7 @@ Look for a “Renderer” section that contains the web page title from the reco
   <img src="/_img/rcs/07.png" srcset="/_img/rcs/07@2x.png 2x" alt="">
 </figure>
 
-Look for a “`CrRendererMain`” section that contains some data on the right-hand side.
-Select the trace events/slices by pressing <kbd>Shift</kbd> and dragging. A table with all the selected slices appears at the bottom.
+Select the trace events/slices by pressing <kbd>Shift</kbd> and dragging. Make sure you cover _all_ the sections, including `CrRendererMain` and any `ThreadPoolForegroundWorker`s. A table with all the selected slices appears at the bottom.
 
 <figure>
   <img src="/_img/rcs/08.png" srcset="/_img/rcs/08@2x.png 2x" alt="">
