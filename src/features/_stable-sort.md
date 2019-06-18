@@ -64,6 +64,10 @@ But there’s some good news. We [proposed a spec change](https://github.com/tc3
 
 (Oh, and [we did the same thing for `TypedArray`s](https://github.com/tc39/ecma262/pull/1433): that sort is now stable as well.)
 
+:::note
+**Note:** Although stability is now required per spec, JavaScript engines are still free to implement whatever sorting algorithm they prefer. [V8 uses Timsort](/blog/array-sort#timsort), for example. The spec does not mandate any particular sorting algorithm.
+:::
+
 ## Feature support { #support }
 
 ### Stable `Array.prototype.sort` { #support-stable-array-sort }
