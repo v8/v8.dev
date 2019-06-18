@@ -8,6 +8,7 @@ tags:
   - Intl
   - Node.js 12
   - io19
+description: 'Intl.RelativeTimeFormat enables localized formatting of relative times without sacrificing performance.'
 tweet: '1054387117571354624'
 ---
 Modern web applications often use phrases like “yesterday”, “42 seconds ago”, or “in 3 months” instead of full dates and timestamps. Such _relative time-formatted values_ have become so common that several popular libraries implement utility functions that format them in a localized manner. (Examples include [Moment.js](https://momentjs.com/), [Globalize](https://github.com/globalizejs/globalize), and [date-fns](https://date-fns.org/docs/).)
