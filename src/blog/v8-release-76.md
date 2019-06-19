@@ -109,7 +109,7 @@ const parts = fmt.formatRangeToParts(start, end);
 Additionally, the `format`, `formatToParts`, and `formatRangeToParts` methods now support the new `timeStyle` and `dateStyle` options:
 
 ```js
-const dtf = new Intl.DateTimeFormat('de' , {
+const dtf = new Intl.DateTimeFormat('de', {
   timeStyle: 'medium',
   dateStyle: 'short'
 });
