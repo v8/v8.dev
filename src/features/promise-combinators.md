@@ -91,7 +91,7 @@ We kick off a computationally expensive task that might take a long time, but we
 
 <feature-support chrome="76"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
-                 safari="no https://bugs.webkit.org/show_bug.cgi?id=197600"
+                 safari="13"
                  nodejs="no"
                  babel="yes"></feature-support>
 
@@ -118,7 +118,7 @@ removeLoadingIndicator();
                  firefox="no"
                  safari="no"
                  nodejs="no"
-                 babel="no"></feature-support>
+                 babel="yes"></feature-support>
 
 `Promise.any` gives you a signal as soon as one of the promises fulfills. This is similar to `Promise.race`, except `any` doesn’t reject early when one of the promises rejects.
 
