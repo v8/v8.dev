@@ -92,6 +92,23 @@ const objectCopy = Object.fromEntries(map);
 
 With both `Object.entries` and `Object.fromEntries` in the language, you can now easily convert between maps and objects.
 
+### Warning: beware of data loss { #data-loss }
+
+When converting maps into plain objects like in the above example, there’s a implicit assumption that each key stringifies uniquely. If this assumption does not hold, data loss occurs:
+
+```js
+const map = new Map([
+  [{}, 'a'],
+  [{}, 'b'],
+]);
+Object.fromEntries(map);
+// → { '[object Object]': 'b' }
+// Note: the value 'a' is nowhere to be found, since both keys
+// stringify to the same value of '[object Object]'.
+```
+
+Before using `Object.fromEntries` or any other techique to convert a map into a object, make sure the map’s keys produce unique `toString` results.
+
 ## `Object.fromEntries` support { #support }
 
 <feature-support chrome="73 /blog/v8-release-73#object.fromentries"
