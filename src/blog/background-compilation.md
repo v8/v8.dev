@@ -4,6 +4,7 @@ author: '[Ross McIlroy](https://twitter.com/rossmcilroy), main thread defender'
 date: 2018-03-26 13:33:37
 tags:
   - internals
+description: 'Starting with Chrome 66, V8 compiles JavaScript source code on a background thread, reducing the amount of time spent compiling on the main thread by between 5% to 20% on typical websites.'
 tweet: '978319362837958657'
 ---
 TL;DR: Starting with Chrome 66, V8 compiles JavaScript source code on a background thread, reducing the amount of time spent compiling on the main thread by between 5% to 20% on typical websites.
