@@ -3,7 +3,7 @@ title: 'V8 release v7.6'
 author: 'Adam Klein'
 avatars:
   - 'adam-klein'
-date: 2019-06-18 16:00:00
+date: 2019-06-19 16:45:00
 tags:
   - release
 ---
