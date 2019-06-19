@@ -9,7 +9,7 @@ tags:
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.6](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.6), which is in beta until its release in coordination with Chrome 76 Stable in several weeks. V8 v7.6 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
-## Performance (size & speed)
+## Performance (size & speed) { #performance }
 
 ### `JSON.parse` improvements
 
