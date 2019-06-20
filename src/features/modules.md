@@ -264,7 +264,7 @@ export function zip() { /* … */ }
 If your code base only really needs the `pluck` functionality, you’d probably import it as follows:
 
 ```js
-import { pluck } from './util.mjs';
+import {pluck} from './util.mjs';
 ```
 
 In this case, (without a build-time bundling step) the browser still ends up having to download, parse, and compile the entire `./util.mjs` module even though it only really needs that one export. That’s wasteful!
@@ -278,7 +278,7 @@ export function pluck() { /* … */ }
 We can then import `pluck` without the overhead of dealing with `drop` and `zip`:
 
 ```js
-import { pluck } from './pluck.mjs';
+import {pluck} from './pluck.mjs';
 ```
 
 :::note
