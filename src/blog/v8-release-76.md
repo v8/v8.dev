@@ -115,7 +115,7 @@ const dtf = new Intl.DateTimeFormat('de', {
   dateStyle: 'short'
 });
 dtf.format(Date.now());
-// → '13.06.19, 13:33:37'
+// → '19.06.19, 13:33:37'
 ```
 
 ## Native stack walking
