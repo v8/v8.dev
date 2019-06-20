@@ -129,7 +129,7 @@ You may have noticed we’re using the `.mjs` file extension for modules. On the
 Still, we recommend using the `.mjs` extension for modules, for two reasons:
 
 1. During development, it makes it crystal clear that the file is a module as opposed to a regular script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than regular scripts, so the difference is hugely important!
-2. It’s consistent with Node.js, where [the experimental modules implementation](https://nodejs.org/api/esm.html) only supports files with the `.mjs` extension.
+1. It’s consistent with Node.js, where [the experimental modules implementation](https://nodejs.org/api/esm.html) only supports files with the `.mjs` extension by default.
 
 :::note
 **Note:** To deploy `.mjs` on the web, your web server needs to be configured to serve files with this extension using the appropriate `Content-Type: text/javascript` header, as mentioned above. Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
