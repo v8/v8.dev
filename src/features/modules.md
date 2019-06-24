@@ -359,7 +359,7 @@ In Node.js/npm, it’s common to import JS modules by their “package name”. 
 
 ```js
 import moment from 'moment';
-import { pluck } from 'lodash-es';
+import {pluck} from 'lodash-es';
 ```
 
 Currently, [per the HTML spec](https://html.spec.whatwg.org/multipage/webappapis.html#resolve-a-module-specifier), such “bare import specifiers” throw an exception. [Our import maps proposal](https://github.com/domenic/import-maps) allows such code to work on the web, including in production apps. An import map is a JSON resource that helps the browser convert bare import specifiers into full URLs.
