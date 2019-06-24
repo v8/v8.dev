@@ -27,7 +27,7 @@ const expandFeatureSupport = require('./feature-support.js');
 const markdownItConfig = {
   html: true,
   breaks: true,
-  linkify: true,
+  linkify: false,
 };
 const markdownItAnchorConfig = {
   permalink: true,
