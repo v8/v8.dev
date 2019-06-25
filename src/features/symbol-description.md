@@ -3,11 +3,10 @@ title: '`Symbol.prototype.description`'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2019-05-20
+date: 2019-06-25
 tags:
   - ECMAScript
   - ES2019
-tweet: 'TODO'
 ---
 JavaScript `Symbol`s can be given a description upon creation:
 
@@ -49,4 +48,4 @@ symbol.description;
                  firefox="63"
                  safari="12.1"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="no"></feature-support>
+                 babel="yes"></feature-support>
