@@ -24,7 +24,7 @@ const symbol = Symbol('foo');
 symbol.toString();
 // → 'Symbol(foo)'
 //           ^^^
-symbol.toString().slice(7, -1);
+symbol.toString().slice(7, -1); // 🤔
 // → 'foo'
 ```
 
