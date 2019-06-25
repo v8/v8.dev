@@ -28,7 +28,7 @@ symbol.toString().slice(7, -1); // 🤔
 // → 'foo'
 ```
 
-However, this approach violates the “express intent, not implementation” principle — the code is slightly magical-looking and not very self-explanatory. The above technique also doesn’t let you distinguish between a symbol with no description (i.e. `Symbol()`) and a symbol with the empty string as its description (i.e. `Symbol('')`).
+However, the code is slightly magical-looking, not very self-explanatory, and violates the “express intent, not implementation” principle. The above technique also doesn’t let you distinguish between a symbol with no description (i.e. `Symbol()`) and a symbol with the empty string as its description (i.e. `Symbol('')`).
 
 [The new `Symbol.prototype.description` getter](https://tc39.es/ecma262/#sec-symbol.prototype.description) provides a more ergonomic way of accessing the description of a `Symbol`:
 
