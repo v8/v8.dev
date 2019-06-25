@@ -162,7 +162,7 @@ Note, you're probably not Facebook and likely don't have a long-lived app like F
 Although most JavaScript parsing and compilation work can happen in a streaming fashion on a background thread, some work still has to happen on the main thread. When the main thread is busy, the page can't respond to user input. Do keep an eye on the impact both downloading and executing code has on your UX.
 
 :::note
-**Note:** Currently, not all JavaScript engines and browsers implement script streaming as a loading optimization. JavaScriptCore (WebKit/Safari) and SpiderMonkey (Firefox) for example do not. We still believe the overall guidance here leads to good user experiences across the board.
+**Note:** Currently, not all JavaScript engines and browsers implement script streaming as a loading optimization. We still believe the overall guidance here leads to good user experiences across the board.
 :::
 
 ## The cost of parsing JSON { #json }
