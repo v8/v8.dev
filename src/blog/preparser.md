@@ -30,14 +30,14 @@ For performance reasons, function activations are managed on the machine stack. 
 
 ```js
 function f(a, b) {
-  const c = a + b;
-  return c;
+  const c = a + b;
+  return c;
 }
 
 function g() {
-  return f(1, 2);
-  // The return instruction pointer of `f` now points here
-  // (because when `f` `return`s, it returns here).
+  return f(1, 2);
+  // The return instruction pointer of `f` now points here
+  // (because when `f` `return`s, it returns here).
 }
 ```
 
@@ -52,16 +52,16 @@ The problem with this setup is that functions can reference variables declared i
 
 ```js
 function make_f(d) { // ← declaration of `d`
-  return function inner(a, b) {
-    const c = a + b + d; // ← reference to `d`
-    return c;
-  };
+  return function inner(a, b) {
+    const c = a + b + d; // ← reference to `d`
+    return c;
+  };
 }
 
 const f = make_f(10);
 
 function g() {
-  return f(1, 2);
+  return f(1, 2);
 }
 ```
 
