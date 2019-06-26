@@ -35,7 +35,7 @@ What does this mean for web developers? Parse & compile costs are **no longer as
     - On mobile you’ll want to ship much less especially because of network speeds, but also to keep plain memory usage low.
 - **Improve execution time**
     - Avoid [Long Tasks](https://w3c.github.io/longtasks/) that can keep the main thread busy and can push out how soon pages are interactive. Post-download, script execution time is now a dominant cost.
-- **Avoid large inline scripts** (as they’re still parsed and compiled on the main thread)
+- **Avoid large inline scripts** (as they’re still parsed and compiled on the main thread). A good rule of thumb is: if the script is over 1 kB, avoid inlining it (because 1 kB is when [code caching](/blog/code-caching-for-devs) kicks in for external scripts).
 
 ## Why does download and execution time matter? { #download-execute }
 
