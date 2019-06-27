@@ -90,7 +90,7 @@ We kick off a computationally expensive task that might take a long time, but we
 ## `Promise.allSettled`
 
 <feature-support chrome="76"
-                 firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
+                 firefox="68"
                  safari="13"
                  nodejs="no"
                  babel="yes"></feature-support>
