@@ -7,6 +7,7 @@ date: 2019-07-01 16:45:00
 tags:
   - WebAssembly
   - tooling
+tweet: '1145704863377981445'
 ---
 WebAssembly is normally compiled from a source language, which means that developers need *tools* to use it. Because of that, the V8 team works on relevant open-source projects like [LLVM](http://llvm.org/), [Emscripten](https://emscripten.org/), [Binaryen](https://github.com/WebAssembly/binaryen/), and [WABT](https://github.com/WebAssembly/wabt). This post describes some of the work we’ve been doing on Emscripten and LLVM, which will soon allow Emscripten to switch to the [LLVM WebAssembly backend](https://github.com/llvm/llvm-project/tree/master/llvm/lib/Target/WebAssembly) by default — please test it and report any issues!
 
@@ -45,7 +46,7 @@ It was also a relatively minor change in Emscripten. While Emscripten is a compi
 
 <figure>
   <img src="/_img/emscripten-llvm-wasm/size.svg" intrinsicsize="1133x638" alt="">
-  <figcaption>Code size measurements (lower is better).</figcaption>
+  <figcaption>Code size measurements (lower is better)</figcaption>
 </figure>
 
 (All sizes here are normalized to fastcomp.) As you can see, the WebAssembly backend’s sizes are almost always smaller! The difference is more noticeable on the smaller microbenchmarks on the left (names in lowercase), where new improvements in system libraries matter more. But there is a code size reduction even on most of the macrobenchmarks on the right (names in UPPERCASE), which are real-world codebases. The one regression on the macrobenchmarks is LZMA, where newer LLVM makes a different inlining decision that ends up unlucky.
@@ -62,7 +63,7 @@ These size improvements (and the speed improvements we’ll discuss next) are du
 
 <figure>
   <img src="/_img/emscripten-llvm-wasm/speed.svg" intrinsicsize="1133x638" alt="">
-  <figcaption>Speed measurements (lower is better).</figcaption>
+  <figcaption>Speed measurements (lower is better)</figcaption>
 </figure>
 
 (Measurements are on v8.) Among the microbenchmarks, speed is a mixed picture — which is not that surprising, since most of them are dominated by a single function or even loop, so any change to the code Emscripten emits can lead to a lucky or unlucky optimization choice by the VM. Overall, about an equal number of microbenchmarks stay the same as those that improve or those that regress. Looking at the more realistic macrobenchmarks, once more LZMA is an outlier, again because of an unlucky inlining decision as mentioned earlier, but otherwise every single macrobenchmark improves!
@@ -73,7 +74,7 @@ The average change on the macrobenchmarks is a speedup of **3.2%**.
 
 <figure>
   <img src="/_img/emscripten-llvm-wasm/build.svg" intrinsicsize="1133x638" alt="">
-  <figcaption>Compile and link time measurements on BananaBread (lower is better).</figcaption>
+  <figcaption>Compile and link time measurements on BananaBread (lower is better)</figcaption>
 </figure>
 
 Build time changes will vary by project, but here are some example numbers from BananaBread, which is a complete but compact game engine consisting of 112 files and 95,287 lines of code. On the left we have build times for the compile step, that is, compiling source files to object files, using the project’s default `-O3` (all times are normalized to fastcomp). As you can see, the compile step takes slightly longer with the WebAssembly backend, which makes sense because we are doing more work at this stage — instead of just compiling source to bitcode as fastcomp does, we also compile the bitcode to WebAssembly.
