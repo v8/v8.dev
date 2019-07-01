@@ -189,7 +189,7 @@ const data = { foo: 42, bar: 1337 }; // 🐌
 const data = JSON.parse('{"foo":42,"bar":1337}'); // 🚀
 ```
 
-As long as the JSON string is only evaluated once, the `JSON.parse` approach is much faster compared to the JavaScript object literal, especially for cold loads.
+As long as the JSON string is only evaluated once, the `JSON.parse` approach is much faster compared to the JavaScript object literal, especially for cold loads. A good rule of thumb is to apply this technique for objects of 10 kB or larger — but as always with performance advice, measure the actual impact before making any changes.
 
 There’s an additional risk when using plain object literals for large amounts of data: they could be parsed _twice_!
 
