@@ -1,5 +1,5 @@
 ---
-title: 'Emscripten and the LLVM WebAssembly Backend'
+title: 'Emscripten and the LLVM WebAssembly backend'
 author: 'Alon Zakai'
 avatars:
   - 'alon-zakai'
