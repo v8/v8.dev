@@ -75,3 +75,11 @@ By flipping open a category you can further drill down into the data.
 <figure>
   <img src="/_img/rcs/11.png" srcset="/_img/rcs/11@2x.png 2x" intrinsicsize="809x545" alt="">
 </figure>
+
+## Command-line interface { #cli }
+
+Run [`d8`](/docs/d8) with `--runtime-call-stats` to get RCS metrics from the command-line:
+
+```bash
+d8 --runtime-call-stats foo.js
+```
