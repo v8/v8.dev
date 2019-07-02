@@ -15,13 +15,13 @@ Let’s say you have an array of dogs, where each dog has a name and a rating. (
 ```js
 // Note how the array is pre-sorted alphabetically by `name`.
 const doggos = [
-  { name: 'Abby',    rating: 12 },
-  { name: 'Bandit',  rating: 13 },
-  { name: 'Choco',   rating: 14 },
-  { name: 'Daisy',   rating: 12 },
-  { name: 'Elmo',    rating: 12 },
-  { name: 'Falco',   rating: 13 },
-  { name: 'Ghost',   rating: 14 },
+  { name: 'Abby',   rating: 12 },
+  { name: 'Bandit', rating: 13 },
+  { name: 'Choco',  rating: 14 },
+  { name: 'Daisy',  rating: 12 },
+  { name: 'Elmo',   rating: 12 },
+  { name: 'Falco',  rating: 13 },
+  { name: 'Ghost',  rating: 14 },
 ];
 // Sort the dogs by `rating` in descending order.
 // (This updates `doggos` in place.)
@@ -32,13 +32,13 @@ The array is pre-sorted alphabetically by name. To sort by rating instead (so we
 
 ```js
 [
-  { name: 'Choco',   rating: 14 },
-  { name: 'Ghost',   rating: 14 },
-  { name: 'Bandit',  rating: 13 },
-  { name: 'Falco',   rating: 13 },
-  { name: 'Abby',    rating: 12 },
-  { name: 'Daisy',   rating: 12 },
-  { name: 'Elmo',    rating: 12 },
+  { name: 'Choco',  rating: 14 },
+  { name: 'Ghost',  rating: 14 },
+  { name: 'Bandit', rating: 13 },
+  { name: 'Falco',  rating: 13 },
+  { name: 'Abby',   rating: 12 },
+  { name: 'Daisy',  rating: 12 },
+  { name: 'Elmo',   rating: 12 },
 ]
 ```
 
@@ -48,13 +48,13 @@ To get this result however, the JavaScript engine can’t just use _any_ sorting
 
 ```js
 [
-  { name: 'Ghost',   rating: 14 }, // 😢
-  { name: 'Choco',   rating: 14 }, // 😢
-  { name: 'Bandit',  rating: 13 },
-  { name: 'Falco',   rating: 13 },
-  { name: 'Abby',    rating: 12 },
-  { name: 'Daisy',   rating: 12 },
-  { name: 'Elmo',    rating: 12 },
+  { name: 'Ghost',  rating: 14 }, // 😢
+  { name: 'Choco',  rating: 14 }, // 😢
+  { name: 'Bandit', rating: 13 },
+  { name: 'Falco',  rating: 13 },
+  { name: 'Abby',   rating: 12 },
+  { name: 'Daisy',  rating: 12 },
+  { name: 'Elmo',   rating: 12 },
 ]
 ```
 
