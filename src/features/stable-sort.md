@@ -3,7 +3,7 @@ title: 'Stable `Array.prototype.sort`'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2019-05-16
+date: 2019-07-02
 tags:
   - ECMAScript
   - ES2019
