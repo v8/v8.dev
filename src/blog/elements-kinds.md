@@ -115,7 +115,7 @@ In most cases, elements kind tracking works invisibly under the hood and you don
 
 ### Avoid reading beyond the length of the array
 
-Somewhat unexpectedly, given the title of this post, our #1 performance tip is not directly related to elements kind tracking (although what happens under the hood is a bit similar). Reading beyond the length of an array can have a surprising performance impact, e.g. reading `array[42]` when `array.length === 5`. In this case, the array index `42` is out of bounds, the property is not present on the array itself, and so the JavaScript engine has to perform expensive prototype chain lookups. Once a load has run into this situation, V8 will forever remember that "this load needs to deal with special cases", and it will never be as fast again as it was before reading out-of-bounds.
+Somewhat unexpectedly (given the title of this post), our #1 performance tip is not directly related to elements kind tracking (although what happens under the hood is a bit similar). Reading beyond the length of an array can have a surprising performance impact, e.g. reading `array[42]` when `array.length === 5`. In this case, the array index `42` is out of bounds, the property is not present on the array itself, and so the JavaScript engine has to perform expensive prototype chain lookups. Once a load has run into this situation, V8 remembers that “this load needs to deal with special cases”, and it will never be as fast again as it was before reading out-of-bounds.
 
 Don’t write your loops like this:
 
@@ -160,14 +160,14 @@ Avoid reading beyond the array’s length! In this case, V8’s bounds check fai
 ```js
 function Maximum(array) {
   let max = 0;
-  for (var i = 0; i <= array.length; i++) {  // BAD COMPARISON!
+  for (let i = 0; i <= array.length; i++) { // BAD COMPARISON!
     if (array[i] > max) max = array[i];
   }
   return max;
 }
 ```
 
-Here, the last iteration will read beyond the array's length, which returns `undefined`, which taints not just the load but also the comparison: instead of comparing only numbers, it now has to deal with special cases. Fixing the termination condition to the proper `i < array.length` yields a 6x (!) performance improvement for this example (measured on arrays with 10,000 elements, so the number of iterations only drops by 0.01%).
+Here, the last iteration reads beyond the array’s length, which returns `undefined`, which taints not just the load but also the comparison: instead of comparing only numbers, it now has to deal with special cases. Fixing the termination condition to the proper `i < array.length` yields a **6×** performance improvement for this example (measured on arrays with 10,000 elements, so the number of iterations only drops by 0.01%).
 
 ### Avoid elements kind transitions
 
@@ -312,7 +312,7 @@ Another example of monomorphism vs. polymorphism in V8 involves object shapes, a
 
 ### Avoid creating holes
 
-The performance difference between accessing holey or packed arrays is usually too small to matter or even be measurable. If (and that's a big "if"!) your performance measurements indicate that saving every last machine instruction in optimized code is worth it, then you can try to keep your arrays in packed-elements mode. 
+For real-world coding patterns, the performance difference between accessing holey or packed arrays is usually too small to matter or even be measurable. If (and that’s a big “if”!) your performance measurements indicate that saving every last machine instruction in optimized code is worth it, then you can try to keep your arrays in packed-elements mode. 
 Let’s say we’re trying to create an array, for example:
 
 ```js
@@ -331,7 +331,7 @@ array[2] = 'c';
 // elements kind remains `HOLEY_ELEMENTS`.
 ```
 
-Once the array is marked as holey, it’ll remain holey forever — even if all its elements are present later! 
+Once the array is marked as holey, it remains holey forever — even if all its elements are present later! 
 
 A better way of creating an array is to use a literal instead:
 
