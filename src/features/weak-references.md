@@ -8,6 +8,7 @@ date: 2019-07-09
 tags:
   - ECMAScript
   - io19
+tweet: '1148603966848151553'
 ---
 Generally, references to objects are _strongly held_ in JavaScript, meaning that as long you have a reference to the object, it won’t be garbage-collected.
 
