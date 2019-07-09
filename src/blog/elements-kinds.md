@@ -312,8 +312,7 @@ Another example of monomorphism vs. polymorphism in V8 involves object shapes, a
 
 ### Avoid creating holes
 
-For real-world coding patterns, the performance difference between accessing holey or packed arrays is usually too small to matter or even be measurable. If (and that’s a big “if”!) your performance measurements indicate that saving every last machine instruction in optimized code is worth it, then you can try to keep your arrays in packed-elements mode. 
-Let’s say we’re trying to create an array, for example:
+For real-world coding patterns, the performance difference between accessing holey or packed arrays is usually too small to matter or even be measurable. If (and that’s a big “if”!) your performance measurements indicate that saving every last machine instruction in optimized code is worth it, then you can try to keep your arrays in packed-elements mode. Let’s say we’re trying to create an array, for example:
 
 ```js
 const array = new Array(3);
@@ -331,7 +330,7 @@ array[2] = 'c';
 // elements kind remains `HOLEY_ELEMENTS`.
 ```
 
-Once the array is marked as holey, it remains holey forever — even if all its elements are present later! 
+Once the array is marked as holey, it remains holey forever — even if all its elements are present later!
 
 A better way of creating an array is to use a literal instead:
 
