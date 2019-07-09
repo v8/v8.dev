@@ -113,50 +113,9 @@ In general, more specific elements kinds enable more fine-grained optimizations.
 
 In most cases, elements kind tracking works invisibly under the hood and you don’t need to worry about it. But here are a few things you can do to get the greatest possible benefit from the system.
 
-### Avoid creating holes
-
-Let’s say we’re trying to create an array, for example:
-
-```js
-const array = new Array(3);
-// The array is sparse at this point, so it gets marked as
-// `HOLEY_SMI_ELEMENTS`, i.e. the most specific possibility given
-// the current information.
-array[0] = 'a';
-// Hold up, that’s a string instead of a small integer… So the kind
-// transitions to `HOLEY_ELEMENTS`.
-array[1] = 'b';
-array[2] = 'c';
-// At this point, all three positions in the array are filled, so
-// the array is packed (i.e. no longer sparse). However, we cannot
-// transition to a more specific kind such as `PACKED_ELEMENTS`. The
-// elements kind remains `HOLEY_ELEMENTS`.
-```
-
-Once the array is marked as holey, it’s holey forever — even if it’s packed later! Any operation on the array from then on is potentially slower than it could be. If you plan on performing lots of operations on the array, and you’d like to optimize those operations, avoid creating holes in the array. V8 can deal with packed arrays more efficiently.
-
-A better way of creating an array is to use a literal instead:
-
-```js
-const array = ['a', 'b', 'c'];
-// elements kind: PACKED_ELEMENTS
-```
-
-If you don’t know all the values ahead of time, create an array, and later `push` the values to it.
-
-```js
-const array = [];
-// …
-array.push(someValue);
-// …
-array.push(someOtherValue);
-```
-
-This approach ensures that the array never transitions to a holey elements kind. As a result, V8 can optimize any future operations on the array more efficiently.
-
 ### Avoid reading beyond the length of the array
 
-A similar situation to hitting a hole occurs when reading beyond the length of the array, e.g. reading `array[42]` when `array.length === 5`. In this case, the array index `42` is out of bounds, the property is not present on the array itself, and so the JavaScript engine has to perform the same expensive prototype chain lookups.
+Somewhat unexpectedly, given the title of this post, our #1 performance tip is not directly related to elements kind tracking (although what happens under the hood is a bit similar). Reading beyond the length of an array can have a surprising performance impact, e.g. reading `array[42]` when `array.length === 5`. In this case, the array index `42` is out of bounds, the property is not present on the array itself, and so the JavaScript engine has to perform expensive prototype chain lookups. Once a load has run into this situation, V8 will forever remember that "this load needs to deal with special cases", and it will never be as fast again as it was before reading out-of-bounds.
 
 Don’t write your loops like this:
 
@@ -196,7 +155,19 @@ items.forEach((item) => {
 
 Nowadays, the performance of both `for-of` and `forEach` is on par with the old-fashioned `for` loop.
 
-Avoid reading beyond the array’s length! Doing so is just as bad as hitting a hole in an array. In this case, V8’s bounds check fails, the check to see if the property is present fails, and then we need to look up the prototype chain.
+Avoid reading beyond the array’s length! In this case, V8’s bounds check fails, the check to see if the property is present fails, and then V8 needs to look up the prototype chain. The impact is even worse when you then accidentally use the value in computations, e.g.:
+
+```js
+function Maximum(array) {
+  let max = 0;
+  for (var i = 0; i <= array.length; i++) {  // BAD COMPARISON!
+    if (array[i] > max) max = array[i];
+  }
+  return max;
+}
+```
+
+Here, the last iteration will read beyond the array's length, which returns `undefined`, which taints not just the load but also the comparison: instead of comparing only numbers, it now has to deal with special cases. Fixing the termination condition to the proper `i < array.length` yields a 6x (!) performance improvement for this example (measured on arrays with 10,000 elements, so the number of iterations only drops by 0.01%).
 
 ### Avoid elements kind transitions
 
@@ -338,6 +309,48 @@ each([1, 2, 3], doSomething);
 Built-in methods (such as `Array.prototype.forEach`) can deal with this kind of polymorphism much more efficiently, so consider using them instead of userland library functions in performance-sensitive situations.
 
 Another example of monomorphism vs. polymorphism in V8 involves object shapes, also known as the hidden class of an object. To learn about that case, check out [Vyacheslav’s article](https://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html).
+
+### Avoid creating holes
+
+The performance difference between accessing holey or packed arrays is usually too small to matter or even be measurable. If (and that's a big "if"!) your performance measurements indicate that saving every last machine instruction in optimized code is worth it, then you can try to keep your arrays in packed-elements mode. 
+Let’s say we’re trying to create an array, for example:
+
+```js
+const array = new Array(3);
+// The array is sparse at this point, so it gets marked as
+// `HOLEY_SMI_ELEMENTS`, i.e. the most specific possibility given
+// the current information.
+array[0] = 'a';
+// Hold up, that’s a string instead of a small integer… So the kind
+// transitions to `HOLEY_ELEMENTS`.
+array[1] = 'b';
+array[2] = 'c';
+// At this point, all three positions in the array are filled, so
+// the array is packed (i.e. no longer sparse). However, we cannot
+// transition to a more specific kind such as `PACKED_ELEMENTS`. The
+// elements kind remains `HOLEY_ELEMENTS`.
+```
+
+Once the array is marked as holey, it’ll remain holey forever — even if all its elements are present later! 
+
+A better way of creating an array is to use a literal instead:
+
+```js
+const array = ['a', 'b', 'c'];
+// elements kind: PACKED_ELEMENTS
+```
+
+If you don’t know all the values ahead of time, create an empty array, and later `push` the values to it.
+
+```js
+const array = [];
+// …
+array.push(someValue);
+// …
+array.push(someOtherValue);
+```
+
+This approach ensures that the array never transitions to a holey elements kind. As a result, V8 can potentially generate ever so slightly faster optimized code for some operations on this array.
 
 ## Debugging elements kinds { #debugging }
 
