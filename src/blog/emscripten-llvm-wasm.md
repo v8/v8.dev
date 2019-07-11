@@ -66,7 +66,7 @@ These size improvements (and the speed improvements we’ll discuss next) are du
   <figcaption>Speed measurements (lower is better)</figcaption>
 </figure>
 
-(Measurements are on v8.) Among the microbenchmarks, speed is a mixed picture — which is not that surprising, since most of them are dominated by a single function or even loop, so any change to the code Emscripten emits can lead to a lucky or unlucky optimization choice by the VM. Overall, about an equal number of microbenchmarks stay the same as those that improve or those that regress. Looking at the more realistic macrobenchmarks, once more LZMA is an outlier, again because of an unlucky inlining decision as mentioned earlier, but otherwise every single macrobenchmark improves!
+(Measurements are on V8.) Among the microbenchmarks, speed is a mixed picture — which is not that surprising, since most of them are dominated by a single function or even loop, so any change to the code Emscripten emits can lead to a lucky or unlucky optimization choice by the VM. Overall, about an equal number of microbenchmarks stay the same as those that improve or those that regress. Looking at the more realistic macrobenchmarks, once more LZMA is an outlier, again because of an unlucky inlining decision as mentioned earlier, but otherwise every single macrobenchmark improves!
 
 The average change on the macrobenchmarks is a speedup of **3.2%**.
 
