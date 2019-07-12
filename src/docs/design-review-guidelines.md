@@ -1,13 +1,17 @@
 ---
-title: 'Design Review Guidelines'
+title: 'Design review guidelines'
 ---
 Please make sure to follow the following guidelines when applicable.
 
-There are multiple drivers for the formalization of V8's design reviews: 1.) Make it clear to Individual Contributors (ICs) who the decision makers are and highlight what the path forward is 2.) Create a forum to have straight-forward design discussions 3.) Reduce surprises on the Tech Lead (TL) layer 4.) Increase the involvement of all V8 contributors over the globe
+There are multiple drivers for the formalization of V8's design reviews:
+1. Make it clear to Individual Contributors (ICs) who the decision makers are and highlight what the path forward is
+1. Create a forum to have straight-forward design discussions
+1. Reduce surprises on the Tech Lead (TL) layer
+1. Increase the involvement of all V8 contributors over the globe
 
 ## TL;DR;
 <figure>
-  <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="V8's Design Review Guidelines at a glance">
+  <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="">
   <figcaption>V8's Design Review Guidelines at a glance</figcaption>
 </figure>
 
@@ -46,7 +50,7 @@ The V8 Eng Review Owners can overrule non-LGTMs or LGTMs.
 
 ## Detailed workflow
 <figure>
-  <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="V8's Design Review Guidelines at a glance">
+  <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="">
   <figcaption>V8's Design Review Guidelines at a glance</figcaption>
 </figure>
 
