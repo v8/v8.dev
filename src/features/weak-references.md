@@ -111,7 +111,7 @@ const finalizationGroup = new FinalizationGroup((iterator) => {
 ```
 
 :::note
-**Note:** The `ref !== undefined` is required because we could’ve added a new `WeakRef` with the same `name` between the old `WeakRef` enqueueing the finalization callback and actually running the finalization callback.
+**Note:** The `ref !== undefined && ref.deref() === undefined` is required because we could’ve added a new `WeakRef` with the same `name` between the old `WeakRef` enqueueing the finalization callback and actually running the finalization callback.
 :::
 
 Our final implementation looks like this:
