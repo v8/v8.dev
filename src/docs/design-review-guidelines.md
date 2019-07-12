@@ -10,7 +10,7 @@ There are multiple drivers for the formalization of V8's design reviews:
 1. Reduce surprises on the Tech Lead (TL) layer
 1. Increase the involvement of all V8 contributors over the globe
 
-## TL;DR;
+## Summary
 
 <figure>
   <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="">
