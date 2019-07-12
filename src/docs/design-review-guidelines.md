@@ -4,12 +4,14 @@ title: 'Design review guidelines'
 Please make sure to follow the following guidelines when applicable.
 
 There are multiple drivers for the formalization of V8's design reviews:
+
 1. Make it clear to Individual Contributors (ICs) who the decision makers are and highlight what the path forward is
 1. Create a forum to have straight-forward design discussions
 1. Reduce surprises on the Tech Lead (TL) layer
 1. Increase the involvement of all V8 contributors over the globe
 
 ## TL;DR;
+
 <figure>
   <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="">
   <figcaption>V8's Design Review Guidelines at a glance</figcaption>
@@ -22,33 +24,42 @@ The proposed solution is based on the following assumption/pillars:
 1. The proposed workflow puts the IC in charge. They are the one who facilitate the process.
 1. Their guiding TLs are tasked to help them navigate the territory and find the right LGTM providers.
 1. If a feature is uncontroversial, nearly no overhead should be created.
-1. If there is a lot of controversy, the feature can be 'escalated' to the V8 Eng Review Owners meeting where further steps are decided. 
+1. If there is a lot of controversy, the feature can be 'escalated' to the V8 Eng Review Owners meeting where further steps are decided.
 
 ## Roles
+
 ### Individual Contributor (IC)
+
 LGTM: N/A
 This person is the creator of the feature and the creator of the design documentation.
 
 ### The Tech Lead (TL) of the IC
+
 LGTM: Must have
 This person is the TL of a given project or component. Likely this is the person that is an owner of the main component your feature is going to touch. If it is not clear who the TL is, the V8 Eng Review Owners will nominate somebody appropriate. They are responsible to add more people to the list of required LGTMs if appropriate.
 
 ### LGTM provider
+
 LGTM: Must have
 This is a person that is required to give LGTM. It might be an IC, or a TL(M).
 
 ### 'Random' reviewer of the document (RRotD)
+
 LGTM: Not required
 This is somebody who is simply reviewing and comment on the proposal. Their input should be considered, although their LGTM is not required.
 
 ### V8 Eng Review Owners
+
 LGTM: Not required
 Stuck proposals can be escalated to the V8 Eng Review Owners via v8-eng-review-owners@googlegroups.com. Potential use cases of such an escalation:
-* An LGTM provider is non-responsive
-* No consensus on the design can be reached
+
+- An LGTM provider is non-responsive
+- No consensus on the design can be reached
+
 The V8 Eng Review Owners can overrule non-LGTMs or LGTMs.
 
 ## Detailed workflow
+
 <figure>
   <img src="/_img/docs/design-review-guidelines/design_review_guidelines.png" alt="">
   <figcaption>V8's Design Review Guidelines at a glance</figcaption>
@@ -80,40 +91,50 @@ The V8 Eng Review Owners can overrule non-LGTMs or LGTMs.
 And always remember: *1.) Assume good intentions 2.) be kind and civilized 3.) be pragmatic*
 
 ## FAQ
+
 ### How to decide if the feature is worthy to have a design document?
+
 Some pointers when a design doc is appropriate:
-* Touches at least two components
-* Needs reconciliation with non-V8 projects e.g. Debugger, Blink
-* Take longer than 1 week of effort to implement
-* Is a language feature
-* Platform specific code will be touched
-* User facing changes
+
+- Touches at least two components
+- Needs reconciliation with non-V8 projects e.g. Debugger, Blink
+- Take longer than 1 week of effort to implement
+- Is a language feature
+- Platform specific code will be touched
+- User facing changes
+
 When in doubt, ask the TL.
 
 ### How to decide who to add to the list of LGTM providers?
+
 Some pointers when people should be added to the list of LGTM providers:
-* OWNERs of the source files/directories you anticipate to touch
-* Main component expert of the components you anticipate to touch
-* Downstream consumers of your changes e.g. when you change an API
+
+- OWNERs of the source files/directories you anticipate to touch
+- Main component expert of the components you anticipate to touch
+- Downstream consumers of your changes e.g. when you change an API
 
 ### Where can I find a template for design documents?
+
 [Here](https://docs.google.com/document/d/1CWNKvxOYXGMHepW31hPwaFz9mOqffaXnuGqhMqcyFYo/edit).
 
 ### What if something big changes?
+
 Make sure you still have the LGTMs e.g. by pinging the LGTM providers with a clear, reasonable deadline to veto.
 
 ### LGTM providers don't comment on my doc, what should I do?
+
 In this case you can follow this path of escalation:
-* Ping them directly via mail, Hangouts or comment/assignment in the doc and specifically ask them explicitly to add an LGTM or non-LGTM
-* Get your TL involved and ask them for help
-* Escalate to v8-eng-review-owners@googlegroups.com 
+
+- Ping them directly via mail, Hangouts or comment/assignment in the doc and specifically ask them explicitly to add an LGTM or non-LGTM
+- Get your TL involved and ask them for help
+- Escalate to v8-eng-review-owners@googlegroups.com
 
 ### Somebody added me as an LGTM provider to a doc, what should I do?
+
 V8 is aiming to make decisions more transparent and escalation more straight-forward. If you think the design is good enough and should be done add an "**LGTM**" to the table cell next to your name.
 
 If you have blocking concerns or remarks, please add "**Not LGTM, because … <reason>**" into the table cell next to your name. Be prepared to get asked for another round of review.
 
 ### How does this work together with the Blink Intents process?
+
 The V8 Design Review Guidelines complement [V8's Blink Intent+Errata process](/docs/feature-launch-process). If you are launching a new WebAssembly or JavaScript language feature, please follow V8's Blink Intent+Errata process and the V8 Design Review Guidelines. It likely makes sense to have all the LGTMs gathered at the point in time you would send an Intent To Implement.
-
-
