@@ -102,7 +102,7 @@ const map = new Map([
   [{}, 'b'],
 ]);
 Object.fromEntries(map);
-// → { '[object Object]': 'b' }
+// → { '[object Object]': 'b' }
 // Note: the value 'a' is nowhere to be found, since both keys
 // stringify to the same value of '[object Object]'.
 ```

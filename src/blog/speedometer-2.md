@@ -12,7 +12,7 @@ JavaScript has rapidly evolved in the meantime, adding many new language feature
 
 The Blink and V8 teams welcome [the recent release of the updated Speedometer 2.0 benchmark](https://webkit.org/blog/8063/speedometer-2-0-a-benchmark-for-modern-web-app-responsiveness/). Applying the original concept to a list of contemporary frameworks, transpilers and ES2015 features makes the benchmark a prime candidate for optimizations again. Speedometer 2.0 is a great addition to [our real-world performance benchmarking tool belt](/blog/real-world-performance).
 
-## Chrome's mileage so far
+## Chrome’s mileage so far
 
 The Blink and V8 teams have already completed a first round of improvements, underlying the importance of this benchmark to us and continuing our journey of focusing on real-world performance. Comparing Chrome 60 from July 2017 with the latest Chrome 64 we have achieved about a 21% improvement on the total score (runs per minute) on a mid-2016 Macbook Pro (4 core, 16GB RAM).
 
@@ -21,7 +21,7 @@ The Blink and V8 teams have already completed a first round of improvements, und
   <figcaption>Comparison of Speedometer 2 scores between Chrome 60 and 64</figcaption>
 </figure>
 
-Let’s zoom into the individual Speedometer 2.0 line items. We doubled the performance of the React runtime by improving [Function.prototype.bind](https://chromium.googlesource.com/v8/v8/+/808dc8cff3f6530a627ade106cbd814d16a10a18). Vanilla-ES2015, AngularJS, Preact, and VueJS improved by 19%–42% due to [speeding up the JSON parsing](https://chromium-review.googlesource.com/c/v8/v8/+/700494) and various other performance fixes. The jQuery-TodoMVC app’s runtime was reduced by improvements to Blink's DOM implementation, including [more lightweight form controls](https://chromium.googlesource.com/chromium/src/+/f610be969095d0af8569924e7d7780b5a6a890cd) and [tweaks to our HTML parser](https://chromium.googlesource.com/chromium/src/+/6dd09a38aaae9c15adf5aad966f761f180bf1cef). Additional tweaking of V8's inline caches in combination with the optimizing compiler yielded improvements across the board.
+Let’s zoom into the individual Speedometer 2.0 line items. We doubled the performance of the React runtime by improving [`Function.prototype.bind`](https://chromium.googlesource.com/v8/v8/+/808dc8cff3f6530a627ade106cbd814d16a10a18). Vanilla-ES2015, AngularJS, Preact, and VueJS improved by 19%–42% due to [speeding up the JSON parsing](https://chromium-review.googlesource.com/c/v8/v8/+/700494) and various other performance fixes. The jQuery-TodoMVC app’s runtime was reduced by improvements to Blink’s DOM implementation, including [more lightweight form controls](https://chromium.googlesource.com/chromium/src/+/f610be969095d0af8569924e7d7780b5a6a890cd) and [tweaks to our HTML parser](https://chromium.googlesource.com/chromium/src/+/6dd09a38aaae9c15adf5aad966f761f180bf1cef). Additional tweaking of V8’s inline caches in combination with the optimizing compiler yielded improvements across the board.
 
 <figure>
   <img src="/_img/speedometer-2/improvements.png" intrinsicsize="1600x669" alt="">

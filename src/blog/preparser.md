@@ -30,14 +30,14 @@ For performance reasons, function activations are managed on the machine stack. 
 
 ```js
 function f(a, b) {
-  const c = a + b;
-  return c;
+  const c = a + b;
+  return c;
 }
 
 function g() {
-  return f(1, 2);
-  // The return instruction pointer of `f` now points here
-  // (because when `f` `return`s, it returns here).
+  return f(1, 2);
+  // The return instruction pointer of `f` now points here
+  // (because when `f` `return`s, it returns here).
 }
 ```
 
@@ -52,16 +52,16 @@ The problem with this setup is that functions can reference variables declared i
 
 ```js
 function make_f(d) { // ← declaration of `d`
-  return function inner(a, b) {
-    const c = a + b + d; // ← reference to `d`
-    return c;
-  };
+  return function inner(a, b) {
+    const c = a + b + d; // ← reference to `d`
+    return c;
+  };
 }
 
 const f = make_f(10);
 
 function g() {
-  return f(1, 2);
+  return f(1, 2);
 }
 ```
 
@@ -86,19 +86,19 @@ Tracking variable declarations and references in the preparser is complicated be
 
 ```js
 function f(d) {
-  function g() {
-    const a = ({ d }
+  function g() {
+    const a = ({ d }
 ```
 
 It could indeed end up referencing `d`, because the tokens we saw are part of a destructuring assignment expression.
 
 ```js
 function f(d) {
-  function g() {
-    const a = ({ d } = { d: 42 });
-    return a;
-  }
-  return g;
+  function g() {
+    const a = ({ d } = { d: 42 });
+    return a;
+  }
+  return g;
 }
 ```
 
@@ -106,13 +106,11 @@ It could also end up being an arrow function with a destructuring parameter `d`,
 
 ```js
 function f(d) {
-  function g() {
-    const a = ({ d }) => d;
-    return a;
-  }
-
-  return [d, g];
-
+  function g() {
+    const a = ({ d }) => d;
+    return a;
+  }
+  return [d, g];
 }
 ```
 
@@ -127,10 +125,10 @@ As mentioned earlier, when a preparsed function is called for the first time, we
 ```js
 // This is the top-level scope.
 function outer() {
-  // preparsed
-  function inner() {
-    // preparsed
-  }
+  // preparsed
+  function inner() {
+    // preparsed
+  }
 }
 
 outer(); // Fully parses and compiles `outer`, but not `inner`.

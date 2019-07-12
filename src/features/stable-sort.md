@@ -3,25 +3,25 @@ title: 'Stable `Array.prototype.sort`'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2019-05-16
+date: 2019-07-02
 tags:
   - ECMAScript
   - ES2019
   - io19
-tweet: '1036626116654637057'
+tweet: '1146067251302244353'
 ---
 Let’s say you have an array of dogs, where each dog has a name and a rating. (If this sounds like a weird example, you should know that there’s a Twitter account that specializes in exactly this… Don’t ask!)
 
 ```js
 // Note how the array is pre-sorted alphabetically by `name`.
 const doggos = [
-  { name: 'Abby',    rating: 12 },
-  { name: 'Bandit',  rating: 13 },
-  { name: 'Choco',   rating: 14 },
-  { name: 'Daisy',   rating: 12 },
-  { name: 'Elmo',    rating: 12 },
-  { name: 'Falco',   rating: 13 },
-  { name: 'Ghost',   rating: 14 },
+  { name: 'Abby',   rating: 12 },
+  { name: 'Bandit', rating: 13 },
+  { name: 'Choco',  rating: 14 },
+  { name: 'Daisy',  rating: 12 },
+  { name: 'Elmo',   rating: 12 },
+  { name: 'Falco',  rating: 13 },
+  { name: 'Ghost',  rating: 14 },
 ];
 // Sort the dogs by `rating` in descending order.
 // (This updates `doggos` in place.)
@@ -32,13 +32,13 @@ The array is pre-sorted alphabetically by name. To sort by rating instead (so we
 
 ```js
 [
-  { name: 'Choco',   rating: 14 },
-  { name: 'Ghost',   rating: 14 },
-  { name: 'Bandit',  rating: 13 },
-  { name: 'Falco',   rating: 13 },
-  { name: 'Abby',    rating: 12 },
-  { name: 'Daisy',   rating: 12 },
-  { name: 'Elmo',    rating: 12 },
+  { name: 'Choco',  rating: 14 },
+  { name: 'Ghost',  rating: 14 },
+  { name: 'Bandit', rating: 13 },
+  { name: 'Falco',  rating: 13 },
+  { name: 'Abby',   rating: 12 },
+  { name: 'Daisy',  rating: 12 },
+  { name: 'Elmo',   rating: 12 },
 ]
 ```
 
@@ -48,13 +48,13 @@ To get this result however, the JavaScript engine can’t just use _any_ sorting
 
 ```js
 [
-  { name: 'Ghost',   rating: 14 }, // 😢
-  { name: 'Choco',   rating: 14 }, // 😢
-  { name: 'Bandit',  rating: 13 },
-  { name: 'Falco',   rating: 13 },
-  { name: 'Abby',    rating: 12 },
-  { name: 'Daisy',   rating: 12 },
-  { name: 'Elmo',    rating: 12 },
+  { name: 'Ghost',  rating: 14 }, // 😢
+  { name: 'Choco',  rating: 14 }, // 😢
+  { name: 'Bandit', rating: 13 },
+  { name: 'Falco',  rating: 13 },
+  { name: 'Abby',   rating: 12 },
+  { name: 'Daisy',  rating: 12 },
+  { name: 'Elmo',   rating: 12 },
 ]
 ```
 

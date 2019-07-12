@@ -20,7 +20,7 @@ The escape analysis in TurboFan, which performs scalar replacement for objects t
 
 ```js
 function mapAdd(a, x) {
-  return a.map(y => y + x);
+  return a.map(y => y + x);
 }
 ```
 
@@ -35,14 +35,14 @@ The escape analysis is now also able to eliminate some cases of variable index a
 
 ```js
 function sum(...args) {
-  let total = 0;
-  for (let i = 0; i < args.length; ++i)
-    total += args[i];
-  return total;
+  let total = 0;
+  for (let i = 0; i < args.length; ++i)
+    total += args[i];
+  return total;
 }
 
 function sum2(x, y) {
-  return sum(x, y);
+  return sum(x, y);
 }
 ```
 
