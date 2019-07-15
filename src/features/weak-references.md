@@ -34,9 +34,15 @@ const wm = new WeakMap();
 // which we still have access.
 
 const ws = new WeakSet();
-ws.add(ref);
-ws.has(ref);
-// → true
+{
+  const ref = {};
+  ws.add(ref);
+  ws.has(ref);
+  // → true
+}
+// We no longer have a reference to `ref` in this block scope, so it
+// can be garbage-collected now, even though it’s a key in `ws` to
+// which we still have access.
 ```
 
 :::note
