@@ -8,6 +8,7 @@ tags:
   - ECMAScript
   - Node.js 12
   - io19
+tweet: '1151140681374547969'
 ---
 If you’ve written JavaScript for use in a web browser before, you may have used `window` to access the global `this`. In Node.js, you may have used `global`. If you’ve written code that must work in either environment, you may have detected which of these is available, and then used that — but the list of identifiers to check grows with the number of environments and use cases you want to support. It gets out of hand quickly:
 
