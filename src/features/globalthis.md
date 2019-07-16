@@ -3,12 +3,11 @@ title: '`globalThis`'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2019-05-20
+date: 2019-07-16
 tags:
   - ECMAScript
   - Node.js 12
   - io19
-tweet: 'TODO'
 ---
 If you’ve written JavaScript for use in a web browser before, you may have used `window` to access the global `this`. In Node.js, you may have used `global`. If you’ve written code that must work in either environment, you may have detected which of these is available, and then used that — but the list of identifiers to check grows with the number of environments and use cases you want to support. It gets out of hand quickly:
 
