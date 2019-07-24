@@ -6,6 +6,7 @@ avatars:
 date: 2019-06-12
 tags:
   - ECMAScript
+  - ES2020
   - io19
 description: 'There are four promise combinators in JavaScript: Promise.all, Promise.race, Promise.allSettled, and Promise.any.'
 tweet: '1138819493956710400'
@@ -17,12 +18,12 @@ Two new proposals are currently making their way through the standardization pro
 Here’s an overview of the four combinators:
 
 :::table-wrapper
-| name                 | description                                     | status                                                                      |
-| -------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
-| `Promise.allSettled` | does not short-circuit                          | [proposal](https://github.com/tc39/proposal-promise-allSettled)             |
-| `Promise.all`        | short-circuits when an input value is rejected  | added in ES2015 ✅                                                          |
-| `Promise.race`       | short-circuits when an input value is settled   | added in ES2015 ✅                                                          |
-| `Promise.any`        | short-circuits when an input value is fulfilled | [proposal](https://github.com/tc39/proposal-promise-any)                    |
+| name                                        | description                                     | status                                                          |
+| ------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
+| [`Promise.allSettled`](#promise.allsettled) | does not short-circuit                          | [proposal](https://github.com/tc39/proposal-promise-allSettled) |
+| [`Promise.all`](#promise.all)               | short-circuits when an input value is rejected  | added in ES2015 ✅                                              |
+| [`Promise.race`](#promise.race)             | short-circuits when an input value is settled   | added in ES2015 ✅                                              |
+| [`Promise.any`](#promise.any)               | short-circuits when an input value is fulfilled | [proposal](https://github.com/tc39/proposal-promise-any)        |
 :::
 
 Let’s take a look at an example use case for each combinator.
