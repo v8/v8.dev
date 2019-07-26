@@ -82,7 +82,7 @@ rtf.format(1, 'week');
 
 Read [our `Intl.RelativeTimeFormat` explainer](/features/intl-relativetimeformat) for more information.
 
-V8 v7.1 also adds support for [the `globalThis` proposal](https://github.com/tc39/proposal-global), enabling a universal mechanism to access the global object even in strict functions or modules regardless of the platform.
+V8 v7.1 also adds support for [the `globalThis` proposal](/features/globalthis), enabling a universal mechanism to access the global object even in strict functions or modules regardless of the platform.
 
 ## V8 API
 
