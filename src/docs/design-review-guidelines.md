@@ -5,9 +5,9 @@ Please make sure to follow the following guidelines when applicable.
 
 There are multiple drivers for the formalization of V8's design reviews:
 
-1. Make it clear to Individual Contributors (ICs) who the decision makers are and highlight what the path forward is
+1. Make it clear to Individual Contributors (ICs) who the decision makers are and highlight what the path forward in the case that projects are not proceeding due to technical disagreement
 1. Create a forum to have straight-forward design discussions
-1. Reduce surprises on the Tech Lead (TL) layer
+1. Ensure V8 Technical Leads (TL) are aware of all significant changes and have the opportunity to give their input on the Tech Lead (TL) laye
 1. Increase the involvement of all V8 contributors over the globe
 
 ## Summary
@@ -72,7 +72,7 @@ The V8 Eng Review Owners can overrule non-LGTMs or LGTMs.
 1. IC incorporates feedback
 1. TL adds more people to the list of LGTM providers.
 1. IC sends out the early design doc/explainer/one pager to v8-dev+design@googlegroups.com .
-1. IC hunts down the LGTMs. TL helps them.
+1. IC collects the LGTMs. TL helps them.
     1. LGTM provider reviews document, add comments and gives either an LGTM or not LGTM at the beginning of the document. If they add a not LGTM, they are obligated to list the reason(s).
     1. Optional: LGTM providers can remove themselves from the list of LGTM providers and/or suggest other LGTM providers
     1. IC and TL work to resolve the unresolved issues.
