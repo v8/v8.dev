@@ -6,9 +6,9 @@ title: 'WebAssembly - adding a new opcode'
 
 WebAssembly is implement in v8 in 3 ways:
 
-1.  interpreter
-1.  baseline compiler (Liftoff)
-1.  optimizing compiler (Turbofan)
+1. interpreter
+1. baseline compiler (Liftoff)
+1. optimizing compiler (Turbofan)
 
 The rest of this document focuses on the Turbofan pipeline, walking through how to add a new Wasm instruction and implement it in Turbofan.
 
@@ -86,11 +86,11 @@ Wasm tests can be found in [`test/cctest/wasm/`](https://cs.chromium.org/chromiu
 
 There are many examples in this file that we can follow. The general setup is:
 
--   create a `WasmRunner`
--   set up globals to hold result (optional)
--   set up locals as parameters to instruction (optional)
--   build the wasm module
--   run it and compare with an expected output
+- create a `WasmRunner`
+- set up globals to hold result (optional)
+- set up locals as parameters to instruction (optional)
+- build the wasm module
+- run it and compare with an expected output
 
 Here's a simple test for our new opcode:
 
@@ -198,10 +198,10 @@ Trying to run the same test leads to a compilation failure that hints at where t
 
 There are a couple of places that needs to be modified to add an operator:
 
-1.  [`src/compiler/machine-operator.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/machine-operator.cc)
-1.  header [`src/compiler/machine-operator.h`](https://cs.chromium.org/chromium/src/v8/src/compiler/machine-operator.h)
-1.  list of opcodes that the machine understands [`src/compiler/opcodes.h`](https://cs.chromium.org/chromium/src/v8/src/compiler/opcodes.h)
-1.  verifier [`src/compiler/verifier.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/verifier.cc)
+1. [`src/compiler/machine-operator.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/machine-operator.cc)
+1. header [`src/compiler/machine-operator.h`](https://cs.chromium.org/chromium/src/v8/src/compiler/machine-operator.h)
+1. list of opcodes that the machine understands [`src/compiler/opcodes.h`](https://cs.chromium.org/chromium/src/v8/src/compiler/opcodes.h)
+1. verifier [`src/compiler/verifier.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/verifier.cc)
 
 ```diff
 diff --git a/src/compiler/machine-operator.cc b/src/compiler/machine-operator.cc
