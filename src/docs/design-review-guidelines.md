@@ -115,7 +115,7 @@ Some pointers when people should be added to the list of LGTM providers:
 
 ### Who is "my" TL?
 
-Likely this is the person that is an owner of the main component your feature is going to touch. If it is not clear who the TL is, please look at the OWNER files or ask the V8 Eng Review Owners via v8-eng-review-owners@googlegroups.com. 
+Likely this is the person that is an owner of the main component your feature is going to touch. If it is not clear who the TL is, please look at the OWNER files or ask the V8 Eng Review Owners via v8-eng-review-owners@googlegroups.com.
 
 ### Where can I find a template for design documents?
 
