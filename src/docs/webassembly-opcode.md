@@ -2,21 +2,21 @@
 title: 'WebAssembly - adding a new opcode'
 ---
 
-[WebAssembly](https://webassembly.org) (Wasm) is a binary instruction format for a stack-based virtual machine. This tutorial walks the reader through implementing a new WebAssembly instruction in v8.
+[WebAssembly](https://webassembly.org) (Wasm) is a binary instruction format for a stack-based virtual machine. This tutorial walks the reader through implementing a new WebAssembly instruction in V8.
 
-WebAssembly is implement in v8 in 3 ways:
+WebAssembly is implemented in V8 in 3 ways:
 
-1. interpreter
-1. baseline compiler (Liftoff)
-1. optimizing compiler (Turbofan)
+1. Interpreter
+1. Baseline compiler (Liftoff)
+1. Optimizing compiler (TurboFan)
 
-The rest of this document focuses on the Turbofan pipeline, walking through how to add a new Wasm instruction and implement it in Turbofan.
+The rest of this document focuses on the TurboFan pipeline, walking through how to add a new Wasm instruction and implement it in TurboFan.
 
-At a high level, Wasm instructions are compiled into a Turbofan graph, and we rely on the Turbofan pipeline to compile the graph into (ultimately) machine code. For more on Turbofan, check out the [v8 docs](https://v8.dev/docs/turbofan).
+At a high level, Wasm instructions are compiled into a TurboFan graph, and we rely on the TurboFan pipeline to compile the graph into (ultimately) machine code. For more on TurboFan, check out the [V8 docs](https://v8.dev/docs/turbofan).
 
 ## Opcodes/Instructions
 
-We will define a new instruction that adds 1 to an [int32](https://webassembly.github.io/spec/core/syntax/types.html#syntax-valtype) (on the top of the stack).
+We will define a new instruction that adds `1` to an [`int32`](https://webassembly.github.io/spec/core/syntax/types.html#syntax-valtype) (on the top of the stack).
 
 Tip: a list of instructions supported by all Wasm implementations can be found in the [spec](https://webassembly.github.io/spec/core/appendix/index-instructions.html).
 
@@ -78,7 +78,7 @@ index 5ed664441d..2d4e9554fe 100644
      CASE_I64x2_OP(Eq, "eq")
 ```
 
-By adding our new instruction in `FOREACH_SIMPLE_OPCODE`, we are skipping a [fair amount of work](https://cs.chromium.org/chromium/src/v8/src/wasm/function-body-decoder-impl.h?l=1751-1756&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b) that is done in `src/wasm/function-body-decoder-impl.h`, which decodes Wasm opcodes and calls into the Turbofan graph generator. Thus, depending on what your opcode does, you might have more work to do. We skip this in the interest of brevity.
+By adding our new instruction in `FOREACH_SIMPLE_OPCODE`, we are skipping a [fair amount of work](https://cs.chromium.org/chromium/src/v8/src/wasm/function-body-decoder-impl.h?l=1751-1756&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b) that is done in `src/wasm/function-body-decoder-impl.h`, which decodes Wasm opcodes and calls into the TurboFan graph generator. Thus, depending on what your opcode does, you might have more work to do. We skip this in the interest of brevity.
 
 ## Writing a test for the new opcode
 
@@ -132,20 +132,20 @@ Tip: finding the test name can be tricky, since the test definition is behind a 
 
 This error indicates that the compiler does not know of our new instruction - that will change in the next section.
 
-## Compiling Wasm into Turbofan
+## Compiling Wasm into TurboFan
 
-In the introduction, we mentioned that Wasm instructions are compiled into a Turbofan graph, `wasm-compiler.cc` is the where this happens. Let's take a look at an example opcode, [I32Eqz](https://cs.chromium.org/chromium/src/v8/src/compiler/wasm-compiler.cc?l=716&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b):
+In the introduction, we mentioned that Wasm instructions are compiled into a TurboFan graph, `wasm-compiler.cc` is the where this happens. Let's take a look at an example opcode, [I32Eqz](https://cs.chromium.org/chromium/src/v8/src/compiler/wasm-compiler.cc?l=716&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b):
 
-```
+```cpp
   switch (opcode) {
     case wasm::kExprI32Eqz:
       op = m->Word32Equal();
       return graph()->NewNode(op, input, mcgraph()->Int32Constant(0));
 ```
 
-This switches on the Wasm opcode `wasm::kExprI32Eqz`, and builds a Turbofan graph consisting of the operation `Word32Equal` with the inputs `input`, which is the argument to the Wasm instruction, and a constant `0`.
+This switches on the Wasm opcode `wasm::kExprI32Eqz`, and builds a TurboFan graph consisting of the operation `Word32Equal` with the inputs `input`, which is the argument to the Wasm instruction, and a constant `0`.
 
-The `Word32Equal` operator is provided by the underlying v8 abstract machine, which is architecture-independent. Later in the pipeline, this abstract machine operator will be translated into architecture-dependent assembly.
+The `Word32Equal` operator is provided by the underlying V8 abstract machine, which is architecture-independent. Later in the pipeline, this abstract machine operator will be translated into architecture-dependent assembly.
 
 For our new opcode, `I32Add1`, we need a graph that adds a constant 1 to the input, so we can resuse an existing machine operator, `Int32Add`, passing it the input, and a constant 1:
 
@@ -165,11 +165,11 @@ index f666bbb7c1..399293c03b 100644
        return graph()->NewNode(op, input, mcgraph()->Int32Constant(0));
 ```
 
-This is enough to get the test passing. However, not all instructions have an existing Turbofan machine operator. In that case we will have to add this new operator to the machine, let's try that.
+This is enough to get the test passing. However, not all instructions have an existing TurboFan machine operator. In that case we will have to add this new operator to the machine, let's try that.
 
-## Turbofan machine operators
+## TurboFan machine operators
 
-We want to add the knowledge of `Int32Add1` to the Turbofan machine. So let's pretend that it exists and use it first:
+We want to add the knowledge of `Int32Add1` to the TurboFan machine. So let's pretend that it exists and use it first:
 
 ```diff
 diff --git a/src/compiler/wasm-compiler.cc b/src/compiler/wasm-compiler.cc
@@ -275,11 +275,11 @@ Running the test again will give us a different failure:
 
 ## Instruction selection
 
-So far we have been working at the Turbofan level, dealing with (a sea of) nodes in the Turbofan graph. However, at the assembly level, we have instructions and operands. Instruction selection is the process of translating this graph to instructions and operands.
+So far we have been working at the TurboFan level, dealing with (a sea of) nodes in the TurboFan graph. However, at the assembly level, we have instructions and operands. Instruction selection is the process of translating this graph to instructions and operands.
 
 The last test error indicated that we need something in [`src/compiler/backend/instruction-selector.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/instruction-selector.cc).  This is a big file with a giant switch statement over all the machine opcodes.  It calls into architecture specific instruction selection, using the visitor pattern to emit instructions for each type of node.
 
-Since we added a new Turbofan machine opcode, we need to add it here as well:
+Since we added a new TurboFan machine opcode, we need to add it here as well:
 
 ```diff
 diff --git a/src/compiler/backend/instruction-selector.cc b/src/compiler/backend/instruction-selector.cc
@@ -421,10 +421,10 @@ And this makes the test pass:
 
 Luckily for us `addl` is already implement. If our new opcode required writing a new assembly instruction implementation, we would add it to [`src/compiler/backend/x64/assembler-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/codegen/x64/assembler-x64.cc), where the assembly instruction is encoded into bytes and emitted.
 
-Tip: to inspect the generated code, we can pass `--print-code` to `cctest`
+Tip: to inspect the generated code, we can pass `--print-code` to `cctest`.
 
 ## Other architectures
 
-In this codelab we only implemented this new instruction for x64. The steps required for other architectures are similar: add Turbofan machine operators, use the platform-dependent files for instruction selection, scheduling, code generation, assembler.
+In this codelab we only implemented this new instruction for x64. The steps required for other architectures are similar: add TurboFan machine operators, use the platform-dependent files for instruction selection, scheduling, code generation, assembler.
 
 Tip: if we compile what we have done so far on another target, e.g. arm64, we are likely to get errors in linking. To resolve those errors, add `UNIMPLEMENTED()` stubs.
