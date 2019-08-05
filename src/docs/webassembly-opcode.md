@@ -6,9 +6,9 @@ title: 'WebAssembly - adding a new opcode'
 
 WebAssembly is implemented in V8 in 3 ways:
 
-1. Interpreter
-1. Baseline compiler (Liftoff)
-1. Optimizing compiler (TurboFan)
+1. Interpreter.
+1. Baseline compiler (Liftoff).
+1. Optimizing compiler (TurboFan).
 
 The rest of this document focuses on the TurboFan pipeline, walking through how to add a new Wasm instruction and implement it in TurboFan.
 
