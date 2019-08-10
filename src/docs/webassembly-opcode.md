@@ -1,29 +1,29 @@
 ---
 title: 'WebAssembly - adding a new opcode'
 ---
+[WebAssembly](https://webassembly.org/) (Wasm) is a binary instruction format for a stack-based virtual machine. This tutorial walks the reader through implementing a new WebAssembly instruction in V8.
 
-[WebAssembly](https://webassembly.org) (Wasm) is a binary instruction format for a stack-based virtual machine. This tutorial walks the reader through implementing a new WebAssembly instruction in V8.
+WebAssembly is implemented in V8 in three parts:
 
-WebAssembly is implemented in V8 in 3 ways:
-
-1. Interpreter.
-1. Baseline compiler (Liftoff).
-1. Optimizing compiler (TurboFan).
+- the interpreter
+- the baseline compiler (Liftoff)
+- the optimizing compiler (TurboFan)
 
 The rest of this document focuses on the TurboFan pipeline, walking through how to add a new Wasm instruction and implement it in TurboFan.
 
-At a high level, Wasm instructions are compiled into a TurboFan graph, and we rely on the TurboFan pipeline to compile the graph into (ultimately) machine code. For more on TurboFan, check out the [V8 docs](https://v8.dev/docs/turbofan).
+At a high level, Wasm instructions are compiled into a TurboFan graph, and we rely on the TurboFan pipeline to compile the graph into (ultimately) machine code. For more on TurboFan, check out the [V8 docs](/docs/turbofan).
 
 ## Opcodes/Instructions
 
-We will define a new instruction that adds `1` to an [`int32`](https://webassembly.github.io/spec/core/syntax/types.html#syntax-valtype) (on the top of the stack).
+Let’s define a new instruction that adds `1` to an [`int32`](https://webassembly.github.io/spec/core/syntax/types.html#syntax-valtype) (on the top of the stack).
 
-Tip: a list of instructions supported by all Wasm implementations can be found in the [spec](https://webassembly.github.io/spec/core/appendix/index-instructions.html).
+:::note
+**Note:** A list of instructions supported by all Wasm implementations can be found in the [spec](https://webassembly.github.io/spec/core/appendix/index-instructions.html).
+:::
 
 All Wasm instructions are defined in [`src/wasm/wasm-opcodes.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-opcodes.h). The instructions are grouped roughly by what they do, e.g. control, memory, SIMD, atomic, etc.
 
-We will add our new instruction, `I32Add1`, to the `FOREACH_SIMPLE_OPCODE`
-section:
+Let’s add our new instruction, `I32Add1`, to the `FOREACH_SIMPLE_OPCODE` section:
 
 ```diff
 diff --git a/src/wasm/wasm-opcodes.h b/src/wasm/wasm-opcodes.h
@@ -42,11 +42,13 @@ index 6970c667e7..867cbf451a 100644
 
 WebAssembly is a binary format, so `0xee` specifies the encoding of this instruction. In this tutorial we chose `0xee` as it is currently unused.
 
-Note: actually adding an instruction to the spec will involve work beyond what is described here.
+:::note
+**Note:** Actually adding an instruction to the spec involves work beyond what is described here.
+:::
 
 We can run a simple unit test for opcodes with:
 
-```bash
+```
 $ tools/dev/gm.py x64.debug unittests/WasmOpcodesTest*
 ...
 [==========] Running 1 test from 1 test suite.
@@ -61,7 +63,7 @@ WasmOpcodes::OpcodeName(kExprI32Add1) == "unknown"; plazz halp in src/wasm/wasm-
 [  FAILED  ] WasmOpcodesTest.EveryOpcodeHasAName
 ```
 
-This error indicates that we don't have a name for our new instruction. Adding a name for our new opcode can be done in [`src/wasm/wasm-opcodes.cc`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-opcodes.cc):
+This error indicates that we don’t have a name for our new instruction. Adding a name for the new opcode can be done in [`src/wasm/wasm-opcodes.cc`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-opcodes.cc):
 
 ```diff
 diff --git a/src/wasm/wasm-opcodes.cc b/src/wasm/wasm-opcodes.cc
@@ -80,9 +82,9 @@ index 5ed664441d..2d4e9554fe 100644
 
 By adding our new instruction in `FOREACH_SIMPLE_OPCODE`, we are skipping a [fair amount of work](https://cs.chromium.org/chromium/src/v8/src/wasm/function-body-decoder-impl.h?l=1751-1756&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b) that is done in `src/wasm/function-body-decoder-impl.h`, which decodes Wasm opcodes and calls into the TurboFan graph generator. Thus, depending on what your opcode does, you might have more work to do. We skip this in the interest of brevity.
 
-## Writing a test for the new opcode
+## Writing a test for the new opcode { #test }
 
-Wasm tests can be found in [`test/cctest/wasm/`](https://cs.chromium.org/chromium/src/v8/test/cctest/wasm/).  We will look at [`test/cctest/wasm/test-run-wasm.cc`](https://cs.chromium.org/chromium/src/v8/test/cctest/wasm/test-run-wasm.cc), where many "simple" opcodes are tested.
+Wasm tests can be found in [`test/cctest/wasm/`](https://cs.chromium.org/chromium/src/v8/test/cctest/wasm/). Let’s take a look at [`test/cctest/wasm/test-run-wasm.cc`](https://cs.chromium.org/chromium/src/v8/test/cctest/wasm/test-run-wasm.cc), where many “simple” opcodes are tested.
 
 There are many examples in this file that we can follow. The general setup is:
 
@@ -92,7 +94,7 @@ There are many examples in this file that we can follow. The general setup is:
 - build the wasm module
 - run it and compare with an expected output
 
-Here's a simple test for our new opcode:
+Here’s a simple test for our new opcode:
 
 ```diff
 diff --git a/test/cctest/wasm/test-run-wasm.cc b/test/cctest/wasm/test-run-wasm.cc
@@ -119,7 +121,7 @@ index 26df61ceb8..b1ee6edd71 100644
 
 Run the test:
 
-```bash
+```
 $ tools/dev/gm.py x64.debug 'cctest/test-run-wasm-simd/RunWasmTurbofan_I32Add1'
 ...
 === cctest/test-run-wasm/RunWasmTurbofan_Int32Add1 ===
@@ -128,13 +130,15 @@ $ tools/dev/gm.py x64.debug 'cctest/test-run-wasm-simd/RunWasmTurbofan_I32Add1'
 # Unsupported opcode 0xee:i32.add1
 ```
 
-Tip: finding the test name can be tricky, since the test definition is behind a macro. Use [Code Search](https://cs.chromium.org) to click around to discover the macro definitions.
+:::note
+**Tip:** Finding the test name can be tricky, since the test definition is behind a macro. Use [Code Search](https://cs.chromium.org/) to click around to discover the macro definitions.
+:::
 
-This error indicates that the compiler does not know of our new instruction - that will change in the next section.
+This error indicates that the compiler does not know of our new instruction. That will change in the next section.
 
 ## Compiling Wasm into TurboFan
 
-In the introduction, we mentioned that Wasm instructions are compiled into a TurboFan graph, `wasm-compiler.cc` is the where this happens. Let's take a look at an example opcode, [I32Eqz](https://cs.chromium.org/chromium/src/v8/src/compiler/wasm-compiler.cc?l=716&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b):
+In the introduction, we mentioned that Wasm instructions are compiled into a TurboFan graph. `wasm-compiler.cc` is where this happens. Let’s take a look at an example opcode, [`I32Eqz`](https://cs.chromium.org/chromium/src/v8/src/compiler/wasm-compiler.cc?l=716&rcl=686b68edf9f42c201c2b25bca9f4bef72ff41c0b):
 
 ```cpp
   switch (opcode) {
@@ -165,11 +169,11 @@ index f666bbb7c1..399293c03b 100644
        return graph()->NewNode(op, input, mcgraph()->Int32Constant(0));
 ```
 
-This is enough to get the test passing. However, not all instructions have an existing TurboFan machine operator. In that case we will have to add this new operator to the machine, let's try that.
+This is enough to get the test passing. However, not all instructions have an existing TurboFan machine operator. In that case we have to add this new operator to the machine. Let’s try that.
 
 ## TurboFan machine operators
 
-We want to add the knowledge of `Int32Add1` to the TurboFan machine. So let's pretend that it exists and use it first:
+We want to add the knowledge of `Int32Add1` to the TurboFan machine. So let’s pretend that it exists and use it first:
 
 ```diff
 diff --git a/src/compiler/wasm-compiler.cc b/src/compiler/wasm-compiler.cc
@@ -264,7 +268,7 @@ index 461aef0023..95251934ce 100644
        MACHINE_SIMD_OP_LIST(SIMD_MACHINE_OP_CASE)
 ```
 
-Running the test again will give us a different failure:
+Running the test again now gives us a different failure:
 
 ```
 === cctest/test-run-wasm/RunWasmTurbofan_Int32Add1 ===
@@ -297,7 +301,7 @@ index 3152b2d41e..7375085649 100644
              node->op()->mnemonic(), node->id());
 ```
 
-Instruction selection is architecture dependent, so we have to add it to the architecture specific instruction selector files too. For this codelab we will only focus on the x64 architecture, so [`src/compiler/backend/x64/instruction-selector-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/x64/instruction-selector-x64.cc)
+Instruction selection is architecture dependent, so we have to add it to the architecture specific instruction selector files too. For this codelab we only focus on the x64 architecture, so [`src/compiler/backend/x64/instruction-selector-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/x64/instruction-selector-x64.cc)
 needs to be modified:
 
 ```diff
@@ -316,7 +320,7 @@ index 2324e119a6..4b55671243 100644
 +
 ```
 
-And we also need to add this new x64 specific opcode, `kX64Int32Add1` to [`src/compiler/backend/x64/instruction-codes-x64.h`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/x64/instruction-codes-x64.h):
+And we also need to add this new x64-specific opcode, `kX64Int32Add1` to [`src/compiler/backend/x64/instruction-codes-x64.h`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/x64/instruction-codes-x64.h):
 
 ```diff
 diff --git a/src/compiler/backend/x64/instruction-codes-x64.h b/src/compiler/backend/x64/instruction-codes-x64.h
@@ -333,7 +337,7 @@ index 9b8be0e0b5..7f5faeb87b 100644
    V(X64And)                               \
 ```
 
-## Instruction Scheduling and Code generation
+## Instruction scheduling and code generation
 
 Running our test, we see new compilation errors:
 
@@ -366,7 +370,7 @@ index 79eda7e78d..3667a84577 100644
      case kX64And:
 ```
 
-Code generation is where we translate our architecture specific opcodes into assembly, let's add a clause to [`src/compiler/backend/x64/code-generator-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/x64/code-generator-x64.cc):
+Code generation is where we translate our architecture specific opcodes into assembly. Let’s add a clause to [`src/compiler/backend/x64/code-generator-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/compiler/backend/x64/code-generator-x64.cc):
 
 ```diff
 diff --git a/src/compiler/backend/x64/code-generator-x64.cc b/src/compiler/backend/x64/code-generator-x64.cc
@@ -394,7 +398,7 @@ For now we leave our code generation empty, and we can run the test to make sure
 # Check failed: 11 == r.Call() (11 vs. 10).
 ```
 
-This failure is expected, since our new instruction is not implemented yet - it is essentially a no-op, so our actual value was unchanged (10).
+This failure is expected, since our new instruction is not implemented yet — it is essentially a no-op, so our actual value was unchanged (`10`).
 
 To implement our opcode, we can use the `add` assembly instruction:
 
@@ -419,9 +423,11 @@ index 6c828d6bc4..260c8619f2 100644
 
 And this makes the test pass:
 
-Luckily for us `addl` is already implement. If our new opcode required writing a new assembly instruction implementation, we would add it to [`src/compiler/backend/x64/assembler-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/codegen/x64/assembler-x64.cc), where the assembly instruction is encoded into bytes and emitted.
+Luckily for us `addl` is already implemented. If our new opcode required writing a new assembly instruction implementation, we would add it to [`src/compiler/backend/x64/assembler-x64.cc`](https://cs.chromium.org/chromium/src/v8/src/codegen/x64/assembler-x64.cc), where the assembly instruction is encoded into bytes and emitted.
 
-Tip: to inspect the generated code, we can pass `--print-code` to `cctest`.
+:::note
+**Tip:** To inspect the generated code, we can pass `--print-code` to `cctest`.
+:::
 
 ## Other architectures
 
