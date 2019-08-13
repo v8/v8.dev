@@ -34,6 +34,12 @@ Over the last milestones, we worked on scalability of background compilation of 
   <img src="/_img/v8-release-77/turbofan-compilation-speedup.svg" alt="">
 </figure>
 
+### Stack trace improvements
+
+Almost all errors thrown by V8 capture a stack trace when they are created. This stack trace can be accessed from JavaScript through the non-standard `error.stack` property. The first time a stack trace is retrieved via `error.stack`, V8 serializes the underlying structured stack trace into a string. This serialized stack trace is kept around to speed up future `error.stack` accesses.
+
+Over the last few versions we worked on some [internal refactorings to the stack trace logic](https://docs.google.com/document/d/1WIpwLgkIyeHqZBc9D3zDtWr7PL-m_cH6mfjvmoC6kSs/edit) ([tracking bug](https://bugs.chromium.org/p/v8/issues/detail?id=8742)), simplifying the code and improving stack trace serialization performance by up to 30%.
+
 ## JavaScript language features
 
 [The `Intl.NumberFormat` API](/features/intl-numberformat) for locale-aware number formatting gains new functionality in this release! It now supports compact notation, scientific notation, engineering notation, sign display, and units of measurement.
@@ -48,12 +54,6 @@ formatter.format(299792458);
 ```
 
 Refer to [our feature explainer](/features/intl-numberformat) for more details.
-
-## Stack trace improvements
-
-Almost all errors thrown by V8 capture a stack trace when they are created. This stack trace can be accessed from JavaScript through the non-standard `error.stack` property. The first time a stack trace is retrieved via `error.stack`, V8 serializes the underlying structured stack trace into a string. This serialized stack trace is kept around to speed up future `error.stack` accesses.
-
-Over the last few versions we worked on some [internal refactorings to the stack trace logic](https://docs.google.com/document/d/1WIpwLgkIyeHqZBc9D3zDtWr7PL-m_cH6mfjvmoC6kSs/edit) ([tracking bug](https://bugs.chromium.org/p/v8/issues/detail?id=8742)), simplifying the code and improving stack trace serialization performance by up to 30%.
 
 ## V8 API
 
