@@ -49,7 +49,7 @@ try {
 
 ### One-sided string trimming { #string-trimming }
 
-In addition to `String.prototype.trim()`, V8 now implements [`String.prototype.trimStart()` and `String.prototype.trimEnd()`](https://github.com/tc39/proposal-string-left-right-trim). This functionality was previously available through the non-standard `trimLeft()` and `trimRight()` methods, which remain as aliases of the new methods for backward compatibility.
+In addition to `String.prototype.trim()`, V8 now implements [`String.prototype.trimStart()` and `String.prototype.trimEnd()`](/features/string-trimming). This functionality was previously available through the non-standard `trimLeft()` and `trimRight()` methods, which remain as aliases of the new methods for backward compatibility.
 
 ```js
 const string = '  hello world  ';
