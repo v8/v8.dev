@@ -137,7 +137,7 @@ In this case you can follow this path of escalation:
 
 V8 is aiming to make decisions more transparent and escalation more straight-forward. If you think the design is good enough and should be done add an "**LGTM**" to the table cell next to your name.
 
-If you have blocking concerns or remarks, please add "**Not LGTM, because … <reason>**" into the table cell next to your name. Be prepared to get asked for another round of review.
+If you have blocking concerns or remarks, please add "**Not LGTM, because … \<reason>**" into the table cell next to your name. Be prepared to get asked for another round of review.
 
 ### How does this work together with the Blink Intents process?
 

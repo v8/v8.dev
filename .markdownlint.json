@@ -6,6 +6,23 @@
   "MD013": false,
   "MD025": { "front_matter_title": "" },
   "MD026": { "punctuation": ".,;:!" },
-  "MD033": false,
+  "MD033": {
+    "allowed_elements": [
+      "a",
+      "abbr",
+      "b",
+      "code",
+      "div",
+      "em",
+      "figcaption",
+      "figure",
+      "i",
+      "img",
+      "kbd",
+      "pre",
+      "sub",
+      "sup"
+    ]
+  },
   "MD040": false
 }
