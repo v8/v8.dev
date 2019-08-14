@@ -33,7 +33,7 @@ foo.toString();
 
 ### JSON ⊂ ECMAScript { #json-ecmascript }
 
-Line separator (U+2028) and paragraph separator (U+2029) symbols are now allowed in string literals, [matching JSON](https://github.com/tc39/proposal-json-superset). Previously, these symbols were treated as line terminators within string literals, and so using them resulted in a `SyntaxError` exception.
+Line separator (U+2028) and paragraph separator (U+2029) symbols are now allowed in string literals, [matching JSON](/features/subsume-json). Previously, these symbols were treated as line terminators within string literals, and so using them resulted in a `SyntaxError` exception.
 
 ### Optional `catch` binding { #optional-catch-binding }
 
