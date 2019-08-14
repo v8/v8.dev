@@ -22,6 +22,20 @@ string.trim(); // ES5
 
 This functionality was previously available through the non-standard `trimLeft()` and `trimRight()` methods, which remain as aliases of the new methods for backward compatibility.
 
+```js
+const string = '  hello world  ';
+string.trimStart();
+// → 'hello world  '
+string.trimLeft();
+// → 'hello world  '
+string.trimEnd();
+// → '  hello world'
+string.trimRight();
+// → '  hello world'
+string.trim(); // ES5
+// → 'hello world'
+```
+
 ## `String.prototype.trim{Start,End}` support { #support }
 
 <feature-support chrome="66 /blog/v8-release-66#string-trimming"
