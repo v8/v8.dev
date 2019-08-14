@@ -30,3 +30,11 @@ try {
   handleException();
 }
 ```
+
+## Optional `catch` binding support { #support }
+
+<feature-support chrome="66 /blog/v8-release-66#optional-catch-binding"
+                 firefox="58 https://bugzilla.mozilla.org/show_bug.cgi?id=1380881"
+                 safari="yes https://trac.webkit.org/changeset/220068/webkit"
+                 nodejs="8"
+                 babel="yes"></feature-support>
