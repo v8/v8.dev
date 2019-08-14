@@ -37,7 +37,7 @@ Line separator (U+2028) and paragraph separator (U+2029) symbols are now allowed
 
 ### Optional `catch` binding { #optional-catch-binding }
 
-The `catch` clause of `try` statements can now be [used without a parameter](https://tc39.es/proposal-optional-catch-binding/). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
+The `catch` clause of `try` statements can now be [used without a parameter](/features/optional-catch-binding). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
 
 ```js
 try {
