@@ -12,7 +12,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ### `Function.prototype.toString` revision { #function-tostring }
 
-[`Function.prototype.toString()`](https://tc39.es/Function-prototype-toString-revision/) now returns exact slices of source code text, including whitespace and comments. Here’s an example comparing the old and the new behavior:
+[`Function.prototype.toString()`](/features/function-tostring) now returns exact slices of source code text, including whitespace and comments. Here’s an example comparing the old and the new behavior:
 
 ```js
 // Note the comment between the `function` keyword
