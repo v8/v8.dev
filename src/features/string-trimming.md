@@ -3,7 +3,7 @@ title: '`String.prototype.trimStart` and `String.prototype.trimEnd`'
 author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias))'
 avatars:
   - 'mathias-bynens'
-date: 2018-03-27
+date: 2018-03-26
 tags:
   - ECMAScript
   - ES2019
