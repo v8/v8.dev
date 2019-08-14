@@ -17,7 +17,7 @@ target_os = ['android', 'unix']  # Multiple target OSes.
 
 Run `gclient sync`, and you’ll get a large checkout under `./third_party/android_tools`.
 
-Enable developer mode on your phone or tablet, and turn on USB debugging, via instructions [here](https://developer.android.com/studio/run/device.html). Also, get the handy [`adb`](https://developer.android.com/studio/command-line/adb.html) tool on your path. It’s in your checkout at `./third_party/android_tools/sdk/platform-tools`.
+Enable developer mode on your phone or tablet, and turn on USB debugging, via instructions [here](https://developer.android.com/studio/run/device.html). Also, get the handy [`adb`](https://developer.android.com/studio/command-line/adb.html) tool on your path. It’s in your checkout at `./third_party/android_sdk/public/platform-tools`.
 
 ## Using `gm`
 
