@@ -2,7 +2,7 @@ language: node_js
 os:
   - linux
   - osx
-  # - windows - doesn't work for now, see https://github.com/jasongin/nvs/issues/113#issuecomment-521211564
+  - windows
 script:
   - npm run ci
   - |
