@@ -126,14 +126,9 @@ Another difference relates to the `async` attribute, which causes the script to 
 
 You may have noticed we’re using the `.mjs` file extension for modules. On the Web, the file extension doesn’t really matter, as long as the file is served with [the JavaScript MIME type `text/javascript`](https://html.spec.whatwg.org/multipage/scripting.html#scriptingLanguages:javascript-mime-type). The browser knows it’s a module because of the `type` attribute on the script element.
 
-Still, we recommend using the `.mjs` extension for modules, for two reasons:
+During development, the `.mjs` file extension makes it crystal clear that a file is a module as opposed to a regular script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than regular scripts, so the difference is hugely important! Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
 
-1. During development, it makes it crystal clear that the file is a module as opposed to a regular script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than regular scripts, so the difference is hugely important!
-1. It’s consistent with Node.js, where [the experimental modules implementation](https://nodejs.org/api/esm.html) only supports files with the `.mjs` extension by default.
-
-:::note
-**Note:** To deploy `.mjs` on the web, your web server needs to be configured to serve files with this extension using the appropriate `Content-Type: text/javascript` header, as mentioned above. Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
-:::
+In production, you should save your files with an `.mjs` extension only if you are sure that they will be served with the required `Content-Type: text/javascript` header. If your host lacks such support, or if you are publishing open source JavaScript for public use by others, it’s safer to use the `.js` extension.
 
 ### Module specifiers { #specifiers }
 
