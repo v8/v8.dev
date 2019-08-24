@@ -42,7 +42,7 @@ Here’s how to statically import and use the `./utils.mjs` module:
 ```
 
 :::note
-**Note:** The previous example uses the `.mjs` extension to signal that it’s a module rather than a regular script. On the web, file extensions don’t really matter, as long as the files are served with the correct MIME type (e.g. `text/javascript` for JavaScript files) in the `Content-Type` HTTP header.
+**Note:** The previous example uses the `.mjs` extension to signal that it’s a module rather than a regular script. On the web, file extensions don’t really matter, as long as the files are served with the correct MIME type (e.g. `text/javascript` for JavaScript files) in the `Content-Type` HTTP header. The `.mjs` extension is especially useful on other platforms such as [Node.js](https://nodejs.org/api/esm.html#esm_enabling) and [`d8`](/docs/d8), where it’s a convenient way to indicate to the runtime that your code is a module. We’re using the same extension here for consistency across platforms and to clearly make the distinction between modules and regular scripts.
 :::
 
 This syntactic form for importing modules is a *static* declaration: it only accepts a string literal as the module specifier, and introduces bindings into the local scope via a pre-runtime “linking” process. The static `import` syntax can only be used at the top-level of the file.

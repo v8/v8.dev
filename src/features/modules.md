@@ -126,9 +126,17 @@ Another difference relates to the `async` attribute, which causes the script to 
 
 You may have noticed we’re using the `.mjs` file extension for modules. On the Web, the file extension doesn’t really matter, as long as the file is served with [the JavaScript MIME type `text/javascript`](https://html.spec.whatwg.org/multipage/scripting.html#scriptingLanguages:javascript-mime-type). The browser knows it’s a module because of the `type` attribute on the script element.
 
-During development, the `.mjs` file extension makes it crystal clear that a file is a module as opposed to a regular script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than regular scripts, so the difference is hugely important! Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
+In production, you should name your files with an `.mjs` extension only if you are sure that they will be served with the required `Content-Type: text/javascript` header. If your host lacks such support, or if you are publishing open source JavaScript for public use by others, it’s safer to use the `.js` extension.
 
-In production, you should save your files with an `.mjs` extension only if you are sure that they will be served with the required `Content-Type: text/javascript` header. If your host lacks such support, or if you are publishing open source JavaScript for public use by others, it’s safer to use the `.js` extension.
+During development, we recommend using the `.mjs` extension for modules, for two reasons:
+
+1. The `.mjs` extension makes it crystal clear to you and anyone else looking at your project that the file is a module as opposed to a regular script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than regular scripts, so the difference is hugely important!
+
+1. It ensures that your file is parsed as a module by runtimes such as [Node.js](https://nodejs.org/api/esm.html#esm_enabling) and [`d8`](/docs/d8), and build tools such as [Babel](https://babeljs.io/docs/en/options#sourcetype). While these environments and tools each have proprietary ways via configuration to interpret `.js` files as modules, the `.mjs` extension is the cross-compatible way to ensure that files are treated as modules.
+
+:::note
+**Note:** You may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
+:::
 
 ### Module specifiers { #specifiers }
 
