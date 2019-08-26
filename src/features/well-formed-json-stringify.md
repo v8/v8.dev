@@ -24,7 +24,7 @@ JSON.stringify('\uD800');
 
 Note that `JSON.parse(stringified)` still produces the same results as before.
 
-This feature is a small fix that was long overdue in JavaScript. It’s one less thing to worry about as a JavaScript developer.
+This feature is a small fix that was long overdue in JavaScript. It’s one less thing to worry about as a JavaScript developer. In combination with [_JSON ⊂ ECMAScript_](/features/subsume-json), it enables safely embedding JSON-stringified data as literals into JavaScript programs, and writing the generated code to disk in any Unicode-compatible encoding (e.g. UTF-8). This is super useful for [metaprogramming use cases](/features/subsume-json#embedding-json).
 
 ## Feature support { #support }
 
