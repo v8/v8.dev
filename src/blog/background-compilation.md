@@ -20,7 +20,7 @@ However, due to limitations in V8’s original baseline compiler, V8 still neede
 V8’s Ignition bytecode compiler takes the [abstract syntax tree (AST)](https://en.wikipedia.org/wiki/Abstract_syntax_tree) produced by the parser as input and produces a stream of bytecode (`BytecodeArray`) along with associated meta-data which enables the Ignition interpreter to execute the JavaScript source.
 
 <figure>
-  <img src="/_img/background-compilation/bytecode.png" width="1162" height="523" alt="" loading="lazy">
+  <img src="/_img/background-compilation/bytecode.svg" width="1145" height="509" alt="" loading="lazy">
 </figure>
 
 Ignition’s bytecode compiler was built with multi-threading in mind, however a number of changes were required throughout the compilation pipeline to enable background compilation. One of the main changes was to prevent the compilation pipeline from accessing objects in V8’s JavaScript heap while running on the background thread. Objects in V8’s heap are not thread-safe, since Javascript is single-threaded, and might be modified by the main-thread or V8’s garbage collector during background compilation.
@@ -32,7 +32,7 @@ Bytecode finalization involves building the final `BytecodeArray` object, used t
 With these changes, almost all of the script’s compilation can be moved to a background thread, with only the short AST internalization and bytecode finalization steps happening on the main thread just before script execution.
 
 <figure>
-  <img src="/_img/background-compilation/threads.png" width="1211" height="307" alt="" loading="lazy">
+  <img src="/_img/background-compilation/threads.svg" width="1185" height="296" alt="" loading="lazy">
 </figure>
 
 Currently, only top-level script code and immediately invoked function expressions (IIFEs) are compiled on a background thread — inner functions are still compiled lazily (when first executed) on the main thread. We are hoping to extend background compilation to more situations in the future. However, even with these restrictions, background compilation leaves the main thread free for longer, enabling it to do other work such as reacting to user-interaction, rendering animations or otherwise producing a smoother more responsive experience.
