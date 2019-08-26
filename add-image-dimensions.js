@@ -13,11 +13,7 @@ for (const file of files) {
     const oldLine = result[0];
     if (oldLine.includes(' width="')) continue;
     const fileName = 'src/' + oldLine.match(/src="\/([^"]+)"/)[1];
-    let { width, height } = imageSize(fileName);
-    if (fileName.includes('@2x')) {
-      width /= 2;
-      height /= 2;
-    }
+    const { width, height } = imageSize(fileName);
     const updatedLine = oldLine.replace(' alt="', ` width="${width}" height="${height}" alt="`);
     console.log(oldLine);
     console.log('>>');
