@@ -62,7 +62,7 @@ tools/release/merge_to_branch.py --branch 2.4 af3cf11 cf33f1b sf3cf09
 
 In case you are a V8 committer, feel free to use `TBR` to land the merge if 1) it has approval and 2) the merge was clean and there are no conflicts to resolve.
 
-### Step 2: Observe the [branch waterfall](https://build.chromium.org/p/client.v8.branches/console)
+### Step 2: Observe the [branch waterfall](https://ci.chromium.org/p/v8/g/branches/console)
 
 If one of the builders is not green after handling your patch, revert the merge immediately. A bot (`AutoTagBot`) takes care of the correct versioning after a 10-minute wait.
 
