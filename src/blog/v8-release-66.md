@@ -133,8 +133,7 @@ Finally, [bytecode improvements](https://chromium-review.googlesource.com/c/v8/v
 The throughput performance of `Array#reduce` was increased by more than 10× for holey double arrays ([see our blog post for an explanation what holey and packed arrays are](/blog/elements-kinds)). This widens the fast-path for cases where `Array#reduce` is applied to holey and packed double arrays.
 
 <figure>
-  <!-- TODO: replace this with the SVG version -->
-  <img src="/_img/v8-release-66/array-reduce.png" width="1300" height="742" alt="" loading="lazy">
+  <img src="/_img/v8-release-66/array-reduce.svg" width="650" height="371" alt="" loading="lazy">
   <figcaption><code>Array.prototype.reduce</code> performance improvements</figcaption>
 </figure>
 
