@@ -47,7 +47,7 @@ window.globalVariable = new Leak();
 It is important to understand the notion of retaining paths to find the root cause of a memory leak. A retaining path is a chain of objects that prevents garbage collection of the leaking object. The chain starts at a root object such as the global object of the main window. The chain ends at the leaking object. Each intermediate object in the chain has a direct reference to the next object in the chain. For example, the retaining path of the `Leak` object in the iframe looks as follows:
 
 <figure>
-  <img src="/_img/tracing-js-dom/retaining-path.png" width="427" height="517" alt="" loading="lazy">
+  <img src="/_img/tracing-js-dom/retaining-path.svg" width="375" height="533" alt="" loading="lazy">
   <figcaption>Figure 1: Retaining path of an object leaked via <code>iframe</code> and event listener</figcaption>
 </figure>
 
