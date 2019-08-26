@@ -115,10 +115,10 @@ _Stacking_ means that more than one optional chaining operator can be applied on
 
 ```js
 // An optional chain may be followed by another optional chain.
-const firstNameLength = db?.users[42].names?.first.length;
+const firstNameLength = db.users?.[42].names?.first.length;
 ```
 
-Still, be considerate about using more than one optional chaining operator in a single chain. If a value is guaranteed to not be nullish, then using `?.` to access properties on it should be discouraged. For instance in the example above, `users` and `users[42]` are always considered to be defined.
+Still, be considerate about using more than one optional chaining operator in a single chain. If a value is guaranteed to not be nullish, then using `?.` to access properties on it should be discouraged. In the example above, `db` is considered to always be defined, but `db.users` and `db.users[42]` may not be. If the user has a `names` property, then `names.first.length` is assumed to always be defined.
 
 _Optional deletion_ means that the `delete` operator can be combined with an optional chain:
 
