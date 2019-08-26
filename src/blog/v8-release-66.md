@@ -96,7 +96,8 @@ In V8 v6.6, we finally managed to [move out or deprecate this remaining function
 We managed to squeeze out some nice performance improvements for promises and async functions, and especially managed to close the gap between async functions and desugared promise chains.
 
 <figure>
-  <img src="/_img/v8-release-66/promise.png" width="1508" height="1028" alt="" loading="lazy">
+  <img src="/_img/v8-release-66/promise.svg" width="754" height="457" alt="" loading="lazy">
+  <figcaption>Promise performance improvements</figcaption>
 </figure>
 
 In addition, the performance of async generators and async iteration was improved significantly, making them a viable option for the upcoming Node 10 LTS, which is scheduled to include V8 v6.6. As an example, consider the following Fibonacci sequence implementation:
@@ -121,7 +122,8 @@ async function fibonacci(id, n) {
 We’ve measured the following improvements for this pattern, before and after Babel transpilation:
 
 <figure>
-  <img src="/_img/v8-release-66/async-generator.png" width="1508" height="1028" alt="" loading="lazy">
+  <img src="/_img/v8-release-66/async-generator.svg" width="767" height="483" alt="" loading="lazy">
+  <figcaption>Async generator performance improvements</figcaption>
 </figure>
 
 Finally, [bytecode improvements](https://chromium-review.googlesource.com/c/v8/v8/+/866734) to “suspendable functions” such as generators, async functions, and modules, have improved the performance of these functions while running in the interpreter, and decreased their compiled size. We’re planning on improving the performance of async functions and async generators even further with upcoming releases, so stay tuned.
@@ -131,7 +133,9 @@ Finally, [bytecode improvements](https://chromium-review.googlesource.com/c/v8/v
 The throughput performance of `Array#reduce` was increased by more than 10× for holey double arrays ([see our blog post for an explanation what holey and packed arrays are](/blog/elements-kinds)). This widens the fast-path for cases where `Array#reduce` is applied to holey and packed double arrays.
 
 <figure>
+  <!-- TODO: replace this with the SVG version -->
   <img src="/_img/v8-release-66/array-reduce.png" width="1300" height="742" alt="" loading="lazy">
+  <figcaption><code>Array.prototype.reduce</code> performance improvements</figcaption>
 </figure>
 
 ## Untrusted code mitigations
