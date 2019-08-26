@@ -44,4 +44,4 @@ A capturing group can be referenced via back reference after it has been capture
 /(?<=\1d(o))r/.exec('hodor'); // ['r', 'o']
 ```
 
-Lookbehind assertions are currently in a very [early stage](https://github.com/goyakin/es-regexp-lookbehind) in the TC39 specification process. However, because they are such an obvious extension to the RegExp syntax, we decided to prioritize their implementation. You can already experiment with lookbehind assertions by running V8 version 4.9 or later with `--harmony`, or by enabling experimental JavaScript features (use `about:flags`) in Chrome from version 49 onwards.
+Lookbehind assertions are currently in a very [early stage](https://github.com/tc39/proposal-regexp-lookbehind) in the TC39 specification process. However, because they are such an obvious extension to the RegExp syntax, we decided to prioritize their implementation. You can already experiment with lookbehind assertions by running V8 version 4.9 or later with `--harmony`, or by enabling experimental JavaScript features (use `about:flags`) in Chrome from version 49 onwards.
