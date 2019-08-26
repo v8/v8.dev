@@ -227,7 +227,8 @@ We integrated concurrent marking into the existing incremental marking infrastru
 Our [real-world benchmarking framework](/blog/real-world-performance) shows about 65% and 70% reduction in main thread marking time per garbage collection cycle on mobile and desktop respectively.
 
 <figure>
-  <img src="/_img/concurrent-marking/12.png" width="2280" height="1453" alt="" loading="lazy">
+  <img src="/_img/concurrent-marking/12.svg" width="506" height="322" alt="" loading="lazy">
+  <figcaption>Time spent in marking on the main thread (lower is better)</figcaption>
 </figure>
 
 Concurrent marking also reduces garbage collection jank in Node.js. This is particularly important since Node.js never implemented idle time garbage collection scheduling and therefore was never able to hide marking time in non-jank-critical phases. Concurrent marking shipped in Node.js v10.
