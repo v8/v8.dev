@@ -19,10 +19,6 @@ for (const file of files) {
       width /= 2;
       height /= 2;
     }
-    if (oldLine.includes('width=')) {
-      continue;
-      console.error('>>>>>>>>>>>>>>', oldLine)
-    }
     const updatedLine = oldLine.replace(/ intrinsicsize="\d+x\d+"/, ` width="${width}" height="${height}"`);
     console.log(oldLine);
     console.log('>>');

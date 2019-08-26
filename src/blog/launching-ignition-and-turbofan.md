@@ -10,12 +10,12 @@ Today we are excited to announce the launch of a new JavaScript execution pipeli
 The new pipeline is built upon [Ignition](/docs/ignition), V8’s interpreter, and [TurboFan](/docs/turbofan), V8’s newest optimizing compiler. These technologies [should](/blog/turbofan-jit) [be](/blog/ignition-interpreter) [familiar](/blog/test-the-future) to those of you who have followed the V8 blog over the last few years, but the switch to the new pipeline marks a big new milestone for both.
 
 <figure>
-  <img src="/_img/v8-ignition.svg" width="256" height="256" intrinsicsize="448x448" alt="">
+  <img src="/_img/v8-ignition.svg" width="256" height="256" alt="">
   <figcaption>Logo for Ignition, V8’s brand-new interpreter</figcaption>
 </figure>
 
 <figure>
-  <img src="/_img/v8-turbofan.svg" width="256" height="256" intrinsicsize="470x470" alt="">
+  <img src="/_img/v8-turbofan.svg" width="256" height="256" alt="">
   <figcaption>Logo for TurboFan, V8’s brand-new optimizing compiler</figcaption>
 </figure>
 

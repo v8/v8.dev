@@ -12,7 +12,7 @@ tweet: '1031538167617413120'
 V8 [v6.9](/blog/v8-release-69) includes Liftoff, a new baseline compiler for WebAssembly. Liftoff is now enabled by default on desktop systems. This article details the motivation to add another compilation tier and describes the implementation and performance of Liftoff.
 
 <figure>
-  <img src="/_img/v8-liftoff.svg" width="256" height="256" intrinsicsize="187x187" alt="">
+  <img src="/_img/v8-liftoff.svg" width="256" height="256" alt="">
   <figcaption>Logo for Liftoff, V8’s WebAssembly baseline compiler</figcaption>
 </figure>
 

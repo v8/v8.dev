@@ -100,7 +100,7 @@ In scavenging we actually do these three steps — marking, evacuating, and poin
 Most of these algorithms and optimizations are common in garbage collection literature and can be found in many garbage collected languages. But state-of-the-art garbage collection has come a long way. One important metric for measuring the time spent in garbage collection is the amount of time that the main thread spends paused while GC is performed. For traditional ‘stop-the-world’ garbage collectors, this time can really add up, and this time spent doing GC directly detracts from the user experience in the form of janky pages and poor rendering and latency.
 
 <figure>
-  <img src="/_img/v8-orinoco.svg" width="256" height="256" intrinsicsize="192x192" alt="">
+  <img src="/_img/v8-orinoco.svg" width="256" height="256" alt="">
   <figcaption>Logo for Orinoco, V8’s garbage collector</figcaption>
 </figure>
 

@@ -348,7 +348,7 @@ Now this second [`PromiseReactionJob`](https://tc39.es/ecma262/#sec-promisereact
 Summarizing what we’ve learned, for each `await` the engine has to create **two additional** promises (even if the right hand side is already a promise) and it needs **at least three** microtask queue ticks. Who knew that a single `await` expression resulted in _that much overhead_?!
 
 <figure>
-  <img src="/_img/fast-async/await-code-before.svg" intrinsicsize="451x214" alt="" width="400" height="191">
+  <img src="/_img/fast-async/await-code-before.svg" width="451" height="215" alt="">
 </figure>
 
 Let’s have a look at where this overhead comes from. The first line is responsible for creating the wrapper promise. The second line immediately resolves that wrapper promise with the `await`ed value `v`. These two lines are responsible for one additional promise plus two out of the three microticks. That’s quite expensive if `v` is already a promise (which is the common case, since applications normally `await` on promises). In the unlikely case that a developer `await`s on e.g. `42`, the engine still needs to wrap it into a promise.
