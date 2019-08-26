@@ -20,7 +20,7 @@ Let's start by analysing a very simple object such as `{a: "foo", b: "bar"}`. Th
 The following diagram shows what a basic JavaScript object looks like in memory.
 
 <figure>
-  <img src="/_img/fast-properties/jsobject.png" intrinsicsize="1600x467" alt="">
+  <img src="/_img/fast-properties/jsobject.png" width="1600" height="467" alt="" loading="lazy">
 </figure>
 
 Elements and properties are stored in two separate data structures which makes adding and accessing properties or elements more efficient for different usage patterns.
@@ -43,7 +43,7 @@ After explaining the general distinction of elements and named properties we nee
 Let's have a look at the important parts of a HiddenClass.
 
 <figure>
-  <img src="/_img/fast-properties/hidden-class.png" intrinsicsize="1600x480" alt="">
+  <img src="/_img/fast-properties/hidden-class.png" width="1600" height="480" alt="" loading="lazy">
 </figure>
 
 In V8 the first field of a JavaScript object points to a HiddenClass. (In fact, this is the case for any object that is on the V8 heap and managed by the garbage collector.) In terms of properties, the most important information is the third bit field, which stores the number of properties, and a pointer to the descriptor array. The descriptor array contains information about named properties like the name itself and the position where the value is stored. Note that we do not keep track of integer indexed properties here, hence there is no entry in the descriptor array.
@@ -51,19 +51,19 @@ In V8 the first field of a JavaScript object points to a HiddenClass. (In fact, 
 The basic assumption about HiddenClasses is that objects with the same structure — e.g. the same named properties in the same order — share the same HiddenClass. To achieve that we use a different HiddenClass when a property gets added to an object. In the following example we start from an empty object and add three named properties.
 
 <figure>
-  <img src="/_img/fast-properties/adding-properties.png" intrinsicsize="1600x707" alt="">
+  <img src="/_img/fast-properties/adding-properties.png" width="1600" height="707" alt="" loading="lazy">
 </figure>
 
 Every time a new property is added, the object's HiddenClass is changed. In the background V8 creates a transition tree that links the HiddenClasses together. V8 knows which HiddenClass to take when you add, for instance, the property "a" to an empty object. This transition tree makes sure you end up with the same final HiddenClass if you add the same properties in the same order. The following example shows that we would follow the same transition tree even if we add simple indexed properties in between.
 
 <figure>
-  <img src="/_img/fast-properties/transitions.png" intrinsicsize="1600x116" alt="">
+  <img src="/_img/fast-properties/transitions.png" width="1600" height="116" alt="" loading="lazy">
 </figure>
 
 However, if we create a new object that gets a different property added, in this case property `"d"`, V8 creates a separate branch for the new HiddenClasses.
 
 <figure>
-  <img src="/_img/fast-properties/transition-trees.png" intrinsicsize="1600x291" alt="">
+  <img src="/_img/fast-properties/transition-trees.png" width="1600" height="291" alt="" loading="lazy">
 </figure>
 
 **Takeaway from this section:**
@@ -81,13 +81,13 @@ A simple object such as `{a: 1, b: 2}` can have various internal representations
 **In-object vs. normal properties:** V8 supports so-called in-object properties which are stored directly on the object themselves. These are the fastest properties available in V8 as they are accessible without any indirection. The number of in-object properties is predetermined by the initial size of the object. If more properties get added than there is space in the object, they are stored in the properties store. The properties store adds one level of indirection but can be grown independently.
 
 <figure>
-  <img src="/_img/fast-properties/in-object-properties.png" intrinsicsize="1600x479" alt="">
+  <img src="/_img/fast-properties/in-object-properties.png" width="1600" height="479" alt="" loading="lazy">
 </figure>
 
 **Fast vs. slow properties:** The next important distinction is between fast and slow properties. Typically we define the properties stored in the linear properties store as "fast". Fast properties are simply accessed by index in the properties store. To get from the name of the property to the actual position in the properties store, we have to consult the descriptor array on the HiddenClass, as we've outlined before.
 
 <figure>
-  <img src="/_img/fast-properties/fast-vs-slow-properties.png" intrinsicsize="1600x636" alt="">
+  <img src="/_img/fast-properties/fast-vs-slow-properties.png" width="1600" height="636" alt="" loading="lazy">
 </figure>
 
 However, if many properties get added and deleted from an object, it can generate a lot of time and memory overhead to maintain the descriptor array and HiddenClasses. Hence, V8 also supports so-called slow properties. An object with slow properties has a self-contained dictionary as a properties store. All the properties meta information is no longer stored in the descriptor array on the HiddenClass but directly in the properties dictionary. Hence, properties can be added and removed without updating the HiddenClass. Since inline caches don’t work with dictionary properties, the latter, are typically slower than fast properties.
@@ -121,7 +121,7 @@ console.log(o[3]);          // Prints undefined
 ```
 
 <figure>
-  <img src="/_img/fast-properties/hole.png" intrinsicsize="1116x555" alt="">
+  <img src="/_img/fast-properties/hole.png" width="1116" height="555" alt="" loading="lazy">
 </figure>
 
 In short, if a property is not present on the receiver we have to keep on looking on the prototype chain. Given that elements are self-contained, e.g. we don't store information about present indexed properties on the HiddenClass, we need a special value, called the\_hole, to mark properties that are not present. This is crucial for the performance of Array functions. If we know that there are no holes, i.e. the elements store is packed, we can perform local operations without expensive lookups on the prototype chain.
@@ -159,7 +159,7 @@ const b2 = [1.1,  , 3];  // Double Holey, b2[1] reads from the prototype
 **The ElementsAccessor:** As you can imagine we are not exactly keen on writing Array functions 20 times in C++, once for every [elements kind](/blog/elements-kinds). That's where some C++ magic comes into play. Instead of implementing Array functions over and over again, we built the `ElementsAccessor` where we mostly have to implement only simple functions that access elements from the backing store. The `ElementsAccessor` relies on [CRTP](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) to create specialized versions of each Array function. So if you call something like `slice` on an array, V8 internally calls a builtin written in C++ and dispatches through the `ElementsAccessor` to the specialized version of the function:
 
 <figure>
-  <img src="/_img/fast-properties/elements-accessor.png" intrinsicsize="640x225" alt="">
+  <img src="/_img/fast-properties/elements-accessor.png" width="640" height="225" alt="" loading="lazy">
 </figure>
 
 **Takeaway from this section:**

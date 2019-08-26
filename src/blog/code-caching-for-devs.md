@@ -32,7 +32,7 @@ The on-disk code cache is managed by Chrome (specifically, by Blink), and it fil
 In summary:
 
 <figure>
-  <img src="/_img/code-caching-for-devs/overview.svg" intrinsicsize="487x280" alt="">
+  <img src="/_img/code-caching-for-devs/overview.svg" width="487" height="280" alt="" loading="lazy">
   <figcaption>Code caching is split into cold, warm, and hot runs, using the in-memory cache on warm runs and the disk cache on hot runs.</figcaption>
 </figure>
 
@@ -51,7 +51,7 @@ In addition to passively doing nothing, you should also try your best to activel
 This may be obvious, but it’s worth making explicit — whenever you ship new code, that code is not yet cached. Whenever the browser makes an HTTP request for a script URL, it can include the date of the last fetch of that URL, and if the server knows that the file hasn’t changed, it can send back a 304 Not Modified response, which keeps our code cache hot. Otherwise, a 200 OK response updates our cached resource, and clears the code cache, reverting it back to a cold run.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/http-200-vs-304.jpg" intrinsicsize="600x515" alt="" title="Drake prefers HTTP 304 responses to HTTP 200 responses.">
+  <img src="/_img/code-caching-for-devs/http-200-vs-304.jpg" width="600" height="515" alt="" title="Drake prefers HTTP 304 responses to HTTP 200 responses." loading="lazy">
 </figure>
 
 It’s tempting to always push your latest code changes immediately, particularly if you want to measure the impact of a certain change, but for caches it’s much better to leave code be, or at least update it as rarely as possible. Consider imposing a limit of `≤ x` deployments per week, where `x` is the slider you can adjust to trade-off caching vs. staleness.
@@ -83,7 +83,7 @@ In this case, only `A()` or `B()` is compiled and executed on the warm run, and 
 Certainly the advice to do “nothing”, whether passively or actively, is not very satisfying. So in addition to doing “nothing”, given our current heuristics and implementation, there are some things you can do. Please remember, though, that heuristics can change, this advice may change, and there is no substitute for profiling.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/with-great-power.jpg" intrinsicsize="500x209" alt="" title="Uncle Ben suggests that Peter Parker should be cautious when optimizing his web app’s cache behavior.">
+  <img src="/_img/code-caching-for-devs/with-great-power.jpg" width="500" height="209" alt="" title="Uncle Ben suggests that Peter Parker should be cautious when optimizing his web app’s cache behavior." loading="lazy">
 </figure>
 
 ### Split out libraries from code using them { #split }
@@ -193,7 +193,7 @@ None of the above suggestions is guaranteed to speed up your web app. Unfortunat
 `chrome://tracing` records instrumented traces of Chrome during some period of time, where the resulting trace visualization looks something like this:
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-visualization.png" srcset="/_img/code-caching-for-devs/chrome-tracing-visualization@2x.png 2x" intrinsicsize="722x672" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-visualization.png" srcset="/_img/code-caching-for-devs/chrome-tracing-visualization@2x.png 2x" width="722" height="672" alt="" loading="lazy">
   <figcaption>The <code>chrome://tracing</code> UI with a recording of a warm cache run</figcaption>
 </figure>
 
@@ -207,11 +207,11 @@ google-chrome --user-data-dir="$(mktemp -d)" --disable-extensions
 When collecting a trace, you have to select what categories to trace. In most cases you can simply select the “Web developer” set of categories, but you can also pick categories manually. The important category for code caching is `v8`.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-1.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-1@2x.png 2x" intrinsicsize="721x607" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-1.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-1@2x.png 2x" width="721" height="607" alt="" loading="lazy">
 </figure>
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-2.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-2@2x.png 2x" intrinsicsize="721x607" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-2.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-2@2x.png 2x" width="721" height="607" alt="" loading="lazy">
 </figure>
 
 After recording a trace with the `v8` category, look for `v8.compile` slices in the trace. (Alternatively, you could enter `v8.compile` in the tracing UI’s search box.) These list the file being compiled, and some metadata about the compilation.
@@ -219,19 +219,19 @@ After recording a trace with the `v8` category, look for `v8.compile` slices in 
 On a cold run of a script, there is no information about code caching — this means that the script was not involved in producing or consuming cache data.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-cold-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-cold-run@2x.png 2x" intrinsicsize="405x318" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-cold-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-cold-run@2x.png 2x" width="405" height="318" alt="" loading="lazy">
 </figure>
 
 On a warm run, there are two `v8.compile` entries per script: one for the actual compilation (as above), and one (after execution) for producing the cache. You can recognize the latter as it has `cacheProduceOptions` and `producedCacheSize` metadata fields.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-warm-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-warm-run@2x.png 2x" intrinsicsize="404x386" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-warm-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-warm-run@2x.png 2x" width="404" height="386" alt="" loading="lazy">
 </figure>
 
 On a hot run, you’ll see a `v8.compile` entry for consuming the cache, with metadata fields `cacheConsumeOptions` and `consumedCacheSize`. All sizes are expressed in bytes.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-hot-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-hot-run@2x.png 2x" intrinsicsize="406x363" alt="">
+  <img src="/_img/code-caching-for-devs/chrome-tracing-hot-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-hot-run@2x.png 2x" width="406" height="363" alt="" loading="lazy">
 </figure>
 
 ## Conclusion

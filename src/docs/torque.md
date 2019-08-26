@@ -56,7 +56,7 @@ The Torque compiler doesn’t create machine code directly, but rather generates
 Graphically, the build process looks like this:
 
 <figure>
-  <img src="/_img/docs/torque/build-process.svg" intrinsicsize="800x480" alt="">
+  <img src="/_img/docs/torque/build-process.svg" width="800" height="480" alt="" loading="lazy">
 </figure>
 
 ## Torque tooling { #tooling }

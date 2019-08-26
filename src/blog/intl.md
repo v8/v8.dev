@@ -46,7 +46,7 @@ As a result of this work, we improved the performance of the Internationalizatio
 For example, creating a new `Intl.NumberFormat` object became around 24× faster.
 
 <figure>
-  <img src="/_img/intl/performance.svg" intrinsicsize="713x371" alt="">
+  <img src="/_img/intl/performance.svg" width="713" height="371" alt="" loading="lazy">
   <figcaption><a href=https://cs.chromium.org/chromium/src/v8/test/js-perf-test/Intl/constructor.js>Microbenchmarks</a> testing the performance of creating various <code>Intl</code> objects</figcaption>
 </figure>
 

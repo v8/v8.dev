@@ -46,14 +46,14 @@ JavaScript execution time is important for phones with slow CPUs. Due to differe
 In fact, of the total time a page spends loading in a browser like Chrome, anywhere up to 30% of that time can be spent in JavaScript execution. Below is a page load from a site with a pretty typical workload (Reddit.com) on a high-end desktop machine:
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/reddit-js-processing.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/reddit-js-processing.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>JavaScript processing represents 10–30% of time spent in V8 during page load.</figcaption>
 </figure>
 
 On mobile, it takes 3–4× longer for a median phone (Moto G4) to execute Reddit’s JavaScript compared to a high-end device (Pixel 3), and over 6× as long on a low-end device (the <$100 Alcatel 1X):
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/reddit-js-processing-devices.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/reddit-js-processing-devices.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>The cost of Reddit’s JavaScript across a few different device classes (low-end, average, and high-end)</figcaption>
 </figure>
 
@@ -64,7 +64,7 @@ On mobile, it takes 3–4× longer for a median phone (Moto G4) to execute Reddi
 When you’re trying to optimize JavaScript execution time, keep an eye out for [Long Tasks](https://web.dev/long-tasks-devtools/) that might be monopolizing the UI thread for long periods of time. These can block critical tasks from executing even if the page looks visually ready. Break these up into smaller tasks. By splitting up your code and prioritizing the order in which it is loaded, you can get pages interactive faster and hopefully have lower input latency.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/long-tasks.png" srcset="/_img/cost-of-javascript-2019/long-tasks@2x.png 2x" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/long-tasks.png" srcset="/_img/cost-of-javascript-2019/long-tasks@2x.png 2x" width="1280" height="774" alt="" loading="lazy">
   <figcaption>Long tasks monopolize the main thread. You should break them up.</figcaption>
 </figure>
 
@@ -75,14 +75,14 @@ Raw JavaScript parsing speed in V8 has increased 2× since Chrome 60. At the sam
 V8 has reduced the amount of parsing and compilation work on the main thread by an average of 40% (e.g. 46% on Facebook, 62% on Pinterest) with the highest improvement being 81% (YouTube), by parsing and compiling on a worker thread. This is in addition to the existing off-main-thread streaming parse/compile.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/chrome-js-parse-times.svg" intrinsicsize="1280x836" alt="">
+  <img src="/_img/cost-of-javascript-2019/chrome-js-parse-times.svg" width="1280" height="836" alt="" loading="lazy">
   <figcaption>V8 parse times across different versions</figcaption>
 </figure>
 
 We can also visualize the CPU time impact of these changes across different versions of V8 across Chrome releases. In the same amount of time it took Chrome 61 to parse Facebook’s JS, Chrome 75 can now parse both Facebook’s JS AND 6 times Twitter’s JS.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/js-parse-times-websites.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/js-parse-times-websites.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>In the time it took Chrome 61 to parse Facebook’s JS, Chrome 75 can now parse both Facebook’s JS and 6 times Twitter’s JS.</figcaption>
 </figure>
 
@@ -95,14 +95,14 @@ Let’s dive into how these changes were unlocked. In short, script resources ca
 The not-so-short explanation is… Much older versions of Chrome would download a script in full before beginning to parse it, which is a straightforward approach but it doesn’t fully utilize the CPU. Between versions 41 and 68, Chrome started parsing async and deferred scripts on a separate thread as soon as the download begins.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/script-streaming-1.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/script-streaming-1.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>Scripts arrive in multiple chunks. V8 starts streaming once it’s seen at least 30 kB.</figcaption>
 </figure>
 
 In Chrome 71, we moved to a task-based setup where the scheduler could parse multiple async/deferred scripts at once. The impact of this change was a ~20% reduction in main thread parse time, yielding an overall ~2% improvement in TTI/FID as measured on real-world websites.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/script-streaming-2.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/script-streaming-2.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>Chrome 71 moved to a task-based setup where the scheduler could parse multiple async/deferred scripts at once.</figcaption>
 </figure>
 
@@ -128,7 +128,7 @@ Leszek Swirski’s BlinkOn presentation goes into more detail:
 In addition to the above, there was [an issue in DevTools](https://bugs.chromium.org/p/chromium/issues/detail?id=939275) that rendered the entire parser task in a way that hints that it’s using CPU (full block). However, the parser blocks whenever it’s starved for data (that needs to go over the main thread). Since we moved from a single streamer thread to streaming tasks, this became really obvious. Here’s what you’d use to see in Chrome 69:
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/devtools-69.png" srcset="/_img/cost-of-javascript-2019/devtools-69@2x.png 2x" intrinsicsize="931x98" alt="">
+  <img src="/_img/cost-of-javascript-2019/devtools-69.png" srcset="/_img/cost-of-javascript-2019/devtools-69@2x.png 2x" width="931" height="98" alt="" loading="lazy">
   <figcaption>The DevTools issue that rendered the entire parser task in a way that hints that it’s using CPU (full block)</figcaption>
 </figure>
 
@@ -137,14 +137,14 @@ The “parse script” task is shown to take 1.08 seconds. However, parsing Java
 Chrome 76 paints a different picture:
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/devtools-76.png" srcset="/_img/cost-of-javascript-2019/devtools-76@2x.png 2x" intrinsicsize="922x441" alt="">
+  <img src="/_img/cost-of-javascript-2019/devtools-76.png" srcset="/_img/cost-of-javascript-2019/devtools-76@2x.png 2x" width="922" height="441" alt="" loading="lazy">
   <figcaption>In Chrome 76, parsing is broken up into multiple smaller streaming tasks.</figcaption>
 </figure>
 
 In general, the DevTools performance pane is great for getting a high-level overview of what’s happening on your page. For detailed V8-specific metrics such as JavaScript parse and compile times, we recommend [using Chrome Tracing with Runtime Call Stats (RCS)](/docs/rcs). In RCS results, `Parse-Background` and `Compile-Background` tell you how much time was spent parsing and compiling JavaScript off the main thread, whereas `Parse` and `Compile` captures the main thread metrics.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/rcs.png" srcset="/_img/cost-of-javascript-2019/rcs@2x.png 2x" intrinsicsize="848x526" alt="">
+  <img src="/_img/cost-of-javascript-2019/rcs.png" srcset="/_img/cost-of-javascript-2019/rcs@2x.png 2x" width="848" height="526" alt="" loading="lazy">
 </figure>
 
 ## What is the real-world impact of these changes? { #impact }
@@ -152,7 +152,7 @@ In general, the DevTools performance pane is great for getting a high-level over
 Let’s look at some examples of real-world sites and how script streaming applies.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/reddit-main-thread.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/reddit-main-thread.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>Main thread vs. worker thread time spent parsing and compiling Reddit’s JS on a MacBook Pro</figcaption>
 </figure>
 
@@ -161,7 +161,7 @@ Reddit.com has several 100 kB+ bundles which are wrapped in outer functions caus
 They’d benefit from splitting up some of their larger bundles into smaller ones (e.g 50 kB each) without the wrapping to maximize parallelization — so that each bundle could be streaming-parsed + compiled separately and reduce main thread parse/compile during start-up.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/facebook-main-thread.svg" intrinsicsize="1280x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/facebook-main-thread.svg" width="1280" height="774" alt="" loading="lazy">
   <figcaption>Main thread vs. worker thread time spent parsing and compiling Facebook’s JS on a MacBook Pro</figcaption>
 </figure>
 
@@ -192,7 +192,7 @@ const data = JSON.parse('{"foo":42,"bar":1337}'); // 🚀
 As long as the JSON string is only evaluated once, the `JSON.parse` approach is [much faster](https://github.com/GoogleChromeLabs/json-parse-benchmark) compared to the JavaScript object literal, especially for cold loads. A good rule of thumb is to apply this technique for objects of 10 kB or larger — but as always with performance advice, measure the actual impact before making any changes.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/json.svg" intrinsicsize="842x520" alt="">
+  <img src="/_img/cost-of-javascript-2019/json.svg" width="842" height="520" alt="" loading="lazy">
   <figcaption><code>JSON.parse('…')</code> is <a href="https://github.com/GoogleChromeLabs/json-parse-benchmark">much faster</a> to parse, compile, and execute compared to an equivalent JavaScript literal — not just in V8 (1.7× as fast), but in all major JavaScript engines.</figcaption>
 </figure>
 
@@ -208,7 +208,7 @@ The first pass can’t be avoided. Luckily, the second pass can be avoided by pl
 V8’s (byte)code-caching optimization can help. When a script is first requested, Chrome downloads it and gives it to V8 to compile. It also stores the file in the browser’s on-disk cache. When the JS file is requested a second time, Chrome takes the file from the browser cache and once again gives it to V8 to compile. This time, however, the compiled code is serialized, and is attached to the cached script file as metadata.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/code-caching.png" srcset="/_img/cost-of-javascript-2019/code-caching@2x.png 2x" intrinsicsize="1431x774" alt="">
+  <img src="/_img/cost-of-javascript-2019/code-caching.png" srcset="/_img/cost-of-javascript-2019/code-caching@2x.png 2x" width="1431" height="774" alt="" loading="lazy">
   <figcaption>Visualization of how code caching works in V8</figcaption>
 </figure>
 

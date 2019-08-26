@@ -11,10 +11,10 @@ for (const file of files) {
   if (!results) continue;
   for (const result of results) {
     const oldLine = result[0];
-    if (oldLine.includes('intrinsicsize')) continue;
+    if (oldLine.includes(' width="')) continue;
     const fileName = 'src/' + oldLine.match(/src="\/([^"]+)"/)[1];
     const { width, height } = imageSize(fileName);
-    const updatedLine = oldLine.replace(' alt="', ` intrinsicsize="${width}x${height}" alt="`);
+    const updatedLine = oldLine.replace(' alt="', ` width="${width}" height="${height}" alt="`);
     console.log(oldLine);
     console.log('>>');
     console.log(updatedLine);

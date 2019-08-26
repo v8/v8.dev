@@ -170,7 +170,7 @@ For now, module specifiers must be full URLs, or relative URLs starting with `/`
 Classic `<script>`s block the HTML parser by default. You can work around it by adding [the `defer` attribute](https://html.spec.whatwg.org/multipage/scripting.html#attr-script-defer), which ensures that the script download happens in parallel with HTML parsing.
 
 <figure>
-  <img src="/_img/modules/async-defer.svg" intrinsicsize="820x200" alt="">
+  <img src="/_img/modules/async-defer.svg" width="820" height="200" alt="" loading="lazy">
 </figure>
 
 Module scripts are deferred by default. As such, there is no need to add `defer` to your `<script type="module">` tags! Not only does the download for the main module happen in parallel with HTML parsing, the same goes for all the dependency modules!
@@ -231,7 +231,7 @@ However, as we learned during [our bottleneck analysis of Chrome’s loading pip
 
 <figure>
   <a href="https://docs.google.com/document/d/1ovo4PurT_1K4WFwN2MYmmgbLcr7v6DRQN67ESVA-wq0/pub">
-    <img src="/_img/modules/renderer-main-thread-time-breakdown.svg" intrinsicsize="830x311" alt="">
+    <img src="/_img/modules/renderer-main-thread-time-breakdown.svg" width="830" height="311" alt="" loading="lazy">
   </a>
 </figure>
 

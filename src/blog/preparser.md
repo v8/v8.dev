@@ -44,7 +44,7 @@ function g() {
 First the receiver (i.e. the `this` value for `f`, which is `globalThis` since it’s a sloppy function call) is pushed on the stack, followed by the called function `f`. Then arguments `1` and `2` are pushed on the stack. At that point the function `f` is called. To execute the call, we first save the state of `g` on the stack: the “return instruction pointer” (`rip`; what code we need to return to) of `f` as well as the “frame pointer” (`fp`; what the stack should look like on return). Then we enter `f`, which allocates space for the local variable `c`, as well as any temporary space it may need. This ensures that any data used by the function disappears when the function activation goes out of scope: it’s simply popped from the stack.
 
 <figure>
-  <img src="/_img/preparser/stack-1.svg" width="173" height="333" intrinsicsize="173x333" alt="">
+  <img src="/_img/preparser/stack-1.svg" width="173" height="333" alt="" loading="lazy">
   <figcaption>Stack layout of a call to function <code>f</code> with arguments <code>a</code>, <code>b</code>, and local variable <code>c</code> allocated on the stack.</figcaption>
 </figure>
 
@@ -68,7 +68,7 @@ function g() {
 In the above example, the reference from `inner` to the local variable `d` declared in `make_f` is evaluated after `make_f` has returned. To implement this, VMs for languages with lexical closures allocate variables referenced from inner functions on the heap, in a structure called a “context”.
 
 <figure>
-  <img src="/_img/preparser/stack-2.svg" width="428" height="292" intrinsicsize="428x292" alt="">
+  <img src="/_img/preparser/stack-2.svg" width="428" height="292" alt="" loading="lazy">
   <figcaption>Stack layout of a call to <code>make_f</code> with the argument copied to a context allocated on the heap for later use by <code>inner</code> that captures <code>d</code>.</figcaption>
 </figure>
 
@@ -139,7 +139,7 @@ The function directly points to the outer context which contains the values of v
 To compute whether or not the lazy compiled function itself needs a context, though, we need to perform scope resolution again: We need to know whether functions nested in the lazy-compiled function reference the variables declared by the lazy function. We can figure this out by re-preparsing those functions. This is exactly what V8 did up to V8 v6.3 / Chrome 63. This is not ideal performance-wise though, as it makes the relation between source size and parse cost nonlinear: we would preparse functions as many times as they are nested. In addition to natural nesting of dynamic programs, JavaScript packers commonly wrap code in “[immediately-invoked function expressions](https://en.wikipedia.org/wiki/Immediately_invoked_function_expression)” (IIFEs), making most JavaScript programs have multiple nesting layers.
 
 <figure>
-  <img src="/_img/preparser/parse-complexity-before.svg" intrinsicsize="960x540" alt="">
+  <img src="/_img/preparser/parse-complexity-before.svg" width="960" height="540" alt="" loading="lazy">
   <figcaption>Each reparse adds at least the cost of parsing the function.</figcaption>
 </figure>
 
@@ -148,14 +148,14 @@ To avoid the nonlinear performance overhead, we perform full scope resolution ev
 Instead, we serialize where variables are allocated as a dense array of flags per variable. When we lazy-parse a function, variables are recreated in the same order as the preparser saw them, and we can simply apply the metadata to the variables. Now that the function is compiled, the variable allocation metadata is not needed anymore and can be garbage-collected. Since we only need this metadata for functions that actually contain inner functions, a large fraction of all functions does not even need this metadata, significantly reducing the memory overhead.
 
 <figure>
-  <img src="/_img/preparser/parse-complexity-after.svg" intrinsicsize="960x540" alt="">
+  <img src="/_img/preparser/parse-complexity-after.svg" width="960" height="540" alt="" loading="lazy">
   <figcaption>By keeping track of metadata for preparsed functions we can completely skip inner functions.</figcaption>
 </figure>
 
 The performance impact of skipping inner functions is, just like the overhead of re-preparsing inner functions, nonlinear. There are sites that hoist all their functions to the top-level scope. Since their nesting level is always 0, the overhead is always 0. Many modern sites, however, do actually deeply nest functions. On those sites we saw significant improvements when this feature launched in V8 v6.3 / Chrome 63. The main advantage is that now it doesn’t matter anymore how deeply nested the code is: any function is at most preparsed once, and fully parsed once[^1].
 
 <figure>
-  <img src="/_img/preparser/skipping-inner-functions.svg" width="796" height="503" intrinsicsize="796x503" alt="">
+  <img src="/_img/preparser/skipping-inner-functions.svg" width="796" height="503" alt="" loading="lazy">
   <figcaption>Main thread and off-the-main-thread parse time, before and after launching the “skipping inner functions” optimization.</figcaption>
 </figure>
 
@@ -179,7 +179,7 @@ Since V8 eagerly compiles PIFEs, they can be used as [profile-directed feedback]
 At a time when V8 still reparsed inner functions, some developers had noticed the impact of JS parsing on startup was pretty high. The package [`optimize-js`](https://github.com/nolanlawson/optimize-js) turns functions into PIFEs based on static heuristics. At the time the package was created, this had a huge impact on load performance on V8. We’ve replicated these results by running the benchmarks provided by `optimize-js` on V8 v6.1, only looking at minified scripts.
 
 <figure>
-  <img src="/_img/preparser/eager-parse-compile-pife.svg" width="979" height="605" intrinsicsize="979x605" alt="">
+  <img src="/_img/preparser/eager-parse-compile-pife.svg" width="979" height="605" alt="" loading="lazy">
   <figcaption>Eagerly parsing and compiling PIFEs results in slightly faster cold and warm startup (first and second page load, measuring total parse + compile + execute times). The benefit is much smaller on V8 v7.5 than it used to be on V8 v6.1 though, due to significant improvements to the parser.</figcaption>
 </figure>
 
@@ -190,7 +190,7 @@ The `optimize-js` benchmark results don’t exactly reflect the real world. The 
 There is still a cost though, especially a memory cost, so it’s not a good idea to eagerly compile everything:
 
 <figure>
-  <img src="/_img/preparser/eager-compilation-overhead.svg" width="477" height="295" intrinsicsize="477x295" alt="">
+  <img src="/_img/preparser/eager-compilation-overhead.svg" width="477" height="295" alt="" loading="lazy">
   <figcaption>Eagerly compiling <em>all</em> JavaScript comes at a significant memory cost.</figcaption>
 </figure>
 
