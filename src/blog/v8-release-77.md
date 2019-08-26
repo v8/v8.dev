@@ -19,7 +19,7 @@ In order to optimize JavaScript, V8 collects feedback about the types of operand
 To reduce V8’s memory usage, we now allocate the feedback vectors lazily only after the function has executed a certain amount of bytecode. This avoids allocating feedback vectors for short-lived functions that don’t benefit from the feedback collected. Our lab experiments show that lazily allocating feedback vectors saves about 2–8% of V8 heap size.
 
 <figure>
-  <img src="/_img/v8-release-77/lazy-feedback-allocation.svg" width="904" height="365" alt="">
+  <img src="/_img/v8-release-77/lazy-feedback-allocation.svg" width="904" height="365" alt="" loading="lazy">
 </figure>
 
 Our experiments from the wild show that this reduces V8’s heap size by 1–2% on desktop and 5–6% on mobile platforms for the users of Chrome. There are no performance regressions on desktop, and on mobile platforms we actually saw a performance improvement on low-end phones with limited memory. Please look out for a more detailed blog post on our recent work to save memory.
@@ -29,10 +29,10 @@ Our experiments from the wild show that this reduces V8’s heap size by 1–2% 
 Over the last milestones, we worked on scalability of background compilation of WebAssembly. The more cores your computer has, the more you benefit from this effort. The graphs below have been created on a 24-core Xeon machine, compiling [the Epic ZenGarden demo](https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html). Depending on the number of threads used, compilation takes less than half of the time compared to V8 v7.4.
 
 <figure>
-  <img src="/_img/v8-release-77/liftoff-compilation-speedup.svg" width="514" height="203" alt="">
+  <img src="/_img/v8-release-77/liftoff-compilation-speedup.svg" width="514" height="203" alt="" loading="lazy">
 </figure>
 <figure>
-  <img src="/_img/v8-release-77/turbofan-compilation-speedup.svg" width="514" height="203" alt="">
+  <img src="/_img/v8-release-77/turbofan-compilation-speedup.svg" width="514" height="203" alt="" loading="lazy">
 </figure>
 
 ### Stack trace improvements

@@ -36,7 +36,7 @@ These tasks can be performed in sequence or can be arbitrarily interleaved. A st
 The major GC collects garbage from the entire heap.
 
 <figure>
-  <img src="/_img/trash-talk/01.svg" width="960" height="295" alt="">
+  <img src="/_img/trash-talk/01.svg" width="960" height="295" alt="" loading="lazy">
   <figcaption>Major GC happens in three phases: marking, sweeping and compacting.</figcaption>
 </figure>
 
@@ -61,7 +61,7 @@ One potential weakness of a garbage collector which copies surviving objects is 
 The heap in V8 is split into different regions called [generations](/blog/orinoco-parallel-scavenger). There is a young generation (split further into ‘nursery’ and ‘intermediate’ sub-generations), and an old generation. Objects are first allocated into the nursery. If they survive the next GC, they remain in the young generation but are considered ‘intermediate’. If they survive yet another GC, they are moved into the old generation.
 
 <figure>
-  <img src="/_img/trash-talk/02.svg" width="960" height="333" alt="">
+  <img src="/_img/trash-talk/02.svg" width="960" height="333" alt="" loading="lazy">
   <figcaption>The V8 heap is split into generations. Objects are moved through generations when they survive a GC.</figcaption>
 </figure>
 
@@ -80,7 +80,7 @@ For scavenging, we have an additional set of roots which are the old-to-new refe
 The evacuation step moves all surviving objects to a contiguous chunk of memory (within a page). This has the advantage of completing removing fragmentation - gaps left by dead objects. We then switch around the two spaces i.e. To-Space becomes From-Space and vice-versa. Once GC is completed, new allocations happen at the next free address in the From-Space.
 
 <figure>
-  <img src="/_img/trash-talk/03.svg" width="960" height="333" alt="">
+  <img src="/_img/trash-talk/03.svg" width="960" height="333" alt="" loading="lazy">
   <figcaption>The scavenger evacuates live objects to a fresh page.</figcaption>
 </figure>
 
@@ -89,7 +89,7 @@ We quickly run out of space in the young generation with this strategy alone. Ob
 The final step of scavenging is to update the pointers that reference the original objects, which have been moved. Every copied object leaves a forwarding-address which is used to update the original pointer to point to the new location.
 
 <figure>
-  <img src="/_img/trash-talk/04.svg" width="960" height="333" alt="">
+  <img src="/_img/trash-talk/04.svg" width="960" height="333" alt="" loading="lazy">
   <figcaption>The scavenger evacuates ‘intermediate’ objects to the old generation, and ‘nursery’ objects to a fresh page.</figcaption>
 </figure>
 
@@ -100,7 +100,7 @@ In scavenging we actually do these three steps — marking, evacuating, and poin
 Most of these algorithms and optimizations are common in garbage collection literature and can be found in many garbage collected languages. But state-of-the-art garbage collection has come a long way. One important metric for measuring the time spent in garbage collection is the amount of time that the main thread spends paused while GC is performed. For traditional ‘stop-the-world’ garbage collectors, this time can really add up, and this time spent doing GC directly detracts from the user experience in the form of janky pages and poor rendering and latency.
 
 <figure>
-  <img src="/_img/v8-orinoco.svg" width="256" height="256" alt="">
+  <img src="/_img/v8-orinoco.svg" width="256" height="256" alt="" loading="lazy">
   <figcaption>Logo for Orinoco, V8’s garbage collector</figcaption>
 </figure>
 
@@ -111,7 +111,7 @@ Orinoco is the codename of the GC project to make use of the latest and greatest
 Parallel is where the main thread and helper threads do a roughly equal amount of work at the same time. This is still a ‘stop-the-world’ approach, but the total pause time is now divided by the number of threads participating (plus some overhead for synchronization). This is the easiest of the three techniques. The JavaScript heap is paused as there is no JavaScript running, so each helper thread just needs to make sure it synchronizes access to any objects that another helper might also want to access.
 
 <figure>
-  <img src="/_img/trash-talk/05.svg" width="490" height="168" alt="">
+  <img src="/_img/trash-talk/05.svg" width="490" height="168" alt="" loading="lazy">
   <figcaption>The main thread and helper threads work on the same task at the same time.</figcaption>
 </figure>
 
@@ -120,7 +120,7 @@ Parallel is where the main thread and helper threads do a roughly equal amount o
 Incremental is where the main thread does a small amount of work intermittently. We don’t do an entire GC in an incremental pause, just a small slice of the total work required for the GC. This is more difficult, because JavaScript executes between each incremental work segment, meaning that the state of the heap has changed, which might invalidate previous work that was done incrementally. As you can see from the diagram, this does not reduce the amount of time spent on the main thread (in fact, it usually increases it slightly), it just spreads it out over time. This is still a good technique for solving one of our original problems: main thread latency. By allowing JavaScript to run intermittently, but also continue garbage collection tasks, the application can still respond to user input and make progress on animation.
 
 <figure>
-  <img src="/_img/trash-talk/06.svg" width="452" height="129" alt="">
+  <img src="/_img/trash-talk/06.svg" width="452" height="129" alt="" loading="lazy">
   <figcaption>Small chunks of the GC task are interleaved into the main thread execution.</figcaption>
 </figure>
 
@@ -129,7 +129,7 @@ Incremental is where the main thread does a small amount of work intermittently.
 Concurrent is when the main thread executes JavaScript constantly, and helper threads do GC work totally in the background. This is the most difficult of the three techniques: anything on the JavaScript heap can change at any time, invalidating work we have done previously. On top of that, there are now read/write races to worry about as helper threads and the main thread simultaneously read or modify the same objects. The advantage here is that the main thread is totally free to execute JavaScript — although there is minor overhead due to some synchronization with helper threads.
 
 <figure>
-  <img src="/_img/trash-talk/07.svg" width="444" height="168" alt="">
+  <img src="/_img/trash-talk/07.svg" width="444" height="168" alt="" loading="lazy">
   <figcaption>GC tasks happen entirely in the background. The main thread is free to run JavaScript.</figcaption>
 </figure>
 
@@ -140,7 +140,7 @@ Concurrent is when the main thread executes JavaScript constantly, and helper th
 Today, V8 uses parallel scavenging to distribute work across helper threads during the young generation GC. Each thread receives a number of pointers, which it follows, eagerly evacuating any live objects into To-Space. The scavenging tasks have to synchronize via atomic read/write/compare-and-swap operations when trying to evacuate an object; another scavenging task may have found the same object via a different path and also try to move it. Whichever helper moved the object successfully then goes back and updates the pointer. It leaves a forwarding pointer so that other workers which reach the object can update other pointers as they find them. For fast synchronization-free allocation of surviving objects, the scavenging tasks use thread-local allocation buffers.
 
 <figure>
-  <img src="/_img/trash-talk/08.svg" width="960" height="339" alt="">
+  <img src="/_img/trash-talk/08.svg" width="960" height="339" alt="" loading="lazy">
   <figcaption>Parallel scavenging distributes scavenging work across multiple helper threads and the main thread.</figcaption>
 </figure>
 
@@ -149,7 +149,7 @@ Today, V8 uses parallel scavenging to distribute work across helper threads duri
 Major GC in V8 starts with concurrent marking. As the heap approaches a dynamically computed limit, concurrent marking tasks are started. The helpers are each given a number of pointers to follow, and they mark each object they find as they follow all references from discovered objects. Concurrent marking happens entirely in the background while JavaScript is executing on the main thread. [Write barriers](https://dl.acm.org/citation.cfm?id=2025255) are used to keep track of new references between objects that JavaScript creates while the helpers are marking concurrently.
 
 <figure>
-  <img src="/_img/trash-talk/09.svg" width="960" height="339" alt="">
+  <img src="/_img/trash-talk/09.svg" width="960" height="339" alt="" loading="lazy">
   <figcaption>The major GC uses concurrent marking and sweeping, and parallel compaction and pointer updating.</figcaption>
 </figure>
 
@@ -160,7 +160,7 @@ When the concurrent marking is finished, or we reach the dynamic allocation limi
 Users of JavaScript don’t have direct access to the garbage collector; it is totally implementation-defined. V8 does however provide a mechanism for the embedder to trigger garbage collection, even if the JavaScript program itself can’t. The GC can post ‘Idle Tasks’ which are optional work that would eventually be triggered anyway. Embedders like Chrome might have some notion of free or idle time. For example in Chrome, at 60 frames per second, the browser has approximately 16.6 ms to render each frame of an animation. If the animation work is completed early, Chrome can choose to run some of these idle tasks that the GC has created in the spare time before the next frame.
 
 <figure>
-  <img src="/_img/trash-talk/10.svg" width="424" height="253" alt="">
+  <img src="/_img/trash-talk/10.svg" width="424" height="253" alt="" loading="lazy">
   <figcaption>Idle GC makes use of free time on the main thread to perform GC work proactively.</figcaption>
 </figure>
 

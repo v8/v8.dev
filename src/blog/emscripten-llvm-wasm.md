@@ -46,7 +46,7 @@ It was also a relatively minor change in Emscripten. While Emscripten is a compi
 ### Code size
 
 <figure>
-  <img src="/_img/emscripten-llvm-wasm/size.svg" width="600" height="371" alt="">
+  <img src="/_img/emscripten-llvm-wasm/size.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Code size measurements (lower is better)</figcaption>
 </figure>
 
@@ -63,7 +63,7 @@ These size improvements (and the speed improvements we’ll discuss next) are du
 ### Speed
 
 <figure>
-  <img src="/_img/emscripten-llvm-wasm/speed.svg" width="600" height="371" alt="">
+  <img src="/_img/emscripten-llvm-wasm/speed.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Speed measurements (lower is better)</figcaption>
 </figure>
 
@@ -74,7 +74,7 @@ The average change on the macrobenchmarks is a speedup of **3.2%**.
 ### Build time
 
 <figure>
-  <img src="/_img/emscripten-llvm-wasm/build.svg" width="600" height="371" alt="">
+  <img src="/_img/emscripten-llvm-wasm/build.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Compile and link time measurements on BananaBread (lower is better)</figcaption>
 </figure>
 

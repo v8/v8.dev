@@ -20,24 +20,24 @@ Marking is a phase of V8’s [Mark-Compact](https://en.wikipedia.org/wiki/Tracin
 We can think of marking as a [graph traversal](https://en.wikipedia.org/wiki/Graph_traversal). The objects on the heap are nodes of the graph. Pointers from one object to another are edges of the graph. Given a node in the graph we can find all out-going edges of that node using the [hidden class](/blog/fast-properties) of the object.
 
 <figure>
-  <img src="/_img/concurrent-marking/00.svg" width="509" height="294" alt="">
+  <img src="/_img/concurrent-marking/00.svg" width="509" height="294" alt="" loading="lazy">
   <figcaption>Figure 1. Object graph</figcaption>
 </figure>
 
 V8 implements marking using two mark-bits per object and a marking worklist. Two mark-bits encode three colors: white (`00`), grey (`10`), and black (`11`). Initially all objects are white, which means that the collector has not discovered them yet. A white object becomes grey when the collector discovers it and pushes it onto the marking worklist. A grey object becomes black when the collector pops it from the marking worklist and visits all its fields. This scheme is called tri-color marking. Marking finishes when there are no more grey objects. All the remaining white objects are unreachable and can be safely reclaimed.
 
 <figure>
-  <img src="/_img/concurrent-marking/01.svg" width="380" height="290" alt="">
+  <img src="/_img/concurrent-marking/01.svg" width="380" height="290" alt="" loading="lazy">
   <figcaption>Figure 2. Marking starts from the roots</figcaption>
 </figure>
 
 <figure>
-  <img src="/_img/concurrent-marking/02.svg" width="380" height="290" alt="">
+  <img src="/_img/concurrent-marking/02.svg" width="380" height="290" alt="" loading="lazy">
   <figcaption>Figure 3. The collector turns a grey object into black by processing its pointers</figcaption>
 </figure>
 
 <figure>
-  <img src="/_img/concurrent-marking/03.svg" width="380" height="290" alt="">
+  <img src="/_img/concurrent-marking/03.svg" width="380" height="290" alt="" loading="lazy">
   <figcaption>Figure 4. The final state after marking is finished</figcaption>
 </figure>
 
@@ -48,13 +48,13 @@ Note that the marking algorithm described above works only if the application is
 Marking performed all at once can take several hundred milliseconds for large heaps.
 
 <figure>
-  <img src="/_img/concurrent-marking/04.svg" width="580" height="50" alt="">
+  <img src="/_img/concurrent-marking/04.svg" width="580" height="50" alt="" loading="lazy">
 </figure>
 
 Such long pauses can make applications unresponsive and result in poor user experience. In 2011 V8 switched from the stop-the-world marking to incremental marking. During incremental marking the garbage collector splits up the marking work into smaller chunks and allows the application to run between the chunks:
 
 <figure>
-  <img src="/_img/concurrent-marking/05.svg" width="595" height="50" alt="">
+  <img src="/_img/concurrent-marking/05.svg" width="595" height="50" alt="" loading="lazy">
 </figure>
 
 The garbage collector chooses how much incremental marking work to perform in each chunk to match the rate of allocations by the application. In common cases this greatly improves the responsiveness of the application. For large heaps under memory pressure there can still be long pauses as the collector tries to keep up with the allocations.
@@ -80,13 +80,13 @@ Because of the write-barrier cost, incremental marking may reduce throughput of 
 **Parallel** marking happens on the main thread and the worker threads. The application is paused throughout the parallel marking phase. It is the multi-threaded version of the stop-the-world marking.
 
 <figure>
-  <img src="/_img/concurrent-marking/06.svg" width="595" height="120" alt="">
+  <img src="/_img/concurrent-marking/06.svg" width="595" height="120" alt="" loading="lazy">
 </figure>
 
 **Concurrent** marking happens mostly on the worker threads. The application can continue running while concurrent marking is in progress.
 
 <figure>
-  <img src="/_img/concurrent-marking/07.svg" width="595" height="120" alt="">
+  <img src="/_img/concurrent-marking/07.svg" width="595" height="120" alt="" loading="lazy">
 </figure>
 
 The following two sections describe how we added support for parallel and concurrent marking in V8.
@@ -96,7 +96,7 @@ The following two sections describe how we added support for parallel and concur
 During parallel marking we can assume that the application is not running concurrently. This substantially simplifies the implementation because we can assume that the object graph is static and does not change. In order to mark the object graph in parallel, we need to make the garbage collector data structures thread-safe and find a way to efficiently share marking work between threads. The following diagram shows the data-structures involved in parallel marking. The arrows indicate the direction of data flow. For simplicity, the diagram omits data-structures that are needed for heap defragmentation.
 
 <figure>
-  <img src="/_img/concurrent-marking/08.svg" width="655" height="250" alt="">
+  <img src="/_img/concurrent-marking/08.svg" width="655" height="250" alt="" loading="lazy">
   <figcaption>Figure 5. Data structures for parallel marking</figcaption>
 </figure>
 
@@ -109,7 +109,7 @@ The implementation of the marking worklist is critical for performance and balan
 The extreme sides in that trade-off space are (a) using a completely concurrent data structure for best sharing as all objects can potentially be shared and (b) using a completely thread-local data structure where no objects can be shared, optimizing for thread-local throughput. Figure 6 shows how V8 balances these needs by using a marking worklist that is based on segments for thread-local insertion and removal. Once a segment becomes full it is published to a shared global pool where it is available for stealing. This way V8 allows marking threads to operate locally without any synchronization as long as possible and still handle cases where a single thread reaches a new sub-graph of objects while another thread starves as it completely drained its local segments.
 
 <figure>
-  <img src="/_img/concurrent-marking/09.svg" width="593" height="214" alt="">
+  <img src="/_img/concurrent-marking/09.svg" width="593" height="214" alt="" loading="lazy">
   <figcaption>Figure 6. Marking worklist</figcaption>
 </figure>
 
@@ -174,7 +174,7 @@ Without the memory fence the object color load operation can be reordered before
 Some operations, for example code patching, require exclusive access to the object. Early on we decided to avoid per-object locks because they can lead to the priority inversion problem, where the main thread has to wait for a worker thread that is descheduled while holding an object lock. Instead of locking an object, we allow the worker thread to bailout from visiting the object. The worker thread does that by pushing the object into the bailout worklist, which is processed only by the main thread:
 
 <figure>
-  <img src="/_img/concurrent-marking/10.svg" width="655" height="337" alt="">
+  <img src="/_img/concurrent-marking/10.svg" width="655" height="337" alt="" loading="lazy">
   <figcaption>Figure 7. The bailout worklist</figcaption>
 </figure>
 
@@ -219,7 +219,7 @@ Note that a white object that undergoes an unsafe layout change has to be marked
 We integrated concurrent marking into the existing incremental marking infrastructure. The main thread initiates marking by scanning the roots and filling the marking worklist. After that it posts concurrent marking tasks on the worker threads. The worker threads help the main thread to make faster marking progress by cooperatively draining the marking worklist. Once in a while the main thread participates in marking by processing the bailout worklist and the marking worklist. Once the marking worklists become empty, the main thread finalizes garbage collection. During finalization the main thread re-scans the roots and may discover more white objects. Those objects are marked in parallel with the help of worker threads.
 
 <figure>
-  <img src="/_img/concurrent-marking/11.svg" width="594" height="212" alt="">
+  <img src="/_img/concurrent-marking/11.svg" width="594" height="212" alt="" loading="lazy">
 </figure>
 
 ## Results
@@ -227,7 +227,7 @@ We integrated concurrent marking into the existing incremental marking infrastru
 Our [real-world benchmarking framework](/blog/real-world-performance) shows about 65% and 70% reduction in main thread marking time per garbage collection cycle on mobile and desktop respectively.
 
 <figure>
-  <img src="/_img/concurrent-marking/12.png" width="2280" height="1453" alt="">
+  <img src="/_img/concurrent-marking/12.png" width="2280" height="1453" alt="" loading="lazy">
 </figure>
 
 Concurrent marking also reduces garbage collection jank in Node.js. This is particularly important since Node.js never implemented idle time garbage collection scheduling and therefore was never able to hide marking time in non-jank-critical phases. Concurrent marking shipped in Node.js v10.

@@ -17,7 +17,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 In modern JavaScript applications, JSON is commonly used as a format to communicate structured data. By speeding up JSON parsing, we can reduce the latency of this communication. In V8 v7.6, we’ve overhauled our JSON parser to be much faster at scanning and parsing JSON. This results in up to 2.7× faster parsing of data served by popular web pages.
 
 <figure>
-  <img src="/_img/v8-release-76/json-parsing.svg" width="600" height="371" alt="">
+  <img src="/_img/v8-release-76/json-parsing.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Chart showing improved performance of <code>JSON.parse</code> on a variety of websites</figcaption>
 </figure>
 
@@ -38,7 +38,7 @@ Performance of calls on frozen or sealed arrays (and array-like objects) receive
 The chart below shows the improvements.
 
 <figure>
-  <img src="/_img/v8-release-76/frozen-sealed-elements.svg" width="660" height="408" alt="">
+  <img src="/_img/v8-release-76/frozen-sealed-elements.svg" width="660" height="408" alt="" loading="lazy">
   <figcaption>Chart showing performance boost on a variety of array operations</figcaption>
 </figure>
 
