@@ -72,7 +72,7 @@ const optionLength = db?.user?.preferences?.[optionName].length;
 This last form is also available for optionally indexing arrays, e.g.:
 
 ```js
-// If the array is missing the user with the given index,
+// If the `usersArray` is `null` or `undefined`,
 // then `userName` gracefully evaluates to `undefined`.
 const userIndex = 42;
 const userName = usersArray?.[userIndex].name;
@@ -117,6 +117,8 @@ _Stacking_ means that more than one optional chaining operator can be applied on
 // An optional chain may be followed by another optional chain.
 const firstNameLength = db?.users[42].names?.first.length;
 ```
+
+Still, be considerate about using more than one optional chaining operator in a single chain. If a value is guaranteed to not be nullish, then using `?.` to access properties on it should be discouraged. For instance in the example above, `users` and `users[42]` are always considered to be defined.
 
 _Optional deletion_ means that the `delete` operator can be combined with an optional chain:
 
