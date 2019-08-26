@@ -21,14 +21,14 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 On average web pages spend 9.5% of the V8 time at startup on parsing JavaScript. Thus we have focused on shipping V8’s fastest JavaScript parser yet with v7.2. We have drastically improved parsing speed across the board. Since v7.0 the parsing speed improved by roughly 30% on desktop. The following graph documents the impressive improvements on our real-world Facebook loading benchmark over the last months.
 
 <figure>
-  <img src="/_img/v8-release-72/facebook-parse-time.png" srcset="/_img/v8-release-72/facebook-parse-time@2x.png 2x" intrinsicsize="1060x223" alt="">
+  <img src="/_img/v8-release-72/facebook-parse-time.png" srcset="/_img/v8-release-72/facebook-parse-time@2x.png 2x" width="1060" height="223" alt="">
   <figcaption>V8 parse time on facebook.com (lower is better)</figcaption>
 </figure>
 
 We have focused on the parser on different occasions. The following graphs show the improvements relative to the latest v7.2 release across several popular websites.
 
 <figure>
-  <img src="/_img/v8-release-72/relative-parse-times.svg" intrinsicsize="861x354" alt="">
+  <img src="/_img/v8-release-72/relative-parse-times.svg" width="861" height="354" alt="">
   <figcaption>V8 parse times relative to V8 v7.2 (lower is better)</figcaption>
 </figure>
 

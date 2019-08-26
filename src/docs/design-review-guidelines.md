@@ -13,7 +13,7 @@ There are multiple drivers for the formalization of V8's design reviews:
 ## Summary
 
 <figure>
-  <img src="/_img/docs/design-review-guidelines/design-review-guidelines.svg" intrinsicsize="960x540" alt="">
+  <img src="/_img/docs/design-review-guidelines/design-review-guidelines.svg" width="960" height="540" alt="">
   <figcaption>V8's Design Review Guidelines at a glance</figcaption>
 </figure>
 
@@ -61,7 +61,7 @@ The V8 Eng Review Owners can overrule non-LGTMs or LGTMs.
 ## Detailed workflow
 
 <figure>
-  <img src="/_img/docs/design-review-guidelines/design-review-guidelines.svg" intrinsicsize="960x540" alt="">
+  <img src="/_img/docs/design-review-guidelines/design-review-guidelines.svg" width="960" height="540" alt="">
   <figcaption>V8's Design Review Guidelines at a glance</figcaption>
 </figure>
 

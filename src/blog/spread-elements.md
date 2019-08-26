@@ -90,7 +90,7 @@ The reason for using such an implementation is that, as mentioned earlier, sprea
 We implemented this simple idea using [CSA](/blog/csa) for _fast_ arrays, i.e. arrays with one of the six most common [elements kinds](/blog/elements-kinds). The optimization applies for [the common real-world scenario](/blog/real-world-performance) where the spread occurs at the start of the array literal, e.g. `[...foo]`. As shown in the graph below, this new fast path yields roughly a 3× performance improvement for spreading an array of length 100,000, making it about 25% faster than the hand-written `clone` loop.
 
 <figure>
-  <img src="/_img/spread-elements/spread-fast-array.png" srcset="/_img/spread-elements/spread-fast-array@2x.png 2x" intrinsicsize="268x243" alt="">
+  <img src="/_img/spread-elements/spread-fast-array.png" srcset="/_img/spread-elements/spread-fast-array@2x.png 2x" width="268" height="243" alt="">
   <figcaption>Performance improvement of spreading a fast array</figcaption>
 </figure>
 
@@ -137,14 +137,14 @@ Our fast path is smart enough to handle holes in this default situation. Instead
 Note that although `slice` is included in this graph, the comparison with it is unfair because `slice` has a different semantics for holey arrays: it preserves all the holes, so it has much less work to do.
 
 <figure>
-  <img src="/_img/spread-elements/spread-holey-smi-array.png" srcset="/_img/spread-elements/spread-holey-smi-array@2x.png 2x" intrinsicsize="284x250" alt="">
+  <img src="/_img/spread-elements/spread-holey-smi-array.png" srcset="/_img/spread-elements/spread-holey-smi-array@2x.png 2x" width="284" height="250" alt="">
   <figcaption>Performance improvement of spreading a holey array of integers (<a href="/blog/elements-kinds"><code>HOLEY_SMI_ELEMENTS</code></a>)</figcaption>
 </figure>
 
 The filling of holes with `undefined` that our fast path has to perform is not as simple as it sounds: it may require converting the whole array to a different elements kind. The next graph measures such a situation. The setup is the same as above, except that this time the 600 array elements are unboxed doubles and the array has the `HOLEY_DOUBLE_ELEMENTS` elements kind. Since this elements kind cannot hold tagged values such as `undefined`, spreading involves a costly elements kind transition, which is why the score for `[...a]` is much lower than in the previous graph. Nevertheless, it is still much faster than `clone(a)`.
 
 <figure>
-  <img src="/_img/spread-elements/spread-holey-double-array.png" srcset="/_img/spread-elements/spread-holey-double-array@2x.png 2x" intrinsicsize="282x242" alt="">
+  <img src="/_img/spread-elements/spread-holey-double-array.png" srcset="/_img/spread-elements/spread-holey-double-array@2x.png 2x" width="282" height="242" alt="">
   <figcaption>Performance improvement of spreading a holey array of doubles (<a href="/blog/elements-kinds"><code>HOLEY_DOUBLE_ELEMENTS</code></a>)</figcaption>
 </figure>
 
@@ -159,12 +159,12 @@ The fast path for maps is similar but does not support spreading a map directly 
 For spreading strings (`[...string]`), we measured a roughly 5× improvement, as shown in the graph below by the purple and green lines. Note that this is even faster than a TurboFan-optimized for-of-loop (TurboFan understands string iteration and can generate optimized code for it), represented by the blue and pink lines. The reason for having two plots in each case is that the micro-benchmarks operate on two different string representations (one-byte strings and two-byte strings).
 
 <figure>
-  <img src="/_img/spread-elements/spread-string.png" srcset="/_img/spread-elements/spread-string@2x.png 2x" intrinsicsize="356x248" alt="">
+  <img src="/_img/spread-elements/spread-string.png" srcset="/_img/spread-elements/spread-string@2x.png 2x" width="356" height="248" alt="">
   <figcaption>Performance improvement of spreading a string</figcaption>
 </figure>
 
 <figure>
-  <img src="/_img/spread-elements/spread-set.png" srcset="/_img/spread-elements/spread-set@2x.png 2x" intrinsicsize="313x248" alt="">
+  <img src="/_img/spread-elements/spread-set.png" srcset="/_img/spread-elements/spread-set@2x.png 2x" width="313" height="248" alt="">
   <figcaption>Performance improvement of spreading a set with 100,000 integers (magenta, about 18×), shown here in comparison with a <code>for</code>-<code>of</code> loop (red)</figcaption>
 </figure>
 
@@ -173,7 +173,7 @@ For spreading strings (`[...string]`), we measured a roughly 5× improvement, as
 Fortunately, our fast paths for spread elements can be reused for `Array.from` in the case where `Array.from` is called with an iterable object and without a mapping function, for example, `Array.from([1, 2, 3])`. The reuse is possible because in this case, the behavior of `Array.from` is exactly the same as that of spreading. It results in an enormous performance improvement, shown below for an array with 100 doubles.
 
 <figure>
-  <img src="/_img/spread-elements/array-from-array-of-doubles.png" srcset="/_img/spread-elements/array-from-array-of-doubles@2x.png 2x" intrinsicsize="284x242" alt="">
+  <img src="/_img/spread-elements/array-from-array-of-doubles.png" srcset="/_img/spread-elements/array-from-array-of-doubles@2x.png 2x" width="284" height="242" alt="">
   <figcaption>Performance improvement of <code>Array.from(array)</code> where <code>array</code> contains 100 doubles</figcaption>
 </figure>
 

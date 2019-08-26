@@ -139,7 +139,7 @@ The function directly points to the outer context which contains the values of v
 To compute whether or not the lazy compiled function itself needs a context, though, we need to perform scope resolution again: We need to know whether functions nested in the lazy-compiled function reference the variables declared by the lazy function. We can figure this out by re-preparsing those functions. This is exactly what V8 did up to V8 v6.3 / Chrome 63. This is not ideal performance-wise though, as it makes the relation between source size and parse cost nonlinear: we would preparse functions as many times as they are nested. In addition to natural nesting of dynamic programs, JavaScript packers commonly wrap code in “[immediately-invoked function expressions](https://en.wikipedia.org/wiki/Immediately_invoked_function_expression)” (IIFEs), making most JavaScript programs have multiple nesting layers.
 
 <figure>
-  <img src="/_img/preparser/parse-complexity-before.svg" intrinsicsize="960x540" alt="">
+  <img src="/_img/preparser/parse-complexity-before.svg" width="960" height="540" alt="">
   <figcaption>Each reparse adds at least the cost of parsing the function.</figcaption>
 </figure>
 
@@ -148,7 +148,7 @@ To avoid the nonlinear performance overhead, we perform full scope resolution ev
 Instead, we serialize where variables are allocated as a dense array of flags per variable. When we lazy-parse a function, variables are recreated in the same order as the preparser saw them, and we can simply apply the metadata to the variables. Now that the function is compiled, the variable allocation metadata is not needed anymore and can be garbage-collected. Since we only need this metadata for functions that actually contain inner functions, a large fraction of all functions does not even need this metadata, significantly reducing the memory overhead.
 
 <figure>
-  <img src="/_img/preparser/parse-complexity-after.svg" intrinsicsize="960x540" alt="">
+  <img src="/_img/preparser/parse-complexity-after.svg" width="960" height="540" alt="">
   <figcaption>By keeping track of metadata for preparsed functions we can completely skip inner functions.</figcaption>
 </figure>
 

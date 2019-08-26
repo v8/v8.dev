@@ -42,7 +42,7 @@ History aside, now let’s take a look at the new pipeline’s real-world perfor
 The V8 team continually monitors the performance of real-world use cases using the [Telemetry - Catapult](https://catapult.gsrc.io/telemetry) framework. [Previously](/blog/real-world-performance) in this blog we’ve discussed why it’s so important to use the data from real-world tests to drive our performance optimization work and how we use [WebPageReplay](https://github.com/chromium/web-page-replay) together with Telemetry to do so. The switch to Ignition and TurboFan shows performance improvements in those real-world test cases. Specifically, the new pipeline results in significant speed-ups on user interaction story tests for well-known websites:
 
 <figure>
-  <img src="/_img/launching-ignition-and-turbofan/improvements-per-website.png" intrinsicsize="1266x478" alt="">
+  <img src="/_img/launching-ignition-and-turbofan/improvements-per-website.png" width="1266" height="478" alt="">
   <figcaption>Reduction in time spent in V8 for user interaction benchmarks</figcaption>
 </figure>
 
@@ -51,7 +51,7 @@ Although Speedometer is a synthetic benchmark, we’ve previously uncovered that
 The new pipeline also speeds up server-side JavaScript. [AcmeAir](https://github.com/acmeair/acmeair-nodejs), a benchmark for Node.js that simulates the server backend implementation of a fictitious airline, runs more than 10% faster using V8 v5.9.
 
 <figure>
-  <img src="/_img/launching-ignition-and-turbofan/benchmark-scores.png" intrinsicsize="1248x770" alt="">
+  <img src="/_img/launching-ignition-and-turbofan/benchmark-scores.png" width="1248" height="770" alt="">
   <figcaption>Improvements on Web and Node.js benchmarks</figcaption>
 </figure>
 
