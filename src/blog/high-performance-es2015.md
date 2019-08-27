@@ -1,6 +1,8 @@
 ---
 title: 'High-performance ES2015 and beyond'
 author: 'Benedikt Meurer [@bmeurer](https://twitter.com/bmeurer), ECMAScript Performance Engineer'
+avatars:
+  - 'benedikt-meurer'
 date: 2017-02-17 13:33:37
 tags:
   - ECMAScript

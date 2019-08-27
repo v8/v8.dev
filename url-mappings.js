@@ -67,7 +67,7 @@ const oldToNew = new Map([
   ['https://v8project.blogspot.com/2016/08/firing-up-ignition-interpreter.html', 'https://v8.dev/blog/ignition-interpreter'],
   ['https://v8project.blogspot.com/2016/07/v8-at-blinkon-6-conference.html', 'https://v8.dev/blog/blinkon-6'],
   ['https://v8project.blogspot.com/2016/07/v8-release-53.html', 'https://v8.dev/blog/v8-release-53'],
-  ['https://v8project.blogspot.com/2016/06/release-52.html', 'https://v8.dev/blog/release-52'],
+  ['https://v8project.blogspot.com/2016/06/release-52.html', 'https://v8.dev/blog/v8-release-52'],
   ['https://v8project.blogspot.com/2016/04/es6-es7-and-beyond.html', 'https://v8.dev/blog/modern-javascript'],
   ['https://v8project.blogspot.com/2016/04/v8-release-51.html', 'https://v8.dev/blog/v8-release-51'],
   ['https://v8project.blogspot.com/2016/04/jank-busters-part-two-orinoco.html', 'https://v8.dev/blog/orinoco'],
