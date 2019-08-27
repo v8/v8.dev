@@ -42,11 +42,11 @@ Currently, only top-level script code and immediately invoked function expressio
 We evaluated the performance of background compilation using our [real-world benchmarking framework](/blog/real-world-performance) across a set of popular webpages.
 
 <figure>
-  <img src="/_img/background-compilation/desktop.png" width="1424" height="880" alt="" loading="lazy">
+  <img src="/_img/background-compilation/desktop.svg" width="712" height="440" alt="" loading="lazy">
 </figure>
 
 <figure>
-  <img src="/_img/background-compilation/mobile.png" width="1616" height="1290" alt="" loading="lazy">
+  <img src="/_img/background-compilation/mobile.svg" width="548" height="442" alt="" loading="lazy">
 </figure>
 
 The proportion of compilation that can happen on a background thread varies depending on the proportion of bytecode compiled during top-level streaming-script compilation verses being lazy compiled as inner functions are invoked (which must still occur on the main thread). As such, the proportion of time saved on the main thread varies, with most pages seeing between 5% to 20% reduction in main-thread compilation time.
