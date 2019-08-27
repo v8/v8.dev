@@ -1,5 +1,6 @@
 ---
 title: 'Untrusted code mitigations'
+description: 'If you embed V8 and run untrusted JavaScript code, enable V8’s mitigations to help protect against speculative side-channel attacks.'
 ---
 In early 2018, researchers from Google’s Project Zero disclosed [a new class of attacks](https://googleprojectzero.blogspot.com/2018/01/reading-privileged-memory-with-side.html) which [exploit](https://security.googleblog.com/2018/01/more-details-about-mitigations-for-cpu_4.html) speculative execution optimizations used by many CPUs. Because V8 uses an optimizing JIT compiler, TurboFan, to make JavaScript run quickly, in certain circumstances it is vulnerable to the side-channel attacks described in the disclosure.
 

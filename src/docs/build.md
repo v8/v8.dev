@@ -1,5 +1,6 @@
 ---
 title: 'Building V8 from source'
+description: 'This document explains how to build V8 from source.'
 ---
 In order to be able to build V8 from scratch on Windows/Linux/macOS for x64, please follow the following steps.
 

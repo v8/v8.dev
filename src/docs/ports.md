@@ -1,5 +1,6 @@
 ---
 title: 'Handling of ports'
+description: 'This document describes how architecture-specific V8 ports should be handled.'
 ---
 This document describes how ports should be handled.
 

@@ -1,5 +1,6 @@
 ---
 title: 'Profiling Chromium with V8'
+description: 'This document explains how to use V8’s CPU and heap profilers with Chromium.'
 ---
 [V8’s CPU & heap profilers](/docs/profile) are trivial to use from V8’s shells, but it may appear confusing how to use them with Chromium. This page should help you with it.
 

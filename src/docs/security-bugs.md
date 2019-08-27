@@ -1,5 +1,6 @@
 ---
 title: 'Reporting security bugs'
+description: 'This document explains the process for reporting security issues in V8.'
 ---
 V8 fully uses [Chromium’s Security process](https://www.chromium.org/Home/chromium-security). In order to report a V8 security bug please follow these steps:
 

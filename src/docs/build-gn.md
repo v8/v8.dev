@@ -1,5 +1,6 @@
 ---
 title: 'Building V8 with GN'
+description: 'This document explains how to use GN to build V8.'
 ---
 V8 is built with the help of [GN](https://gn.googlesource.com/gn/+/master/docs/). GN is a meta build system of sorts, as it generates build files for a number of other build systems. How you build therefore depends on what “back-end” build system and compiler you’re using.
 The instructions below assume that you already have a [checkout of V8](/docs/source-code) and that you have [installed the build dependencies](/docs/build).

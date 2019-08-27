@@ -1,7 +1,7 @@
 ---
 title: 'V8 Torque builtins'
+description: 'This document is intended as an introduction to writing Torque builtins, and is targeted towards V8 developers.'
 ---
-
 This document is intended as an introduction to writing Torque builtins, and is targeted towards V8 developers. Torque replaces CodeStubAssembler as the recommended way to implement new builtins. See [CodeStubAssembler builtins](/docs/csa-builtins) for the CSA version of this guide.
 
 ## Builtins

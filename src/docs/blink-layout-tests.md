@@ -1,5 +1,6 @@
 ---
 title: 'Blink web tests (a.k.a. layout tests)'
+description: 'V8’s infrastructure continuously runs Blink’s web tests to prevent integration problems with Chromium. This document describes what to do in case such a test fails.'
 ---
 We continuously run [Blink’s web tests (formerly known as “layout tests”)](https://chromium.googlesource.com/chromium/src/+/master/docs/testing/web_tests.md) on our [FYI waterfall](https://ci.chromium.org/p/v8/g/fyi/console?branch=master) to prevent integration problems with Chromium.
 

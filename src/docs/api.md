@@ -1,5 +1,6 @@
 ---
 title: 'V8’s public API'
+description: 'This document discusses the stability of V8’s public API, and how developers can make changes to it.'
 ---
 This document discusses the stability of V8’s public API, and how developers can make changes to it.
 

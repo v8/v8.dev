@@ -1,5 +1,6 @@
 ---
 title: 'Running benchmarks locally'
+description: 'This document explains how to run classic benchmark suites in d8.'
 ---
 We have a simple workflow for running the “classic” benchmarks of SunSpider, Kraken and Octane. You can run with different binaries and flag combinations, and results are averaged over multiple runs.
 

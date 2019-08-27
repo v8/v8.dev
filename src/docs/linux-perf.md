@@ -1,5 +1,6 @@
 ---
 title: 'V8’s Linux `perf` integration'
+description: 'This document explains how to analyze the performance of V8’s JITted code with the Linux `perf` tool.'
 ---
 V8 has built-in support for the Linux `perf` tool. By default, this support is disabled, but by using the `--perf-prof` and `--perf-prof-debug-info` command-line options, V8 writes out performance data during execution into a file that can be used to analyze the performance of V8’s JITted code with the Linux `perf` tool.
 

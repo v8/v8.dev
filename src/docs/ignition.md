@@ -1,5 +1,6 @@
 ---
 title: 'Ignition'
+description: 'This document collects resources about Ignition, V8’s interpreter.'
 ---
 V8 features an interpreter called Ignition. Ignition is a fast low-level register-based interpreter written using the backend of [TurboFan](/docs/turbofan). The V8 blog post presents a [high-level overview](/blog/ignition-interpreter) of the Ignition interpreter. More details can be found in the following resources:
 

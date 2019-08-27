@@ -1,5 +1,6 @@
 ---
 title: 'Responsibilities of V8 committers and reviewers'
+description: 'This document lists guidelines for V8 contributors.'
 ---
 When you’re committing to the V8 repositories, ensure that you follow these guidelines (adapted from <https://dev.chromium.org/developers/committers-responsibility>):
 

@@ -1,7 +1,8 @@
 ---
 title: 'ARM debugging with the simulator'
+description: 'The ARM simulator and debugger can be very helpful when working with V8 code generation.'
 ---
-The simulator and debugger can be very helpful when working with v8 code generation.
+The simulator and debugger can be very helpful when working with V8 code generation.
 
 - It is convenient as it allows you to test code generation without access to actual hardware.
 - No cross or native compilation is needed.

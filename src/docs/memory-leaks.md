@@ -1,5 +1,6 @@
 ---
 title: 'Investigating memory leaks'
+description: 'This document provides guidance on investigating memory leaks in V8.'
 ---
 If you’re investigating a memory leak and wonder why an object is not garbage-collected, you can use `%DebugTrackRetainingPath(object)` to print the actual retaining path of the object on each GC.
 

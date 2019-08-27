@@ -8,6 +8,7 @@ tags:
   - ECMAScript
   - ES2020
   - io19
+description: 'String.prototype.matchAll makes it easy to iterate through all the match objects a given regular expression produces.'
 ---
 It’s common to repeatedly apply the same regular expression on a string to get all the matches. To some extent, this is already possible today by using the `String#match` method.
 

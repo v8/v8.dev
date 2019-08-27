@@ -1,5 +1,6 @@
 ---
 title: 'Triaging issues'
+description: 'This document explains how to deal with issues in V8’s bug tracker.'
 ---
 This document explains how to deal with issues in [V8’s bug tracker](/bugs).
 

@@ -7,6 +7,7 @@ date: 2018-09-11
 tags:
   - ECMAScript
   - ES2019
+description: 'JSON.stringify now outputs escape sequences for lone surrogates, making its output valid Unicode (and representable in UTF-8).'
 ---
 `JSON.stringify` was previously specified to return ill-formed Unicode strings if the input contains any lone surrogates:
 

@@ -1,5 +1,6 @@
 ---
 title: 'CodeStubAssembler builtins'
+description: 'This document is intended as an introduction to writing CodeStubAssembler builtins, and is targeted towards V8 developers.'
 ---
 This document is intended as an introduction to writing CodeStubAssembler builtins, and is targeted towards V8 developers.
 

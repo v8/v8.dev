@@ -8,6 +8,7 @@ date: 2018-06-18
 tags:
   - ECMAScript
   - ES2015
+description: 'This article explains how to use JavaScript modules, how to deploy them responsibly, and how the Chrome team is working to make modules even better in the future.'
 tweet: '1008725884575109120'
 ---
 JavaScript modules are now [supported in all major browsers](https://caniuse.com/#feat=es6-module)!

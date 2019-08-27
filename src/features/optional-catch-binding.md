@@ -7,6 +7,7 @@ date: 2018-03-27
 tags:
   - ECMAScript
   - ES2019
+description: 'In ES2019, catch can now be used without a parameter.'
 tweet: '956209997808939008'
 ---
 The `catch` clause of `try` statements used to require a binding:

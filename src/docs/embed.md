@@ -1,7 +1,8 @@
 ---
 title: 'Getting started with embedding V8'
+description: 'This document introduces some key V8 concepts and provides a “hello world” example to get you started with V8 code.'
 ---
-This document introduces some key V8 concepts and provides a `hello world` example to get you started with V8 code.
+This document introduces some key V8 concepts and provides a “hello world” example to get you started with V8 code.
 
 ## Audience
 

@@ -1,5 +1,6 @@
 ---
 title: 'Runtime Call Stats'
+description: 'This document explains how to use Runtime Call Stats to get detailed V8-internal metrics.'
 ---
 [The DevTools Performance panel](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/) gives insights into your web app’s runtime performance by visualizing various Chrome-internal metrics. However, certain low-level V8 metrics aren’t currently exposed in DevTools. This article guides you through the most robust way of gathering detailed V8-internal metrics, known as Runtime Call Stats or RCS, through `chrome://tracing`.
 

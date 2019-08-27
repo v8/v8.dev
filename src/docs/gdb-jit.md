@@ -1,5 +1,6 @@
 ---
 title: 'GDB JIT Compilation Interface integration'
+description: 'GDB JIT Compilation Interface integration allows V8 to provide GDB with the symbol and debugging information for native code emitted from the V8 runtime.'
 ---
 GDB JIT Compilation Interface integration allows V8 to provide GDB with the symbol and debugging information for native code emitted from the V8 runtime.
 

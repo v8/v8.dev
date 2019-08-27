@@ -1,5 +1,6 @@
 ---
 title: 'Merging & patching'
+description: 'This document explains how to merge V8 patches to the master branch.'
 ---
 If you have a patch to the `master` branch (e.g. an important bug fix) that needs to be merged into one of the production V8 branches, read on.
 

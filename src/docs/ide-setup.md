@@ -1,5 +1,6 @@
 ---
 title: 'GUI and IDE setup'
+description: 'This document contains GUI and IDE-specific tips for working on the V8 code base.'
 ---
 The V8 source code can be browsed online with [Chromium Code Search](https://cs.chromium.org/chromium/src/v8/).
 

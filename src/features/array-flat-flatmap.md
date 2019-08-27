@@ -8,6 +8,7 @@ tags:
   - ECMAScript
   - ES2019
   - io19
+description: 'Array.prototype.flat flattens an array up to the specified depth. Array.prototype.flatMap is equivalent to doing a map followed by a flat separately.'
 tweet: '1138457106380709891'
 ---
 ## `Array.prototype.flat` { #flat }

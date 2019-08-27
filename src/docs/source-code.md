@@ -1,5 +1,6 @@
 ---
 title: 'Checking out the V8 source code'
+description: 'This document explains how to check out the V8 source code locally.'
 ---
 This document explains how to check out the V8 source code locally. If you just want to browse the source online, use these links:
 

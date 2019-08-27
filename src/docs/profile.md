@@ -1,7 +1,8 @@
 ---
 title: 'Using V8’s sample-based profiler'
+description: 'This document explains how to use V8’s sample-based profiler.'
 ---
-V8 has built-in sample-based profiling. Profiling is turned off by default, but can be enabled via the `--prof` command line option. The sampler records stacks of both JavaScript and C/C++ code.
+V8 has built-in sample-based profiling. Profiling is turned off by default, but can be enabled via the `--prof` command-line option. The sampler records stacks of both JavaScript and C/C++ code.
 
 ## Build
 

@@ -7,6 +7,7 @@ date: 2018-03-26
 tags:
   - ECMAScript
   - ES2019
+description: 'ES2019 introduces String.prototype.trimStart() and String.prototype.trimEnd().'
 ---
 ES2019 introduces [`String.prototype.trimStart()` and `String.prototype.trimEnd()`](https://github.com/tc39/proposal-string-left-right-trim):
 

@@ -7,6 +7,7 @@ date: 2019-06-17
 tags:
   - WebAssembly
   - internals
+description: 'This article explains Chrome’s WebAssembly code cache and how developers can take advantage of it to speed up loading for applications with large WebAssembly modules.'
 tweet: '1140631433532334081'
 ---
 There’s a saying among developers that the fastest code is code that doesn’t run. Likewise, the fastest compiling code is code that doesn’t have to be compiled. WebAssembly code caching is a new optimization in Chrome and V8 that tries to avoid code compilation by caching the native code produced by the compiler. We’ve [written](/blog/code-caching) [about](/blog/improved-code-caching) [how](/blog/code-caching-for-devs) Chrome and V8 cache JavaScript code in the past, and best practices for taking advantage of this optimization. In this blog post, we describe the operation of Chrome’s WebAssembly code cache and how developers can take advantage of it to speed up loading for applications with large WebAssembly modules.

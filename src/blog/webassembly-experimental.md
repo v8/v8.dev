@@ -4,6 +4,7 @@ author: 'Seth Thompson, WebAssembly Wrangler'
 date: 2016-03-15 13:33:37
 tags:
   - WebAssembly
+description: 'Starting today, experimental support for WebAssembly is available in V8 and Chromium behind a flag.'
 ---
 _For a comprehensive overview of WebAssembly and a roadmap for future community collaboration, see [A WebAssembly Milestone](https://hacks.mozilla.org/2016/03/a-webassembly-milestone/) on the Mozilla Hacks blog._
 

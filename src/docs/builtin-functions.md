@@ -1,5 +1,6 @@
 ---
 title: 'Built-in functions'
+description: 'This document explains what “built-ins” are in V8.'
 ---
 Built-in functions in V8 come in different flavors w.r.t. implementation, depending on their functionality, performance requirements, and sometimes plain historical development.
 

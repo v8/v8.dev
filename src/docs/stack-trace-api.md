@@ -1,5 +1,6 @@
 ---
 title: 'Stack trace API'
+description: 'This document outlines V8’s JavaScript stack trace API.'
 ---
 All internal errors thrown in V8 capture a stack trace when they are created. This stack trace can be accessed from JavaScript through the non-standard `error.stack` property. V8 also has various hooks for controlling how stack traces are collected and formatted, and for allowing custom errors to also collect stack traces. This document outlines V8’s JavaScript stack trace API.
 

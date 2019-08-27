@@ -1,5 +1,6 @@
 ---
 title: 'Documentation'
+description: 'Documentation for the V8 project.'
 ---
 V8 is Google’s open source high-performance JavaScript and WebAssembly engine, written in C++. It is used in Chrome and in Node.js, among others.
 

@@ -1,5 +1,6 @@
 ---
 title: 'Flake bisect'
+description: 'This document explains how to bisect flaky tests.'
 ---
 Flaky tests are reported in a separate step on the bots ([example build](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20verify%20csa/9271)).
 

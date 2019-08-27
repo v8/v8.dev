@@ -7,6 +7,7 @@ date: 2017-06-06
 tags:
   - ECMAScript
   - ES2018
+description: 'This article explains how object rest and spread properties work in JavaScript, and revisits array rest and spread elements.'
 tweet: '890269994688315394'
 ---
 Before discussing _object rest and spread properties_, let’s take a trip down memory lane and remind ourselves of a very similar feature.

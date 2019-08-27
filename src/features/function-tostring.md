@@ -7,6 +7,7 @@ date: 2018-03-25
 tags:
   - ECMAScript
   - ES2019
+description: 'Function.prototype.toString now returns exact slices of source code text, including whitespace and comments.'
 ---
 [`Function.prototype.toString()`](https://tc39.es/Function-prototype-toString-revision/) now returns exact slices of source code text, including whitespace and comments. Here’s an example comparing the old and the new behavior:
 

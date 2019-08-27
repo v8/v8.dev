@@ -1,5 +1,6 @@
 ---
 title: 'V8’s version numbering scheme'
+description: 'This document explains V8’s version numbering scheme.'
 ---
 V8 version numbers are of the form `x.y.z.w`, where:
 

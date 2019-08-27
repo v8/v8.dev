@@ -1,5 +1,6 @@
 ---
 title: 'Contributing to V8'
+description: 'This document explains how to contribute to V8.'
 ---
 The information on this page explains how to contribute to V8. Be sure to read the whole thing before sending us a contribution.
 

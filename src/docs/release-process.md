@@ -1,5 +1,6 @@
 ---
 title: 'Release process'
+description: 'This document explains the V8 release process.'
 ---
 The V8 release process is tightly connected to [Chrome’s](https://www.chromium.org/getting-involved/dev-channel). The V8 team is using all four Chrome release channels to push new versions to the users.
 
