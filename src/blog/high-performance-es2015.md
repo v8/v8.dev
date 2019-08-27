@@ -5,15 +5,15 @@ date: 2017-02-17 13:33:37
 tags:
   - ECMAScript
 ---
-Over the last couple of months the V8 team focused on bringing the performance of newly added [ES2015](http://www.ecma-international.org/ecma-262/6.0/) and other even more recent JavaScript features on par with their transpiled [ES5](http://www.ecma-international.org/ecma-262/5.1/) counterparts.
+Over the last couple of months the V8 team focused on bringing the performance of newly added [ES2015](https://www.ecma-international.org/ecma-262/6.0/) and other even more recent JavaScript features on par with their transpiled [ES5](https://www.ecma-international.org/ecma-262/5.1/) counterparts.
 
 ## Motivation
 
 Before we go into the details of the various improvements, we should first consider why performance of ES2015+ features matter despite the widespread usage of [Babel](http://babeljs.io/) in modern web development:
 
 1. First of all there are new ES2015 features that are only polyfilled on demand, for example the [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) builtin. When Babel transpiles [object spread properties](https://github.com/sebmarkbage/ecmascript-rest-spread) (which are heavily used by many [React](https://facebook.github.io/react) and [Redux](http://redux.js.org/) applications), it relies on [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) instead of an ES5 equivalent if the VM supports it.
-2. Polyfilling ES2015 features typically increases code size, which contributes significantly to the current [web performance crisis](https://channel9.msdn.com/Blogs/msedgedev/nolanlaw-web-perf-crisis), especially on mobile devices common in emerging markets. So the cost of just delivering, parsing and compiling the code can be fairly high, even before you get to the actual execution cost.
-3. And last but not least, the client side JavaScript is only one of the environments that relies on the V8 engine. There’s also [Node.js](https://nodejs.org/) for server side applications and tools, where developers don’t need to transpile to ES5 code, but can directly use the features supported by the [relevant V8 version](https://nodejs.org/en/download/releases/) in the target Node.js release.
+1. Polyfilling ES2015 features typically increases code size, which contributes significantly to the current [web performance crisis](https://channel9.msdn.com/Blogs/msedgedev/nolanlaw-web-perf-crisis), especially on mobile devices common in emerging markets. So the cost of just delivering, parsing and compiling the code can be fairly high, even before you get to the actual execution cost.
+1. And last but not least, the client-side JavaScript is only one of the environments that relies on the V8 engine. There’s also [Node.js](https://nodejs.org/) for server side applications and tools, where developers don’t need to transpile to ES5 code, but can directly use the features supported by the [relevant V8 version](https://nodejs.org/en/download/releases/) in the target Node.js release.
 
 Let’s consider the following code snippet from the [Redux documentation](http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html):
 
@@ -154,16 +154,18 @@ Many of the improvements we achieved for modern language features were only feas
 
 ## State of the union
 
-Our short-term goal was to reach less than 2x slowdown on average as soon as possible. We started by looking at the worst test first, and from Chrome M54 to Chrome M58 (Canary) we managed to reduce the number of tests with slowdown above 2x from 16 to 8, and at the same time reduce the worst slowdown from 19x in M54 to just 6x in M58 (Canary). We also significantly reduced the average and median slowdown during that period:
+Our short-term goal was to reach less than 2× slowdown on average as soon as possible. We started by looking at the worst test first, and from Chrome 54 to Chrome 58 (Canary) we managed to reduce the number of tests with slowdown above 2× from 16 to 8, and at the same time reduce the worst slowdown from 19× in Chrome 54 to just 6× in Chrome 58 (Canary). We also significantly reduced the average and median slowdown during that period:
 
 <figure>
-  <img src="/_img/high-performance-es2015/slowdown.png" width="647" height="400" alt="" loading="lazy">
+  <img src="/_img/high-performance-es2015/slowdown.svg" width="804" height="497" alt="" loading="lazy">
+  <figcaption>Slowdown of ES2015+ compared to native ES5 equivalent</figcaption>
 </figure>
 
-You can see a clear trend towards parity of ES2015+ and ES5. On average we improved performance relative to ES5 by over 47%. Here are some highlights that we addressed since M54.
+You can see a clear trend towards parity of ES2015+ and ES5. On average we improved performance relative to ES5 by over 47%. Here are some highlights that we addressed since Chrome 54.
 
 <figure>
-  <img src="/_img/high-performance-es2015/comparison.png" width="1600" height="1118" alt="" loading="lazy">
+  <img src="/_img/high-performance-es2015/comparison.svg" width="845" height="591" alt="" loading="lazy">
+  <figcaption>ES2015+ performance compared to naive ES5 equivalent</figcaption>
 </figure>
 
 Most notably we improved performance of new language constructs that are based on iteration, like the spread operator, destructuring and `for`-`of` loops. For example, using array destructuring:
@@ -175,7 +177,7 @@ function fn() {
 }
 ```
 
-...is now as fast as the naive ES5 version:
+…is now as fast as the naive ES5 version:
 
 ```js
 function fn() {
@@ -184,7 +186,7 @@ function fn() {
 }
 ```
 
-...and a lot faster (and shorter) than the Babel-generated code:
+…and a lot faster (and shorter) than the Babel-generated code:
 
 ```js
 "use strict";
@@ -202,4 +204,4 @@ function fn() {
 
 You can check out the [High-Speed ES2015](https://docs.google.com/presentation/d/1wiiZeRQp8-sXDB9xXBUAGbaQaWJC84M5RNxRyQuTmhk) talk we gave at the last [Munich NodeJS User Group](http://www.mnug.de/) meetup for additional details:
 
-We are committed to continue improving the performance of ES2015+ features. In case you are interested in the nitty-gritty details please have a look at V8's [ES2015 and beyond performance plan](https://docs.google.com/document/d/1EA9EbfnydAmmU_lM8R_uEMQ-U_v4l9zulePSBkeYWmY).
+We are committed to continue improving the performance of ES2015+ features. In case you are interested in the nitty-gritty details please have a look at V8’s [ES2015 and beyond performance plan](https://docs.google.com/document/d/1EA9EbfnydAmmU_lM8R_uEMQ-U_v4l9zulePSBkeYWmY).
