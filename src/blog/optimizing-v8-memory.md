@@ -20,17 +20,17 @@ In order to profile V8 and discover optimizations that have impact for the large
 A workload for browsing news and social websites:
 
 1. Open a popular news or social website, e.g. Hacker News.
-2. Click on the first link.
-3. Wait until the new website is loaded.
-4. Scroll down a few pages.
-5. Click the back button.
-6. Click on the next link on the original website and repeat steps 3-6 a few times.
+1. Click on the first link.
+1. Wait until the new website is loaded.
+1. Scroll down a few pages.
+1. Click the back button.
+1. Click on the next link on the original website and repeat steps 3-6 a few times.
 
 A workload for browsing media website:
 
 1. Open an item on a popular media website, e.g. a video on YouTube.
-2. Consume that item by waiting for a few seconds.
-3. Click on the next item and repeat steps 2-3 a few times.
+1. Consume that item by waiting for a few seconds.
+1. Click on the next item and repeat steps 2–3 a few times.
 
 Once a workflow is captured, it can be replayed as often as needed against a development version of Chrome, for example each time there is new version of V8. During playback, V8’s memory usage is sampled at fixed time intervals to obtain a meaningful average. The benchmarks can be found [here](https://cs.chromium.org/chromium/src/tools/perf/page_sets/system_health/browsing_stories.py?q=browsing+news&sq=package:chromium&dr=CS&l=11).
 
@@ -61,34 +61,38 @@ Early adopters can also try out the integration into [Chrome’s tracing infrast
 
 ## JavaScript heap size reduction
 
-There is an inherent trade-off between garbage collection throughput, latency, and memory consumption. For example, garbage collection latency (which causes user-visible jank) can be reduced by using more memory to avoid frequent garbage collection invocations. For low-memory mobile devices, i.e. devices with under 512M of RAM, prioritizing latency and throughput over memory consumption may result in out-of-memory crashes and suspended tabs on Android.
+There is an inherent trade-off between garbage collection throughput, latency, and memory consumption. For example, garbage collection latency (which causes user-visible jank) can be reduced by using more memory to avoid frequent garbage collection invocations. For low-memory mobile devices, i.e. devices with under 512 MB of RAM, prioritizing latency and throughput over memory consumption may result in out-of-memory crashes and suspended tabs on Android.
 
-To better balance the right tradeoffs for these low-memory mobile devices, we introduced a special memory reduction mode which tunes several garbage collection heuristics to lower memory usage of the JavaScript garbage collected heap. 1) At the end of a full garbage collection, V8’s heap growing strategy determines when the next garbage collection will happen based on the amount of live objects with some additional slack. In memory reduction mode, V8 will use less slack resulting in less memory usage due to more frequent garbage collections. 2) Moreover this estimate is treated as a hard limit, forcing unfinished incremental marking work to finalize in the main garbage collection pause. Normally, when not in memory reduction mode, unfinished incremental marking work may result in going over this limit arbitrarily to trigger the main garbage collection pause only when marking is finished. 3) Memory fragmentation is further reduced by performing more aggressive memory compaction.
+To better balance the right tradeoffs for these low-memory mobile devices, we introduced a special memory reduction mode which tunes several garbage collection heuristics to lower memory usage of the JavaScript garbage collected heap.
 
-Figure 4 depicts some of the improvements on low memory devices since Chrome M53. Most noticeably, the average V8 heap memory consumption of the mobile New York Times benchmark reduced by about 66%. Overall, we observed a 50% reduction of average V8 heap size on this set of benchmarks.
+1. At the end of a full garbage collection, V8’s heap growing strategy determines when the next garbage collection will happen based on the amount of live objects with some additional slack. In memory reduction mode, V8 uses less slack resulting in less memory usage due to more frequent garbage collections.
+1. Moreover this estimate is treated as a hard limit, forcing unfinished incremental marking work to finalize in the main garbage collection pause. Normally, when not in memory reduction mode, unfinished incremental marking work may result in going over this limit arbitrarily to trigger the main garbage collection pause only when marking is finished.
+1. Memory fragmentation is further reduced by performing more aggressive memory compaction.
+
+Figure 4 depicts some of the improvements on low memory devices since Chrome 53. Most noticeably, the average V8 heap memory consumption of the mobile New York Times benchmark reduced by about 66%. Overall, we observed a 50% reduction of average V8 heap size on this set of benchmarks.
 
 <figure>
   <img src="/_img/optimizing-v8-memory/heap-memory-reduction.png" width="1122" height="694" alt="" loading="lazy">
-  <figcaption>Figure 4: V8 heap memory reduction since M53 on low-memory devices</figcaption>
+  <figcaption>Figure 4: V8 heap memory reduction since Chrome 53 on low-memory devices</figcaption>
 </figure>
 
-Another optimization introduced recently not only reduces memory on low-memory devices but beefier mobile and desktop machines. Reducing the V8 heap page size from 1M to 512KB results in a smaller memory footprint when not many live objects are present and lower overall memory fragmentation up to 2x. It also allows V8 to perform more compaction work since smaller work chunks allow more work to be done in parallel by the memory compaction threads.
+Another optimization introduced recently not only reduces memory on low-memory devices but beefier mobile and desktop machines. Reducing the V8 heap page size from 1 MB to 512 kB results in a smaller memory footprint when not many live objects are present and lower overall memory fragmentation up to 2×. It also allows V8 to perform more compaction work since smaller work chunks allow more work to be done in parallel by the memory compaction threads.
 
 ## Zone memory reduction
 
 In addition to the JavaScript heap, V8 uses off-heap memory for internal VM operations. The largest chunk of memory is allocated through memory areas called _zones_. Zones are a type of  region-based memory allocator which enables fast allocation and bulk deallocation where all zone allocated memory is freed at once when the zone is destroyed. Zones are used throughout V8’s parser and compilers.
 
-One of the major improvements in M55 comes from reducing memory consumption during background parsing. Background parsing allows V8 to parse scripts while a page is being loaded. The memory visualization tool helped us discover that the background parser would keep an entire zone alive long after the code was already compiled. By immediately freeing the zone after compilation, we reduced the lifetime of zones significantly which resulted in reduced average and peak memory usage.
+One of the major improvements in Chrome 55 comes from reducing memory consumption during background parsing. Background parsing allows V8 to parse scripts while a page is being loaded. The memory visualization tool helped us discover that the background parser would keep an entire zone alive long after the code was already compiled. By immediately freeing the zone after compilation, we reduced the lifetime of zones significantly which resulted in reduced average and peak memory usage.
 
 Another improvement results from better packing of fields in _abstract syntax tree_ nodes generated by the parser. Previously we relied on the C++ compiler to pack fields together where possible. For example, two booleans just require two bits and should be located within one word or within the unused fraction of the previous word. The C++ compiler doesn’t always find the most compressed packing, so we instead manually pack bits. This not only results in reduced peak memory usage, but also improved parser and compiler performance.
 
-Figure 5 shows the peak zone memory improvements since M54 which reduced by about 40% on average over the measured websites.
+Figure 5 shows the peak zone memory improvements since Chrome 54 which reduced by about 40% on average over the measured websites.
 
 <figure>
   <img src="/_img/optimizing-v8-memory/peak-zone-memory-reduction.png" width="853" height="527" alt="" loading="lazy">
-  <figcaption>Figure 5: V8 peak zone memory reduction since M54 on desktop</figcaption>
+  <figcaption>Figure 5: V8 peak zone memory reduction since Chrome 54 on desktop</figcaption>
 </figure>
 
-Over the next months we will continue our work on reducing the memory footprint of V8. We have more zone memory optimizations planned for the parser and we plan to focus on devices ranging from 512M-1G of memory.
+Over the next months we will continue our work on reducing the memory footprint of V8. We have more zone memory optimizations planned for the parser and we plan to focus on devices ranging from 512 MB – 1 GB of memory.
 
-**Update:** All the improvements discussed above reduce the Chrome 55 overall memory consumption by up to 35% on _low-memory devices_ compared to Chrome 53.  Other device segments will only benefit from the zone memory improvements.
+**Update:** All the improvements discussed above reduce the Chrome 55 overall memory consumption by up to 35% on _low-memory devices_ compared to Chrome 53. Other device segments only benefit from the zone memory improvements.

@@ -37,7 +37,7 @@ When the download time is shorter than the compile time, then `WebAssembly.compi
 
 ## Speed
 
-We continued to work on widening the fast-path of JavaScript builtins in general, adding a mechanism to detect and prevent a ruinous situation called a “deoptimization loop.” This occurs when your optimized code deoptimizes, and there is _no way to learn what went wrong_. In such scenarios, TurboFan just keeps trying to optimize, finally giving up after about 30 attempts. This would happen if you did something to alter the shape of the array in the callback function of any of our second order array builtins. For example, changing the `length` of the array — in v6.5, we note when that happens, and stop inlining the array builtin called at that site on future optimization attempts.
+We continued to work on widening the fast-path of JavaScript builtins in general, adding a mechanism to detect and prevent a ruinous situation called a “deoptimization loop.” This occurs when your optimized code deoptimizes, and there is _no way to learn what went wrong_. In such scenarios, TurboFan just keeps trying to optimize, finally giving up after about 30 attempts. This would happen if you did something to alter the shape of the array in the callback function of any of our second order array builtins. For example, changing the `length` of the array — in V8 v6.5, we note when that happens, and stop inlining the array builtin called at that site on future optimization attempts.
 
 We also widened the fast-path by inlining many builtins that were formerly excluded because of a side-effect between the load of the function to call and the call itself, for example a function call. And `String.prototype.indexOf` got a [10× performance improvement in function calls](https://bugs.chromium.org/p/v8/issues/detail?id=6270).
 
@@ -55,7 +55,8 @@ Furthermore, we’ve widened the fast path on all these builtins. At first we wo
 The following image shows the improvement delta compared to V8 v6.4 in our inlined builtins, broken down into integer arrays, double arrays, and double arrays with holes. Time is in milliseconds.
 
 <figure>
-  <img src="/_img/v8-release-65/performance-improvements.png" width="1598" height="988" alt="" loading="lazy">
+  <img src="/_img/v8-release-65/performance-improvements.svg" width="799" height="494" alt="" loading="lazy">
+  <figcaption>Performance improvements since V8 v6.4</figcaption>
 </figure>
 
 ## V8 API
