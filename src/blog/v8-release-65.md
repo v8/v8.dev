@@ -14,7 +14,7 @@ In response to the latest speculative side-channel attack called Spectre, V8 int
 
 ## Streaming compilation for WebAssembly code
 
-The WebAssembly API provides a special function to support streaming compilation in combination with the `fetch()` API:
+The WebAssembly API provides a special function to support [streaming compilation](https://developers.google.com/web/updates/2018/04/loading-wasm) in combination with the `fetch()` API:
 
 ```js
 const module = await WebAssembly.compileStreaming(fetch('foo.wasm'));
@@ -22,15 +22,15 @@ const module = await WebAssembly.compileStreaming(fetch('foo.wasm'));
 
 This API has been available since V8 v6.1 and Chrome 61, although the initial implementation didn’t actually use streaming compilation. However, with V8 v6.5 and Chrome 65 we take advantage of this API and compile WebAssembly modules already while we are still downloading the module bytes. As soon as we download all bytes of a single function, we pass the function to a background thread to compile it.
 
-Our measurements show that with this API, the WebAssembly compilation in Chrome 65 can keep up with up to 50 Mbit/sec download speed on high-end machines. This means that if you download WebAssembly code with 50 Mbit/sec, compilation of that code finishes as soon as the download finishes.
+Our measurements show that with this API, the WebAssembly compilation in Chrome 65 can keep up with up to 50 Mbit/s download speed on high-end machines. This means that if you download WebAssembly code with 50 Mbit/s, compilation of that code finishes as soon as the download finishes.
 
-For the graph below we measure the time it takes to download and compile a WebAssembly module with 67 MB and about 190,000 functions. We do the measurements with 25 Mbit/sec, 50 Mbit/sec, and 100 Mbit/sec download speed.
+For the graph below we measure the time it takes to download and compile a WebAssembly module with 67 MB and about 190,000 functions. We do the measurements with 25 Mbit/s, 50 Mbit/s, and 100 Mbit/s download speed.
 
 <figure>
-  <img src="/_img/v8-release-65/wasm-streaming-compilation.png" width="1200" height="742" alt="" loading="lazy">
+  <img src="/_img/v8-release-65/wasm-streaming-compilation.svg" width="600" height="371" alt="" loading="lazy">
 </figure>
 
-When the download time is longer than the compile time of the WebAssembly module, e.g. in the graph above with 25 Mbit/sec and 50 Mbit/sec, then `WebAssembly.compileStreaming()` finishes compilation almost immediately after the last bytes are downloaded.
+When the download time is longer than the compile time of the WebAssembly module, e.g. in the graph above with 25 Mbit/s and 50 Mbit/s, then `WebAssembly.compileStreaming()` finishes compilation almost immediately after the last bytes are downloaded.
 
 When the download time is shorter than the compile time, then `WebAssembly.compileStreaming()` takes about as long as it takes to compile the WebAssembly module without downloading the module first.
 
