@@ -2,6 +2,7 @@
 title: 'Feature support'
 permalink: /features/support/
 layout: layouts/base.njk
+description: 'This document explains the JavaScript and WebAssembly language feature support listings as used on the V8 website.'
 ---
 # JavaScript/Wasm feature support
 

@@ -1,6 +1,7 @@
 ---
 title: 'Terms of service'
 layout: layouts/base.njk
+description: 'This document outlines the terms of service for the V8 website and project.'
 ---
 # Terms of service
 
