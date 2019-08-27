@@ -3,12 +3,12 @@ title: 'Optional chaining'
 author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), breaker of optional chains'
 avatars:
   - 'maya-lekova'
-date: 2019-08-26
+date: 2019-08-27
 tags:
   - ECMAScript
 description: 'Optional chaining enables readable and concise expression of property accesses with built-in nullish checking.'
 ---
-Long chains of property accesses in JavaScript can be error-prone, as any of them might evaluate to `null` or `undefined` (also known as "nullish" values). Checking for property existence on each step easily turns into a deeply-nested structure of `if`-statements or a long `if`-condition replicating the property access chain:
+Long chains of property accesses in JavaScript can be error-prone, as any of them might evaluate to `null` or `undefined` (also known as “nullish” values). Checking for property existence on each step easily turns into a deeply-nested structure of `if`-statements or a long `if`-condition replicating the property access chain:
 
 ```js
 // Error prone-version, could throw.
@@ -35,7 +35,7 @@ const nameLength =
 
 ## Introducing the optional chaining operator { #optional-chaining }
 
-Surely you don’t want to write code like that, so having some alternative is desirable. Some other languages offer an elegant solution to this problem with using a feature called “optional chaining”. According to [a recent spec proposal](https://github.com/tc39/proposal-optional-chaining), “an optional chain is a chain of one or more property accesses and function calls, the first of which begins with the token `?.`.”
+Surely you don’t want to write code like that, so having some alternative is desirable. Some other languages offer an elegant solution to this problem with using a feature called “optional chaining”. According to [a recent spec proposal](https://github.com/tc39/proposal-optional-chaining), “an optional chain is a chain of one or more property accesses and function calls, the first of which begins with the token `?.`”.
 
 Using the new optional chaining operator, we can rewrite the above example as follows:
 
@@ -78,7 +78,7 @@ const userIndex = 42;
 const userName = usersArray?.[userIndex].name;
 ```
 
-The optional chaining operator can be combined with the [nullish coalescing operator](https://github.com/tc39/proposal-nullish-coalescing) when a non-`undefined` default value is needed. This enables safe deep property access with a specified default value, addressing a common use case that previously required userland libraries such as [lodash’s `_.get`](https://lodash.dev/docs/4.17.15#get):
+The optional chaining operator can be combined with the [nullish coalescing `??` operator](https://github.com/tc39/proposal-nullish-coalescing) when a non-`undefined` default value is needed. This enables safe deep property access with a specified default value, addressing a common use case that previously required userland libraries such as [lodash’s `_.get`](https://lodash.dev/docs/4.17.15#get):
 
 ```js
 const object = { id: 123, names: { first: 'Alice', last: 'Smith' }};
@@ -87,7 +87,7 @@ const object = { id: 123, names: { first: 'Alice', last: 'Smith' }};
   const firstName = _.get(object, 'names.first');
   // → 'Alice'
 
-  const middleName =_.get(object, 'names.middle', '(no middle name)');
+  const middleName = _.get(object, 'names.middle', '(no middle name)');
   // → '(no middle name)'
 }
 
@@ -102,7 +102,7 @@ const object = { id: 123, names: { first: 'Alice', last: 'Smith' }};
 
 ## Properties of the optional chaining operator { #properties }
 
-The optional chaining operator has a few interesting properties: _short-circuiting_, _stacking_, _grouping_, and _optional deletion_. Let's walk through each of these with an example.
+The optional chaining operator has a few interesting properties: _short-circuiting_, _stacking_, and _optional deletion_. Let’s walk through each of these with an example.
 
 _Short-circuiting_ means not evaluating the rest of the expression if an optional chaining operator returns early:
 
@@ -118,7 +118,7 @@ _Stacking_ means that more than one optional chaining operator can be applied on
 const firstNameLength = db.users?.[42]?.names.first.length;
 ```
 
-Still, be considerate about using more than one optional chaining operator in a single chain. If a value is guaranteed to not be nullish, then using `?.` to access properties on it should be discouraged. In the example above, `db` is considered to always be defined, but `db.users` and `db.users[42]` may not be. If there's such user in the database, then `names.first.length` is assumed to always be defined.
+Still, be considerate about using more than one optional chaining operator in a single chain. If a value is guaranteed to not be nullish, then using `?.` to access properties on it is discouraged. In the example above, `db` is considered to always be defined, but `db.users` and `db.users[42]` may not be. If there’s such a user in the database, then `names.first.length` is assumed to always be defined.
 
 _Optional deletion_ means that the `delete` operator can be combined with an optional chain:
 
