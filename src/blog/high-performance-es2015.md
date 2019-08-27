@@ -34,9 +34,19 @@ function todoApp(state = initialState, action) {
 There are two things in that code that demand transpilation: the default parameter for state and the spreading of state into the object literal. Babel generates the following ES5 code:
 
 ```js
-"use strict";
+'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends = Object.assign || function(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+};
 
 function todoApp() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -58,7 +68,6 @@ This example also highlights another important drawback of transpilation: The ge
 ```js
 async function* readLines(path) {
   let file = await fileOpen(path);
-
   try {
     while (!file.EOF) {
       yield await file.readLine();
@@ -72,9 +81,107 @@ async function* readLines(path) {
 Babel translates these 187 characters (150 bytes gzipped) into a whopping 2987 characters (971 bytes gzipped) of ES5 code, not even counting the [regenerator runtime](https://babeljs.io/docs/plugins/transform-regenerator/) that is required as an additional dependency:
 
 ```js
-"use strict";
+'use strict';
 
-var _asyncGenerator = function () { function AwaitValue(value) { this.value = value; } function AsyncGenerator(gen) { var front, back; function send(key, arg) { return new Promise(function (resolve, reject) { var request = { key: key, arg: arg, resolve: resolve, reject: reject, next: null }; if (back) { back = back.next = request; } else { front = back = request; resume(key, arg); } }); } function resume(key, arg) { try { var result = gen[key](arg); var value = result.value; if (value instanceof AwaitValue) { Promise.resolve(value.value).then(function (arg) { resume("next", arg); }, function (arg) { resume("throw", arg); }); } else { settle(result.done ? "return" : "normal", result.value); } } catch (err) { settle("throw", err); } } function settle(type, value) { switch (type) { case "return": front.resolve({ value: value, done: true }); break; case "throw": front.reject(value); break; default: front.resolve({ value: value, done: false }); break; } front = front.next; if (front) { resume(front.key, front.arg); } else { back = null; } } this._invoke = send; if (typeof gen.return !== "function") { this.return = undefined; } } if (typeof Symbol === "function" && Symbol.asyncIterator) { AsyncGenerator.prototype[Symbol.asyncIterator] = function () { return this; }; } AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); }; AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); }; AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); }; return { wrap: function wrap(fn) { return function () { return new AsyncGenerator(fn.apply(this, arguments)); }; }, await: function await(value) { return new AwaitValue(value); } }; }();
+var _asyncGenerator = function() {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function(resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function(arg) {
+            resume('next', arg);
+          }, function(arg) {
+            resume('throw', arg);
+          });
+        } else {
+          settle(result.done ? 'return' : 'normal', result.value);
+        }
+      } catch (err) {
+        settle('throw', err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case 'return':
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+        case 'throw':
+          front.reject(value);
+          break;
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+      front = front.next;
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+    this._invoke = send;
+    if (typeof gen.return !== 'function') {
+      this.return = undefined;
+    }
+  }
+  if (typeof Symbol === 'function' && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function() {
+      return this;
+    };
+  }
+  AsyncGenerator.prototype.next = function(arg) {
+    return this._invoke('next', arg);
+  };
+  AsyncGenerator.prototype.throw = function(arg) {
+    return this._invoke('throw', arg);
+  };
+  AsyncGenerator.prototype.return = function(arg) {
+    return this._invoke('return', arg);
+  };
+  return {
+    wrap: function wrap(fn) {
+      return function() {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function await (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
 
 var readLines = function () {
   var _ref = _asyncGenerator.wrap(regeneratorRuntime.mark(function _callee(path) {
@@ -116,7 +223,7 @@ var readLines = function () {
             return _context.finish(11);
 
           case 15:
-          case "end":
+          case 'end':
             return _context.stop();
         }
       }
@@ -192,9 +299,41 @@ function fn() {
 …and a lot faster (and shorter) than the Babel-generated code:
 
 ```js
-"use strict";
+'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray = function() {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i['return']) _i['return']();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+    return _arr;
+  }
+  return function(arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError('Invalid attempt to destructure non-iterable instance');
+    }
+  };
+}();
 
 function fn() {
   var _data = data,
