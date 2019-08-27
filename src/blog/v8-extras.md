@@ -6,6 +6,7 @@ avatars:
 date: 2016-02-04 13:33:37
 tags:
   - internals
+description: 'V8 v4.8 includes “V8 extras”, a simple interface designed with the goal of allowing embedders to write high-performance, self-hosted APIs.'
 ---
 V8 implements a large subset of the JavaScript language’s built-in objects and functions in JavaScript itself. For example, you can see our [promises implementation](https://code.google.com/p/chromium/codesearch#chromium/src/v8/src/js/promise.js) is written in JavaScript. Such built-ins are called _self-hosted_. These implementations are included in our [startup snapshot](/blog/custom-startup-snapshots) so that new contexts can be quickly created without needing to setup and initialize the self-hosted built-ins at runtime.
 

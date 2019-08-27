@@ -4,6 +4,7 @@ author: 'the Blink and V8 teams'
 date: 2018-01-24 13:33:37
 tags:
   - benchmarks
+description: 'An overview of the performance improvements we’ve made so far in Blink and V8 based on Speedometer 2.0.'
 tweet: '956232641736421377'
 ---
 Ever since its initial release of Speedometer 1.0 in 2014, the Blink and V8 teams have been using the benchmark as a proxy for real-world use of popular JavaScript frameworks and we achieved considerable speedups on this benchmark. We verified independently that these improvements translate to real user benefits by measuring against real-world websites and observed that improvements of page load times of popular websites also improved the Speedometer score.

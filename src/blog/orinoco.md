@@ -9,6 +9,7 @@ date: 2016-04-12 13:33:37
 tags:
   - internals
   - memory
+description: 'This article introduces three optimizations that lay the groundwork for a new garbage collector in V8, codenamed Orinoco.'
 ---
 In a [previous blog post](/blog/jank-busters), we introduced the problem of jank caused by garbage collection interrupting a smooth browsing experience. In this blog post we introduce three optimizations that lay the groundwork for a new garbage collector in V8, codenamed _Orinoco_. Orinoco is based on the idea that implementing a mostly parallel and concurrent garbage collector without strict generational boundaries will reduce garbage collection jank and memory consumption while providing high throughput. Instead of implementing Orinoco behind a flag as a separate garbage collector, we decided to ship features of Orinoco incrementally on V8 tip of tree to benefit users immediately. The three features discussed in this post are parallel compaction, parallel remembered set processing, and black allocation.
 

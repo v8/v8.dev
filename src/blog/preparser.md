@@ -9,6 +9,7 @@ tags:
   - internals
   - parsing
 tweet: '1117807107972243456'
+description: 'This is the second part of our article series explaining how V8 parses JavaScript as fast as possible.'
 ---
 This is the second part of our series explaining how V8 parses JavaScript as fast as possible. The first part explained how we made V8’s [scanner](/blog/scanner) fast.
 

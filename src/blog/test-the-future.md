@@ -4,6 +4,7 @@ author: 'Daniel Clifford ([@expatdanno](https://twitter.com/expatdanno)), Origin
 date: 2017-02-14 13:33:37
 tags:
   - internals
+description: 'Preview V8’s new compiler pipeline with Ignition and TurboFan in Chrome Canary today!'
 ---
 The V8 team is currently working on a new default compiler pipeline that will help us bring future speedups to [real-world JavaScript](/blog/real-world-performance). You can preview the new pipeline in Chrome Canary today to help us verify that there are no surprises when we roll out the new configuration for all Chrome channels.
 

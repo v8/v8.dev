@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2016-03-15 13:33:37
 tags:
   - release
+description: 'V8 v5.0 comes with performance improvements and adds support for several new ES2015 language features.'
 ---
 The first step in the V8 [release process](/docs/release-process) is a new branch from the git master immediately before Chromium branches for a Chrome Beta milestone (roughly every six weeks). Our newest release branch is [V8 5.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.0), which will remain in beta until we release a stable build in conjunction with Chrome 50 Stable. Here’s a highlight of the new developer-facing features in this version of V8.
 
@@ -57,6 +58,6 @@ The implementation of rest parameters is 8-10x faster than that of the previous 
 
 ## V8 API
 
-Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
+Please check out our [summary of API changes](https://docs.google.com/document/d/1g8JFi8T_oAE_7uAri7Njtig7fKaPDfotU6huOa1alds/edit). This document gets regularly updated a few weeks after each major release.
 
 Developers with an [active V8 checkout](https://v8.dev/docs/source-code#using-git) can use `git checkout -b 5.0 -t branch-heads/5.0` to experiment with the new features in V8 5.0. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

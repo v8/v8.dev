@@ -9,6 +9,7 @@ date: 2017-11-29 13:33:37
 tags:
   - internals
   - memory
+description: 'This article introduces the parallel Scavenger, one of the latest features of Orinoco, V8’s mostly concurrent and parallel garbage collector.'
 ---
 JavaScript objects in V8 are allocated on a heap managed by V8’s garbage collector. In previous blog posts we have already talked about how we [reduce garbage collection pause times](/blog/jank-busters) ([more than once](/blog/orinoco)) and [memory consumption](/blog/optimizing-v8-memory). In this blog post we introduce the parallel Scavenger, one of the latest features of Orinoco, V8’s mostly concurrent and parallel garbage collector and discuss design decisions and alternative approaches we implemented on the way.
 

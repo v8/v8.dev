@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2015-11-25 13:33:37
 tags:
   - release
+description: 'V8 v4.8 adds support for several new ES2015 language features.'
 ---
 Roughly every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before Chrome branches for a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 4.8](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/4.8), which will be in beta until it is released in coordination with Chrome 48 Stable. V8 4.8 contains a handful of developer-facing features, so we’d like to give you a preview of some of the highlights in anticipation of the release in several weeks.
 
@@ -67,6 +68,6 @@ The ES2015 spec adjusts the abstract operation for type conversion to convert an
 
 ## V8 API
 
-Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
+Please check out our [summary of API changes](https://docs.google.com/document/d/1g8JFi8T_oAE_7uAri7Njtig7fKaPDfotU6huOa1alds/edit). This document gets regularly updated a few weeks after each major release.
 
 Developers with an [active V8 checkout](https://v8.dev/docs/source-code#using-git) can use `git checkout -b 4.8 -t branch-heads/4.8` to experiment with the new features in V8 v4.8. Alternatively you can [subscribe to Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

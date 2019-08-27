@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2016-10-24 13:33:37
 tags:
   - release
+description: 'V8 v5.5 comes with reduced memory consumption and increased support for ECMAScript language features.'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 5.5](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.5), which will be in beta until it is released in coordination with Chrome 55 Stable in several weeks. V8 v5.5 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release.
 
@@ -42,7 +43,7 @@ async function logFetch(url) {
 
 ## Performance improvements
 
-V8 5.5 delivers a number of key improvements in memory footprint.
+V8 v5.5 delivers a number of key improvements in memory footprint.
 
 ### Memory
 
@@ -50,7 +51,7 @@ Memory consumption is an important dimension in the JavaScript virtual machine p
 
 ## V8 API
 
-Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document is regularly updated a few weeks after each major release.
+Please check out our [summary of API changes](https://docs.google.com/document/d/1g8JFi8T_oAE_7uAri7Njtig7fKaPDfotU6huOa1alds/edit). This document is regularly updated a few weeks after each major release.
 
 ### V8 inspector migrated
 

@@ -6,6 +6,7 @@ avatars:
 date: 2019-08-13 16:45:00
 tags:
   - release
+description: 'V8 v7.7 features lazy feedback allocation, faster WebAssembly background compilation, stack trace improvements, and new Intl.NumberFormat functionality.'
 tweet: '1161287541611323397'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.7](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.7), which is in beta until its release in coordination with Chrome 77 Stable in several weeks. V8 v7.7 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.

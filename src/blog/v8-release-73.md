@@ -6,6 +6,7 @@ avatars:
 date: 2019-02-07 11:30:42
 tags:
   - release
+description: 'V8 v7.3 features WebAssembly and async performance improvements, async stack traces, Object.fromEntries, String#matchAll, and much more!'
 tweet: '1093457099441561611'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.3](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.3), which is in beta until its release in coordination with Chrome 73 Stable in several weeks. V8 v7.3 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.

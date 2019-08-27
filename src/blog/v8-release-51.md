@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2016-04-23 13:33:37
 tags:
   - release
+description: 'V8 v5.1 comes with performance improvements, reduced jank and memory consumption, and increased support for ECMAScript language features.'
 ---
 The first step in the V8 [release process](/docs/release-process) is a new branch from the git master immediately before Chromium branches for a Chrome Beta milestone (roughly every six weeks). Our newest release branch is [V8 v5.1](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/5.1), which will remain in beta until we release a stable build in conjunction with Chrome 51 Stable. Here’s a highlight of the new developer-facing features in this version of V8.
 
@@ -60,7 +61,7 @@ V8 v5.1 also brings a few notable performance improvements to the following Java
 - `Array.prototype.join` & `Array.prototype.toString`
 - Flattening repeat strings e.g. `'.'.repeat(1000)`
 
-## WASM
+## WebAssembly (Wasm) { #wasm }
 
 V8 v5.1 has a preliminary support for [WebAssembly](/blog/webassembly-experimental). You can enable it via the flag `--expose_wasm` in `d8`. Alternatively you can try out the [Wasm demos](https://webassembly.github.io/demo/) with Chrome 51 (Beta Channel).
 

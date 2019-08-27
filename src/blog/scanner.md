@@ -8,6 +8,7 @@ tags:
   - internals
   - parsing
 tweet: '1110205101652787200'
+description: 'The cornerstone of parser performance is a fast scanner. This article explains how V8’s JavaScript scanner recently got up to 2.1× faster.'
 ---
 To run a JavaScript program, the source text needs to be processed so V8 can understand it. V8 starts out by parsing the source into an abstract syntax tree (AST), a set of objects that represent the program structure. That AST gets compiled to bytecode by Ignition. The performance of these parse + compile phases is important: V8 cannot run code before compilation is done. In this series of blog posts, we focus on parsing, and the work done in V8 to ship a blazingly fast parser.
 

@@ -1,11 +1,14 @@
 ---
 title: 'Digging into the TurboFan JIT'
 author: 'Ben L. Titzer, Software Engineer and TurboFan Mechanic'
+avatars:
+  - 'ben-titzer'
 date: 2015-07-13 13:33:37
 tags:
   - internals
+description: 'A deep-dive into the design of V8’s new TurboFan optimizing compiler.'
 ---
-[Last week we announced](https://blog.chromium.org/2015/07/revving-up-javascript-performance-with.html) that we've turned on TurboFan for certain types of JavaScript. In this post we wanted to dig deeper into the design of TurboFan.
+[Last week we announced](https://blog.chromium.org/2015/07/revving-up-javascript-performance-with.html) that we’ve turned on TurboFan for certain types of JavaScript. In this post we wanted to dig deeper into the design of TurboFan.
 
 Performance has always been at the core of V8’s strategy. TurboFan combines a cutting-edge intermediate representation with a multi-layered translation and optimization pipeline to generate better quality machine code than what was previously possible with the CrankShaft JIT. Optimizations in TurboFan are more numerous, more sophisticated, and more thoroughly applied than in CrankShaft, enabling fluid code motion, control flow optimizations, and precise numerical range analysis, all of which were more previously unattainable.
 

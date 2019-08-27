@@ -50,6 +50,6 @@ In Chrome 63 [block coverage](https://docs.google.com/presentation/d/1IFqqlQwJ0o
 
 ## V8 API
 
-Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document is regularly updated a few weeks after each major release.
+Please check out our [summary of API changes](https://docs.google.com/document/d/1g8JFi8T_oAE_7uAri7Njtig7fKaPDfotU6huOa1alds/edit). This document is regularly updated a few weeks after each major release.
 
 Developers with an [active V8 checkout](/docs/source-code#using-git) can use git checkout -b 6.3 -t branch-heads/6.3 to experiment with the new features in V8 v6.3. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

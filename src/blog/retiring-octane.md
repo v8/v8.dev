@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2017-04-12 13:33:37
 tags:
   - benchmarks
+description: 'The V8 team believes that it is time to retire Octane as a recommended benchmark.'
 ---
 The history of JavaScript benchmarks is a story of constant evolution. As the web expanded from simple documents to dynamic client-side applications, new JavaScript benchmarks were created to measure workloads that became important for new use cases. This constant change has given individual benchmarks finite lifespans. As web browser and virtual machine (VM) implementations begin to over-optimize for specific test cases, benchmarks themselves cease to become effective proxies for their original use cases. One of the first JavaScript benchmarks, [SunSpider](https://webkit.org/perf/sunspider/sunspider.html), provided early incentives for shipping fast optimizing compilers. However, as VM engineers uncovered the [limitations of microbenchmarks](https://blog.mozilla.org/nnethercote/2014/06/16/a-browser-benchmarking-manifesto/) and found new ways to [optimize](https://benediktmeurer.de/2016/12/16/the-truth-about-traditional-javascript-benchmarks/#the-notorious-sunspider-examples) [around](https://bugzilla.mozilla.org/show_bug.cgi?id=787601) SunSpider’s [limitations](https://bugs.webkit.org/show_bug.cgi?id=63864), the browser community [retired](https://trac.webkit.org/changeset/187526/webkit) SunSpider as a recommended benchmark.
 

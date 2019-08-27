@@ -5,6 +5,7 @@ date: 2018-05-04 13:33:37
 tags:
   - release
 tweet: '992506342391742465'
+description: 'V8 v6.7 adds more untrusted code mitigations and ships BigInt support.'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 6.7](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/6.7), which is in beta until its release in coordination with Chrome 67 Stable in several weeks. V8 v6.7 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 

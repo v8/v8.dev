@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2016-01-26 13:33:37
 tags:
   - release
+description: 'V8 v4.9 comes with an improved `Math.random` implementation and adds support for several new ES2015 language features.'
 ---
 Roughly every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before Chrome branches for a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 4.9](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/4.9), which will be in beta until it is released in coordination with Chrome 49 Stable. V8 4.9 is filled with all sorts of developer-facing goodies, so we’d like to give you a preview of some of the highlights in anticipation of the release in several weeks.
 
@@ -80,7 +81,7 @@ const title = `Mr. ${debugMe.name}`; // → 'Mr. John Doe'
 
 For more information on the usage of Proxies and the Reflect API, see the examples section of the [MDN Proxy page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy#Examples).
 
-### Default Parameters
+### Default parameters
 
 In ES5 and below, optional parameters in function definitions required boilerplate code to check whether parameters were undefined:
 
@@ -136,6 +137,6 @@ V8 v4.9 includes an improvement in the implementation of `Math.random()`. [As an
 
 ## V8 API
 
-Please check out our [summary of API changes](http://bit.ly/v8-api-changes). This document gets regularly updated a few weeks after each major release.
+Please check out our [summary of API changes](https://docs.google.com/document/d/1g8JFi8T_oAE_7uAri7Njtig7fKaPDfotU6huOa1alds/edit). This document gets regularly updated a few weeks after each major release.
 
 Developers with an [active V8 checkout](https://v8.dev/docs/source-code#using-git) can use `git checkout -b 4.9 -t branch-heads/4.9` to experiment with the new features in V8 v4.9. Alternatively you can subscribe to [Chrome's Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

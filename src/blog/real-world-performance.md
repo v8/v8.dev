@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2016-12-21 13:33:37
 tags:
   - benchmarks
+description: 'The V8 team has developed a new methodology to measure and understand real-world JavaScript performance.'
 ---
 Over the last year the V8 team has developed a new methodology to measure and understand real-world JavaScript performance. We’ve used the insights that we gleaned from it to change how the V8 team makes JavaScript faster. Our new real-world focus represents a significant shift from our traditional performance focus. We’re confident that as we continue to apply this methodology in 2017, it will significantly improve users’ and developers’ ability to rely on predictable performance from V8 for real-world JavaScript in both Chrome and Node.js.
 
