@@ -151,7 +151,7 @@ Fortunately, Ignition and TurboFan ([V8’s new interpreter and compiler pipelin
 Many of the improvements we achieved for modern language features were only feasible with the new Ignition/Turbofan pipeline. Ignition and TurboFan proved especially critical to optimizing generators and async functions. Generators had long been supported by V8, but were not optimizable due to control flow limitations in Crankshaft. Async functions are essentially sugar on top of generators, so they fall into the same category. The new compiler pipeline leverages Ignition to make sense of the AST and generate bytecodes which de-sugar complex generator control flow into simpler local-control flow bytecodes. TurboFan can more easily optimize the resulting bytecodes since it doesn’t need to know anything specific about generator control flow, just how to save and restore a function’s state on yields.
 
 <figure>
-  <img src="/_img/high-performance-es2015/generators.png" width="698" height="380" alt="" loading="lazy">
+  <img src="/_img/high-performance-es2015/generators.svg" width="800" height="442" alt="" loading="lazy">
   <figcaption>How JavaScript generators are represented in Ignition and TurboFan</figcaption>
 </figure>
 
