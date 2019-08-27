@@ -1,6 +1,9 @@
 ---
 title: 'Getting garbage collection for free'
 author: 'Hannes Payer and Ross McIlroy, Idle Garbage Collectors'
+avatars:
+  - 'hannes-payer'
+  - 'ross-mcilroy'
 date: 2015-08-07 13:33:37
 tags:
   - internals

@@ -1,6 +1,8 @@
 ---
 title: 'Background compilation'
 author: '[Ross McIlroy](https://twitter.com/rossmcilroy), main thread defender'
+avatars:
+  - 'ross-mcilroy'
 date: 2018-03-26 13:33:37
 tags:
   - internals
