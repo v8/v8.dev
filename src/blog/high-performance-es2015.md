@@ -6,6 +6,7 @@ avatars:
 date: 2017-02-17 13:33:37
 tags:
   - ECMAScript
+description: 'V8’s performance of ES2015+ language features is now on par with their transpiled ES5 counterparts.'
 ---
 Over the last couple of months the V8 team focused on bringing the performance of newly added [ES2015](https://www.ecma-international.org/ecma-262/6.0/) and other even more recent JavaScript features on par with their transpiled [ES5](https://www.ecma-international.org/ecma-262/5.1/) counterparts.
 

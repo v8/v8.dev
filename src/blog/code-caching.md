@@ -6,6 +6,7 @@ avatars:
 date: 2015-07-27 13:33:37
 tags:
   - internals
+description: 'V8 now supports (byte)code caching, i.e. caching the result of JavaScript parsing + compilation.'
 ---
 V8 uses [just-in-time compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation) (JIT) to execute JavaScript code. This means that immediately prior to running a script, it has to be parsed and compiled — which can cause considerable overhead. As we [announced recently](https://blog.chromium.org/2015/03/new-javascript-techniques-for-rapid.html), code caching is a technique that lessens this overhead. When a script is compiled for the first time, cache data is produced and stored. The next time V8 needs to compile the same script, even in a different V8 instance, it can use the cache data to recreate the compilation result instead of compiling from scratch. As a result the script is executed much sooner.
 

@@ -7,6 +7,7 @@ date: 2018-01-29 13:33:37
 tags:
   - internals
 tweet: '958046113390411776'
+description: 'Several JavaScript data structures such as Map, Set, WeakSet, and WeakMap use hash tables under the hood. This article explains how V8 v6.3 improves hash table performance.'
 ---
 ECMAScript 2015 introduced several new data structures such as Map, Set, WeakSet, and WeakMap, all of which use hash tables under the hood. This post details the [recent improvements](https://bugs.chromium.org/p/v8/issues/detail?id=6404) in how [V8 v6.3+](/blog/v8-release-63) stores the keys in hash tables.
 

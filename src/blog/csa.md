@@ -4,6 +4,7 @@ author: '[Daniel Clifford](https://twitter.com/expatdanno), CodeStubAssembler as
 date: 2017-11-16 13:33:37
 tags:
   - internals
+description: 'V8 has its own abstraction on top of assembly code: the CodeStubAssembler. The CSA allows V8 to quickly and reliably optimize JS features at a low level, all while supporting multiple platforms.'
 tweet: '931184976481177600'
 ---
 In this post we’d like to introduce the CodeStubAssembler (CSA), a component in V8 that has been a very useful tool in achieving some [big](/blog/optimizing-proxies) [performance](https://twitter.com/v8js/status/918119002437750784) [wins](https://twitter.com/_gsathya/status/900188695721984000) over the last several V8 releases. The CSA also significantly improved the V8 team’s ability to quickly optimize JavaScript features at a low-level with a high degree of reliability, which improved the team’s development velocity.

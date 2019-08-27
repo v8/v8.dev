@@ -7,6 +7,7 @@ date: 2016-02-26 13:33:37
 tags:
   - ECMAScript
   - RegExp
+description: 'JavaScript regular expressions are getting some new functionality: lookbehind assertions.'
 ---
 Introduced with the third edition of the ECMA-262 specification, regular expressions have been part of Javascript since 1999. In functionality and expressiveness, JavaScript’s implementation of regular expressions roughly mirrors that of other programming languages.
 

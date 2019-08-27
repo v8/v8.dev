@@ -7,6 +7,8 @@ date: 2017-10-05 13:33:37
 tags:
   - ECMAScript
   - benchmarks
+  - internals
+description: 'This article explains how V8 improved JavaScript proxies performance.'
 tweet: '915846050447003648'
 ---
 Proxies have been an integral part of JavaScript since ES2015. They allow intercepting fundamental operations on objects and customizing their behavior. Proxies form a core part of projects like [jsdom](https://github.com/tmpvar/jsdom) and the [Comlink RPC library](https://github.com/GoogleChrome/comlink). Recently, we put a lot of effort into improving the performance of proxies in V8. This article sheds some light on general performance improvement patterns in V8 and for proxies in particular.

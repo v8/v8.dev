@@ -4,6 +4,8 @@ author: 'Juliana Franco ([@jupvfranco](https://twitter.com/jupvfranco)), Lazines
 date: 2017-10-04 13:33:37
 tags:
   - memory
+  - internals
+description: 'This technical deep-dive explains how V8 used to unlink deoptimized functions, and how we recently changed this to improve performance.'
 tweet: '915473224187760640'
 ---
 Roughly three months ago, I joined the V8 team (Google Munich) as an intern and since then I’ve been working on the VM’s _Deoptimizer_ — something completely new to me which proved to be an interesting and challenging project. The first part of my internship focused on [improving the VM security-wise](https://docs.google.com/document/d/1ELgd71B6iBaU6UmZ_lvwxf_OrYYnv0e4nuzZpK05-pg/edit). The second part focused on performance improvements. Namely, on the removal of a data-structure used for the unlinking of previously deoptimized functions, which was a performance bottleneck during garbage collection. This blog post describes this second part of my internship. I’ll explain how V8 used to unlink deoptimized functions, how we changed this, and what performance improvements were obtained.

@@ -9,6 +9,7 @@ date: 2018-03-01 13:33:37
 tags:
   - internals
   - memory
+description: 'Chrome’s DevTools can now trace and snapshot C++ DOM objects and display all reachable DOM objects from JavaScript with their references.'
 tweet: '969184997545562112'
 ---
 Debugging memory leaks in Chrome 66 just became much easier. Chrome’s DevTools can now trace and snapshot C++ DOM objects and display all reachable DOM objects from JavaScript with their references. This feature is one of the benefits of the new C++ tracing mechanism of the V8 garbage collector.

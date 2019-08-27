@@ -2,6 +2,7 @@
 title: 'Hello, world!'
 author: 'the V8 team'
 date: 2015-07-10 13:33:37
+description: 'The V8 project now has a blog!'
 ---
 Welcome to the V8 developer blog!
 

@@ -6,6 +6,7 @@ avatars:
 date: 2017-12-13 13:33:37
 tags:
   - internals
+description: 'V8 now has native support for JavaScript code coverage. Tools can now access V8’s coverage information without instrumenting the code!'
 tweet: '940879905079873536'
 ---
 Code coverage provides information about whether, and optionally how often certain parts of an application have been executed. It’s commonly used to determine how thoroughly a test suite exercises a particular codebase.

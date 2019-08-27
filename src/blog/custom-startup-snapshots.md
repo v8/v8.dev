@@ -6,6 +6,7 @@ avatars:
 date: 2015-09-25 13:33:37
 tags:
   - internals
+description: 'V8 embedders can utilize snapshots to skip over the startup time incurred by initializations of JavaScript programs.'
 ---
 The JavaScript specification includes a lot of built-in functionality, from [math functions](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math) to a [full-featured regular expression engine](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions). Every newly-created V8 context has these functions available from the start. For this to work, the global object (for example, the window object in a browser) and all the built-in functionality must be set up and initialized into V8’s heap at the time the context is created. It takes quite some time to do this from scratch.
 

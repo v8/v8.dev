@@ -4,6 +4,7 @@ author: 'the V8 team'
 date: 2017-05-15 13:33:37
 tags:
   - internals
+description: 'V8 v5.9 comes with a brand-new JavaScript execution pipeline, built upon the Ignition interpreter and the TurboFan optimizing compiler.'
 ---
 Today we are excited to announce the launch of a new JavaScript execution pipeline for V8 v5.9 that will reach Chrome Stable in v59. With the new pipeline, we achieve big performance improvements and significant memory savings on real-world JavaScript applications. We’ll discuss the numbers in more detail at the end of this post, but first let’s take a look at the pipeline itself.
 

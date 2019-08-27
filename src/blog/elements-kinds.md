@@ -7,6 +7,7 @@ date: 2017-09-12 13:33:37
 tags:
   - internals
   - presentations
+description: 'This technical deep-dive explains how V8 optimizes operations on arrays behind the scenes, and what that means for JavaScript developers.'
 tweet: '907608362191376384'
 ---
 :::note

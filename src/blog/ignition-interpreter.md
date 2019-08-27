@@ -1,9 +1,12 @@
 ---
 title: 'Firing up the Ignition interpreter'
 author: 'Ross McIlroy, V8 Ignition Jump Starter'
+avatars:
+  - 'ross-mcilroy'
 date: 2016-08-23 13:33:37
 tags:
   - internals
+description: 'With the Ignition interpreter, V8 compiles JavaScript functions to a concise bytecode, which is between 50% to 25% the size of the equivalent baseline machine code.'
 ---
 V8 and other modern JavaScript engines get their speed via [just-in-time (JIT) compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation) of script to native machine code immediately prior to execution. Code is initially compiled by a baseline compiler, which can generate non-optimized machine code quickly. The compiled code is analyzed during runtime and optionally re-compiled dynamically with a more advanced optimizing compiler for peak performance. In V8, this script execution pipeline has a variety of special cases and conditions which require complex machinery to switch between the baseline compiler and two optimizing compilers, Crankshaft and TurboFan.
 

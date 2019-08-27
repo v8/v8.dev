@@ -6,6 +6,7 @@ avatars:
 date: 2017-09-22 13:33:37
 tags:
   - security
+description: 'We’ve disabled V8’s escape analysis in Chrome 61 to protect users against a security vulnerability.'
 tweet: '911339802884284416'
 ---
 In JavaScript, an allocated object _escapes_ if it is accessible from outside the current function. Normally V8 allocates new objects on the JavaScript heap, but using _escape analysis_, an optimizing compiler can figure out when an object can be treated specially because its lifetime is provably bound to the function’s activation. When the reference to a newly allocated object does not escape the function that creates it, JavaScript engines don’t need to explicitly allocate that object on the heap. They can instead effectively treat the values of the object as local variables to the function. That in turn enables all kinds of optimizations like storing these values on the stack or in registers, or in some cases, optimizing the values away completely. Objects that escape (more accurately, objects that can’t be proven to not escape) must be heap-allocated.

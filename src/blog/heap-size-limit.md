@@ -8,10 +8,11 @@ avatars:
 date: 2017-02-09 13:33:37
 tags:
   - memory
+description: 'V8 recently increased its hard limit on heap size.'
 ---
 V8 has a hard limit on its heap size. This serves as a safeguard against applications with memory leaks. When an application reaches this hard limit, V8 does a series of last resort garbage collections. If the garbage collections do not help to free memory V8 stops execution and reports an out-of-memory failure. Without the hard limit a memory leaking application could use up all system memory hurting the performance of other applications.
 
-Ironically, this safeguard mechanism makes investigation of memory leaks harder for JavaScript developers. The application can run out of memory before the developer manages to inspect the heap in DevTools. Moreover the DevTools process itself can run out memory because it uses an ordinary V8 instance. For example, taking a heap snapshot of [this demo](https://ulan.github.io/misc/heap-snapshot-demo.html) will abort execution due to out-of-memory on the current stable Chrome.
+Ironically, this safeguard mechanism makes investigation of memory leaks harder for JavaScript developers. The application can run out of memory before the developer manages to inspect the heap in DevTools. Moreover the DevTools process itself can run out memory because it uses an ordinary V8 instance. For example, taking a heap snapshot of [this demo](https://ulan.github.io/misc/heap-snapshot-demo.html) aborts execution due to out-of-memory on the current stable Chrome.
 
 Historically the V8 heap limit was conveniently set to fit the signed 32-bit integer range with some margin. Over time this convenience lead to sloppy code in V8 that mixed types of different bit widths, effectively breaking the ability to increase the limit. Recently we cleaned up the garbage collector code, enabling the use of larger heap sizes. DevTools already makes use of this feature and taking a heap snapshot in the previously mentioned demo works as expected in the latest Chrome Canary.
 

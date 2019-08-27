@@ -6,6 +6,7 @@ avatars:
 date: 2017-08-30 13:33:37
 tags:
   - internals
+description: 'This technical deep-dive explains how V8 handles JavaScript properties behind the scenes.'
 ---
 In this blog post we would like to explain how V8 handles JavaScript properties internally. From a JavaScript point of view there are only a few distinctions necessary for properties. JavaScript objects mostly behave like dictionaries, with string keys and arbitrary objects as values. The specification does however treat integer-indexed properties and other properties differently [during iteration](https://tc39.es/ecma262/#sec-ordinaryownpropertykeys). Other than that, the different properties behave mostly the same, independent of whether they are integer indexed or not.
 

@@ -9,6 +9,7 @@ date: 2018-06-11 13:33:37
 tags:
   - internals
   - memory
+description: 'This post describes the garbage collection technique called concurrent marking.'
 tweet: '1006187194808233985'
 ---
 This post describes the garbage collection technique called _concurrent marking_. The optimization allows a JavaScript application to continue execution while the garbage collector scans the heap to find and mark live objects. Our benchmarks show that concurrent marking reduces the time spent marking on the main thread by 60%–70%. Concurrent marking is the last puzzle piece of the [Orinoco project](/blog/orinoco) — the project to incrementally replace the old garbage collector with the new mostly concurrent and parallel garbage collector. Concurrent marking is enabled by default in Chrome 64 and Node.js v10.

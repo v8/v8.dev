@@ -6,6 +6,7 @@ avatars:
 date: 2017-03-01 13:33:37
 tags:
   - internals
+description: 'This technical deep-dive explains how V8 made JavaScript’s for-in as fast as possible.'
 ---
 `for`-`in` is a widely used language feature present in many frameworks. Despite its ubiquity, it is one of the more obscure language constructs from an implementation perspective. V8 went to great lengths to make this feature as fast as possible. Over the course of the past year, `for`-`in` became fully spec-compliant and up to 3 times faster, depending on the context.
 

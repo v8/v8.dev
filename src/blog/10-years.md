@@ -6,6 +6,7 @@ avatars:
 date: 2018-09-11 19:00:00
 tags:
   - benchmarks
+description: 'An overview of major milestones for the V8 project in the past 10 years as well as the years before, when the project was still secret.'
 tweet: '1039559389324238850'
 ---
 This month marks the 10-year anniversary of shipping not just Google Chrome, but also the V8 project. This post gives an overview of major milestones for the V8 project in the past 10 years as well as the years before, when the project was still secret.
