@@ -358,6 +358,18 @@ delete object.x;
 
 `Object.freeze` does the same as `Object.seal`, but it also prevents the values of existing properties from being changed by marking them non-writable.
 
+```js
+const object = { x: 1 };
+Object.freeze(object);
+object.y = 2;
+// TypeError: Cannot add property y;
+//            object is not extensible
+delete object.x;
+// TypeError: Cannot delete property x
+object.x = 3;
+// TypeError: Cannot assign to read-only property x
+```
+
 Let’s consider this concrete example, with two objects which both have a single property `x`, and where we then prevent any further extensions to the second object.
 
 ```js
