@@ -9,6 +9,7 @@ tags:
   - internals
   - presentations
 description: 'This article describes how V8 chooses optimal in-memory representations for various JavaScript values, and how that impacts the shape machinery — all of which helps explain a recent V8 performance cliff in React core.'
+tweet: '1166723359696130049'
 ---
 [Previously](https://mathiasbynens.be/notes/shapes-ics), we discussed how JavaScript engines optimize object and array access through the use of Shapes and Inline Caches, and we’ve explored [how engines speed up prototype property access](https://mathiasbynens.be/notes/prototypes) in particular. This article describes how V8 chooses optimal in-memory representations for various JavaScript values, and how that impacts the shape machinery — all of which helps explain [a recent V8 performance cliff in React core](https://github.com/facebook/react/issues/14365).
 
