@@ -28,7 +28,7 @@ description: 'This article describes how V8 chooses optimal in-memory representa
 Every JavaScript value has exactly one of (currently) eight different types: `Number`, `String`, `Symbol`, `BigInt`, `Boolean`, `Undefined`, `Null`, and `Object`.
 
 <figure>
-  <img src="/_img/react-cliff/01-javascript-types.svg" intrinsicsize="913x497" alt="" loading="lazy">
+  <img src="/_img/react-cliff/01-javascript-types.svg" width="913" height="497" alt="" loading="lazy">
 </figure>
 
 With one notable exception, these types are observable in JavaScript through the `typeof` operator:
@@ -60,13 +60,13 @@ typeof { x: 42 };
 As such, `null` means “no object value”, whereas `undefined` means “no value”.
 
 <figure>
-  <img src="/_img/react-cliff/02-primitives-objects.svg" intrinsicsize="960x384" alt="" loading="lazy">
+  <img src="/_img/react-cliff/02-primitives-objects.svg" width="960" height="384" alt="" loading="lazy">
 </figure>
 
 Following this line of thought, Brendan Eich designed JavaScript to make `typeof` return `'object'` for all values on the right-hand side, i.e. all objects and `null` values, in the spirit of Java. That’s why `typeof null === 'object'` despite the spec having a separate `Null` type.
 
 <figure>
-  <img src="/_img/react-cliff/03-primitives-objects-typeof.svg" intrinsicsize="960x384" alt="" loading="lazy">
+  <img src="/_img/react-cliff/03-primitives-objects-typeof.svg" width="960" height="384" alt="" loading="lazy">
 </figure>
 
 ## Value representation
@@ -187,7 +187,7 @@ const o = {
 The value `42` for `x` can be encoded as `Smi`, so it can be stored inside of the object itself. The value `4.2` on the other hand needs a separate entity to hold the value, and the object points to that entity.
 
 <figure>
-  <img src="/_img/react-cliff/04-smi-vs-heapnumber.svg" intrinsicsize="960x287" alt="" loading="lazy">
+  <img src="/_img/react-cliff/04-smi-vs-heapnumber.svg" width="960" height="287" alt="" loading="lazy">
 </figure>
 
 Now, let’s say we run the following JavaScript snippet:
@@ -202,13 +202,13 @@ o.y += 1;
 In this case, the value of `x` can be updated in-place, since the new value `52` also fits the `Smi` range.
 
 <figure>
-  <img src="/_img/react-cliff/05-update-smi.svg" intrinsicsize="960x301" alt="" loading="lazy">
+  <img src="/_img/react-cliff/05-update-smi.svg" width="960" height="301" alt="" loading="lazy">
 </figure>
 
 However, the new value of `y=5.2` does not fit into a `Smi` and is also different from the previous value `4.2`, so V8 has to allocate a new `HeapNumber` entity for the assignment to `y`.
 
 <figure>
-  <img src="/_img/react-cliff/06-update-heapnumber.svg" intrinsicsize="960x375" alt="" loading="lazy">
+  <img src="/_img/react-cliff/06-update-heapnumber.svg" width="960" height="375" alt="" loading="lazy">
 </figure>
 
 `HeapNumber`s are not mutable, which enables certain optimizations. For example, if we assign `y`s value to `x`:
@@ -221,7 +221,7 @@ o.x = o.y;
 …we can now just link to the same `HeapNumber` instead of allocating a new one for the same value.
 
 <figure>
-  <img src="/_img/react-cliff/07-heapnumbers.svg" intrinsicsize="960x411" alt="" loading="lazy">
+  <img src="/_img/react-cliff/07-heapnumbers.svg" width="960" height="411" alt="" loading="lazy">
 </figure>
 
 One downside to `HeapNumber`s being immutable is that it would be slow to update fields with values outside the `Smi` range often, like in the following example:
@@ -239,25 +239,25 @@ for (let i = 0; i < 5; ++i) {
 The first line would create a `HeapNumber` instance with the initial value `0.1`. The loop body changes this value to `1.1`, `2.1`, `3.1`, `4.1`, and finally `5.1`, creating a total of six `HeapNumber` instances along the way, five of which are garbage once the loop finishes.
 
 <figure>
-  <img src="/_img/react-cliff/08-garbage-heapnumbers.svg" intrinsicsize="960x432" alt="" loading="lazy">
+  <img src="/_img/react-cliff/08-garbage-heapnumbers.svg" width="960" height="432" alt="" loading="lazy">
 </figure>
 
 To avoid this problem, V8 provides a way to update non-`Smi` number fields in-place as well, as an optimization. When a numeric field holds values outside the `Smi` range, V8 marks that field as a `Double` field on the shape, and allocates a so-called `MutableHeapNumber` that holds the actual value encoded as Float64.
 
 <figure>
-  <img src="/_img/react-cliff/09-mutableheapnumber.svg" intrinsicsize="960x518" alt="" loading="lazy">
+  <img src="/_img/react-cliff/09-mutableheapnumber.svg" width="960" height="518" alt="" loading="lazy">
 </figure>
 
 When you field’s value changes, V8 no longer needs to allocate a new `HeapNumber`, but instead can just update the `MutableHeapNumber` in-place.
 
 <figure>
-  <img src="/_img/react-cliff/10-update-mutableheapnumber.svg" intrinsicsize="960x500" alt="" loading="lazy">
+  <img src="/_img/react-cliff/10-update-mutableheapnumber.svg" width="960" height="500" alt="" loading="lazy">
 </figure>
 
 However, there’s a catch to this approach as well. Since the value of a `MutableHeapNumber` can change, it’s important that these are not passed around.
 
 <figure>
-  <img src="/_img/react-cliff/11-mutableheapnumber-to-heapnumber.svg" intrinsicsize="960x513" alt="" loading="lazy">
+  <img src="/_img/react-cliff/11-mutableheapnumber-to-heapnumber.svg" width="960" height="513" alt="" loading="lazy">
 </figure>
 
 For example, if you assign `o.x` to some other variable `y`, you wouldn’t want the value of `y` to change the next time `o.x` changes — that would be a violation of the JavaScript spec! So when `o.x` is accessed, the number must be *re-boxed* into a regular `HeapNumber` before assigning it to `y`.
@@ -275,7 +275,7 @@ object.x += 1;
 To avoid the inefficiency, all we have to do for small integers is mark the field on the shape as `Smi` representation, and simply update the number value in place as long as it fits the small integer range.
 
 <figure>
-  <img src="/_img/react-cliff/12-smi-no-boxing.svg" intrinsicsize="960x424" alt="" loading="lazy">
+  <img src="/_img/react-cliff/12-smi-no-boxing.svg" width="960" height="424" alt="" loading="lazy">
 </figure>
 
 ## Shape deprecations and migrations
@@ -296,19 +296,19 @@ y = a.x;
 This starts out with two objects pointing to the same shape, where `x` is marked as `Smi` representation:
 
 <figure>
-  <img src="/_img/react-cliff/13-shape.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/13-shape.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 When `b.x` changes to `Double` representation, V8 allocates a new shape where `x` is assigned `Double` representation, and which points back to the empty shape. V8 also allocates a `MutableHeapNumber` to hold the new value `0.2` for the `x` property. Then we update the object `b` to point to this new shape, and change the slot in the object to point to the previously allocated `MutableHeapNumber` at offset 0. And finally, we mark the old shape as deprecated and unlink it from the transition tree. This is done by having a new transition for `'x'` from the empty shape to the newly-created shape.
 
 <figure>
-  <img src="/_img/react-cliff/14-shape-transition.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/14-shape-transition.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 We cannot completely remove the old shape at this point, since it is still used by `a`, and it would be way too expensive to traverse the memory to find all objects pointing to the old shape and update them eagerly. Instead V8 does this lazily: any property access or assignment to `a` migrates it to the new shape first. The idea is to eventually make the deprecated shape unreachable and to have the garbage collector remove it.
 
 <figure>
-  <img src="/_img/react-cliff/15-shape-deprecation.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/15-shape-deprecation.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 A trickier case occurs if the field that changes representation is _not_ the last one in the chain:
@@ -326,7 +326,7 @@ o.y = 0.1;
 In that case V8 needs to find the so-called _split shape_, which is the last shape in the chain before the relevant property gets introduced. Here we’re changing `y`, so we need to find the last shape that doesn't have `y`, which in our example is the shape that introduced `x`.
 
 <figure>
-  <img src="/_img/react-cliff/16-split-shape.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/16-split-shape.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 Starting from the split shape, we create a new transition chain for `y` which replays all the previous transitions, but with `'y'` being marked as `Double` representation. And we use this new transition chain for `y`, marking the old subtree as deprecated. In the last step we migrate the instance `o` to the new shape, using a `MutableHeapNumber` to hold the value of `y` now. This way, new objects do not take the old path, and once all references to the old shape are gone, the deprecated shape part of the tree disappears.
@@ -369,7 +369,7 @@ Object.preventExtensions(object2);
 It starts out like we already know, transitioning from the empty shape to a new shape that holds the property `'x'` (represented as `Smi`). When we prevent extensions to `b`, we perform a special transition to a new shape which is marked as non-extensible. This special transition doesn’t introduce any new property — it’s really just a marker.
 
 <figure>
-  <img src="/_img/react-cliff/17-shape-nonextensible.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/17-shape-nonextensible.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 Note how we can’t just update the shape with `x` in-place, since that is needed by the other object `a`, which is still extensible.
@@ -389,7 +389,7 @@ We have an object with two fields that have `Smi` representation. We prevent any
 As we learned before, this creates roughly the following setup:
 
 <figure>
-  <img src="/_img/react-cliff/18-repro-shape-setup.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/18-repro-shape-setup.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 Both properties are marked as `Smi` representation, and the final transition is the extensibility transition to mark the shape as non-extensible.
@@ -397,7 +397,7 @@ Both properties are marked as `Smi` representation, and the final transition is 
 Now we need to change `y` to `Double` representation, which means we need to again start by finding the split shape. In this case, it’s the shape that introduced `x`. But now V8 got confused, since the split shape was extensible while the current shape was marked as non-extensible. And V8 didn’t really know how to replay the transitions properly in this case. So V8 essentially just gave up trying to make sense of this, and instead created a separate shape that is not connected to the existing shape tree and not shared with any other objects. Think of it as an _orphaned shape_:
 
 <figure>
-  <img src="/_img/react-cliff/19-orphaned-shape.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/19-orphaned-shape.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 You can imagine it’s pretty bad if this happens to lots of objects, since that renders the whole shape system useless.
@@ -421,13 +421,13 @@ These fields (such as `actualStartTime`) are initialized with `0` or `-1`, and t
 Initially the simplified example above looked like this:
 
 <figure>
-  <img src="/_img/react-cliff/20-fibernode-shape.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/20-fibernode-shape.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 There are two instances sharing a shape tree, all working as intended. But then, as you store the real timestamp, V8 gets confused finding the split shape:
 
 <figure>
-  <img src="/_img/react-cliff/21-orphan-islands.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/21-orphan-islands.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 V8 assigns a new orphaned shape to `node1`, and the same thing happens to `node2` some time later, resulting in two _orphan islands_, each with their own disjoint shapes. Many real-world React apps don’t just have two, but rather tens of thousands of these `FiberNode`s. As you can imagine, this situation was not particularly great for V8’s performance.
@@ -435,19 +435,19 @@ V8 assigns a new orphaned shape to `node1`, and the same thing happens to `node2
 Luckily, [we’ve fixed this performance cliff](https://chromium-review.googlesource.com/c/v8/v8/+/1442640/) in [V8 v7.4](/blog/v8-release-74), and we’re [looking into making field representation changes cheaper](https://bit.ly/v8-in-place-field-representation-changes) to remove any remaining performance cliffs. With the fix, V8 now does the right thing:
 
 <figure>
-  <img src="/_img/react-cliff/22-fix.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/22-fix.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 The two `FiberNode` instances point to the non-extensible shape where `'actualStartTime'` is a `Smi` field. When the first assignment to `node1.actualStartTime` happens, a new transition chain is created and the previous chain is marked as deprecated:
 
 <figure>
-  <img src="/_img/react-cliff/23-fix-fibernode-shape-1.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/23-fix-fibernode-shape-1.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 Note how the extensibility transition is now properly replayed in the new chain.
 
 <figure>
-  <img src="/_img/react-cliff/24-fix-fibernode-shape-2.svg" intrinsicsize="960x540" alt="" loading="lazy">
+  <img src="/_img/react-cliff/24-fix-fibernode-shape-2.svg" width="960" height="540" alt="" loading="lazy">
 </figure>
 
 After the assignment to `node2.actualStartTime`, both nodes refer to the new shape, and the deprecated part of the transition tree can be cleaned up by the garbage collector.
