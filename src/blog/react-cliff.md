@@ -249,7 +249,7 @@ To avoid this problem, V8 provides a way to update non-`Smi` number fields in-pl
   <img src="/_img/react-cliff/09-mutableheapnumber.svg" width="960" height="518" alt="" loading="lazy">
 </figure>
 
-When you field’s value changes, V8 no longer needs to allocate a new `HeapNumber`, but instead can just update the `MutableHeapNumber` in-place.
+When your field’s value changes, V8 no longer needs to allocate a new `HeapNumber`, but instead can just update the `MutableHeapNumber` in-place.
 
 <figure>
   <img src="/_img/react-cliff/10-update-mutableheapnumber.svg" width="960" height="500" alt="" loading="lazy">
