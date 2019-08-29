@@ -376,7 +376,7 @@ Let’s consider this concrete example, with two objects which both have a singl
 const a = { x: 1 };
 const b = { x: 2 };
 
-Object.preventExtensions(object2);
+Object.preventExtensions(b);
 ```
 
 It starts out like we already know, transitioning from the empty shape to a new shape that holds the property `'x'` (represented as `Smi`). When we prevent extensions to `b`, we perform a special transition to a new shape which is marked as non-extensible. This special transition doesn’t introduce any new property — it’s really just a marker.
