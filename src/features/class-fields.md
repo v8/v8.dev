@@ -112,7 +112,7 @@ counter.#count = 42;
 // → SyntaxError
 ```
 
-## Public and static properties
+## Public and private static properties
 
 Class fields syntax can be used to create public and private static properties and methods as well:
 
