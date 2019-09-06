@@ -1,8 +1,9 @@
 ---
 title: 'The cost of JavaScript in 2019'
-author: 'Addy Osmani ([@addyosmani](https://twitter.com/addyosmani)), JavaScript Janitor'
+author: 'Addy Osmani ([@addyosmani](https://twitter.com/addyosmani)), JavaScript Janitor, and Mathias Bynens ([@mathias](https://twitter.com/mathias)), Main Thread Liberator'
 avatars:
   - 'addy-osmani'
+  - 'mathias-bynens'
 date: 2019-06-25
 tags:
   - internals
