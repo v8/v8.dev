@@ -6,6 +6,7 @@ avatars:
   - 'mythri-alle'
 tags:
   - internals
+tweet: '988728000677142528'
 description: 'Starting with Chrome 66, V8 caches more (byte)code by generating the cache after top-level execution.'
 ---
 V8 uses [code caching](/blog/code-caching) to cache the generated code for frequently-used scripts. Starting with Chrome 66, we are caching more code by generating the cache after top-level execution. This leads to a 20–40% reduction in parse and compilation time during the initial load.
