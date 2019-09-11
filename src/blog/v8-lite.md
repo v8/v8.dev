@@ -8,6 +8,8 @@ avatars:
 date: 2019-09-11 14:44:37
 tags:
   - internals
+  - memory
+  - presentations
 description: 'The V8 Lite project dramatically reduced the memory overhead of V8 on typical websites, this is how we did it.'
 ---
 
