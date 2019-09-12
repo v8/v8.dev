@@ -41,7 +41,7 @@ In doing so, we determined that a significant portion of V8’s heap was dedicat
 As a result of this, we started work on a *Lite mode* of V8 that trades off speed of JavaScript execution against improved memory savings by vastly reducing the allocation of these optional objects.
 
 <figure>
-  <img src="/_img/v8-lite/v8-lite.svg" width="149" height="231" alt="" loading="lazy">
+  <img src="/_img/v8-lite/v8-lite.png" width="149" height="231" alt="" loading="lazy">
 </figure>
 
 A number of the *Lite mode* changes could be made by configuring existing V8 settings, for example, disabling V8’s TurboFan optimizing compiler. However, others required more involved changes to V8.
