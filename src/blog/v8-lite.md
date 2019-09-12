@@ -112,9 +112,9 @@ We have released the optimizations described above over the last seven releases 
   <figcaption>Per-page breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).</figcaption>
 </figure>
 
-Over this time, we have reduced the V8 heap size by an average of 18% across a range of typical websites, which corresponds to an average decrease of 1.5MB for low-end AndroidGo mobile devices. This has been possible without any significant impact on JavaScript performance either on benchmarks or as measured on real world webpage interactions.
+Over this time, we have reduced the V8 heap size by an average of 18% across a range of typical websites, which corresponds to an average decrease of 1.5 MB for low-end AndroidGo mobile devices. This has been possible without any significant impact on JavaScript performance either on benchmarks or as measured on real world webpage interactions.
 
-*Lite mode* can provide further memory savings at some cost to JavaScript execution throughput by disabling function optimization. On average *Lite mode* provides 22% memory savings, with some pages seeing up to 32% reductions. This corresponds to a 1.8MB reduction in V8 heap size on an AndroidGo device.
+*Lite mode* can provide further memory savings at some cost to JavaScript execution throughput by disabling function optimization. On average *Lite mode* provides 22% memory savings, with some pages seeing up to 32% reductions. This corresponds to a 1.8 MB reduction in V8 heap size on an AndroidGo device.
 
 <figure>
   <img src="/_img/v8-lite/breakdown-by-optimization.svg" width="677" height="411" alt="" loading="lazy">
