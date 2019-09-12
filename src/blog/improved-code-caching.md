@@ -2,6 +2,8 @@
 title: 'Improved code caching'
 author: 'Mythri Alle, Chief Code Cacher'
 date: 2018-04-24 13:33:37
+avatars:
+  - 'mythri-alle'
 tags:
   - internals
 tweet: '988728000677142528'
