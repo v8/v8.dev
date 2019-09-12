@@ -5,7 +5,7 @@ avatars:
   - 'mythri-alle'
   - 'dan-elphick'
   - 'ross-mcilroy'
-date: 2019-09-11 14:44:37
+date: 2019-09-12 12:44:37
 tags:
   - internals
   - memory
@@ -33,7 +33,7 @@ In this post we highlight some of the key optimizations we developed and the mem
 In order to optimize V8’s memory usage, we first needed to understand how memory is used by V8 and what object types contribute a large proportion of V8’s heap size. We used V8’s [memory visualization](https://v8.dev/blog/optimizing-v8-memory#memory-visualization) tools to trace heap composition across a number of typical web pages.
 
 <figure>
-  <img src="/_img/v8-lite/memory_categorization.svg" width="950" height="440" alt="" loading="lazy">
+  <img src="/_img/v8-lite/memory-categorization.svg" width="950" height="440" alt="" loading="lazy">
   <figcaption>Percentage of V8’s heap used by different object types when loading Times of India.</figcaption>
 </figure>
 
@@ -42,7 +42,7 @@ In doing so, we determined that a significant portion of V8’s heap was dedicat
 As a result of this, we started work on a *Lite mode* of V8 that trades off speed of JavaScript execution against improved memory savings by vastly reducing the allocation of these optional objects.
 
 <figure>
-  <img src="/_img/v8-lite/v8_lite.svg" width="149" height="231" alt="" loading="lazy">
+  <img src="/_img/v8-lite/v8-lite.svg" width="149" height="231" alt="" loading="lazy">
 </figure>
 
 A number of the *Lite mode* changes could be made by configuring existing V8 settings, for example, disabling V8’s TurboFan optimizing compiler. However, others required more involved changes to V8.
@@ -60,7 +60,7 @@ To bring most of these savings to regular V8 without these regressions, we inste
 One additional complication with this approach is related to the fact that feedback vectors form a tree, with the feedback vectors for inner functions being held as entries in their outer function’s feedback vector.  This is necessary so that newly created function closures receive the same feedback vector array as all other closures created for the same function. With lazy allocation of feedback vectors we can’t form this tree using feedback vectors, since there is no guarantee that an outer function will have allocated its feedback vector by the time an inner function does so. To address this, we created a new `ClosureFeedbackCellArray` to maintain this tree, then swap out a function’s `ClosureFeedbackCellArray` with a full `FeedbackVector` when it becomes hot.
 
 <figure>
-  <img src="/_img/v8-lite/lazy_feedback.svg" width="1257" height="480" alt="" loading="lazy">
+  <img src="/_img/v8-lite/lazy-feedback.svg" width="1257" height="480" alt="" loading="lazy">
   <figcaption>Feedback vector trees before and after lazy feedback allocation.</figcaption>
 </figure>
 
@@ -87,7 +87,7 @@ There were technical challenges to ensure that bytecode is only ever flushed whe
 In addition to flushing bytecode, we also flush feedback vectors associated with these flushed functions. However we can’t flush feedback vectors during the same GC cycle as the bytecode because they aren’t retained by the same object - bytecode is held by a native-context independent `SharedFunctionInfo`, whereas the feedback vector is retained by the native-context dependent `JSFunction`. As a result we flush feedback vectors on the subsequent GC cycle.
 
 <figure>
-  <img src="/_img/v8-lite/bytecode_flushing.svg" width="1200" height="492" alt="" loading="lazy">
+  <img src="/_img/v8-lite/bytecode-flushing.svg" width="1200" height="492" alt="" loading="lazy">
   <figcaption>The object layout for an aged function after two GC cycles.</figcaption>
 </figure>
 
@@ -104,12 +104,12 @@ The second optimization is related to how we deoptimize from TurboFan optimized 
 We have released the optimizations described above over the last seven releases of V8. Typically they landed first in *Lite mode*, and then were later brought to the default configuration of V8.
 
 <figure>
-  <img src="/_img/v8-lite/savings_by_release.svg" width="700" height="433" alt="" loading="lazy">
+  <img src="/_img/v8-lite/savings-by-release.svg" width="700" height="433" alt="" loading="lazy">
   <figcaption>Average V8 heap size for a set of typical web pages on an AndroidGo device.</figcaption>
 </figure>
 
 <figure>
-  <img src="/_img/v8-lite/breakdown_by_page.svg" width="677" height="411" alt="" loading="lazy">
+  <img src="/_img/v8-lite/breakdown-by-page.svg" width="677" height="411" alt="" loading="lazy">
   <figcaption>Per-page breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).</figcaption>
 </figure>
 
@@ -118,7 +118,7 @@ Over this time, we have reduced the V8 heap size by an average of 18% across a r
 *Lite Mode* can provide further memory savings at some cost to JavaScript execution throughput by disabling function optimization. On average *Lite mode* provides 22% memory savings, with some pages seeing up to 32% reductions. This corresponds to a 1.8MB reduction in V8 heap size on an AndroidGo device.
 
 <figure>
-  <img src="/_img/v8-lite/breakdown_by_optimization.svg" width="677" height="411" alt="" loading="lazy">
+  <img src="/_img/v8-lite/breakdown-by-optimization.svg" width="677" height="411" alt="" loading="lazy">
   <figcaption>Breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).</figcaption>
 </figure>
 
