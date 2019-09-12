@@ -1,6 +1,6 @@
 ---
-title: 'A Lighter V8'
-author: 'Mythri Alle, Dan Elphick and [Ross McIlroy](https://twitter.com/rossmcilroy), V8 weight-watchers'
+title: 'A lighter V8'
+author: 'Mythri Alle, Dan Elphick, and [Ross McIlroy](https://twitter.com/rossmcilroy), V8 weight-watchers'
 avatars:
   - 'mythri-alle'
   - 'dan-elphick'
@@ -12,10 +12,9 @@ tags:
   - presentations
 description: 'The V8 Lite project dramatically reduced the memory overhead of V8 on typical websites, this is how we did it.'
 ---
-
 In late 2018 we started a project called V8 Lite, aimed at dramatically reducing V8’s memory usage. Initially this project was envisioned as a separate *Lite mode* of V8 specifically aimed at low-memory mobile devices or embedder use-cases that care more about reduced memory usage than throughput execution speed.  However, in the process of this work, we realized that many of the memory optimizations we had made for this *Lite mode* could be brought over to regular V8 thereby benefiting all users of V8.
 
-In this post we highlight some of the key optimizations we developed and the memory savings they provided in real world workloads.
+In this post we highlight some of the key optimizations we developed and the memory savings they provided in real-world workloads.
 
 :::note
 **Note:** If you prefer watching a presentation over reading articles, then enjoy the video below! If not, skip the video and read on.
@@ -28,9 +27,9 @@ In this post we highlight some of the key optimizations we developed and the mem
   <figcaption><a href="https://www.youtube.com/watch?v=56ogP8-eRqA">“V8 Lite  ⁠— slimming down JavaScript memory”</a> as presented by Ross McIlroy at BlinkOn 10.</figcaption>
 </figure>
 
-## Lite Mode
+## Lite mode
 
-In order to optimize V8’s memory usage, we first needed to understand how memory is used by V8 and what object types contribute a large proportion of V8’s heap size. We used V8’s [memory visualization](https://v8.dev/blog/optimizing-v8-memory#memory-visualization) tools to trace heap composition across a number of typical web pages.
+In order to optimize V8’s memory usage, we first needed to understand how memory is used by V8 and what object types contribute a large proportion of V8’s heap size. We used V8’s [memory visualization](/blog/optimizing-v8-memory#memory-visualization) tools to trace heap composition across a number of typical web pages.
 
 <figure>
   <img src="/_img/v8-lite/memory-categorization.svg" width="950" height="440" alt="" loading="lazy">
@@ -74,13 +73,13 @@ To avoid this waste, we now compile bytecode without collecting source positions
 
 One issue we had to address with this work was to require repeatable bytecode generation, which had not previously been guaranteed. If V8 generates different bytecode when collecting source positions compared to the original code, then the source positions will not line up and stack traces could point to the wrong position in the source code.
 
-In certain circumstances V8 could generate different bytecode depending on whether a function was [eagerly or lazily compiled](https://v8.dev/blog/preparser#skipping-inner-functions), due to some parser information being lost between the initial eager parse of a function, and later lazy compilation. These mismatches were mostly benign, for example losing track of the fact that a variable is immutable and therefore not being able to optimize it as such. However some of the mismatches uncovered by this work did have the potential to cause incorrect code execution in certain circumstances. As a result, we fixed these mismatches and added checks and a stress mode to ensure that eager and lazy compilation of a function always produce consistent outputs, giving us greater confidence in the correctness and consistency of V8’s parser and preparser.
+In certain circumstances V8 could generate different bytecode depending on whether a function was [eagerly or lazily compiled](/blog/preparser#skipping-inner-functions), due to some parser information being lost between the initial eager parse of a function, and later lazy compilation. These mismatches were mostly benign, for example losing track of the fact that a variable is immutable and therefore not being able to optimize it as such. However some of the mismatches uncovered by this work did have the potential to cause incorrect code execution in certain circumstances. As a result, we fixed these mismatches and added checks and a stress mode to ensure that eager and lazy compilation of a function always produce consistent outputs, giving us greater confidence in the correctness and consistency of V8’s parser and preparser.
 
 ## Bytecode flushing
 
 Bytecode compiled from JavaScript source takes up a significant chunk of V8 heap space, typically around 15%, including related metadata. There are many functions which are only executed during initialization, or rarely used after having been compiled.
 
-As a result, we added support for flushing compiled bytecode from functions during garbage collection if they haven’t been executed recently.  In order to do this, we keep track of the *age* of a function’s bytecode, incrementing the *age* every [major (mark-compact)](https://v8.dev/blog/trash-talk#major-gc) garbage collection, and resetting it to zero when the function is executed. Any bytecode which crosses an aging threshold is eligible to be collected by the next garbage collection. If it is collected and then later executed again, it will then be recompiled.
+As a result, we added support for flushing compiled bytecode from functions during garbage collection if they haven’t been executed recently.  In order to do this, we keep track of the *age* of a function’s bytecode, incrementing the *age* every [major (mark-compact)](/blog/trash-talk#major-gc) garbage collection, and resetting it to zero when the function is executed. Any bytecode which crosses an aging threshold is eligible to be collected by the next garbage collection. If it is collected and then later executed again, it will then be recompiled.
 
 There were technical challenges to ensure that bytecode is only ever flushed when it is no longer necessary. For instance, if function `A` calls another long-running function `B`, function `A` could be aged while it is still on the stack.  We don’t want to flush the bytecode for function `A` even if it reaches its aging threshold because we need to return to it when the long-running function `B` returns. As such, we treat bytecode as weakly held from a function when it reaches its aging threshold, but strongly held by any references to it on the stack or elsewhere. We only flush the code when there are no strong links remaining.
 
@@ -95,7 +94,7 @@ In addition to flushing bytecode, we also flush feedback vectors associated with
 
 In addition to these larger projects, we also uncovered and addressed a couple of inefficiencies.
 
-The first was to reduce the size of `FunctionTemplateInfo` objects. These objects store internal metadata about [FunctionTemplates](https://v8.dev/docs/embed#templates), which are used to enable embedders, such as Chrome, to provide C++ callback implementations of functions that can be called by JavaScript code. Chrome introduces a lot of FunctionTemplates in order to implement DOM Web APIs, and therefore `FunctionTemplateInfo` objects contributed to V8’s heap size. After analysing the typical usage of FunctionTemplates, we found that of the eleven fields on a `FunctionTemplateInfo` object, only three were typically set to a non-default value. We therefore split the `FunctionTemplateInfo` object such that the rare fields are stored in a side-table which is only allocated on demand if required.
+The first was to reduce the size of `FunctionTemplateInfo` objects. These objects store internal metadata about [`FunctionTemplate`s](/docs/embed#templates), which are used to enable embedders, such as Chrome, to provide C++ callback implementations of functions that can be called by JavaScript code. Chrome introduces a lot of FunctionTemplates in order to implement DOM Web APIs, and therefore `FunctionTemplateInfo` objects contributed to V8’s heap size. After analysing the typical usage of FunctionTemplates, we found that of the eleven fields on a `FunctionTemplateInfo` object, only three were typically set to a non-default value. We therefore split the `FunctionTemplateInfo` object such that the rare fields are stored in a side-table which is only allocated on demand if required.
 
 The second optimization is related to how we deoptimize from TurboFan optimized code. Since TurboFan performs speculative optimizations, it might need to fall back to the interpreter (deoptimize) if certain conditions no longer hold. Each deopt point has an id which enables the runtime to determine where in the bytecode it should return execution to in the interpreter. Previously this id was calculated by having the optimized code jump to a particular offset within a large jump table, which loaded the correct id into a register and then jumped into the runtime to perform the deoptimization.  This had the advantage of requiring only a single jump instruction in the optimized code for each deopt point. However the deoptimize jump table was pre-allocated and had to be large enough to support the whole deoptimization id range. We instead modified TurboFan such that deopt points in optimized code load the deopt id directly before calling into the runtime. This enabled us to remove this large jump table entirely, at the expense of a slight increase in optimized code size.
 
@@ -115,7 +114,7 @@ We have released the optimizations described above over the last seven releases 
 
 Over this time, we have reduced the V8 heap size by an average of 18% across a range of typical websites, which corresponds to an average decrease of 1.5MB for low-end AndroidGo mobile devices. This has been possible without any significant impact on JavaScript performance either on benchmarks or as measured on real world webpage interactions.
 
-*Lite Mode* can provide further memory savings at some cost to JavaScript execution throughput by disabling function optimization. On average *Lite mode* provides 22% memory savings, with some pages seeing up to 32% reductions. This corresponds to a 1.8MB reduction in V8 heap size on an AndroidGo device.
+*Lite mode* can provide further memory savings at some cost to JavaScript execution throughput by disabling function optimization. On average *Lite mode* provides 22% memory savings, with some pages seeing up to 32% reductions. This corresponds to a 1.8MB reduction in V8 heap size on an AndroidGo device.
 
 <figure>
   <img src="/_img/v8-lite/breakdown-by-optimization.svg" width="677" height="411" alt="" loading="lazy">
