@@ -95,16 +95,16 @@ Language design is hard, and we're not always able to create new operators witho
 
 You can probably see that the `&&` operator has a higher precedence for its left- and right-hand side than the `||` operator, meaning that the implied parentheses wrap the `&&` instead of the `||`. When designing the `??` operator, we had to decide what the precedence would be. It could either have:
 
-lower precedence than both `&&` and `||`
-lower than `&&` but higher than `||`
-higher precedence than both `&&` and `||`
+1. lower precedence than both `&&` and `||`
+2. lower than `&&` but higher than `||`
+3. higher precedence than both `&&` and `||`
 
 For each of these precedence definitions, we then had to run it through the four possible test cases:
 
-`lhs && middle ?? rhs`
-`lhs ?? middle && rhs`
-`lhs || middle ?? rhs`
-`lhs ?? middle || rhs`
+1. `lhs && middle ?? rhs`
+2. `lhs ?? middle && rhs`
+3. `lhs || middle ?? rhs`
+4. `lhs ?? middle || rhs`
 
 In each test expression, we had to decide where the implicit parenthesis belonged. And if they didn't wrap the expression exactly the way the developer intended, then we'd have badly-written code. Unfortunately no matter which precedence level we chose, one of the test expressions could violate the developers intentions.
 
