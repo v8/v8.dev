@@ -106,23 +106,23 @@ For each of these precedence definitions, we then had to run it through the four
 3. `lhs || middle ?? rhs`
 4. `lhs ?? middle || rhs`
 
-In each test expression, we had to decide where the implicit parenthesis belonged. And if they didn't wrap the expression exactly the way the developer intended, then we'd have badly-written code. Unfortunately no matter which precedence level we chose, one of the test expressions could violate the developers intentions.
+In each test expression, we had to decide where the implicit parenthesis belonged. And if they didn't wrap the expression exactly the way the developer intended, then we'd have badly-written code. Unfortunately no matter which precedence level we chose, one of the test expressions could violate the developer's intentions.
 
 In the end, we decided to require explicit parentheses when mixing the `??` and (`&&` or `||`) (notice I was explicit with my parentheses grouping! meta joke!). If you mix, you must wrap one of the operator groups in parentheses, or you get a syntax error.
 
 ```js
 // Explicit parentheses groups are required to mix
-(lhs && middle) ?? rhs
-lhs && (middle ?? rhs)
+(lhs && middle) ?? rhs;
+lhs && (middle ?? rhs);
 
-(lhs ?? middle) && rhs
-lhs ?? (middle && rhs)
+(lhs ?? middle) && rhs;
+lhs ?? (middle && rhs);
 
-(lhs || middle) ?? rhs
-lhs || (middle ?? rhs)
+(lhs || middle) ?? rhs;
+lhs || (middle ?? rhs);
 
-(lhs ?? middle) || rhs
-lhs ?? (middle || rhs)
+(lhs ?? middle) || rhs;
+lhs ?? (middle || rhs);
 ```
 
 This way, the language parser always matches what the developer intended. And anyone later reading the code can immediately understand it, too. Nice!
