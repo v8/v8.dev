@@ -47,7 +47,7 @@ The nullish coalescing operator (`??`) acts very similar to the `||` operator, e
 
 Explicitly, that means the values `false`, `0`, `NaN`, and the empty string `''` are all falsy values that are not nullish. When such falsy-but-not-nullish values are the left-hand side of a `lhs ?? rhs`, the expression evaluates to them instead of the right-hand side. Bugs begone!
 
-## What about default assignment while destructuring?
+## What about default assignment while destructuring? { #destructuring }
 
 You might have noticed that the last code example could also be fixed by using default assignment inside an object destructure:
 
@@ -95,15 +95,15 @@ Language design is hard, and we’re not always able to create new operators wit
 You can probably see that the `&&` operator has a higher precedence for its left- and right-hand side than the `||` operator, meaning that the implied parentheses wrap the `&&` instead of the `||`. When designing the `??` operator, we had to decide what the precedence would be. It could either have:
 
 1. lower precedence than both `&&` and `||`
-2. lower than `&&` but higher than `||`
-3. higher precedence than both `&&` and `||`
+1. lower than `&&` but higher than `||`
+1. higher precedence than both `&&` and `||`
 
 For each of these precedence definitions, we then had to run it through the four possible test cases:
 
 1. `lhs && middle ?? rhs`
-2. `lhs ?? middle && rhs`
-3. `lhs || middle ?? rhs`
-4. `lhs ?? middle || rhs`
+1. `lhs ?? middle && rhs`
+1. `lhs || middle ?? rhs`
+1. `lhs ?? middle || rhs`
 
 In each test expression, we had to decide where the implicit parenthesis belonged. And if they didn’t wrap the expression exactly the way the developer intended, then we’d have badly-written code. Unfortunately no matter which precedence level we chose, one of the test expressions could violate the developer’s intentions.
 
@@ -126,7 +126,7 @@ lhs ?? (middle || rhs);
 
 This way, the language parser always matches what the developer intended. And anyone later reading the code can immediately understand it, too. Nice!
 
-## Tell me about `document.all`
+## Tell me about `document.all` { #document.all }
 
 [`document.all`](https://developer.mozilla.org/en-US/docs/Web/API/Document/all) is a special value that you should never ever ever use. But if you do use it, it’s best you know how it interacts with “truthy” and “nullish”.
 
