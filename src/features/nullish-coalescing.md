@@ -141,5 +141,5 @@ When using `document.all` with either `&&` or `||`, it pretends to be falsy. But
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1566141"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=200072"
                  nodejs="no"
-                 babel="no https://babeljs.io/docs/en/next/babel-plugin-syntax-nullish-coalescing-operator.html"></feature-support>
+                 babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator"></feature-support>
 
