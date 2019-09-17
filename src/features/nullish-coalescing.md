@@ -142,4 +142,3 @@ When using `document.all` with either `&&` or `||`, it pretends to be falsy. But
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=200072"
                  nodejs="no"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator"></feature-support>
-
