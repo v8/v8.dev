@@ -11,15 +11,6 @@ tweet: '1173971116865523714'
 ---
 The [nullish coalescing proposal](https://github.com/tc39/proposal-nullish-coalescing/) (`??`) adds a new short-circuiting operator meant to handle default values.
 
-```js
-false ?? true;   // => false
-0 ?? 1;          // => 0
-'' ?? 'default'; // => ''
-
-null ?? [];      // => []
-undefined ?? []; // => []
-```
-
 You might already be familiar with the other short-circuiting operators `&&` and `||`. Both of these operators handle “truthy” and “falsy” values. Imagine the code sample `lhs && rhs`. If `lhs` (read, _left-hand side_) is falsy, the expression evaluates to `lhs`. Otherwise, it evaluates to `rhs` (read, _right-hand side_). The opposite is true for the code sample `lhs || rhs`. If `lhs` is truthy, the expression evaluates to `lhs`. Otherwise, it evaluates to `rhs`.
 
 But what exactly does “truthy” and “falsy” mean? In spec terms, it equates to the [`ToBoolean`](https://tc39.es/ecma262/#sec-toboolean) abstract operation. For us regular JavaScript developers, **everything** is truthy except the falsy values `undefined`, `null`, `false`, `0`, `NaN`, and the empty string `''`. (Technically, the value associated with `document.all` is also falsy, but we’ll get to that later.)
@@ -56,6 +47,15 @@ function Component(props) {
 The nullish coalescing operator (`??`) acts very similar to the `||` operator, except that we don’t use “truthy” when evaluating the operator. Instead we use the definition of “nullish”, meaning “is the value strictly equal to `null` or `undefined`”. So imagine the expression `lhs ?? rhs`: if `lhs` is not nullish, it evaluates to `lhs`. Otherwise, it evaluates to `rhs`.
 
 Explicitly, that means the values `false`, `0`, `NaN`, and the empty string `''` are all falsy values that are not nullish. When such falsy-but-not-nullish values are the left-hand side of a `lhs ?? rhs`, the expression evaluates to them instead of the right-hand side. Bugs begone!
+
+```js
+false ?? true;   // => false
+0 ?? 1;          // => 0
+'' ?? 'default'; // => ''
+
+null ?? [];      // => []
+undefined ?? []; // => []
+```
 
 ## What about default assignment while destructuring? { #destructuring }
 
@@ -142,7 +142,12 @@ This way, the language parser always matches what the developer intended. And an
 
 `document.all` is an array-like object, meaning it has indexed properties like an array and a length. Objects are usually truthy — but surprisingly, `document.all` pretends to be a falsy value! In fact, it’s loosely equal to both `null` and `undefined` (which normally means that it can’t have properties at all).
 
-When using `document.all` with either `&&` or `||`, it pretends to be falsy. But, it’s not strictly equal to `null` nor `undefined`, so it’s not nullish. So when using `document.all` with `??`, it behaves as not nullish (like any other object would).
+When using `document.all` with either `&&` or `||`, it pretends to be falsy. But, it’s not strictly equal to `null` nor `undefined`, so it’s not nullish. So when using `document.all` with `??`, it behaves like any other object would.
+
+```js
+document.all || true; // => true
+document.all ?? true; // => HTMLAllCollection[]
+```
 
 ## Support for nullish coalescing { #support }
 
