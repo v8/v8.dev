@@ -48,6 +48,15 @@ The nullish coalescing operator (`??`) acts very similar to the `||` operator, e
 
 Explicitly, that means the values `false`, `0`, `NaN`, and the empty string `''` are all falsy values that are not nullish. When such falsy-but-not-nullish values are the left-hand side of a `lhs ?? rhs`, the expression evaluates to them instead of the right-hand side. Bugs begone!
 
+```js
+false ?? true;   // => false
+0 ?? 1;          // => 0
+'' ?? 'default'; // => ''
+
+null ?? [];      // => []
+undefined ?? []; // => []
+```
+
 ## What about default assignment while destructuring? { #destructuring }
 
 You might have noticed that the last code example could also be fixed by using default assignment inside an object destructure:
@@ -133,7 +142,12 @@ This way, the language parser always matches what the developer intended. And an
 
 `document.all` is an array-like object, meaning it has indexed properties like an array and a length. Objects are usually truthy — but surprisingly, `document.all` pretends to be a falsy value! In fact, it’s loosely equal to both `null` and `undefined` (which normally means that it can’t have properties at all).
 
-When using `document.all` with either `&&` or `||`, it pretends to be falsy. But, it’s not strictly equal to `null` nor `undefined`, so it’s not nullish. So when using `document.all` with `??`, it behaves as not nullish (like any other object would).
+When using `document.all` with either `&&` or `||`, it pretends to be falsy. But, it’s not strictly equal to `null` nor `undefined`, so it’s not nullish. So when using `document.all` with `??`, it behaves like any other object would.
+
+```js
+document.all || true; // => true
+document.all ?? true; // => HTMLAllCollection[]
+```
 
 ## Support for nullish coalescing { #support }
 
