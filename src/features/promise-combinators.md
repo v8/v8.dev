@@ -93,7 +93,7 @@ We kick off a computationally expensive task that might take a long time, but we
 <feature-support chrome="76"
                  firefox="68"
                  safari="13"
-                 nodejs="no"
+                 nodejs="12.9 https://nodejs.org/en/blog/release/v12.9.0/"
                  babel="yes"></feature-support>
 
 `Promise.allSettled` gives you a signal when all the input promises are _settled_, which means they’re either _fulfilled_ or _rejected_. This is useful in cases where you don’t care about the state of the promise, you just want to know when the work is done, regardless of whether it was successful.
