@@ -128,7 +128,7 @@ Likely this is the person that is an owner of the main component your feature is
 
 ### Where can I find a template for design documents?
 
-[Here](https://docs.google.com/document/d/1CWNKvxOYXGMHepW31hPwaFz9mOqffaXnuGqhMqcyFYo/edit).
+[Here](https://docs.google.com/document/d/1CWNKvxOYXGMHepW31hPwaFz9mOqffaXnuGqhMqcyFYo/template/preview).
 
 ### What if something big changes?
 
