@@ -28,7 +28,7 @@ Previously, script streaming started when a `<script>` tag was encountered durin
 ...
 ```
 
-the pipeline would previously look roughly like this:
+…the pipeline would previously look roughly like this:
 
 <figure>
   <img src="/_img/v8-release-78/script-streaming-0.svg" width="458" height="130" alt="" loading="lazy">
@@ -60,20 +60,20 @@ The best news is that thanks to our experimentation infrastructure, we’ve been
 
 ### Faster object destructuring
 
-Object destructuring of the form...
+Object destructuring of the form…
 
 ```js
 const {x, y} = object;
 ```
 
-...is almost equivalent to the desugared form...
+…is almost equivalent to the desugared form...
 
 ```js
 const x = object.x;
 const y = object.y;
 ```
 
-...except that it also needs to throw a special error for `object` being `undefined` or `null`...
+…except that it also needs to throw a special error for `object` being `undefined` or `null`...
 
 ```
 $ v8 -e 'const object = undefined; const {x, y} = object;'
@@ -82,7 +82,7 @@ const object = undefined; const {x, y} = object;
                                  ^
 ```
 
-...rather than the normal error you’d get when trying to dereference undefined:
+…rather than the normal error you’d get when trying to dereference undefined:
 
 ```
 $ v8 -e 'const object = undefined; object.x'
@@ -98,6 +98,7 @@ As of V8 v7.8, object destructuring is **as fast** as the equivalent desugared v
 ### Lazy source positions
 
 When compiling bytecode from JavaScript, source position tables are generated that tie bytecode sequences to character positions within the source code. However, this information is only used when symbolizing exceptions or performing developer tasks such as debugging and profiling and so this is largely wasted memory.
+
 To avoid this, we now compile bytecode without collecting source positions (assuming no debugger or profiler is attached). The source positions are only collected when a stack trace is actually generated, for instance when calling `Error.stack` or printing an exception’s stack trace to the console. This does have some cost, as generating source positions requires the function to be reparsed and compiled, however most websites don’t symbolize stack traces in production and therefore don’t see any observable performance impact. In our lab testing we saw between 1-2.5% reductions in V8’s memory usage.
 
 <figure>
@@ -107,9 +108,8 @@ To avoid this, we now compile bytecode without collecting source positions (assu
 
 ### Faster RegExp match failures
 
-Generally, a RegExp attempts to find a match by iterating forward through the input string and checking for a match starting from each position. Once that position gets close enough to the end of the string that no match is possible, V8 now (in most cases) stops trying to find possible beginnings of new matches, and instead quickly returns a failure. This optimization applies to both compiled and interpreted regular expressions, and yields a speedup on workloads where
-failure to find a match is common, and
-the minimum length of any successful match is relatively large compared to the average input string length.
+Generally, a RegExp attempts to find a match by iterating forward through the input string and checking for a match starting from each position. Once that position gets close enough to the end of the string that no match is possible, V8 now (in most cases) stops trying to find possible beginnings of new matches, and instead quickly returns a failure. This optimization applies to both compiled and interpreted regular expressions, and yields a speedup on workloads where failure to find a match is common, and the minimum length of any successful match is relatively large compared to the average input string length.
+
 On the UniPoker test in JetStream 2, which inspired this work, V8 v7.8 brings a 20% improvement to the average-of-all-iterations subscore.
 
 ## WebAssembly
