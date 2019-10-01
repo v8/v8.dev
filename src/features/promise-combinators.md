@@ -20,7 +20,7 @@ Here’s an overview of the four combinators:
 :::table-wrapper
 | name                                        | description                                     | status                                                          |
 | ------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------- |
-| [`Promise.allSettled`](#promise.allsettled) | does not short-circuit                          | [proposal](https://github.com/tc39/proposal-promise-allSettled) |
+| [`Promise.allSettled`](#promise.allsettled) | does not short-circuit                          | [added in ES2020 ✅](https://github.com/tc39/proposal-promise-allSettled) |
 | [`Promise.all`](#promise.all)               | short-circuits when an input value is rejected  | added in ES2015 ✅                                              |
 | [`Promise.race`](#promise.race)             | short-circuits when an input value is settled   | added in ES2015 ✅                                              |
 | [`Promise.any`](#promise.any)               | short-circuits when an input value is fulfilled | [proposal](https://github.com/tc39/proposal-promise-any)        |
