@@ -6,6 +6,7 @@ avatars:
 date: 2019-07-16
 tags:
   - ECMAScript
+  - ES2020
   - Node.js 12
   - io19
 description: 'globalThis introduces a unified mechanism to access the global this in any JavaScript environment, regardless of the script goal.'
