@@ -1,0 +1,25 @@
+:root {
+  --html-color: var(--nearwhite);
+  --html-background-color: var(--black);
+  --main-color:var(--nearwhite);
+  --main-background-color: var(--darkestgray);
+  --footer-color: var(--nearwhite);
+  --footer-background-color: var(--darkgray);
+  --main-and-footer-link-color: var(--yellow);
+  --avatar-img-filter: grayscale(50%);
+  --icon-no-support-filter: brightness(0.5) grayscale(100%);
+  --note-color: var(--darkestgray);
+  --note-background-color: var(--yellow);
+  --tag-color: var(--nearwhite);
+  --tag-background-color: var(--darkgray);
+  --logo-hover-background-color: var(--darkgray);
+}
+
+:root {
+  -webkit-font-smoothing: antialiased;
+}
+
+figure img[src*=".png"]:not([src*="v8"]):not(.no-darkening),
+figure img[src*=".svg"]:not([src*="v8"]):not(.no-darkening) {
+  filter: invert(0.85) hue-rotate(180deg);
+}

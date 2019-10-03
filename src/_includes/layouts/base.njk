@@ -4,6 +4,28 @@
     <meta charset="utf-8">
     <title>{% if '/' === page.url %}V8 JavaScript engine{% else %}{{ (renderData.title or title) | markdown | striptags | decodeHtmlEntities }} · V8{% endif %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <script>
+      // If `prefers-color-scheme` is not supported, fall back to light mode.
+      // In this case, light.css will be downloaded with `highest` priority.
+      if (window.matchMedia('(prefers-color-scheme: dark)').media === 'not all') {
+        document.documentElement.style.display = 'none';
+        document.head.insertAdjacentHTML(
+            'beforeend',
+            '<link rel="stylesheet" href="/_css/light.css" onload="document.documentElement.style.display = ``">'
+        );
+      }
+    </script>
+    <!--
+      Conditionally either load the light or the dark stylesheet. The matching file
+      will be downloaded with `highest`, the non-matching file with `lowest`
+      priority. If the browser doesn't support `prefers-color-scheme`, the media
+      query is unknown and the files are downloaded with `lowest` priority (but
+      above I already force `highest` priority for my default light experience).
+    -->
+    <link rel="stylesheet" href="/_css/dark.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/_css/light.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
+    <!-- The main stylesheet -->
     <link rel="stylesheet" href="/_css/main.css">
 {% if '/features' in page.url %}
     <link rel="stylesheet" href="/_css/feature-support.css">
@@ -34,16 +56,23 @@
       {{ content | safe }}
     </main>
     <footer id="footer">
-      <nav>
-        <a href="/logo">Branding</a> ·
-        <a href="/terms">Terms</a> ·
-        <a href="https://policies.google.com/privacy">Privacy</a> ·
-        <a href="https://twitter.com/v8js" rel="me nofollow">Twitter</a> ·
-        <a href="https://github.com/v8/v8.dev/tree/master/{{ page.inputPath }}" rel="nofollow">Edit this page on GitHub</a>
-      </nav>
+      <div>
+        <nav>
+          <a href="/logo">Branding</a> ·
+          <a href="/terms">Terms</a> ·
+          <a href="https://policies.google.com/privacy">Privacy</a> ·
+          <a href="https://twitter.com/v8js" rel="me nofollow">Twitter</a> ·
+          <a href="https://github.com/v8/v8.dev/tree/master/{{ page.inputPath }}" rel="nofollow">Edit this page on GitHub</a>
+        </nav>
+        <dark-mode-toggle permanent dark="Light Theme" light="Dark Theme"></dark-mode-toggle>
+      </div>
       <p><small>Except as otherwise noted, any code samples from the V8 project are licensed under <a href="https://chromium.googlesource.com/v8/v8.git/+/master/LICENSE">V8’s BSD-style license</a>. Other content on this page is licensed under <a href="https://creativecommons.org/licenses/by/3.0/">the Creative Commons Attribution 3.0 License</a>. For details, see <a href="/terms#site-policies">our site policies</a>.</small></p>
     </footer>
     <script type="module" src="/_js/main.mjs"></script>
+    {% if '/' === page.url %}
+      <script async src="https://platform.twitter.com/widgets.js"></script>
+      <script defer src="/_js/twitter-widget.js"></script>
+    {% endif %}
     <script nomodule src="/_js/legacy.js"></script>
   </body>
 </html>

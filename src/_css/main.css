@@ -13,12 +13,21 @@
 */
 
 :root {
+  color-scheme: dark light;
+  --transition-duration: 0.5s;
+  --transition-timing: ease;
+  transition:
+      color var(--transition-duration) var(--transition-timing),
+      background-color var(--transition-duration) var(--transition-timing);
   /* Colors used in the V8 logos. */
   --blue: #4285F4;
   --darkgray: #464646;
   --lightgray: #A6A6A6;
   --white: #FFF;
   /* Derived colors. */
+  --black: #000;
+  --darkestgray: #232323;
+  --nearwhite: #fefefe;
   --darkblue: #0A50C2;
   --lightestgray: #D6D6D6;
   --lightyellow: #FDEEB5;
@@ -39,8 +48,8 @@ html, body, fieldset, nav ul, nav ul li, h1, h2, h3 {
 }
 html {
   font: 16px/1.6 sans-serif;
-  color: #000;
-  background: var(--darkgray);
+  color: var(--html-color);
+  background: var(--html-background-color);
 }
 body {
   max-width: 860px;
@@ -65,7 +74,6 @@ body {
   right: 1em;
 }
 #header h1 a {
-  color: #FFF;
   padding: 1em;
   font-size: 16px;
   position: absolute;
@@ -79,7 +87,7 @@ body {
 }
 #header nav a, #nav-toggle {
   padding: 1em;
-  color: #000;
+  color: var(--black);
   font-weight: bold;
   background: rgba(255, 255, 255, .8);
   font-size: 16px;
@@ -116,7 +124,7 @@ a {
   height: 600px;
 }
 main, #footer {
-  background: #FFF;
+  background: var(--main-background-color);
   padding: 1em var(--offset);
 }
 article footer {
@@ -124,6 +132,7 @@ article footer {
   background: var(--yellow);
 }
 article footer p {
+  color: var(--black);
   margin: 0 0 1em;
 }
 article footer p:only-child {
@@ -132,6 +141,7 @@ article footer p:only-child {
 article footer img {
   float: left;
   margin-right: 1em;
+  filter: var(--avatar-img-filter);
 }
 hr {
   padding: 0;
@@ -153,23 +163,28 @@ hr {
   font-weight: bold;
 }
 .retweet:hover, .retweet:focus {
+  color: var(--nearwhite);
   background-color: var(--darkgray);
   border-color: var(--darkgray);
 }
 #footer {
-  background: var(--lightestgray) url(/_img/v8-outline.svg) no-repeat 95.5% center;
+  color: var(--footer-color);
+  background: var(--footer-background-color) url(/_img/v8-outline.svg) no-repeat 95.5% center;
   padding-right: 12em;
   background-size: 10em;
 }
-#footer nav {
+#footer div {
   padding-top: 1em;
+  display: flex;
+  align-items: flex-end;
 }
+
 pre, code, var, kbd, samp {
   font-family: Source Code Pro, Monaco, Lucida Console, monospace;
   font-size: 1em;
 }
 pre {
-  background: #000;
+  background: #171717;
   color: #E6E1DC;
   overflow: auto;
   white-space: pre;
@@ -220,14 +235,22 @@ ins {
 ins, del:hover {
   text-decoration: none;
 }
-main a, footer a {
+article footer a {
   color: var(--darkblue);
   border-bottom: 1px solid var(--darkblue);
+}
+article footer a:hover {
+  color: var(--nearwhite);
+  background-color: var(--darkblue);
+}
+main a, footer a {
+  color: var(--main-and-footer-link-color);
+  border-bottom: 1px solid var(--main-and-footer-link-color);
   padding: 2px 2px 1px 2px;
 }
 main a:hover, main a:focus, footer a:hover, footer a:focus {
-  background-color: var(--darkblue);
-  color: #FFF;
+  background-color: var(--main-and-footer-link-color);
+  color: var(--main-background-color);
 }
 main a:hover code, main a:focus code {
   background-color: inherit;
@@ -264,8 +287,8 @@ blockquote {
 }
 .logo-download:hover,
 .logo-download:focus {
-  background: var(--lightestgray);
-  color: #000;
+  background: var(--logo-hover-background-color);
+  color: var(--main-color);
 }
 .logo-download + h2 {
   margin-top: 1em;
@@ -319,7 +342,8 @@ tbody tr:nth-child(odd) {
   background-color: #EEE;
 }
 .note {
-  background: var(--lightyellow);
+  color: var(--note-color);
+  background: var(--note-background-color);
   margin-bottom: 1em;
 }
 main nav {
@@ -338,8 +362,8 @@ main .meta {
 }
 .tag:not(.token) {
   border: 0;
-  background: #EEE;
-  color: #000;
+  background: var(--tag-background-color);
+  color: var(--tag-color);
 }
 img {
   max-width: 100%;
@@ -352,6 +376,16 @@ img {
 
 .language-grammar b {
   font-style: normal;
+}
+
+dark-mode-toggle {
+  --dark-mode-toggle-light-icon: url(/_css/img/sun.svg);
+  --dark-mode-toggle-dark-icon: url(/_css/img/moon.svg);
+  --dark-mode-toggle-color: var(--main-and-footer-link-color);
+  --dark-mode-toggle-icon-filter: invert(80%);
+  margin-left: 1em;
+  position: relative;
+  top: 0.4rem;
 }
 
 @media (max-width: 770px) {

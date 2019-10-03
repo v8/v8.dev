@@ -211,7 +211,7 @@ The first pass can’t be avoided. Luckily, the second pass can be avoided by pl
 V8’s (byte)code-caching optimization can help. When a script is first requested, Chrome downloads it and gives it to V8 to compile. It also stores the file in the browser’s on-disk cache. When the JS file is requested a second time, Chrome takes the file from the browser cache and once again gives it to V8 to compile. This time, however, the compiled code is serialized, and is attached to the cached script file as metadata.
 
 <figure>
-  <img src="/_img/cost-of-javascript-2019/code-caching.png" srcset="/_img/cost-of-javascript-2019/code-caching@2x.png 2x" width="1431" height="774" alt="" loading="lazy">
+  <img src="/_img/cost-of-javascript-2019/code-caching.png" srcset="/_img/cost-of-javascript-2019/code-caching@2x.png 2x" width="1431" height="774" alt="" loading="lazy" class="no-darkening">
   <figcaption>Visualization of how code caching works in V8</figcaption>
 </figure>
 

@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import * as DarkModeToggle from '/_js/dark-mode-toggle.min.mjs';
+
 // Navigation toggle.
 const toggle = document.querySelector('#nav-toggle');
 toggle.addEventListener('click', (event) => {
