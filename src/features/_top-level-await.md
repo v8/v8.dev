@@ -6,7 +6,7 @@ avatars:
 date: 2019-10-08
 tags:
   - ECMAScript
-description: 'Top-level await will soon be available in JavaScript modules! No longer will you need to be in an async function to use `await`.'
+description: 'Top-level `await` is coming to JavaScript modules! You’ll soon be able to use `await` without needing to be in an async function.'
 ---
 [Top-level `await`](https://github.com/tc39/proposal-top-level-await) enables developers to use the `await` keyword outside of async functions. It acts like a big async function causing other modules who `import` them to wait before they start evaluating their body.
 
@@ -78,11 +78,11 @@ Prior to top-level `await`, this order was always synchronous and deterministic:
 
 Here’s what happens when you use top-level `await` in a module:
 
-The execution of the current module is deferred until the awaited promise is resolved.
-The execution of the parent module is deferred until the child module that called `await`, and all its siblings, export bindings.
-The sibling modules, and siblings of parent modules, are able to continue executing in the same synchronous order -- assuming there are no cycles or other `await`ed promises in the graph.
-The module that called `await` resumes its execution after the `await`ed promise resolves.
-The parent module and subsequent trees continue to execute in a synchronous order as long as there are no other `await`ed promises.
+1. The execution of the current module is deferred until the awaited promise is resolved.
+1. The execution of the parent module is deferred until the child module that called `await`, and all its siblings, export bindings.
+1. The sibling modules, and siblings of parent modules, are able to continue executing in the same synchronous order -- assuming there are no cycles or other `await`ed promises in the graph.
+1. The module that called `await` resumes its execution after the `await`ed promise resolves.
+1. The parent module and subsequent trees continue to execute in a synchronous order as long as there are no other `await`ed promises.
 
 ## Doesn’t this already work in DevTools?
 
