@@ -19,7 +19,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-figure img[src*=".png"]:not([src*="v8"]):not(.no-darkening),
-figure img[src*=".svg"]:not([src*="v8"]):not(.no-darkening) {
+figure img[src*=".png"]:not(.no-darkening),
+figure img[src*=".svg"]:not(.no-darkening) {
   filter: invert(0.85) hue-rotate(180deg);
 }
