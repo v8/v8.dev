@@ -1,6 +1,5 @@
 /**
- * Dynamically either insert the dark or the light themed Twitter widget
- * @todo Should the widget be dynamically updated upon theme change?
+ * Dynamically either insert the dark or the light themed Twitter widget.
  */
 (function(toggle, prefix, suffix) {
   document.querySelector('main').insertAdjacentHTML('beforeend', prefix +
