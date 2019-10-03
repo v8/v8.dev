@@ -80,7 +80,7 @@ Here’s what happens when you use top-level `await` in a module:
 
 1. The execution of the current module is deferred until the awaited promise is resolved.
 1. The execution of the parent module is deferred until the child module that called `await`, and all its siblings, export bindings.
-1. The sibling modules, and siblings of parent modules, are able to continue executing in the same synchronous order -- assuming there are no cycles or other `await`ed promises in the graph.
+1. The sibling modules, and siblings of parent modules, are able to continue executing in the same synchronous order — assuming there are no cycles or other `await`ed promises in the graph.
 1. The module that called `await` resumes its execution after the `await`ed promise resolves.
 1. The parent module and subsequent trees continue to execute in a synchronous order as long as there are no other `await`ed promises.
 
