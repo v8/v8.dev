@@ -88,7 +88,6 @@ The parent module and subsequent trees continue to execute in a synchronous orde
 
 Indeed it does! The REPL in both [Chrome DevTools](https://developers.google.com/web/updates/2017/08/devtools-release-notes#await) and [Node.js](https://github.com/nodejs/node/issues/13209) have supported top-level `await` for a while now. However, this functionality was non-standard and limited to the REPL! It’s distinct from the top-level `await` proposal, which is part of the language specification and only applies to modules. To test production code relying on top-level `await` in a way that fully matches the spec proposal’s semantics, make sure to test in your actual app, and not just in DevTools or the Node.js REPL!
 
-
 ## Isn’t top-level `await` a footgun?
 
 Perhaps you have seen [the infamous gist](https://gist.github.com/Rich-Harris/0b6f317657f5167663b493c722647221) by [Rich Harris](https://twitter.com/Rich_Harris) which initially outlined a number of concerns about top-level `await` and urged the JavaScript language not to implement the feature. Some specific concerns were:
@@ -114,4 +113,3 @@ Without top-level `await`, JavaScript developers often used async immediately-in
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202484"
                  nodejs="no"
                  babel="no https://github.com/babel/proposals/issues/44"></feature-support>
-
