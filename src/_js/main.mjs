@@ -13,12 +13,27 @@
 
 import '/_js/dark-mode-toggle.min.mjs';
 
+// Dark mode toggle.
+const darkModeToggle = document.querySelector('dark-mode-toggle');
+const root = document.documentElement;
+
+// Set or remove the `dark` class the first time.
+darkModeToggle.mode === 'dark' ?
+    root.classList.add('dark') : root.classList.remove('dark');
+root.style.display = 'block';
+
+// Listen for toggle changes (which includes `prefers-color-scheme` changes)
+// and toggle the `dark` class accordingly.
+darkModeToggle.addEventListener('colorschemechange', () => {
+  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+});
+
 // Navigation toggle.
-const toggle = document.querySelector('#nav-toggle');
-toggle.addEventListener('click', (event) => {
+const navToggle = document.querySelector('#nav-toggle');
+navToggle.addEventListener('click', (event) => {
   event.preventDefault();
   document.querySelector('header nav').classList.add('show');
-  toggle.classList.add('hide');
+  navToggle.classList.add('hide');
 });
 
 // A user right-clicking the logo probably wants to download it.
