@@ -62,9 +62,9 @@ if (location.search.includes('utm_source')) {
 // Helper function to dynamically insert scripts.
 const firstScript = document.scripts[0];
 const insertScript = (src) => {
-  const scriptElement = document.createElement('script');
-  scriptElement.src = src;
-  firstScript.parentNode.insertBefore(scriptElement, firstScript);
+  const script = document.createElement('script');
+  script.src = src;
+  firstScript.parentNode.insertBefore(script, firstScript);
 };
 
 // Google Analytics.
@@ -80,7 +80,7 @@ ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
 insertScript('https://www.google-analytics.com/analytics.js');
 
-// Dynamically either insert the dark or the light themed Twitter widget.
+// Dynamically either insert the dark- or the light-themed Twitter widget.
 const twitterTimeline = document.querySelector('.twitter-timeline');
 if (twitterTimeline) {
   twitterTimeline.dataset.theme = darkModeToggle.mode;

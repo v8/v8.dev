@@ -13,6 +13,11 @@
 
 (function() {
 
+  // Dark mode emulation assumes the root element is hidden. Since
+  // legacy browsers don’t get dark mode, we should just show the
+  // root element.
+  document.documentElement.style.display = 'block';
+
   // Navigation toggle.
   var toggle = document.querySelector('#nav-toggle');
   toggle.addEventListener('click', (event) => {
@@ -44,6 +49,14 @@
     history.replaceState({}, '', location.pathname);
   }
 
+  // Helper function to dynamically insert scripts.
+  var firstScript = document.scripts[0];
+  var insertScript = (src) => {
+    var script = document.createElement('script');
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  };
+
   // Google Analytics.
   var UA_ID = 'UA-65961526-1';
   self.GoogleAnalyticsObject = 'ga';
@@ -55,9 +68,12 @@
   ga('create', UA_ID, 'auto');
   ga('set', 'referrer', document.referrer.split('?')[0]);
   ga('send', 'pageview');
-  var firstScript = document.scripts[0];
-  var scriptElement = document.createElement('script');
-  scriptElement.src = 'https://www.google-analytics.com/analytics.js';
-  firstScript.parentNode.insertBefore(scriptElement, firstScript);
+  insertScript('https://www.google-analytics.com/analytics.js');
+
+  // Dynamically insert the Twitter widget if needed.
+  var twitterTimeline = document.querySelector('.twitter-timeline');
+  if (twitterTimeline) {
+    insertScript('https://platform.twitter.com/widgets.js');
+  }
 
 }());
