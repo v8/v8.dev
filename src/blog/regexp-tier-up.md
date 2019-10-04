@@ -3,6 +3,7 @@ title: 'Improving V8 regular expressions'
 author: 'Patrick Thier and Ana Peško, <insert funny title here>'
 avatars:
   - 'patrick-thier'
+  - 'ana-pesko'
 date: 2019-09-30 11:24:16
 tags:
   - internals
@@ -56,7 +57,7 @@ Although the example is made up, the sequence of bytecodes described here occurs
 ## Results
 
 <figure>
-  <img src="/_img/regexp-tier-up/results-memory.svg" alt="" loading="lazy">
+  <img src="/_img/regexp-tier-up/results-memory.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Figure 1: Memory savings for different tier-up values</figcaption>
 </figure>
 
