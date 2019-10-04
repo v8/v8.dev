@@ -11,13 +11,14 @@ tags:
 description: 'In this blog post we describe how we take advantage of the upsides of interpreting regular expressions and mitigate the downsides.'
 tweet: '1180131710568030208'
 ---
-In its default configuration, V8 compiles regular expressions to native code upon the first execution. As part of our work on [JIT-less V8](/blog/jitless), we introduced an interpreter for regular expressions. Interpreting regular expressions has the advantage of using less memory, but it comes with a performance penalty. In this blog post we describe how we take advantage of the upsides of interpreting regular expressions and mitigate the downsides.
+In its default configuration, V8 compiles regular expressions to native code upon the first execution. As part of our work on [JIT-less V8](/blog/jitless), we introduced an interpreter for regular expressions. Interpreting regular expressions has the advantage of using less memory, but it comes with a performance penalty. In this blog post we describe how we take advantage of the upsides of interpreting regular expressions while mitigating the downsides.
 
 ## Tier-up strategy for RegExp
 
 We want to use the ‘best of both worlds’ for regular expressions. In order to do so, we first compile all regular expressions to bytecode and interpret them. This way, we save a lot of memory, and overall (and with the new, faster interpreter) the performance penalty is acceptable. If a regular expression with the same pattern is used again, we consider it to be ‘hot’ so we recompile to native code. From this point on, we continue the execution as fast as we can.
 
-There are many different paths through the regular expression code in V8, depending on the method invoked, whether it is a global or non-global regexp, and if we’re taking the fast or slow path. That being said, we want the tier-up decision to be as centralized as possible. We’ve added a ticks field toV8’s RegExp object that is initialized to a certain value at runtime. This value represents the number of times the regular expression will be interpreted before we tier-up to the compiler. Each time the regular expression is interpreted, we decrement the ticks field by 1. In a built-in written in [CodeStubAssembler](/blog/csa) which is invoked for all regular expressions, we check the ticks flag on every execution. Once the ticks reach 0, we know we need to recompile the regular expression to native code, and we jump to runtime to do so.
+There are many different paths through the regular expression code in V8, depending on the method invoked, whether it is a global or non-global regexp, and if we’re taking the fast or slow path. That being said, we want the tier-up decision to be as centralized as possible. We’ve added a ticks field to V8’s RegExp object that is initialized to a certain value at runtime. This value represents the number of times the regular expression will be interpreted before we tier-up to the compiler. Each time the regular expression is interpreted, we decrement the ticks field by 1. In a built-in written in [CodeStubAssembler](/blog/csa) which is invoked for all regular expressions, we check the ticks flag on every execution. Once the ticks reach 0, we know we need to recompile the regular expression to native code, and we jump to runtime to do so.
+
 We’ve mentioned that regular expressions can have different execution paths. For the case of global replaces with functions as parameters, the implementations for native code and bytecode differ. The native code expects an array to store all matches upfront, and the bytecode matches one at a time. Because of this, we’ve decided to always eagerly tier-up to native code for this use case.
 
 ## Speeding up the RegExp interpreter
@@ -30,12 +31,13 @@ Starting with V8 v7.8, whenever the RegExp compiler generates bytecode to interp
 
 ### New dispatch method
 
-The RegExp interpreter previously used a simple switch-based dispatch method. The main disadvantage of this method is that the CPU has a very hard time predicting the next bytecode to execute, resulting in many branch mispredictions, slowing down execution.
-We changed the dispatch method to threaded code in V8 v7.8. This method allows the CPU’s branch predictor to predict the next bytecode based on the currently executed bytecode, resulting in less mispredictions. In more detail, we use a dispatch table, storing a mapping between each bytecode ID and the address of the handler implementing the bytecode. V8's interpreter [Ignition](/docs/ignition) also uses this approach. However a big difference between Ignition and the RegExp interpreter is that Ignition's bytecode handlers are written in [CodeStubAssembler](/blog/csa), whereas the whole RegExp interpreter is written in C++ using [computed `goto`s](https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html) (a GNU extension also supported by clang), which is easier to read and maintain than CSA. For compilers that don't support computed gotos, we fall back to the old switch-based dispatch method.
+The RegExp interpreter previously used a simple `switch`-based dispatch method. The main disadvantage of this method is that the CPU has a very hard time predicting the next bytecode to execute, resulting in many branch mispredictions, slowing down execution.
+
+We changed the dispatch method to threaded code in V8 v7.8. This method allows the CPU’s branch predictor to predict the next bytecode based on the currently executed bytecode, resulting in fewer mispredictions. In more detail, we use a dispatch table, storing a mapping between each bytecode ID and the address of the handler implementing the bytecode. V8’s interpreter [Ignition](/docs/ignition) also uses this approach. However, a big difference between Ignition and the RegExp interpreter is that Ignition’s bytecode handlers are written in [CodeStubAssembler](/blog/csa), whereas the whole RegExp interpreter is written in C++ using [computed `goto`s](https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html) (a GNU extension also supported by clang), which is easier to read and maintain than CSA. For compilers that don’t support computed gotos, we fall back to the old `switch`-based dispatch method.
 
 ### Bytecode peephole optimization
 
-Before we talk about bytecode peephole optimization let's look at a motivating example.
+Before we talk about bytecode peephole optimization, let’s look at a motivating example.
 
 ```js
 const re = /[^_]*/;
@@ -47,13 +49,12 @@ re.exec(str);
 For this simple pattern, the RegExp compiler creates 3 bytecodes that are executed for every character. On a high level these are:
 
 1. Load current character.
-2. Check if character equals `'_'`.
-3. If not, advance current position in the subject string and `goto 1`.
+1. Check if character equals `'_'`.
+1. If not, advance current position in the subject string and `goto 1`.
 
-For our subject string we interpret 17 bytecodes until we find a non-matching character.
-The idea of peephole optimization is that we replace sequences of bytecodes with a new optimized bytecode that combines the functionality of multiple bytecodes. In our example we can even handle the implicit loop created by the `goto` explicitly in the new bytecode, thus a single bytecode handles all matching characters, saving 16 dispatches.
+For our subject string we interpret 17 bytecodes until we find a non-matching character. The idea of peephole optimization is that we replace sequences of bytecodes with a new optimized bytecode that combines the functionality of multiple bytecodes. In our example we can even handle the implicit loop created by the `goto` explicitly in the new bytecode, thus a single bytecode handles all matching characters, saving 16 dispatches.
 
-Although the example is made up, the sequence of bytecodes described here occurs frequently in real-world websites. We analyzed [real websites](/blog/real-world-performance) and created new optimized bytecodes for the most frequent bytecode sequences we encountered.
+Although the example is made-up, the sequence of bytecodes described here occurs frequently in real-world websites. We analyzed [real websites](/blog/real-world-performance) and created new optimized bytecodes for the most frequent bytecode sequences we encountered.
 
 ## Results
 
@@ -62,7 +63,7 @@ Although the example is made up, the sequence of bytecodes described here occurs
   <figcaption>Figure 1: Memory savings for different tier-up values</figcaption>
 </figure>
 
-Figure 1 shows the impact on memory of different tier-up strategies for Facebook, Reddit, Twitter and Tumblr browsing stories. The default is size of jitted code, and then we have size of regexp code we end up using (bytecode size if we don’t tier-up, native code size if we do) for ticks initialized to 1, 10, 100. Finally, we have the size of regexp code if we interpret all regular expressions.  We’ve used these results and other benchmarks to decide to turn on the tier-up with ticks initialized to 1, i.e. we interpret the regular expression once, and then tier-up.
+Figure 1 shows the impact on memory of different tier-up strategies for Facebook, Reddit, Twitter and Tumblr browsing stories. The default is the size of JITted code, and then we have size of regexp code we end up using (bytecode size if we don’t tier-up, native code size if we do) for ticks initialized to 1, 10, and 100. Finally, we have the size of regexp code if we interpret all regular expressions. We’ve used these results and other benchmarks to decide to turn on the tier-up with ticks initialized to 1, i.e. we interpret the regular expression once, and then tier up.
 
 With this tier-up strategy in place, we’ve reduced V8’s heap code size between 4 and 7% on real sites and V8’s effective size between 1 and 2%.
 
@@ -71,13 +72,14 @@ With this tier-up strategy in place, we’ve reduced V8’s heap code size betwe
   <figcaption>Figure 2: RegExp performance comparison</figcaption>
 </figure>
 
-Figure 2 shows the impact on the performance of the RegExp interpreter for all improvements described in this blog post[^strict-bounds] on the RexBench benchmark suite. For reference the performance of JIT compiled RegExp is also shown (Native).
-
-The new interpreter is up to 2× as fast as the old one, averaging about 1.45× as fast. We even come quite close to the performance of JITted RegExp for most benchmarks, with Regex DNA being the only exception. The reason why interpreted RegExp are that much slower than JITted RegExp on this benchmark is due to the long subject strings (~300,000 characters) used. Even though we reduced dispatch overhead to a minimum, the overhead sums up on strings with more than 1,000 characters, resulting in slower execution. Because the interpreter is so much slower on long strings, we’ve added a heuristic that eagerly tiers-up for these strings.
+Figure 2 shows the impact on the performance of the RegExp interpreter for all improvements described in this blog post[^strict-bounds] on the RexBench benchmark suite. For reference, the performance of JIT compiled RegExp is also shown (Native).
 
 [^strict-bounds]: The results shown here also include an improvement to regular expressions already described in the [V8 v7.8 release notes](/blog/v8-release-78#faster-regexp-match-failures).
 
+The new interpreter is up to 2× as fast as the old one, averaging about 1.45× as fast. We even come quite close to the performance of JITted RegExp for most benchmarks, with Regex DNA being the only exception. The reason why interpreted RegExp are that much slower than JITted RegExp on this benchmark is due to the long subject strings (~300,000 characters) used. Even though we reduced dispatch overhead to a minimum, the overhead sums up on strings with more than 1,000 characters, resulting in slower execution. Because the interpreter is so much slower on long strings, we’ve added a heuristic that eagerly tiers-up for these strings.
+
 ## Conclusion
 
-Starting with V8 v7.9 (Chrome 79) we tier-up regular expressions instead of eagerly compiling them. Therefore the interpreter, previously only used in JIT-less V8, is now used everywhere. As a result we save memory. We sped up the interpreter to make this feasible. But this is not the end of the story, more improvements can be expected in the future.
+Starting with V8 v7.9 (Chrome 79) we tier up regular expressions instead of eagerly compiling them. Therefore the interpreter, previously only used in JIT-less V8, is now used everywhere. As a result we save memory. We sped up the interpreter to make this feasible. But this is not the end of the story — more improvements can be expected in the future.
+
 We would like to take this opportunity to thank everyone in the V8 team for their support during our internship. It was an awesome experience!
