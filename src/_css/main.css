@@ -14,7 +14,6 @@
 
 :root {
   color-scheme: dark light;
-  display: none;
   --transition-duration: 0.5s;
   --transition-timing: ease;
   transition:
@@ -52,6 +51,11 @@
   --tag-color: var(--black);
   --tag-background-color: var(--lightestgray);
   --logo-hover-background-color: var(--lightestgray);
+}
+
+:root.js {
+  /* Avoid a flash of white until we've figured out if we're in dark mode */
+  display: none;
 }
 
 :root.dark {
