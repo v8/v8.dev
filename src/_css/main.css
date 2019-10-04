@@ -53,11 +53,6 @@
   --logo-hover-background-color: var(--lightestgray);
 }
 
-:root.js {
-  /* Avoid a flash of white until we've figured out if we're in dark mode */
-  display: none;
-}
-
 :root.dark {
   --html-color: var(--nearwhite);
   --html-background-color: var(--black);

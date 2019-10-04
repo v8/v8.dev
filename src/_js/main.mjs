@@ -20,7 +20,6 @@ const root = document.documentElement;
 // Set or remove the `dark` class the first time.
 darkModeToggle.mode === 'dark' ?
     root.classList.add('dark') : root.classList.remove('dark');
-root.style.display = 'block';
 
 // Listen for toggle changes (which includes `prefers-color-scheme` changes)
 // and toggle the `dark` class accordingly.

@@ -13,11 +13,6 @@
 
 (function() {
 
-  // Dark mode emulation assumes the root element is hidden. Since
-  // legacy browsers don’t get dark mode, we should just show the
-  // root element.
-  document.documentElement.style.display = 'block';
-
   // Navigation toggle.
   var toggle = document.querySelector('#nav-toggle');
   toggle.addEventListener('click', (event) => {
