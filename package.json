@@ -5,7 +5,7 @@
     "eleventy": "eleventy",
     "html": "html-minifier --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css && postcss src/_css/feature-support.css --output dist/_css/feature-support.css",
-    "js": "shx mkdir -p dist/_js && minify --mangle.topLevel --sourceType module src/_js/main.mjs --outFile dist/_js/main.mjs && minify --mangle.topLevel src/_js/legacy.js --outFile dist/_js/legacy.js && minify --mangle.topLevel src/_js/twitter-widget.js --outFile dist/_js/twitter-widget.js",
+    "js": "shx mkdir -p dist/_js && minify --mangle.topLevel --sourceType module src/_js/main.mjs --outFile dist/_js/main.mjs && minify --mangle.topLevel src/_js/legacy.js --outFile dist/_js/legacy.js",
     "json": "json-minify src/.webmanifest > dist/.webmanifest",
     "xml": "minify-xml --in-place dist/sitemap.xml && minify-xml --in-place dist/blog.atom && minify-xml --in-place dist/features.atom",
     "sw": "workbox injectManifest workbox-config.js && minify dist/sw.js --outFile dist/sw.js",
