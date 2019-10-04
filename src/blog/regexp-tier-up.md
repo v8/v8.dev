@@ -9,6 +9,7 @@ tags:
   - internals
   - RegExp
 description: 'In this blog post we describe how we take advantage of the upsides of interpreting regular expressions and mitigate the downsides.'
+tweet: '1180131710568030208'
 ---
 In its default configuration, V8 compiles regular expressions to native code upon the first execution. As part of our work on [JIT-less V8](/blog/jitless), we introduced an interpreter for regular expressions. Interpreting regular expressions has the advantage of using less memory, but it comes with a performance penalty. In this blog post we describe how we take advantage of the upsides of interpreting regular expressions and mitigate the downsides.
 
