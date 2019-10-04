@@ -76,7 +76,7 @@ scriptElement.src = 'https://www.google-analytics.com/analytics.js';
 firstScript.parentNode.insertBefore(scriptElement, firstScript);
 
 // Dynamically either insert the dark or the light themed Twitter widget.
-if (document.querySelector('script[src*="platform.twitter.com"]')) {
+if (document.querySelector('.twitter-timeline')) {
   const main = document.querySelector('main');
   const prefix = '<a href="https://twitter.com/v8js" rel="me nofollow" class="twitter-timeline" data-dnt="true" data-height="1000" data-chrome="noheader nofooter" data-theme="';
   const suffix = '">View tweets by @v8js</a>';
