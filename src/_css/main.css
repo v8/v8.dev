@@ -14,7 +14,7 @@
 
 :root {
   color-scheme: dark light;
-  --transition-duration: 0.5s;
+  --transition-duration: 0.1s;
   --transition-timing: ease;
   transition:
       color var(--transition-duration) var(--transition-timing),
