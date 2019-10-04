@@ -59,6 +59,14 @@ if (location.search.includes('utm_source')) {
   history.replaceState({}, '', location.pathname);
 }
 
+// Helper function to dynamically insert scripts.
+const insertScript = (src) => {
+  const firstScript = document.scripts[0];
+  const scriptElement = document.createElement('script');
+  scriptElement.src = src;
+  firstScript.parentNode.insertBefore(scriptElement, firstScript);
+};
+
 // Google Analytics.
 const UA_ID = 'UA-65961526-1';
 self.GoogleAnalyticsObject = 'ga';
@@ -70,16 +78,11 @@ ga.q = [];
 ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
-const firstScript = document.scripts[0];
-const scriptElement = document.createElement('script');
-scriptElement.src = 'https://www.google-analytics.com/analytics.js';
-firstScript.parentNode.insertBefore(scriptElement, firstScript);
+insertScript('https://www.google-analytics.com/analytics.js');
 
 // Dynamically either insert the dark or the light themed Twitter widget.
-if (document.querySelector('.twitter-timeline')) {
-  const main = document.querySelector('main');
-  const prefix = '<a href="https://twitter.com/v8js" rel="me nofollow" class="twitter-timeline" data-dnt="true" data-height="1000" data-chrome="noheader nofooter" data-theme="';
-  const suffix = '">View tweets by @v8js</a>';
-  main.insertAdjacentHTML('beforeend',
-      prefix + (darkModeToggle ? darkModeToggle.mode : 'light') + suffix);
+const twitterTimeline = document.querySelector('.twitter-timeline');
+if (twitterTimeline) {
+  twitterTimeline.dataset.theme = darkModeToggle.mode;
+  insertScript('https://platform.twitter.com/widgets.js');
 }
