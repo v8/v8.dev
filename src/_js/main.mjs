@@ -60,8 +60,8 @@ if (location.search.includes('utm_source')) {
 }
 
 // Helper function to dynamically insert scripts.
+const firstScript = document.scripts[0];
 const insertScript = (src) => {
-  const firstScript = document.scripts[0];
   const scriptElement = document.createElement('script');
   scriptElement.src = src;
   firstScript.parentNode.insertBefore(scriptElement, firstScript);
