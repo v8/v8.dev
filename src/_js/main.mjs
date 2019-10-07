@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '/_js/dark-mode-toggle.min.mjs';
+import '/_js/dark-mode-toggle.mjs';
 
 // Dark mode toggle.
 const darkModeToggle = document.querySelector('dark-mode-toggle');
