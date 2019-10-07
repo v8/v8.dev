@@ -17,14 +17,21 @@ import '/_js/dark-mode-toggle.min.mjs';
 const darkModeToggle = document.querySelector('dark-mode-toggle');
 const root = document.documentElement;
 
+function updateThemeClass() {
+  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+}
+
 // Set or remove the `dark` class the first time.
-darkModeToggle.mode === 'dark' ?
-    root.classList.add('dark') : root.classList.remove('dark');
+updateThemeClass();
 
 // Listen for toggle changes (which includes `prefers-color-scheme` changes)
 // and toggle the `dark` class accordingly.
-darkModeToggle.addEventListener('colorschemechange', () => {
-  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
+
+// Force listening for external events (by default "permanent" prevents this).
+matchMedia('(prefers-color-scheme: dark)').addListener(({matches}) => {
+  darkModeToggle.mode = matches ? 'dark' : 'light';
+  updateThemeClass();
 });
 
 // Navigation toggle.
