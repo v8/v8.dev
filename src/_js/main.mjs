@@ -11,12 +11,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '/_js/dark-mode-toggle.mjs';
+
+// Dark mode toggle.
+const darkModeToggle = document.querySelector('dark-mode-toggle');
+const root = document.documentElement;
+
+const updateThemeClass = () => {
+  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+};
+
+// Set or remove the `dark` class the first time.
+updateThemeClass();
+
+// Listen for toggle changes (which includes `prefers-color-scheme` changes)
+// and toggle the `dark` class accordingly.
+darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
+
+// Force listening for external events (by default "permanent" prevents this).
+matchMedia('(prefers-color-scheme:dark)').addListener(({matches}) => {
+  darkModeToggle.mode = matches ? 'dark' : 'light';
+  updateThemeClass();
+});
+
 // Navigation toggle.
-const toggle = document.querySelector('#nav-toggle');
-toggle.addEventListener('click', (event) => {
+const navToggle = document.querySelector('#nav-toggle');
+navToggle.addEventListener('click', (event) => {
   event.preventDefault();
   document.querySelector('header nav').classList.add('show');
-  toggle.classList.add('hide');
+  navToggle.classList.add('hide');
 });
 
 // A user right-clicking the logo probably wants to download it.
@@ -26,6 +49,21 @@ if (location.pathname !== '/logo') {
     event.preventDefault();
     self.location = '/logo';
   });
+}
+
+// Helper function to dynamically insert scripts.
+const firstScript = document.scripts[0];
+const insertScript = (src) => {
+  const script = document.createElement('script');
+  script.src = src;
+  firstScript.parentNode.insertBefore(script, firstScript);
+};
+
+// Dynamically either insert the dark- or the light-themed Twitter widget.
+const twitterTimeline = document.querySelector('.twitter-timeline');
+if (twitterTimeline) {
+  twitterTimeline.dataset.theme = darkModeToggle.mode;
+  insertScript('https://platform.twitter.com/widgets.js');
 }
 
 // Install our service worker.
@@ -53,7 +91,4 @@ ga.q = [];
 ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
-const firstScript = document.scripts[0];
-const scriptElement = document.createElement('script');
-scriptElement.src = 'https://www.google-analytics.com/analytics.js';
-firstScript.parentNode.insertBefore(scriptElement, firstScript);
+insertScript('https://www.google-analytics.com/analytics.js');

@@ -30,6 +30,20 @@
     });
   }
 
+  // Helper function to dynamically insert scripts.
+  var firstScript = document.scripts[0];
+  var insertScript = (src) => {
+    var script = document.createElement('script');
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  };
+
+  // Dynamically insert the Twitter widget if needed.
+  var twitterTimeline = document.querySelector('.twitter-timeline');
+  if (twitterTimeline) {
+    insertScript('https://platform.twitter.com/widgets.js');
+  }
+
   // Install our service worker.
   if ('serviceWorker' in navigator) {
     addEventListener('load', () => {
@@ -55,9 +69,6 @@
   ga('create', UA_ID, 'auto');
   ga('set', 'referrer', document.referrer.split('?')[0]);
   ga('send', 'pageview');
-  var firstScript = document.scripts[0];
-  var scriptElement = document.createElement('script');
-  scriptElement.src = 'https://www.google-analytics.com/analytics.js';
-  firstScript.parentNode.insertBefore(scriptElement, firstScript);
+  insertScript('https://www.google-analytics.com/analytics.js');
 
 }());
