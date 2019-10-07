@@ -17,9 +17,9 @@ import '/_js/dark-mode-toggle.min.mjs';
 const darkModeToggle = document.querySelector('dark-mode-toggle');
 const root = document.documentElement;
 
-function updateThemeClass() {
+const updateThemeClass = () => {
   root.classList.toggle('dark', darkModeToggle.mode === 'dark');
-}
+};
 
 // Set or remove the `dark` class the first time.
 updateThemeClass();
@@ -29,7 +29,7 @@ updateThemeClass();
 darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
 
 // Force listening for external events (by default "permanent" prevents this).
-matchMedia('(prefers-color-scheme: dark)').addListener(({matches}) => {
+matchMedia('(prefers-color-scheme:dark)').addListener(({matches}) => {
   darkModeToggle.mode = matches ? 'dark' : 'light';
   updateThemeClass();
 });
@@ -51,6 +51,21 @@ if (location.pathname !== '/logo') {
   });
 }
 
+// Helper function to dynamically insert scripts.
+const firstScript = document.scripts[0];
+const insertScript = (src) => {
+  const script = document.createElement('script');
+  script.src = src;
+  firstScript.parentNode.insertBefore(script, firstScript);
+};
+
+// Dynamically either insert the dark- or the light-themed Twitter widget.
+const twitterTimeline = document.querySelector('.twitter-timeline');
+if (twitterTimeline) {
+  twitterTimeline.dataset.theme = darkModeToggle.mode;
+  insertScript('https://platform.twitter.com/widgets.js');
+}
+
 // Install our service worker.
 if ('serviceWorker' in navigator) {
   addEventListener('load', () => {
@@ -65,14 +80,6 @@ if (location.search.includes('utm_source')) {
   history.replaceState({}, '', location.pathname);
 }
 
-// Helper function to dynamically insert scripts.
-const firstScript = document.scripts[0];
-const insertScript = (src) => {
-  const script = document.createElement('script');
-  script.src = src;
-  firstScript.parentNode.insertBefore(script, firstScript);
-};
-
 // Google Analytics.
 const UA_ID = 'UA-65961526-1';
 self.GoogleAnalyticsObject = 'ga';
@@ -85,10 +92,3 @@ ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
 insertScript('https://www.google-analytics.com/analytics.js');
-
-// Dynamically either insert the dark- or the light-themed Twitter widget.
-const twitterTimeline = document.querySelector('.twitter-timeline');
-if (twitterTimeline) {
-  twitterTimeline.dataset.theme = darkModeToggle.mode;
-  insertScript('https://platform.twitter.com/widgets.js');
-}

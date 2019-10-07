@@ -30,6 +30,20 @@
     });
   }
 
+  // Helper function to dynamically insert scripts.
+  var firstScript = document.scripts[0];
+  var insertScript = (src) => {
+    var script = document.createElement('script');
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  };
+
+  // Dynamically insert the Twitter widget if needed.
+  var twitterTimeline = document.querySelector('.twitter-timeline');
+  if (twitterTimeline) {
+    insertScript('https://platform.twitter.com/widgets.js');
+  }
+
   // Install our service worker.
   if ('serviceWorker' in navigator) {
     addEventListener('load', () => {
@@ -44,14 +58,6 @@
     history.replaceState({}, '', location.pathname);
   }
 
-  // Helper function to dynamically insert scripts.
-  var firstScript = document.scripts[0];
-  var insertScript = (src) => {
-    var script = document.createElement('script');
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  };
-
   // Google Analytics.
   var UA_ID = 'UA-65961526-1';
   self.GoogleAnalyticsObject = 'ga';
@@ -64,11 +70,5 @@
   ga('set', 'referrer', document.referrer.split('?')[0]);
   ga('send', 'pageview');
   insertScript('https://www.google-analytics.com/analytics.js');
-
-  // Dynamically insert the Twitter widget if needed.
-  var twitterTimeline = document.querySelector('.twitter-timeline');
-  if (twitterTimeline) {
-    insertScript('https://platform.twitter.com/widgets.js');
-  }
 
 }());
