@@ -91,7 +91,7 @@ We kick off a computationally expensive task that might take a long time, but we
 ## `Promise.allSettled`
 
 <feature-support chrome="76"
-                 firefox="71"
+                 firefox="71 https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
                  safari="13"
                  nodejs="12.9.0 https://nodejs.org/en/blog/release/v12.9.0/"
                  babel="yes"></feature-support>
