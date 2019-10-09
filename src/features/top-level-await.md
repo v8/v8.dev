@@ -87,7 +87,7 @@ Here’s what happens when you use top-level `await` in a module:
 
 ## Doesn’t this already work in DevTools?
 
-Indeed it does! The REPL in [Chrome DevTools](https://developers.google.com/web/updates/2017/08/devtools-release-notes#await), [Node.js](https://github.com/nodejs/node/issues/13209) and Safari Web Inspector have supported top-level `await` for a while now. However, this functionality was non-standard and limited to the REPL! It’s distinct from the top-level `await` proposal, which is part of the language specification and only applies to modules. To test production code relying on top-level `await` in a way that fully matches the spec proposal’s semantics, make sure to test in your actual app, and not just in DevTools or the Node.js REPL!
+Indeed it does! The REPL in [Chrome DevTools](https://developers.google.com/web/updates/2017/08/devtools-release-notes#await), [Node.js](https://github.com/nodejs/node/issues/13209), and Safari Web Inspector have supported top-level `await` for a while now. However, this functionality was non-standard and limited to the REPL! It’s distinct from the top-level `await` proposal, which is part of the language specification and only applies to modules. To test production code relying on top-level `await` in a way that fully matches the spec proposal’s semantics, make sure to test in your actual app, and not just in DevTools or the Node.js REPL!
 
 ## Isn’t top-level `await` a footgun?
 
