@@ -34,35 +34,39 @@
 
   /* Light mode */
   --html-color: var(--black);
-  --html-background-color: var(--darkgray);
+  --html-background: var(--darkgray);
   --main-color: var(--black);
-  --main-background-color: var(--white);
-  --footer-background-color: var(--lightestgray);
+  --main-background: var(--white);
+  --footer-background: var(--lightestgray);
   --main-and-footer-link-color: var(--darkblue);
   --avatar-img-filter: none;
   --icon-no-support-filter: grayscale(100%);
   --note-color: var(--main-color);
-  --note-background-color: var(--lightyellow);
+  --note-background: var(--lightyellow);
   --tag-color: var(--black);
-  --tag-background-color: var(--lightestgray);
-  --logo-hover-background-color: var(--lightestgray);
+  --tag-background: var(--lightestgray);
+  --table-border: var(--lightestgray);
+  --logo-hover-background: var(--lightestgray);
+  --alt-table-row-background: #EEE;
 }
 
 :root.dark {
   --html-color: var(--nearwhite);
-  --html-background-color: var(--black);
+  --html-background: var(--black);
   --main-color:var(--nearwhite);
-  --main-background-color: var(--darkestgray);
+  --main-background: var(--darkestgray);
   --footer-color: var(--nearwhite);
-  --footer-background-color: var(--darkgray);
+  --footer-background: var(--darkgray);
   --main-and-footer-link-color: var(--yellow);
   --avatar-img-filter: grayscale(50%);
   --icon-no-support-filter: brightness(0.5) grayscale(100%);
   --note-color: var(--darkestgray);
-  --note-background-color: var(--yellow);
+  --note-background: var(--yellow);
   --tag-color: var(--nearwhite);
-  --tag-background-color: var(--darkgray);
-  --logo-hover-background-color: var(--darkgray);
+  --tag-background: var(--darkgray);
+  --table-border: var(--lightgray);
+  --logo-hover-background: var(--darkgray);
+  --alt-table-row-background: #111;
 
   -webkit-font-smoothing: antialiased;
 }
@@ -83,7 +87,7 @@ html, body, fieldset, nav ul, nav ul li, h1, h2, h3 {
 html {
   font: 16px/1.6 sans-serif;
   color: var(--html-color);
-  background: var(--html-background-color);
+  background: var(--html-background);
 }
 body {
   max-width: 860px;
@@ -158,7 +162,7 @@ a {
   height: 600px;
 }
 main, #footer {
-  background: var(--main-background-color);
+  background: var(--main-background);
   padding: 1em var(--offset);
 }
 article footer {
@@ -203,7 +207,7 @@ hr {
 }
 #footer {
   color: var(--footer-color);
-  background: var(--footer-background-color) url(/_img/v8-outline.svg) no-repeat 95.5% center;
+  background: var(--footer-background) url(/_img/v8-outline.svg) no-repeat 95.5% center;
   padding-right: 12em;
   background-size: 10em;
 }
@@ -284,7 +288,7 @@ main a, footer a {
 }
 main a:hover, main a:focus, footer a:hover, footer a:focus {
   background-color: var(--main-and-footer-link-color);
-  color: var(--main-background-color);
+  color: var(--main-background);
 }
 main a:hover code, main a:focus code {
   background-color: inherit;
@@ -321,7 +325,7 @@ blockquote {
 }
 .logo-download:hover,
 .logo-download:focus {
-  background: var(--logo-hover-background-color);
+  background: var(--logo-hover-background);
   color: var(--main-color);
 }
 .logo-download + h2 {
@@ -369,15 +373,15 @@ thead th {
   color: #FFF;
 }
 th, td {
-  border: 1px solid #DEDEDE;
+  border: 1px solid var(--table-border);
   padding: .5em 1em;
 }
 tbody tr:nth-child(odd) {
-  background-color: #EEE;
+  background-color: var(--alt-table-row-background);
 }
 .note {
   color: var(--note-color);
-  background: var(--note-background-color);
+  background: var(--note-background);
   margin-bottom: 1em;
 }
 main nav {
@@ -396,7 +400,7 @@ main .meta {
 }
 .tag:not(.token) {
   border: 0;
-  background: var(--tag-background-color);
+  background: var(--tag-background);
   color: var(--tag-color);
 }
 img {
