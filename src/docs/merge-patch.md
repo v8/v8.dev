@@ -72,7 +72,7 @@ Note that this option only works if the patch applies cleanly on the release bra
 1. Enter "refs/branch-heads/*X.X*" as destination branch (replace *X.X* by the proper branch).
 1. Modify the commit message:
    1. Prefix the title with "Merged: ".
-   1. Remove all lines from the footer (especially "Change-Id", "Commit-Queue", and "Cr-Commit-Position"). We need new information on the new CL.
+   1. Remove lines from the footer that correspont to the original CL ("Change-Id", "Reviewed-on", "Reviewed-by", "Commit-Queue", "Cr-Commit-Position"). Definitely keep the "(cherry picked from commit XXX)" line, as this is needed by some tools to relate merges to original CLs.
    1. Add "No-Try: true", "No-Presubmit: true" and "No-Tree-Checks: true" in the footer.
 1. Send out to review, or add a "TBR=..." or "Tbr: ..." line if the CL is unmodified.
 
