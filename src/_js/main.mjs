@@ -13,25 +13,61 @@
 
 import '/_js/dark-mode-toggle.mjs';
 
-// Dark mode toggle.
+const TWITTER_WIDGET_URL = 'https://platform.twitter.com/widgets.js';
+const TWITTER_SELECTOR = '.twitter-timeline';
+
+// Helper function to dynamically insert scripts.
+const firstScript = document.scripts[0];
+const insertScript = (src) => {
+  const script = document.createElement('script');
+  script.src = src;
+  firstScript.parentNode.insertBefore(script, firstScript);
+};
+
+// Dark mode toggle and Twitter timeline.
 const darkModeToggle = document.querySelector('dark-mode-toggle');
 const root = document.documentElement;
 
+// Toggles the `dark` class based on the dark mode toggle's mode
 const updateThemeClass = () => {
   root.classList.toggle('dark', darkModeToggle.mode === 'dark');
 };
 
+// Dynamically either insert the dark- or the light-themed Twitter widget.
+let twitterTimelineAnchor = document.querySelector(TWITTER_SELECTOR);
+// Twitter modifies the anchor before replacing it, so we clone it here.
+const twitterTimelineAnchorClone = twitterTimelineAnchor &&
+    twitterTimelineAnchor.cloneNode(true);
+const updateTwitterTimeline = () => {
+  twitterTimelineAnchor = document.querySelector(TWITTER_SELECTOR);
+  if (twitterTimelineAnchor) {
+    twitterTimelineAnchor.dataset.theme = darkModeToggle.mode;
+    insertScript(TWITTER_WIDGET_URL);
+  }
+};
+
 // Set or remove the `dark` class the first time.
 updateThemeClass();
+// Embed the dark or the light Twitter timeline the first time.
+updateTwitterTimeline();
 
 // Listen for toggle changes (which includes `prefers-color-scheme` changes)
 // and toggle the `dark` class accordingly.
-darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
-
-// Force listening for external events (by default "permanent" prevents this).
-matchMedia('(prefers-color-scheme:dark)').addListener(({matches}) => {
-  darkModeToggle.mode = matches ? 'dark' : 'light';
+darkModeToggle.addEventListener('colorschemechange', () => {
   updateThemeClass();
+  const twitterTimelineIframe = document.querySelector(TWITTER_SELECTOR);
+  // If there's no Twitter timeline on the current page, our work is done here.
+  if (!twitterTimelineIframe) {
+    return;
+  }
+  // Swap the Twitter-generated Twitter timeline iframe for the static link.
+  twitterTimelineIframe.parentNode.replaceChild(
+      twitterTimelineAnchorClone.cloneNode(true), twitterTimelineIframe);
+  // Remove the Twitter widget script (it's cached and we need to reload it
+  // to trigger re-execution).
+  document.querySelector(`script[src="${TWITTER_WIDGET_URL}"]`).remove();
+  // Start the widget insertion dance again.
+  updateTwitterTimeline();
 });
 
 // Navigation toggle.
@@ -49,21 +85,6 @@ if (location.pathname !== '/logo') {
     event.preventDefault();
     self.location = '/logo';
   });
-}
-
-// Helper function to dynamically insert scripts.
-const firstScript = document.scripts[0];
-const insertScript = (src) => {
-  const script = document.createElement('script');
-  script.src = src;
-  firstScript.parentNode.insertBefore(script, firstScript);
-};
-
-// Dynamically either insert the dark- or the light-themed Twitter widget.
-const twitterTimeline = document.querySelector('.twitter-timeline');
-if (twitterTimeline) {
-  twitterTimeline.dataset.theme = darkModeToggle.mode;
-  insertScript('https://platform.twitter.com/widgets.js');
 }
 
 // Install our service worker.
