@@ -26,7 +26,7 @@ const twitterLink = document.querySelector('.twitter-link');
 let twitterLoaded = null;
 if (twitterLink) {
   twitterLoaded = import('https://platform.twitter.com/widgets.js')
-  .then(() => twitterLink.remove());
+    .then(() => twitterLink.remove());
 }
 
 // Dynamically either insert the dark- or the light-themed Twitter widget.
@@ -38,14 +38,14 @@ const updateTwitterTimeline = async () => {
     twitterTimelineContainer.insertAdjacentElement('afterend', newContainer);
     await twttr.widgets.createTimeline({
       screenName: 'v8js',
-      sourceType: "profile"
+      sourceType: 'profile',
     },
     newContainer,
     {
       dnt: true,
       height: 1000,
       chrome: 'noheader nofooter',
-      theme: darkModeToggle.mode
+      theme: darkModeToggle.mode,
     });
     twitterTimelineContainer.remove();
     twitterTimelineContainer = newContainer;
