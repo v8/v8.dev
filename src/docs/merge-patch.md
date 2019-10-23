@@ -35,9 +35,7 @@ The currently important labels for V8 are:
 1. `Merge-Approved-{Branch}` means that the Chrome TPMs have signed off on the merge.
 1. When the merge is done, the `Merge-Approved-{Branch}` label is replaced with `Merge-Merged-{Branch}`.
 
-## Instructions for Git using the automated script
-
-### How to check if a commit was already merged/reverted/has Canary coverage
+## How to check if a commit was already merged/reverted/has Canary coverage
 
 Use `mergeinfo.py` to get all the commits which are connected to the `$COMMIT_HASH` according to Git.
 
@@ -47,7 +45,9 @@ tools/release/mergeinfo.py $COMMIT_HASH
 
 If it tells you `Is on Canary: No Canary coverage` you should not merge yet because the fix was not yet deployed on a Canary build. A good rule of the thumb is to wait at least 3 days after the fix has landed until the merge is conducted.
 
-### Step 1: Run the script
+## How to create the merge CL
+
+### Option 1: Using the automated script
 
 Let’s assume you’re merging revision af3cf11 to branch 2.4 (please specify full git hashes - abbreviations are used here for simplicity).
 
@@ -63,7 +63,20 @@ tools/release/merge_to_branch.py --branch 2.4 af3cf11 cf33f1b sf3cf09
 
 In case you are a V8 committer, feel free to use `TBR` to land the merge if 1) it has approval and 2) the merge was clean and there are no conflicts to resolve.
 
-### Step 2: Observe the [branch waterfall](https://ci.chromium.org/p/v8/g/branches/console)
+### Option 2 : Using [gerrit](https://chromium-review.googlesource.com/)
+
+Note that this option only works if the patch applies cleanly on the release branch.
+
+1. Open the CL you want to back-merge.
+1. Select "Cherry pick" from the extended menu (three vertical dots in the upper right corner).
+1. Enter "refs/branch-heads/*X.X*" as destination branch (replace *X.X* by the proper branch).
+1. Modify the commit message:
+   1. Prefix the title with "Merged: ".
+   1. Remove lines from the footer that correspond to the original CL ("Change-Id", "Reviewed-on", "Reviewed-by", "Commit-Queue", "Cr-Commit-Position"). Definitely keep the "(cherry picked from commit XXX)" line, as this is needed by some tools to relate merges to original CLs.
+   1. Add "No-Try: true", "No-Presubmit: true" and "No-Tree-Checks: true" in the footer.
+1. Send out to review, or add a "TBR=..." or "Tbr: ..." line if the CL is unmodified.
+
+### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8/g/branches/console)
 
 If one of the builders is not green after handling your patch, revert the merge immediately. A bot (`AutoTagBot`) takes care of the correct versioning after a 10-minute wait.
 
