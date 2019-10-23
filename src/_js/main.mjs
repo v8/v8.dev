@@ -13,36 +13,42 @@
 
 import '/_js/dark-mode-toggle.mjs';
 
-const TWITTER_WIDGET_URL = 'https://platform.twitter.com/widgets.js';
-const TWITTER_SELECTOR = '.twitter-timeline';
-
-// Helper function to dynamically insert scripts.
-const firstScript = document.scripts[0];
-const insertScript = (src) => {
-  const script = document.createElement('script');
-  script.src = src;
-  firstScript.parentNode.insertBefore(script, firstScript);
-};
-
-// Dark mode toggle and Twitter timeline.
 const darkModeToggle = document.querySelector('dark-mode-toggle');
-const root = document.documentElement;
 
 // Toggles the `dark` class based on the dark mode toggle's mode
+const root = document.documentElement;
 const updateThemeClass = () => {
   root.classList.toggle('dark', darkModeToggle.mode === 'dark');
 };
 
+// Only load the Twitter script when we need it.
+const twitterLink = document.querySelector('.twitter-link');
+let twitterLoaded = null;
+if (twitterLink) {
+  twitterLoaded = import('https://platform.twitter.com/widgets.js')
+  .then(() => twitterLink.remove());
+}
+
 // Dynamically either insert the dark- or the light-themed Twitter widget.
-let twitterTimelineAnchor = document.querySelector(TWITTER_SELECTOR);
-// Twitter modifies the anchor before replacing it, so we clone it here.
-const twitterTimelineAnchorClone = twitterTimelineAnchor &&
-    twitterTimelineAnchor.cloneNode(true);
-const updateTwitterTimeline = () => {
-  twitterTimelineAnchor = document.querySelector(TWITTER_SELECTOR);
-  if (twitterTimelineAnchor) {
-    twitterTimelineAnchor.dataset.theme = darkModeToggle.mode;
-    insertScript(TWITTER_WIDGET_URL);
+let twitterTimelineContainer = document.querySelector('.twitter-widget');
+const updateTwitterTimeline = async () => {
+  if (twitterTimelineContainer) {
+    await twitterLoaded;
+    const newContainer = twitterTimelineContainer.cloneNode();
+    twitterTimelineContainer.insertAdjacentElement('afterend', newContainer);
+    await twttr.widgets.createTimeline({
+      screenName: 'v8js',
+      sourceType: "profile"
+    },
+    newContainer,
+    {
+      dnt: true,
+      height: 1000,
+      chrome: 'noheader nofooter',
+      theme: darkModeToggle.mode
+    });
+    twitterTimelineContainer.remove();
+    twitterTimelineContainer = newContainer;
   }
 };
 
@@ -55,18 +61,6 @@ updateTwitterTimeline();
 // and toggle the `dark` class accordingly.
 darkModeToggle.addEventListener('colorschemechange', () => {
   updateThemeClass();
-  const twitterTimelineIframe = document.querySelector(TWITTER_SELECTOR);
-  // If there's no Twitter timeline on the current page, our work is done here.
-  if (!twitterTimelineIframe) {
-    return;
-  }
-  // Swap the Twitter-generated Twitter timeline iframe for the static link.
-  twitterTimelineIframe.parentNode.replaceChild(
-      twitterTimelineAnchorClone.cloneNode(true), twitterTimelineIframe);
-  // Remove the Twitter widget script (it's cached and we need to reload it
-  // to trigger re-execution).
-  document.querySelector(`script[src="${TWITTER_WIDGET_URL}"]`).remove();
-  // Start the widget insertion dance again.
   updateTwitterTimeline();
 });
 
@@ -112,4 +106,6 @@ ga.q = [];
 ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
-insertScript('https://www.google-analytics.com/analytics.js');
+const script = document.createElement('script');
+script.src = 'https://www.google-analytics.com/analytics.js';
+document.head.appendChild(script);

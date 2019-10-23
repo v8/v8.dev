@@ -2,7 +2,6 @@
 src/_css/img/safari.png
 src/_css/img/chrome.svg
 src/_css/img/firefox.svg
-src/_js/dark-mode-toggle.min.mjs
 # Other ignores:
 dist/
 .firebase/
