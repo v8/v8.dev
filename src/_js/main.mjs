@@ -15,12 +15,6 @@ import '/_js/dark-mode-toggle.mjs';
 
 const darkModeToggle = document.querySelector('dark-mode-toggle');
 
-// Toggles the `dark` class based on the dark mode toggle's mode
-const root = document.documentElement;
-const updateThemeClass = () => {
-  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
-};
-
 // Only load the Twitter script when we need it.
 const twitterLink = document.querySelector('.twitter-link');
 let twitterLoaded = null;
@@ -35,6 +29,7 @@ const updateTwitterTimeline = async () => {
   if (twitterTimelineContainer) {
     await twitterLoaded;
     const newContainer = twitterTimelineContainer.cloneNode();
+    newContainer.style.display = 'none';
     twitterTimelineContainer.insertAdjacentElement('afterend', newContainer);
     await twttr.widgets.createTimeline({
       screenName: 'v8js',
@@ -48,21 +43,24 @@ const updateTwitterTimeline = async () => {
       theme: darkModeToggle.mode,
     });
     twitterTimelineContainer.remove();
+    newContainer.style.display = 'block';
     twitterTimelineContainer = newContainer;
   }
 };
 
+// Toggles the `dark` class based on the dark mode toggle's mode
+const root = document.documentElement;
+const updateThemeClass = () => {
+  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+  updateTwitterTimeline();
+};
+
 // Set or remove the `dark` class the first time.
 updateThemeClass();
-// Embed the dark or the light Twitter timeline the first time.
-updateTwitterTimeline();
 
 // Listen for toggle changes (which includes `prefers-color-scheme` changes)
 // and toggle the `dark` class accordingly.
-darkModeToggle.addEventListener('colorschemechange', () => {
-  updateThemeClass();
-  updateTwitterTimeline();
-});
+darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
 
 // Navigation toggle.
 const navToggle = document.querySelector('#nav-toggle');
@@ -106,6 +104,4 @@ ga.q = [];
 ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
-const script = document.createElement('script');
-script.src = 'https://www.google-analytics.com/analytics.js';
-document.head.appendChild(script);
+import('https://www.google-analytics.com/analytics.js');
