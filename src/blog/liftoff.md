@@ -63,7 +63,7 @@ The example above assumes a virtual stack with two values on the operand stack. 
 
 ### Tiering up from Liftoff to TurboFan
 
-With Liftoff and Turbofan, V8 now has two compilation tiers for WebAssembly: Liftoff as the baseline compiler for fast startup and TurboFan as optimizing compiler for maximum performance. This poses the question of how to combine the two compilers to provide the best overall user experience.
+With Liftoff and TurboFan, V8 now has two compilation tiers for WebAssembly: Liftoff as the baseline compiler for fast startup and TurboFan as optimizing compiler for maximum performance. This poses the question of how to combine the two compilers to provide the best overall user experience.
 
 For JavaScript, V8 uses the Ignition interpreter and the TurboFan compiler and employs a dynamic tier-up strategy. Each function is first executed in Ignition, and if the function becomes hot, TurboFan compiles it into highly-optimized machine code. A similar approach could also be used for Liftoff, but the tradeoffs are a bit different here:
 

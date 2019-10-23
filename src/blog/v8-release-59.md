@@ -10,7 +10,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 ## Ignition+TurboFan launched
 
-V8 v5.9 is going to be the first version with Ignition+Turbofan enabled by default. In general, this switch should lead to lower memory consumption and faster startup for web application across the board, and we don’t expect stability or performance issues because the new pipeline has already undergone significant testing. However, [give us a call](https://bugs.chromium.org/p/v8/issues/entry?template=Bug%20report%20for%20the%20new%20pipeline) in case your code suddenly starts to significantly regress in performance.
+V8 v5.9 is going to be the first version with Ignition+TurboFan enabled by default. In general, this switch should lead to lower memory consumption and faster startup for web application across the board, and we don’t expect stability or performance issues because the new pipeline has already undergone significant testing. However, [give us a call](https://bugs.chromium.org/p/v8/issues/entry?template=Bug%20report%20for%20the%20new%20pipeline) in case your code suddenly starts to significantly regress in performance.
 
 For more information, see [our dedicated blog post](/blog/launching-ignition-and-turbofan).
 
