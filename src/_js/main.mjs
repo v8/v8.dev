@@ -13,12 +13,46 @@
 
 import '/_js/dark-mode-toggle.mjs';
 
-// Dark mode toggle.
 const darkModeToggle = document.querySelector('dark-mode-toggle');
-const root = document.documentElement;
 
+// Only load the Twitter script when we need it.
+const twitterLink = document.querySelector('.twitter-link');
+let twitterLoaded = null;
+if (twitterLink) {
+  twitterLoaded = import('https://platform.twitter.com/widgets.js')
+    .then(() => twitterLink.remove());
+}
+
+// Dynamically either insert the dark- or the light-themed Twitter widget.
+let twitterTimelineContainer = document.querySelector('.twitter-widget');
+const updateTwitterTimeline = async () => {
+  if (twitterTimelineContainer) {
+    await twitterLoaded;
+    const newContainer = twitterTimelineContainer.cloneNode();
+    newContainer.style.display = 'none';
+    twitterTimelineContainer.insertAdjacentElement('afterend', newContainer);
+    await twttr.widgets.createTimeline({
+      screenName: 'v8js',
+      sourceType: 'profile',
+    },
+    newContainer,
+    {
+      dnt: true,
+      height: 1000,
+      chrome: 'noheader nofooter',
+      theme: darkModeToggle.mode,
+    });
+    twitterTimelineContainer.remove();
+    newContainer.style.display = 'block';
+    twitterTimelineContainer = newContainer;
+  }
+};
+
+// Toggles the `dark` class based on the dark mode toggle's mode
+const root = document.documentElement;
 const updateThemeClass = () => {
   root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+  updateTwitterTimeline();
 };
 
 // Set or remove the `dark` class the first time.
@@ -27,12 +61,6 @@ updateThemeClass();
 // Listen for toggle changes (which includes `prefers-color-scheme` changes)
 // and toggle the `dark` class accordingly.
 darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
-
-// Force listening for external events (by default "permanent" prevents this).
-matchMedia('(prefers-color-scheme:dark)').addListener(({matches}) => {
-  darkModeToggle.mode = matches ? 'dark' : 'light';
-  updateThemeClass();
-});
 
 // Navigation toggle.
 const navToggle = document.querySelector('#nav-toggle');
@@ -49,21 +77,6 @@ if (location.pathname !== '/logo') {
     event.preventDefault();
     self.location = '/logo';
   });
-}
-
-// Helper function to dynamically insert scripts.
-const firstScript = document.scripts[0];
-const insertScript = (src) => {
-  const script = document.createElement('script');
-  script.src = src;
-  firstScript.parentNode.insertBefore(script, firstScript);
-};
-
-// Dynamically either insert the dark- or the light-themed Twitter widget.
-const twitterTimeline = document.querySelector('.twitter-timeline');
-if (twitterTimeline) {
-  twitterTimeline.dataset.theme = darkModeToggle.mode;
-  insertScript('https://platform.twitter.com/widgets.js');
 }
 
 // Install our service worker.
@@ -91,4 +104,4 @@ ga.q = [];
 ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
-insertScript('https://www.google-analytics.com/analytics.js');
+import('https://www.google-analytics.com/analytics.js');
