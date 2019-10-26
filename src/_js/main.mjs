@@ -104,4 +104,6 @@ ga.q = [];
 ga('create', UA_ID, 'auto');
 ga('set', 'referrer', document.referrer.split('?')[0]);
 ga('send', 'pageview');
-import('https://www.google-analytics.com/analytics.js');
+const gaScript = document.createElement('script');
+gaScript.src = 'https://www.google-analytics.com/analytics.js';
+document.head.appendChild(gaScript);
