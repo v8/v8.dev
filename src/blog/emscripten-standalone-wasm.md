@@ -120,13 +120,13 @@ However, there is more than the Web and the server, in particular there are also
 
 One concrete way Emscripten hopes to help here is that by using WASI APIs as much as possible we can avoid **unnecessary** API differences. As mentioned earlier, on the Web Emscripten code accesses Web APIs indirectly, through JavaScript, so where that JavaScript API could look like WASI, we'd be removing an unnecessary API difference, and that same binary can also run on the server. In other words, if wasm wants to log some info, it needs to call into JS, something like this:
 
-```
+```js
 wasm   =>   function musl_writev(..) { .. console.log(..) .. }
 ```
 
 `musl_writev` is an implementation of the Linux syscall interface that [musl libc](https://www.musl-libc.org) uses to write data to a file descriptor, and that ends up calling `console.log` with the proper data. The wasm module imports and calls that `musl_writev`, which defines an ABI between the JS and the wasm. That ABI is arbitrary (and in fact Emscripten has changed its ABI over time to optimize it). If we replace that with an ABI that matches WASI, we can get this:
 
-```
+```js
 wasm   =>   function __wasi_fd_write(..) { .. console.log(..) .. }
 ```
 
