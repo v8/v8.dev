@@ -84,13 +84,13 @@ int main() {
 
 We can build and run that in any of those runtimes:
 
-```
-$emcc hello.cpp -O3 -o hello.wasm
-$wasmer run hello.wasm
+```shell
+$ emcc hello.cpp -O3 -o hello.wasm
+$ wasmer run hello.wasm
 hello, world!
-$wasmtime hello.wasm
+$ wasmtime hello.wasm
 hello, world!
-$wavm run hello.wasm
+$ wavm run hello.wasm
 hello, world!
 ```
 
