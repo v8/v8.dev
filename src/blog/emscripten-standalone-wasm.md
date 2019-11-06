@@ -84,7 +84,7 @@ int main() {
 
 We can build and run that in any of those runtimes:
 
-```shell
+```bash
 $ emcc hello.cpp -O3 -o hello.wasm
 $ wasmer run hello.wasm
 hello, world!
