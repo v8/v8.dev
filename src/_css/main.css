@@ -297,7 +297,7 @@ main a:hover code, main a:focus code {
   color: var(--darkblue);
   border-bottom: 1px solid var(--darkblue);
 }
-.note a:hover {
+.note a:hover, .note a:focus {
   color: var(--white);
   background-color: var(--darkblue);
 }
