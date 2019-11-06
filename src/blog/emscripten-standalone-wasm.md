@@ -7,7 +7,7 @@ date: 2019-11-06 16:45:00
 tags:
   - WebAssembly
   - tooling
-description: 'Emscripten is switching to the LLVM WebAssembly backend, resulting in much faster link times️ and many other benefits.'
+description: 'Emscripten now supports standalone wasm files, which do not need JavaScript.'
 tweet: 'TODO'
 ---
 Emscripten has always focused first and foremost on compiling to the Web and other JavaScript environments like Node.js. But as WebAssembly starts to be used *without* JavaScript, new use cases are appearing, and so we've been working on support for emitting [**standalone wasm**](https://github.com/emscripten-core/emscripten/wiki/WebAssembly-Standalone) files from Emscripten, that do not depend on the Emscripten JS runtime! This post explains why that's interesting.
