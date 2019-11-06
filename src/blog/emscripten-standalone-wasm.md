@@ -67,13 +67,7 @@ WebAssembly.instantiate(binary).then(({ instance }) => {
 });
 ```
 
-Just 4 lines!
-
-Running that prints `42` as expected.
-
-Note that while this example is very simplistic, there are cases where you simply don't need much JavaScript, and may be able to do better than Emscripten's default JavaScript runtime (which supports a bunch of environments and options).
-
-A real-world example of that is in [zeux's meshoptimizer](https://github.com/zeux/meshoptimizer/blob/bdc3006532dd29b03d83dc819e5fa7683815b88e/js/meshopt_decoder.js) - just 57 lines, including memory management, growth, etc.!
+Just 4 lines! Running that prints `42` as expected. Note that while this example is very simplistic, there are cases where you simply don't need much JavaScript, and may be able to do better than Emscripten's default JavaScript runtime (which supports a bunch of environments and options). A real-world example of that is in [zeux's meshoptimizer](https://github.com/zeux/meshoptimizer/blob/bdc3006532dd29b03d83dc819e5fa7683815b88e/js/meshopt_decoder.js) - just 57 lines, including memory management, growth, etc.!
 
 ### Running in Wasm runtimes
 
