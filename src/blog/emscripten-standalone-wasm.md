@@ -37,20 +37,20 @@ When `emcc` sees we only want wasm then it makes it "standalone" - a wasm file t
 Disassembling it, it's very minimal - just 87 bytes! It contains the obvious `add` function
 
 ```lisp
- (func $add (param $0 i32) (param $1 i32) (result i32)
-  (i32.add
-   (local.get $0)
-   (local.get $1)
-  )
+(func $add (param $0 i32) (param $1 i32) (result i32)
+ (i32.add
+  (local.get $0)
+  (local.get $1)
  )
+)
 ```
 
 and one more function, `_start`,
 
 ```lisp
- (func $_start
-  (nop)
- )
+(func $_start
+ (nop)
+)
 ```
 
 `_start` is part of the [WASI](https://github.com/WebAssembly/WASI) spec, and Emscripten's standalone mode emits it so that we can run in WASI runtimes. (Normally `_start` would do global initialization, but here we just don't need any so it's empty.)
