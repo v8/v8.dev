@@ -15,7 +15,7 @@ tweet: '1140993821897121796'
 
 ## `Object.entries`
 
-The `Object.entries` has been around for a while.
+The `Object.entries` API has been around for a while.
 
 <feature-support chrome="54"
                  firefox="47"
