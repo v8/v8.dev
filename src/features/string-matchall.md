@@ -83,6 +83,10 @@ for (const match of string.matchAll(regex)) {
 
 The general idea is that you just write a simple `for`-`of` loop, and `String#matchAll` takes care of the rest for you.
 
+:::note
+**Note:** As the name implies, `String#matchAll` is meant to iterate through _all_ match objects. As such, it should be used with global regular expressions, i.e. those with the `g` flag set, since any non-global regular expressions would only produce a single match (at most). Calling `matchAll` with a non-global RegExp results in a `TypeError` exception.
+:::
+
 ## `String.prototype.matchAll` support { #support }
 
 <feature-support chrome="73 /blog/v8-release-73#string.prototype.matchall"
