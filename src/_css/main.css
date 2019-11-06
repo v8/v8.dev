@@ -293,6 +293,14 @@ main a:hover, main a:focus, footer a:hover, footer a:focus {
 main a:hover code, main a:focus code {
   background-color: inherit;
 }
+.note a {
+  color: var(--darkblue);
+  border-bottom: 1px solid var(--darkblue);
+}
+.note a:hover, .note a:focus {
+  color: var(--white);
+  background-color: var(--darkblue);
+}
 a.bookmark {
   display: none;
 }
