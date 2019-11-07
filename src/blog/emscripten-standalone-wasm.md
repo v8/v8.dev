@@ -1,5 +1,5 @@
 ---
-title: 'Outside the Web: Standalone WebAssembly Binaries Using Emscripten'
+title: 'Outside the web: standalone WebAssembly binaries using Emscripten'
 author: 'Alon Zakai'
 avatars:
   - 'alon-zakai'
