@@ -3,9 +3,14 @@ os:
   - linux
   - osx
   - windows
+addons:
+  chrome: stable
+before_install:
+  - npm install -g @lhci/cli@0.3.0-alpha.0
 script:
   - npm run ci
   - |
     if [ "${TRAVIS_BRANCH}" = 'master' -a "${TRAVIS_PULL_REQUEST}" = 'false' -a "${TRAVIS_OS_NAME}" = 'linux' ]; then
       firebase deploy --token "${FIREBASE_TOKEN}" --message "Deploy @ ${TRAVIS_COMMIT}";
     fi
+  - lhci autorun

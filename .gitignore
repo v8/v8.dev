@@ -4,6 +4,7 @@ src/_css/img/chrome.svg
 src/_css/img/firefox.svg
 # Other ignores:
 dist/
+.lighthouseci/
 .firebase/
 firebase-debug.log
 node_modules/
