@@ -71,7 +71,7 @@ Just 4 lines! Running that prints `42` as expected. Note that while this example
 
 ### Running in Wasm runtimes
 
-Another nice thing about standalone wasm files is that you can run them in wasm runtimes like [wasmer](https://wasmer.io), [wasmtime](https://github.com/CraneStation/wasmtime), or [WAVM](https://github.com/WAVM/WAVM). For example, consider this hello world:
+Another nice thing about standalone wasm files is that you can run them in wasm runtimes like [wasmer](https://wasmer.io), [wasmtime](https://github.com/bytecodealliance/wasmtime), or [WAVM](https://github.com/WAVM/WAVM). For example, consider this hello world:
 
 ```cpp
 // hello.cpp
