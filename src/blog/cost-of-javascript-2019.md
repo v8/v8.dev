@@ -197,6 +197,15 @@ As long as the JSON string is only evaluated once, the `JSON.parse` approach is 
   <figcaption><code>JSON.parse('…')</code> is <a href="https://github.com/GoogleChromeLabs/json-parse-benchmark">much faster</a> to parse, compile, and execute compared to an equivalent JavaScript literal — not just in V8 (1.7× as fast), but in all major JavaScript engines.</figcaption>
 </figure>
 
+The following video goes into more detail on where the performance difference comes from, starting at the 02:10 mark.
+
+<figure>
+  <div class="video video-16:9">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ff4fgQxPaO0?start=130" allow="picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  </div>
+  <figcaption><a href="https://www.youtube.com/watch?v=ff4fgQxPaO0">“Faster apps with <code>JSON.parse</code>”</a> as presented by Mathias Bynens at #ChromeDevSummit 2019.</figcaption>
+</figure>
+
 See [our _JSON ⊂ ECMAScript_ feature explainer](/features/subsume-json#embedding-json-parse) for an example implementation that, given an arbitrary object, generates a valid JavaScript program that `JSON.parse`s it.
 
 There’s an additional risk when using plain object literals for large amounts of data: they could be parsed _twice_!
