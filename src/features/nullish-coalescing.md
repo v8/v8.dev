@@ -151,7 +151,7 @@ document.all ?? true; // => HTMLAllCollection[]
 
 ## Support for nullish coalescing { #support }
 
-<feature-support chrome="no https://bugs.chromium.org/p/v8/issues/detail?id=9547"
+<feature-support chrome="80 https://bugs.chromium.org/p/v8/issues/detail?id=9547"
                  firefox="72 https://bugzilla.mozilla.org/show_bug.cgi?id=1566141"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=200072"
                  nodejs="no"
