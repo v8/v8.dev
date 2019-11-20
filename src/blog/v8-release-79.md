@@ -30,7 +30,7 @@ This relatively simple change improved the Speedometer AngularJS score by 4%.
 
 ### Handle API getters in builtins
 
-Previously, V8 would always miss to the C++ runtime when handling getters defined by the embedding API (such as Blink). These included getters defined in the HTML spec such as `Node.nodeType`, `Node.nodeName`, etc. 
+Previously, V8 would always miss to the C++ runtime when handling getters defined by the embedding API (such as Blink). These included getters defined in the HTML spec such as `Node.nodeType`, `Node.nodeName`, etc.
 
 V8 would do the entire prototype walk in the builtin to load the getter and then bail out to the runtime once it realizes that the getter is defined by the API. In the C++ runtime, it would walk the prototype chain to get the getter again before executing it, duplicating a lot of work.
 
@@ -47,7 +47,7 @@ Now in V8 v7.9, these getters are handled in the builtins without having to miss
 
 When V8 identifies that certain functions are hot it marks them for optimization on the next call. When the function executes again, V8 compiles the function using the optimizing compiler and starts using the optimized code from the subsequent call. However, for functions with long running loops this is not sufficient. V8 uses a technique called on-stack replacement (OSR) to install optimized code for the currently executing function. This allows us to start using the optimized code during the first execution of the function, while it is stuck in a hot loop.
 
-If the function is executed a second time, it is very likely to be OSRed again. Before V8 v7.9 we needed to re-optimize the function again in order to OSR it, however from v7.9 we added OSR caching to retain optimized code for OSR replacements, keyed by the loop header that was used as the entry point in the OSRed function. This has improved performance of some peak-performance benchmarks by 5–18%. 
+If the function is executed a second time, it is very likely to be OSRed again. Before V8 v7.9 we needed to re-optimize the function again in order to OSR it, however from v7.9 we added OSR caching to retain optimized code for OSR replacements, keyed by the loop header that was used as the entry point in the OSRed function. This has improved performance of some peak-performance benchmarks by 5–18%.
 
 <figure>
   <img src="/_img/v8-release-79/OSR-caching.svg" width="769" height="476" alt="" loading="lazy">
@@ -64,6 +64,6 @@ In v7.9, V8 got support for multiple code spaces on 64-bit architectures. This a
 
 ## V8 API
 
-Please use `git log branch-heads/7.8..branch-heads/7.9 include/v8.h` to get a list of the API changes. 
+Please use `git log branch-heads/7.8..branch-heads/7.9 include/v8.h` to get a list of the API changes.
 
 Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 7.9 -t branch-heads/7.9` to experiment with the new features in V8 v7.9. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
