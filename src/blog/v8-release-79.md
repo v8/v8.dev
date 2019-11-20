@@ -6,7 +6,7 @@ avatars:
 date: 2019-11-20
 tags:
   - release
-description: 'V8 v7.9 features removed deprecation for Double ⇒ Tagged transitions, handling API getters in builtins, OSR caching, and WASM support for multiple code spaces.'
+description: 'V8 v7.9 features removed deprecation for Double ⇒ Tagged transitions, handling API getters in builtins, OSR caching, and Wasm support for multiple code spaces.'
 tweet: '1197187184304050176'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 7.9](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/7.9), which is in beta until its release in coordination with Chrome 79 Stable in several weeks. V8 v7.9 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
@@ -60,7 +60,7 @@ If the function is executed a second time, it is very likely to be OSRed again. 
 
 So far, each WebAssembly module consisted of exactly one code space on 64-bit architectures, which was reserved on module creation. This allowed us to use near calls within a module, but limited us to 128 MB of code space on arm64, and required to reserved 1 GB upfront on x64.
 
-In v7.9, V8 got support for multiple code spaces on 64-bit architectures. This allows us to only reserve the estimated needed code space, and add more code spaces later if needed. Far jump will be used for calls between code spaces that are too far apart for near jumps. Instead of ~1000 WebAssembly modules per process V8 now support several million, only limited by the actual amount of memory available.
+In v7.9, V8 got support for multiple code spaces on 64-bit architectures. This allows us to only reserve the estimated needed code space, and add more code spaces later if needed. Far jump will be used for calls between code spaces that are too far apart for near jumps. Instead of ~1000 WebAssembly modules per process V8 now supports several million, only limited by the actual amount of memory available.
 
 ## V8 API
 
