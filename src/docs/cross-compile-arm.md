@@ -69,7 +69,6 @@ Use `adb` to copy the binary and snapshot files to the phone:
 adb shell 'mkdir -p /data/local/tmp/v8/bin'
 adb push out.gn/arm.release/d8 /data/local/tmp/v8/bin
 adb push out.gn/arm.release/icudtl.dat /data/local/tmp/v8/bin
-adb push out.gn/arm.release/natives_blob.bin /data/local/tmp/v8/bin
 adb push out.gn/arm.release/snapshot_blob.bin /data/local/tmp/v8/bin
 ```
 
@@ -77,7 +76,7 @@ adb push out.gn/arm.release/snapshot_blob.bin /data/local/tmp/v8/bin
 rebuffat:~/src/v8$ adb shell
 bullhead:/ $ cd /data/local/tmp/v8/bin
 bullhead:/data/local/tmp/v8/bin $ ls
-v8 natives_blob.bin snapshot_blob.bin
+v8 icudtl.dat snapshot_blob.bin
 bullhead:/data/local/tmp/v8/bin $ ./d8
 V8 version 5.8.0 (candidate)
 d8> 'w00t!'
