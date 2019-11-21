@@ -73,7 +73,7 @@
 
 :root.dark figure img[src*=".png"]:not(.no-darkening),
 :root.dark figure img[src*=".svg"]:not(.no-darkening) {
-  filter: invert(0.85) hue-rotate(180deg);
+  filter: invert(0.862745) hue-rotate(180deg);
 }
 
 * {
