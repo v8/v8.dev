@@ -61,7 +61,7 @@ One nice thing about a standalone Wasm file like this is that you can write cust
 
 ```javascript
 // load-add.js
-var binary = require('fs').readFileSync('add.wasm');
+const binary = require('fs').readFileSync('add.wasm');
 
 WebAssembly.instantiate(binary).then(({ instance }) => {
   console.log(instance.exports.add(40, 2));
