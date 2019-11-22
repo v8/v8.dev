@@ -16,7 +16,7 @@ JavaScript modules are now [supported in all major browsers](https://caniuse.com
 <feature-support chrome="61"
                  firefox="60"
                  safari="11"
-                 nodejs="no"
+                 nodejs="13.2.0 https://nodejs.org/en/blog/release/v13.2.0/#notable-changes"
                  babel="yes"></feature-support>
 
 This article explains how to use JS modules, how to deploy them responsibly, and how the Chrome team is working to make modules even better in the future.
