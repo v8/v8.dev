@@ -425,8 +425,8 @@ img {
 }
 
 dark-mode-toggle {
-  --dark-mode-toggle-light-icon: url(/_css/img/sun.svg);
-  --dark-mode-toggle-dark-icon: url(/_css/img/moon.svg);
+  --dark-mode-toggle-light-icon: url(/_css/img/moon.svg);
+  --dark-mode-toggle-dark-icon: url(/_css/img/sun.svg);
   --dark-mode-toggle-color: var(--main-and-footer-link-color);
   --dark-mode-toggle-icon-filter: invert(80%);
   margin-left: 1em;
