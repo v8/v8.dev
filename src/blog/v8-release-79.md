@@ -24,7 +24,7 @@ In V8 v7.9, we got rid of MutableHeapNumber, and instead use HeapNumbers that ar
 This relatively simple change improved the Speedometer AngularJS score by 4%.
 
 <figure>
-  <img src="/_img/v8-release-79/Speedometer-AngularJS.svg" width="701" height="380" alt="" loading="lazy">
+  <img src="/_img/v8-release-79/speedometer-angularjs.svg" width="701" height="380" alt="" loading="lazy">
   <figcaption>Speedometer AngularJS score improvements</figcaption>
 </figure>
 
@@ -34,12 +34,12 @@ Previously, V8 would always miss to the C++ runtime when handling getters define
 
 V8 would do the entire prototype walk in the builtin to load the getter and then bail out to the runtime once it realizes that the getter is defined by the API. In the C++ runtime, it would walk the prototype chain to get the getter again before executing it, duplicating a lot of work.
 
-In general, the [inline caching (IC)](https://mathiasbynens.be/notes/shapes-ics) mechanism can help mitigate this as V8 would install an IC handler after the first miss to the C++ runtime. But with the new [lazy feedback allocation](https://v8.dev/blog/v8-release-77#lazy-feedback-allocation), V8 doesn’t install IC handlers until the function has been executed for some time.
+In general, [the inline caching (IC) mechanism](https://mathiasbynens.be/notes/shapes-ics) can help mitigate this as V8 would install an IC handler after the first miss to the C++ runtime. But with the new [lazy feedback allocation](https://v8.dev/blog/v8-release-77#lazy-feedback-allocation), V8 doesn’t install IC handlers until the function has been executed for some time.
 
 Now in V8 v7.9, these getters are handled in the builtins without having to miss to the C++ runtime even when they don’t have IC handlers installed, by taking advantage of special API stubs that can call directly into the API getter. This results in a 12% decrease in the amount of time spent in IC runtime in Speedometer’s Backbone and jQuery benchmark.
 
 <figure>
-  <img src="/_img/v8-release-79/Speedometer.svg" width="600" height="371" alt="" loading="lazy">
+  <img src="/_img/v8-release-79/speedometer.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Speedometer Backbone and jQuery improvements</figcaption>
 </figure>
 
@@ -47,10 +47,10 @@ Now in V8 v7.9, these getters are handled in the builtins without having to miss
 
 When V8 identifies that certain functions are hot it marks them for optimization on the next call. When the function executes again, V8 compiles the function using the optimizing compiler and starts using the optimized code from the subsequent call. However, for functions with long running loops this is not sufficient. V8 uses a technique called on-stack replacement (OSR) to install optimized code for the currently executing function. This allows us to start using the optimized code during the first execution of the function, while it is stuck in a hot loop.
 
-If the function is executed a second time, it is very likely to be OSRed again. Before V8 v7.9 we needed to re-optimize the function again in order to OSR it, however from v7.9 we added OSR caching to retain optimized code for OSR replacements, keyed by the loop header that was used as the entry point in the OSRed function. This has improved performance of some peak-performance benchmarks by 5–18%.
+If the function is executed a second time, it is very likely to be OSRed again. Before V8 v7.9 we needed to re-optimize the function again in order to OSR it. However, from v7.9 we added OSR caching to retain optimized code for OSR replacements, keyed by the loop header that was used as the entry point in the OSRed function. This has improved performance of some peak-performance benchmarks by 5–18%.
 
 <figure>
-  <img src="/_img/v8-release-79/OSR-caching.svg" width="769" height="476" alt="" loading="lazy">
+  <img src="/_img/v8-release-79/osr-caching.svg" width="769" height="476" alt="" loading="lazy">
   <figcaption>OSR caching improvements</figcaption>
 </figure>
 
@@ -60,7 +60,7 @@ If the function is executed a second time, it is very likely to be OSRed again. 
 
 So far, each WebAssembly module consisted of exactly one code space on 64-bit architectures, which was reserved on module creation. This allowed us to use near calls within a module, but limited us to 128 MB of code space on arm64, and required to reserved 1 GB upfront on x64.
 
-In v7.9, V8 got support for multiple code spaces on 64-bit architectures. This allows us to only reserve the estimated needed code space, and add more code spaces later if needed. Far jump will be used for calls between code spaces that are too far apart for near jumps. Instead of ~1000 WebAssembly modules per process V8 now supports several million, only limited by the actual amount of memory available.
+In v7.9, V8 got support for multiple code spaces on 64-bit architectures. This allows us to only reserve the estimated needed code space, and add more code spaces later if needed. Far jump is used for calls between code spaces that are too far apart for near jumps. Instead of ~1000 WebAssembly modules per process V8 now supports several million, only limited by the actual amount of memory available.
 
 ## V8 API
 
