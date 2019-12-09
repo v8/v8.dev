@@ -503,9 +503,29 @@ macro Bar(implicit context: Context)() {
 ```
 
 In contrast to Scala, we forbid this if the names of the implicit parameters are not identical.
-For overload resolution not to cause fragile and confusing behavior, we want that the implicit parameters do not influence overload resolution at all. That is: when comparing candidates of an overload set, we do not consider the available implicit bindings at the call-site. Only after we found a single best overload, we check if implicit bindings for the implicit parameters are available.
+
+Since overload resolution can cause confusing behavior, we ensure that implicit parameters do not influence overload resolution at all. That is: when comparing candidates of an overload set, we do not consider the available implicit bindings at the call-site. Only after we found a single best overload, we check if implicit bindings for the implicit parameters are available.
 
 Having the implicit parameters left of the explicit parameters is different from Scala, but maps better to the existing convention in CSA to have the `context` parameter first.
+
+#### js-implicit
+
+If you want JavaScript linking for a builtin defined in Torque, you should use keyword `js-implicit` instead of `implicit`. The arguments are limited to these four components of the calling convention:
+
+ * context: Context
+ * receiver: Object ("this" in JavaScript)
+ * target: JSFunction (arguments.callee in JavaScript)
+ * newTarget: Object (new.target in JavaScript)
+
+They don't all have to be declared, only the ones you want to use. For an example, here is our code for `Array.prototype.shift`:
+
+```torque
+  // https://tc39.github.io/ecma262/#sec-array.prototype.shift
+  transitioning javascript builtin ArrayPrototypeShift(
+      js-implicit context: Context, receiver: Object)(...arguments): Object {
+  ...
+  }
+```
 
 ### Overload resolution
 
