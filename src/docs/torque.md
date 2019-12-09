@@ -509,12 +509,13 @@ Since overload resolution can cause confusing behavior, we ensure that implicit 
 Having the implicit parameters left of the explicit parameters is different from Scala, but maps better to the existing convention in CSA to have the `context` parameter first.
 
 #### js-implicit
+
 If you want JavaScript linking for a builtin defined in Torque, you should use keyword `js-implicit` instead of `implicit`. The arguments are limited to these four components of the calling convention:
 
- * context: Context
- * receiver: Object ("this" in JavaScript)
- * target: JSFunction (arguments.callee in JavaScript)
- * newTarget: Object (new.target in JavaScript)
+- context: Context
+- receiver: Object ("this" in JavaScript)
+- target: JSFunction (arguments.callee in JavaScript)
+- newTarget: Object (new.target in JavaScript)
 
 They don't all have to be declared, only the ones you want to use. For an example, here is our code for `Array.prototype.shift`:
 
