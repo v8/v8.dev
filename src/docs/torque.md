@@ -510,21 +510,25 @@ Having the implicit parameters left of the explicit parameters is different from
 
 #### js-implicit
 
-If you want JavaScript linking for a builtin defined in Torque, you should use keyword `js-implicit` instead of `implicit`. The arguments are limited to these four components of the calling convention:
+For builtins with javascript linkage defined in Torque, you should use keyword `js-implicit` instead of `implicit`. The arguments are limited to these four components of the calling convention:
 
-- context: Context
-- receiver: Object ("this" in JavaScript)
+- context: NativeContext
+- receiver: JSAny ("this" in JavaScript)
 - target: JSFunction (arguments.callee in JavaScript)
-- newTarget: Object (new.target in JavaScript)
+- newTarget: JSAny (new.target in JavaScript)
 
-They don't all have to be declared, only the ones you want to use. For an example, here is our code for `Array.prototype.shift`:
+They don't all have to be declared, only the ones you want to use. 
+For an example, here is our code for `Array.prototype.shift`:
 
 ```torque
   // https://tc39.github.io/ecma262/#sec-array.prototype.shift
   transitioning javascript builtin ArrayPrototypeShift(
-      js-implicit context: Context, receiver: Object)(...arguments): Object {
+      js-implicit context: NativeContext, receiver: JSAny)(...arguments): JSAny {
   ...
 ```
+
+Note that the `context` argument is a `NativeContext`. This is because builtins in V8 always embed the native context in their closures. Encoding this in the js-implicit convention allows the programmer to eliminate an operation to load the native context from the function context.
+
 
 ### Overload resolution
 
