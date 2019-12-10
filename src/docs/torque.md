@@ -517,7 +517,7 @@ For builtins with javascript linkage defined in Torque, you should use keyword `
 - target: JSFunction (arguments.callee in JavaScript)
 - newTarget: JSAny (new.target in JavaScript)
 
-They don't all have to be declared, only the ones you want to use. 
+They don't all have to be declared, only the ones you want to use.
 For an example, here is our code for `Array.prototype.shift`:
 
 ```torque
@@ -528,7 +528,6 @@ For an example, here is our code for `Array.prototype.shift`:
 ```
 
 Note that the `context` argument is a `NativeContext`. This is because builtins in V8 always embed the native context in their closures. Encoding this in the js-implicit convention allows the programmer to eliminate an operation to load the native context from the function context.
-
 
 ### Overload resolution
 
