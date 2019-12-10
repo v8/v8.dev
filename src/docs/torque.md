@@ -49,7 +49,9 @@ Hello world!
 
 The Torque compiler doesn’t create machine code directly, but rather generates C++ code that calls V8’s existing `CodeStubAssembler` interface. The `CodeStubAssembler` uses the [TurboFan compiler’s](https://v8.dev/docs/turbofan) backend to generate efficient code. Torque compilation therefore requires multiple steps:
 
-1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files, outputting corresponding `*-gen.cc` files (one `.cc` file per Torque namespace). The `.cc` files that are generated use TurboFan’s `CodeStubAssembler` interface for generating code. The Torque compiler also generates various `.h` files meant to be consumed by the V8 build for any class definitions found in `.tq` files.
+1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files, outputting corresponding `*-tq-csa.cc`
+and `*-tq-csa.h` files in appropriate subdirectories under `gen/torque-generated`. The Torque compiler also generates various known `.h` files, meant to be consumed by the V8 build. These contain any class definitions found in the `.tq` files under
+compile.
 1. The `.h` files produced by Torque are included at strategic points in the V8 build, supplementing class definitions declared "by hand" in the V8 sources.
 1. The `gn` build then compiles the generated `.cc` files from step 1 into the `mksnapshot` executable.
 1. When `mksnapshot` runs, all of V8’s builtins are generated and packaged in to the snapshot file, including those that are defined in Torque and any other builtins that use Torque-defined functionality.
