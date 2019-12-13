@@ -99,6 +99,7 @@ Torque code is packaged in individual source files. Each source file consists of
   AbstractTypeDeclaration
   ClassDeclaration
   TypeAliasDeclaration
+  EnumDeclaration
   CallableDeclaration
   ConstDeclaration
   GenericSpecialization
@@ -346,6 +347,83 @@ The way this is policed in the type system is that it is illegal to access a val
 const fastArray : FastJSArray = Cast<FastJSArray>(array) otherwise Bailout;
 Call(f, Undefined);
 return fastArray; // Type error: fastArray is invalid here.
+```
+
+#### Enums
+
+Enumerations provide a means to define a set of constants and group them under a name similar to
+the enum classes in C++. A declaration is introduced by the `enum` keyword and adheres to the following
+syntactical structure:
+
+<pre><code class="language-grammar">EnumDeclaration :
+  <b>enum</b> IdentifierName ExtendsDeclaration<sub>opt</sub> ConstexprDeclaration<sub>opt</sub> <b>{</b> EnumEntryDeclaration<sub>list+</sub> (<b>, ...</b>)<sub>opt</sub> <b>}</b>
+EnumEntryDeclaration :
+  IdentifierName ConstexprDeclaration<sub>opt</sub>
+</code></pre>
+
+A basic example looks like this:
+```torque
+enum LanguageMode extends Smi {
+  kStrict,
+  kSloppy
+}
+```
+This declaration defines a new type `LanguageMode`, where the `extends` clause specifies the underlying
+type, that is the runtime type used to represent a value of the enum. In this example, this is `TNode<Smi>`,
+since this is what the type `Smi` `generates`. A `constexpr LanguageMode` converts to `LanguageMode`
+in the generated CSA files since no `constexpr` clause is specified on the enum to replace the default name.
+If the `extends` clause is omitted, Torque will generate only the `constexpr` version of the type.
+
+Torque generates a distinct type and constant for each of the enum's entries. Those are defined
+inside a namespace that matches the enum's name. Necessary specializations of `FromConstexpr<>` are
+generated to convert from the entry's `constexpr` types to the enum type. The value that is generated
+for an entry is defined by the entry's `constexpr` clause, if one is present, and follows the rule
+`<enum-constexpr>::<entry-name>`, where `<entry-name>` is the name of the entry (e.g. `kStrict`) and
+`<enum-constexpr>` is the name generated for the `constexpr` enum type (`LanguageMode` in this case).
+
+To summarize, the above example is desugared into something that looks very similar to this:
+
+```torque
+namespace LanguageMode {
+  type kStrict extends Smi;
+  const kStrict: kStrict constexpr 'LanguageMode::kStrict';
+  type kSloppy extends Smi;
+  const kSloppy: kSloppy constexpr 'LanguageMode::kSloppy';
+}
+type LanguageMode = LanguageMode::kStrict | LanguageMode::kSloppy;
+FromConstexpr<LanguageMode, LanguageMode::constexpr kSloppy>(o: LanguageMode::constexpr kSloppy) {
+    return %RawDownCast<LanguageMode>(%FromConstexpr<Smi>(o));
+}
+FromConstexpr<LanguageMode, LanguageMode::constexpr kStrict>(o: LanguageMode::constexpr kStrict) {
+    return %RawDownCast<LanguageMode>(%FromConstexpr<Smi>(o));
+}
+```
+Note that `constexpr` is part of the type name and thus goes after the namespace scope.
+
+Torque's enumerations work very well together with the `typeswitch` construct, because the
+values are defined using distinct types:
+```torque
+typeswitch(language_mode) {
+  case (LangugageMode::kStrict): {
+    // ...
+  }
+  case (LanguageMode::kSloppy): {
+    // ...
+  }
+}
+```
+Torque recognizes that this `typeswitch` is exhaustive which allows to produce slightly more efficient
+code. In order to generate correct code if only a subset of the possible runtime values is known to Torque,
+an enumeration can be declared 'open' using a `...` after the last enum entry. Consider the
+`ExtractFixedArrayFlag`s for example, where only some of the options are available/used from within
+Torque:
+```torque
+enum ExtractFixedArrayFlag constexpr 'CodeStubAssembler::ExtractFixedArrayFlag' {
+  kFixedDoubleArrays,
+  kAllFixedArrays,
+  kFixedArrays,
+  ...
+}
 ```
 
 ### Callables
