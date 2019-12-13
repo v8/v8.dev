@@ -4,14 +4,22 @@
   "display": "minimal-ui",
   "icons": [
     {
-      "src": "/_img/v8-192x192.png",
+      "src": "/_img/v8-icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
-      "src": "/_img/v8-512x512.png",
+      "src": "/_img/v8-icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/_img/v8-icon-1024x1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable any"
     }
   ],
   "start_url": "/",
