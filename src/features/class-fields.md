@@ -190,7 +190,7 @@ class Cat extends Animal {
 ### Support for public class fields { #support-public-fields }
 
 <feature-support chrome="72 /blog/v8-release-72#public-class-fields"
-                 firefox="no"
+                 firefox="69 https://bugzilla.mozilla.org/show_bug.cgi?id=1499448"
                  safari="no"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="no"></feature-support>
