@@ -18,6 +18,7 @@ const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAttrs = require('markdown-it-attrs');
 const markdownItContainer = require('markdown-it-container');
 const markdownItFootnote = require('markdown-it-footnote');
+const markdownItMultiMdTable = require('markdown-it-multimd-table');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
 const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 
@@ -40,6 +41,9 @@ const md = markdownIt(markdownItConfig)
   .use(markdownItAttrs)
   .use(markdownItContainer, 'note')
   .use(markdownItContainer, 'table-wrapper')
+  .use(markdownItMultiMdTable, {
+    rowspan: true,
+  })
   .use(markdownItAnchor, markdownItAnchorConfig);
 
 module.exports = (eleventyConfig) => {
