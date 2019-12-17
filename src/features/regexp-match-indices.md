@@ -65,7 +65,7 @@ To achieve this, we need a few building blocks, the first of which is recognizin
 
 ```js
 function isIdentifier(name) {
-  const re = /^[a-zA-Z_\$][0-9a-zA-Z_\$]*$/;
+  const re = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/;
   return re.exec(name) !== null;
 }
 ```
@@ -74,7 +74,7 @@ function isIdentifier(name) {
 **Note:** A real-world parser could make use of the newly introduced [property escapes in regexes](https://github.com/tc39/proposal-regexp-unicode-property-escapes#other-examples) and use the following regular expression for matching all valid ECMAScript identifier names:
 
 ```js
-const re = /^(?:[$_\p{ID_Start}])(?:[$_\u200C\u200D\p{ID_Continue}])*$/u;
+const re = /^[$_\p{ID_Start}][$_\u200C\u200D\p{ID_Continue}]*$/u;
 ```
 
 For simplicity, let’s stick to our previous regex, which matches only Latin characters, numbers, and underscores.
@@ -84,7 +84,7 @@ If we encounter an error with a variable declaration like above and want to prin
 
 ```js
 function getDeclarationPosition(source) {
-  const re = /(let|const|var)\s+([a-zA-Z_\$][0-9a-zA-Z_\$]*)/;
+  const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/;
   const match = re.exec(source);
   if (!match) return -1;
   return match.index;
@@ -101,7 +101,7 @@ As mentioned above, [the new JavaScript feature](https://github.com/tc39/proposa
 
 ```js
 function getVariablePosition(source) {
-  const re = /(let|const|var)\s+([a-zA-Z_\$][0-9a-zA-Z_\$]*)/;
+  const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/;
   const match = re.exec(source);
   if (!match) return undefined;
   return match.indices[2];
@@ -118,7 +118,7 @@ The `indices` object also contains a `groups` property, which can be indexed by 
 
 ```js
 function getVariablePosition(source) {
-  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_\$][0-9a-zA-Z_\$]*)/;
+  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_$][0-9a-zA-Z_$]*)/;
   const match = re.exec(source);
   if (!match) return -1;
   return match.indices.groups.id;
