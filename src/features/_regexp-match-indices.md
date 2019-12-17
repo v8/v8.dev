@@ -3,10 +3,10 @@ title: 'RegExp match indices'
 author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), regularly expressing new features'
 avatars:
   - 'maya-lekova'
-date: 2019-12-16
+date: 2019-12-17
 tags:
   - ECMAScript
-description: 'RegExp match indices provide `start` and `end` indices of the matched capture groups.'
+description: 'RegExp match indices provide `start` and `end` indices of each matched capture group.'
 ---
 JavaScript is now equipped with a new regular expression enhancement, called “match indices”. Imagine you want to find invalid variable names in JavaScript code that coincide with reserved words, and output a caret and an “underline” under the variable name, like:
 
@@ -21,12 +21,12 @@ In the example above, `function` is a reserved word and cannot be used as a vari
 function displayError(text, message) {
   const re = /(continue|function|break|for|if)/;
   const match = text.match(re);
-  // index 1 corresponds to the first capture group
+  // Index `1` corresponds to the first capture group.
   const [start, end] = match.indices[1];
-  const error = ' '.repeat(start) + // adjust the caret position
+  const error = ' '.repeat(start) + // Adjust the caret position.
     '^' +
-    '-'.repeat(end - start - 1) +   // append the underline
-    ' ' + message;                  // append the message
+    '-'.repeat(end - start - 1) +   // Append the underline.
+    ' ' + message;                  // Append the message.
   console.log(text);
   console.log(error);
 }
@@ -45,7 +45,7 @@ Read on if you’re interested in how it works in more detail.
 
 ## Motivation
 
-Let’s move to a more involved example and think about how you’d solve the task of parsing a programming language (for instance what the [TypeScript compiler](https://github.com/microsoft/TypeScript/tree/master/src/compiler) does) - first split the input source code into tokens, then give a syntactic structure to those tokens. If the user wrote some syntactically incorrect code, you’d want to present them with a meaningful error, ideally pointing to the location where the problematic code was first encountered. For example, given the following code snippet:
+Let’s move to a more involved example and think about how you’d solve the task of parsing a programming language (for instance what the [TypeScript compiler](https://github.com/microsoft/TypeScript/tree/master/src/compiler) does) — first split the input source code into tokens, then give a syntactic structure to those tokens. If the user wrote some syntactically incorrect code, you’d want to present them with a meaningful error, ideally pointing to the location where the problematic code was first encountered. For example, given the following code snippet:
 
 ```js
 let foo = 42;
@@ -71,7 +71,7 @@ function isIdentifier(name) {
 ```
 
 :::note
-**Note:** A real-world parser could make use of the newly introduced [property escapes in regexes](https://github.com/tc39/proposal-regexp-unicode-property-escapes#other-examples) and use the following regular expression for matching all valid ECMAScript identifiers:
+**Note:** A real-world parser could make use of the newly introduced [property escapes in regexes](https://github.com/tc39/proposal-regexp-unicode-property-escapes#other-examples) and use the following regular expression for matching all valid ECMAScript identifier names:
 
 ```js
 const re = /^(?:[$_\p{ID_Start}])(?:[$_\u200C\u200D\p{ID_Continue}])*$/u;
@@ -91,7 +91,7 @@ function getDeclarationPosition(source) {
 }
 ```
 
-One could use the `index` property on the match object returned by `RegExp.prototype.exec`, which returns the starting position of the whole match. For use cases like the one described above though, you’d often want to use (possibly multiple) capture groups. Until recently, JavaScript didn’t expose the indices where the substrings that capture groups matched begin and end.
+One could use the `index` property on the match object returned by `RegExp.prototype.exec`, which returns the starting position of the whole match. For use cases like the one described above though, you’d often want to use (possibly multiple) capture groups. Until recently, JavaScript didn’t expose the indices where the substrings matched by capture groups begin and end.
 
 ## RegExp match indices explained
 
@@ -107,9 +107,10 @@ function getVariablePosition(source) {
   return match.indices[2];
 }
 getVariablePosition('let foo');
+// → [4, 7]
 ```
 
-If you execute the example from above, it would return the array `[4, 7]` - the [start, end) position of the matched substring from the group with index `2`, and the compiler can print the desired error.
+This example returns the array `[4, 7]`, which is the `[start, end)` position of the matched substring from the group with index `2`. Based on this information, our compiler can now print the desired error.
 
 ## Additional features
 
@@ -117,10 +118,10 @@ The `indices` object also contains a `groups` property, which can be indexed by 
 
 ```js
 function getVariablePosition(source) {
-  const re = /(?<keyword>let|const|var)\s+(?<var_name>[a-zA-Z_\$][0-9a-zA-Z_\$]*)/;
+  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_\$][0-9a-zA-Z_\$]*)/;
   const match = re.exec(source);
   if (!match) return -1;
-  return match.indices.groups['var_name'];
+  return match.indices.groups.id;
 }
 getVariablePosition('let foo');
 ```
