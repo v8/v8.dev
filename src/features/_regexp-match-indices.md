@@ -128,7 +128,7 @@ getVariablePosition('let foo');
 
 ## Support for RegExp match indices
 
-<feature-support chrome="yes https://bugs.chromium.org/p/v8/issues/detail?id=9548"
+<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=9548"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1519483"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202475"
                  nodejs="no"
