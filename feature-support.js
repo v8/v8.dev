@@ -1,13 +1,28 @@
 function describeSupport(input) {
   switch (input) {
     case 'no': {
-      return `<span class="support">no support</span>`;
+      return {
+        className: 'no-support',
+        description: `<span class="support">no support</span>`,
+      };
     }
     case 'yes': {
-      return `<span class="support">supported</span>`;
+      return {
+        className: 'has-support',
+        description: `<span class="support">supported</span>`,
+      };
+    }
+    case 'partial': {
+      return {
+        className: 'partial-support',
+        description: `<span class="support">partially supported</span>`,
+      };
     }
     default: {
-      return `<span class="support">supported since version <span class="version">${input}</span></span>`;
+      return {
+        className: 'has-support',
+        description: `<span class="support">supported since version <span class="version">${input}</span></span>`,
+      };
     }
   }
 }
@@ -32,11 +47,12 @@ function expandFeatureSupport(input) {
     const buf = ['<ul class="feature-support">'];
     for (const [key, value] of Object.entries(groups)) {
       const [version, url] = value.split(' ');
+      const {className, description} = describeSupport(version);
       buf.push(`
-        <li class="environment ${ version === 'no' ? 'no-support' : 'has-support' }${ url ? ' has-link' : ''}">
+        <li class="environment ${ className }${ url ? ' has-link' : ''}">
           ${ url ? `<a href="${ encodeURI(url) }">` : '' }
             <span class="icon ${ key }">${ environmentIdToName(key) }:</span>
-            ${ describeSupport(version) }
+            ${ description }
           ${ url ? '</a>' : '' }
         </li>
       `);

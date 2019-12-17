@@ -30,6 +30,9 @@
 .environment.no-support {
   background: #CCC;
 }
+.environment.partial-support {
+  background: var(--orange);
+}
 .environment.no-support .icon {
   opacity: 0.4;
   filter: var(--icon-no-support-filter);

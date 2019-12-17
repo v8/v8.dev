@@ -24,7 +24,7 @@ A feature without any support would look like this:
 
 For cutting-edge features, it’s common to see mixed support across environments:
 
-<feature-support chrome="no"
+<feature-support chrome="partial"
                  firefox="yes"
                  safari="yes"
                  nodejs="no"
