@@ -19,7 +19,7 @@ In the example above, `function` is a reserved word and cannot be used as a vari
 
 ```js
 function displayError(text, message) {
-  const re = /(continue|function|break|for|if)/;
+  const re = /\b(continue|function|break|for|if)\b/;
   const match = text.match(re);
   // Index `1` corresponds to the first capture group.
   const [start, end] = match.indices[1];
