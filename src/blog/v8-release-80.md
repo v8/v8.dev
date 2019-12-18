@@ -3,7 +3,7 @@ title: 'V8 release v8.0'
 author: 'Leszek Swirski, V8th of his name'
 avatars:
   - 'leszek-swirski'
-date: 2019-12-20
+date: 2019-12-18
 tags:
   - release
 description: 'V8 v8.0 features optional chaining, nullish coalescing, faster higher-order builtins -- oh and 40% less memory use thanks to pointer compression, no big deal. '
