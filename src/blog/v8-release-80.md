@@ -7,7 +7,7 @@ date: 2019-12-18
 tags:
   - release
 description: 'V8 v8.0 features optional chaining, nullish coalescing, faster higher-order builtins -- oh and 40% less memory use thanks to pointer compression, no big deal. '
-tweet: ''
+tweet: '1207323849861279746'
 ---
 
 <!-- Yes, it's an SVG. Please don't ask me how long I spent making it. -->
