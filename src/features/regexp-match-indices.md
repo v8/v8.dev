@@ -7,6 +7,7 @@ date: 2019-12-17
 tags:
   - ECMAScript
 description: 'RegExp match indices provide `start` and `end` indices of each matched capture group.'
+tweet: '1206970814400270338'
 ---
 JavaScript is now equipped with a new regular expression enhancement, called “match indices”. Imagine you want to find invalid variable names in JavaScript code that coincide with reserved words, and output a caret and an “underline” under the variable name, like:
 
