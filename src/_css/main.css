@@ -85,7 +85,7 @@ html, body, fieldset, nav ul, nav ul li, h1, h2, h3 {
   padding: 0;
 }
 html {
-  font: 16px/1.6 sans-serif;
+  font: 100%/1.6 sans-serif;
   color: var(--html-color);
   background: var(--html-background);
 }
@@ -113,7 +113,7 @@ body {
 }
 #header h1 a {
   padding: 1em;
-  font-size: 16px;
+  font-size: 1em;
   position: absolute;
   bottom: 0;
   background: url(/_img/v8-outline.svg) no-repeat center center;
@@ -128,7 +128,7 @@ body {
   color: var(--black);
   font-weight: bold;
   background: rgba(255, 255, 255, .8);
-  font-size: 16px;
+  font-size: 1em;
   margin-right: 1em;
   display: block;
 }
@@ -404,7 +404,7 @@ main nav a {
   border-bottom: 0;
 }
 main .meta {
-  font-size: 14px;
+  font-size: 0.875em;
   margin-top: -0.2em;
 }
 .tag:not(.token) {
