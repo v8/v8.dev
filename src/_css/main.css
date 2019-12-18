@@ -302,6 +302,9 @@ main a:hover code, main a:focus code {
   color: var(--white);
   background-color: var(--darkblue);
 }
+.note pre {
+  width: calc(100% + 1.5 * var(--offset));
+}
 a.bookmark {
   display: none;
 }
@@ -452,6 +455,9 @@ dark-mode-toggle {
   li pre {
     width: calc(100% + 4 * var(--offset));
     left: calc(-2 * var(--offset));
+  }
+  .note pre {
+    width: calc(100% + 2.5 * var(--offset) + 1px);
   }
 }
 
