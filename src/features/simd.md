@@ -39,7 +39,7 @@ WebAssembly SIMD support is prototyped behind a flag in chrome, to try out the S
 
 ### Building C / C++ to target SIMD
 
-WebAssembly’s SIMD support depends on using a recent build of clang with the WebAssembly LLVM backend enabled. Emscripten has support for the WebAssembly SIMD proposal as well. Install, and activate the latest-upstream distribution of emscripten using [emsdk](https://emscripten.org/docs/getting_started/downloads.html) to use the bleeding edge SIMD features.
+WebAssembly’s SIMD support depends on using a recent build of clang with the WebAssembly LLVM backend enabled. Emscripten has support for the WebAssembly SIMD proposal as well. Install and activate the latest-upstream distribution of emscripten using [emsdk](https://emscripten.org/docs/getting_started/downloads.html) to use the bleeding edge SIMD features.
 
 ```
 ./emsdk install latest-upstream
