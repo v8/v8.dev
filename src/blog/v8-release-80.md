@@ -6,7 +6,7 @@ avatars:
 date: 2019-12-18
 tags:
   - release
-description: 'V8 v8.0 features optional chaining, nullish coalescing, faster higher-order builtins -- oh and 40% less memory use thanks to pointer compression, no big deal. '
+description: 'V8 v8.0 features optional chaining, nullish coalescing, faster higher-order builtins — oh and 40% less memory use thanks to pointer compression, no big deal.'
 tweet: '1207323849861279746'
 ---
 
