@@ -23,7 +23,7 @@ The current proposal introduces a new v128 value type, and a number of new opera
 
 * The operations should be well supported across multiple modern architectures.
 
-* Performance wins should be positive across multiple relevant arches within an instruction group.
+* Performance wins should be positive across multiple relevant architectures within an instruction group.
 
 * The chosen set of operations should minimize performance cliffs if any.
 
