@@ -32,7 +32,7 @@ This post provides a preview of some of the highlights in anticipation of the re
 
 ~~We changed all our `void *` to `pv`, reducing source file size by up to 66%.~~
 
-The V8 heap contains a whole sleuth of items, for example floating point values, string characters, compiled code, and tagged values (which represent pointers into the V8 heap or small integers). Upon inspection of the heap, we discovered that these tagged values occupy the majority of the heap!
+The V8 heap contains a whole slew of items, for example floating point values, string characters, compiled code, and tagged values (which represent pointers into the V8 heap or small integers). Upon inspection of the heap, we discovered that these tagged values occupy the majority of the heap!
 
 Tagged values are as big as the system pointer: they are 32 bits wide for 32-bit architectures, and 64 bits in 64-bit architectures. Then, when comparing the 32-bit version with the 64-bit one, we are using twice as much heap memory for every tagged value.
 
