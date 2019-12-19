@@ -113,7 +113,7 @@ body {
 }
 #header h1 a {
   padding: 1em;
-  font-size: 1em;
+  font-size: 1rem;
   position: absolute;
   bottom: 0;
   background: url(/_img/v8-outline.svg) no-repeat center center;
