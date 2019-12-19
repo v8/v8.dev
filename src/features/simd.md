@@ -29,7 +29,7 @@ The current proposal introduces a new v128 value type, and a number of new opera
 
  
 
-The proposal is in active development, both V8, and the toolchain have working prototype implementations for experimentation. As these are prototype implementations, they are subject to change as new operations are added to the proposal.
+The proposal is in active development, both V8 and the toolchain have working prototype implementations for experimentation. As these are prototype implementations, they are subject to change as new operations are added to the proposal.
 
 ## Using WebAssembly SIMD
 
