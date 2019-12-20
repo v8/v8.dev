@@ -378,32 +378,12 @@ Torque generates a distinct type and constant for each of the enum's entries. Th
 inside a namespace that matches the enum's name. Necessary specializations of `FromConstexpr<>` are
 generated to convert from the entry's `constexpr` types to the enum type. The value generated for an entry in the C++ files is `<enum-constexpr>::<entry-name>` where `<enum-constexpr>` is the `constexpr` name generated for the enum. In the above example, those are `LanguageMode::kStrict` and `LanguageMode::kSloppy`.
 
-To summarize, the above example is desugared into something that looks very similar to this:
-
-```torque
-namespace LanguageMode {
-  type kStrict extends Smi;
-  const kStrict: kStrict constexpr 'LanguageMode::kStrict';
-  type kSloppy extends Smi;
-  const kSloppy: kSloppy constexpr 'LanguageMode::kSloppy';
-}
-type LanguageMode = LanguageMode::kStrict | LanguageMode::kSloppy;
-FromConstexpr<LanguageMode, LanguageMode::constexpr kSloppy>(o: LanguageMode::constexpr kSloppy) {
-    return %RawDownCast<LanguageMode>(%FromConstexpr<Smi>(o));
-}
-FromConstexpr<LanguageMode, LanguageMode::constexpr kStrict>(o: LanguageMode::constexpr kStrict) {
-    return %RawDownCast<LanguageMode>(%FromConstexpr<Smi>(o));
-}
-```
-
-Note that `constexpr` is part of the type name and thus goes after the namespace scope.
-
 Torque's enumerations work very well together with the `typeswitch` construct, because the
 values are defined using distinct types:
 
 ```torque
 typeswitch(language_mode) {
-  case (LangugageMode::kStrict): {
+  case (LanguageMode::kStrict): {
     // ...
   }
   case (LanguageMode::kSloppy): {
