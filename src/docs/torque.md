@@ -360,12 +360,14 @@ syntactical structure:
 </code></pre>
 
 A basic example looks like this:
+
 ```torque
 extern enum LanguageMode extends Smi {
   kStrict,
   kSloppy
 }
 ```
+
 This declaration defines a new type `LanguageMode`, where the `extends` clause specifies the underlying
 type, that is the runtime type used to represent a value of the enum. In this example, this is `TNode<Smi>`,
 since this is what the type `Smi` `generates`. A `constexpr LanguageMode` converts to `LanguageMode`
@@ -393,10 +395,12 @@ FromConstexpr<LanguageMode, LanguageMode::constexpr kStrict>(o: LanguageMode::co
     return %RawDownCast<LanguageMode>(%FromConstexpr<Smi>(o));
 }
 ```
+
 Note that `constexpr` is part of the type name and thus goes after the namespace scope.
 
 Torque's enumerations work very well together with the `typeswitch` construct, because the
 values are defined using distinct types:
+
 ```torque
 typeswitch(language_mode) {
   case (LangugageMode::kStrict): {
@@ -407,8 +411,10 @@ typeswitch(language_mode) {
   }
 }
 ```
+
 If the C++ definition of the enum contains more values than those used in `.tq` files, Torque needs to know that. This is done by declaring the enum 'open' by appending a `...` after the last entry. Consider the `ExtractFixedArrayFlag` for example, where only some of the options are available/used from within
 Torque:
+
 ```torque
 enum ExtractFixedArrayFlag constexpr 'CodeStubAssembler::ExtractFixedArrayFlag' {
   kFixedDoubleArrays,
