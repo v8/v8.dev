@@ -82,6 +82,8 @@ Modules are a little different from classic scripts:
 
 - The new static `import` and `export` syntax is only available within modules — it doesn’t work in classic scripts.
 
+- `await` cannot be used as a variable name anywhere in a module - variables in classic scripts can be named `await` outside of async functions.
+
 Because of these differences, *the same JavaScript code might behave differently when treated as a module vs. a classic script*. As such, the JavaScript runtime needs to know which scripts are modules.
 
 ## Using JS modules in the browser { #browser }
