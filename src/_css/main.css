@@ -224,7 +224,6 @@ pre, code, var, kbd, samp {
 pre {
   background: #171717;
   color: #E6E1DC;
-  overflow: auto;
   white-space: pre;
   overflow: auto;
 }
