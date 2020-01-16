@@ -71,6 +71,18 @@ try {
 }
 ```
 
+### Polyfills
+
+You can effectively hold the execution of a static import by `await`-ing a conditional, dynamic import. This is very useful when using polyfills that you only want to load when the browser needs them:
+
+```js
+if (browserNeedsPolyfill()) {
+  await import("./polyfill.mjs");
+}
+
+import "./main.js";
+```
+
 ## Module execution order
 
 One of the biggest changes to JavaScript with top-level `await` is the order of execution of modules in your graph. The JavaScript engine executes modules in [post-order traversal](https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_algorithms/Tree_traversal#Post-order): starting from the left-most subtree of your module graph, modules are evaluated, their bindings are exported, and their siblings are executed, followed by their parents. This algorithm runs recursively until it executes the root of your module graph.
