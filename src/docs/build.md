@@ -28,10 +28,10 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
 
 ## Building V8
 
-1. Make sure that you are in the V8 source directory on the `master` branch.
+1. Make sure that you are in the 'src' source directory on the `master` branch.
 
     ```bash
-    cd /path/to/v8
+    cd /path/to/src
     ```
 
 1. Pull in the latest changes and install any new build dependencies:
@@ -43,13 +43,13 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
 1. Compile the source:
 
     ```bash
-    tools/dev/gm.py x64.release
+    v8/tools/dev/gm.py x64.release
     ```
 
     Or, to compile the source and immediately run the tests:
 
     ```bash
-    tools/dev/gm.py x64.release.check
+    v8/tools/dev/gm.py x64.release.check
     ```
 
     For more information on the `gm.py` helper script and the commands it triggers, see [Building with GN](/docs/build-gn).
