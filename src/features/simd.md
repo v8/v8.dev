@@ -9,25 +9,21 @@ description: 'Bringing vector operations to WebAssembly'
 
 ## Introduction
 
-SIMD stands for Single Instruction, Multiple Data. SIMD instructions are a special class of instructions that exploit data parallelism in applications by simultaneously performing the same operation on multiple data elements. Compute intensive applications like audio/video codecs, image processors, are all examples of applications that take advantage of SIMD instructions to accelerate performance. Most modern architectures support some variants of SIMD instructions. 
+SIMD stands for Single Instruction, Multiple Data. SIMD instructions are a special class of instructions that exploit data parallelism in applications by simultaneously performing the same operation on multiple data elements. Compute intensive applications like audio/video codecs, image processors, are all examples of applications that take advantage of SIMD instructions to accelerate performance. Most modern architectures support some variants of SIMD instructions.
 
 The WebAssembly SIMD proposal defines a portable, performant subset of SIMD operations that are available across most modern architectures. This proposal derived many elements from the [SIMD.js proposal](https://github.com/tc39/ecmascript_simd), which in turn was originally derived from the [Dart SIMD](https://www.researchgate.net/publication/261959129_A_SIMD_programming_model_for_dart_javascriptand_other_dynamically_typed_scripting_languages) specification. The SIMD.js proposal was an API proposed at TC39 with new types and functions for performing SIMD computations, but this was archived in favor of supporting SIMD operations more transparently in WebAssembly. The [WebAssembly SIMD proposal](https://github.com/WebAssembly/simd) was introduced as a way for browsers to take advantage of the data level parallelism using the underlying hardware.
 
 ## WebAssembly SIMD Proposal
 
-The high level goal of the WebAssembly SIMD proposal is to introduce vector operations to the WebAssembly Specification, in a way that guarantees portable performance. 
+The high level goal of the WebAssembly SIMD proposal is to introduce vector operations to the WebAssembly Specification, in a way that guarantees portable performance.
 
-The set of SIMD instructions is large, and varied across architectures. The set of operations included in the WebAssembly SIMD proposal consist of operations that are well supported on a wide variety of platforms, and are proven to be performant. To this end, the current proposal is limited to standardizing Fixed-Width 128-bit SIMD operations. 
+The set of SIMD instructions is large, and varied across architectures. The set of operations included in the WebAssembly SIMD proposal consist of operations that are well supported on a wide variety of platforms, and are proven to be performant. To this end, the current proposal is limited to standardizing Fixed-Width 128-bit SIMD operations.
 
 The current proposal introduces a new v128 value type, and a number of new operations that operate on this type. The criteria used to determine these operations are:
 
-* The operations should be well supported across multiple modern architectures.
-
-* Performance wins should be positive across multiple relevant architectures within an instruction group.
-
-* The chosen set of operations should minimize performance cliffs if any.
-
- 
+- The operations should be well supported across multiple modern architectures.
+- Performance wins should be positive across multiple relevant architectures within an instruction group.
+- The chosen set of operations should minimize performance cliffs if any.
 
 The proposal is in active development, both V8 and the toolchain have working prototype implementations for experimentation. As these are prototype implementations, they are subject to change as new operations are added to the proposal.
 
@@ -41,7 +37,7 @@ WebAssembly SIMD support is prototyped behind a flag in chrome, to try out the S
 
 WebAssembly’s SIMD support depends on using a recent build of clang with the WebAssembly LLVM backend enabled. Emscripten has support for the WebAssembly SIMD proposal as well. Install and activate the latest-upstream distribution of emscripten using [emsdk](https://emscripten.org/docs/getting_started/downloads.html) to use the bleeding edge SIMD features.
 
-```sh
+```bash
 ./emsdk install latest-upstream
 
 ./emsdk activate latest-upstream
@@ -49,7 +45,7 @@ WebAssembly’s SIMD support depends on using a recent build of clang with the W
 
 There are a couple of different ways to enable generating SIMD code when porting your application to use SIMD. Once the latest upstream emscripten version has been installed, compile using emscripten, and pass the `-msimd128` flag to enable SIMD.
 
-```sh
+```bash
 emcc -msimd128 -O3 foo.c -o foo.js
 ```
 
@@ -117,7 +113,7 @@ This manually rewritten code assumes that the input and output arrays are aligne
 
 ## Compelling use cases
 
-The WebAssembly SIMD proposal seeks to accelerate high compute applications like audio/video codecs, image processing applications, cryptographic applications, etc. Currently WebAssembly SIMD is experimentally supported in widely used open source projects like [Halide](https://github.com/halide/Halide/blob/master/README_webassembly.md), [OpenCV.js](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html), and [XNNPACK](https://github.com/google/XNNPACK). 
+The WebAssembly SIMD proposal seeks to accelerate high compute applications like audio/video codecs, image processing applications, cryptographic applications, etc. Currently WebAssembly SIMD is experimentally supported in widely used open source projects like [Halide](https://github.com/halide/Halide/blob/master/README_webassembly.md), [OpenCV.js](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html), and [XNNPACK](https://github.com/google/XNNPACK).
 
 Some interesting demos come from the [MediaPipe project](https://github.com/google/mediapipe) by the Google Research team.
 
@@ -125,27 +121,26 @@ As per their description, MediaPipe is a framework for building multimodal (eg. 
 
 One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a following hand-tracking system. Without SIMD, you can get only around 3 frames per second on a modern laptop, while with SIMD enabled you get a much smoother experience at 15-16 frames per second.
 
-![](/src/_img/simd/handgif.gif) 
+![Hand tracking](/src/_img/simd/handgif.gif)
 
 Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
 
 Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
-![](/src/_img/simd/credit_card.gif)
+![Card reading](/src/_img/simd/credit_card.gif)
 
-Card Reading
+Card reading
 
-![](/src/_img/simd/invisibilityCloak.gif)
+![Invisibility cloak](/src/_img/simd/invisibilityCloak.gif)
 
 Invisibility cloak
 
-![](/src/_img/simd/emotionRecognizer.gif)
+![Emoji replacement](/src/_img/simd/emotionRecognizer.gif)
 
 Emoji replacement
 
-
 ## Future work
 
-The Current SIMD proposal is in Phase 2, so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations. 
+The Current SIMD proposal is in Phase 2, so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations.
 
-To try out current experimental support, use the latest-upstream emscripten toolchain, and a recent Chrome Canary as detailed [above](#using-webassembly-simd). Please note that as the support is experimental, we are actively working on feature completion and performance so some breakage, or performance inconsistencies are possible. 
+To try out current experimental support, use the latest-upstream emscripten toolchain, and a recent Chrome Canary as detailed [above](#using-webassembly-simd). Please note that as the support is experimental, we are actively working on feature completion and performance so some breakage, or performance inconsistencies are possible.
