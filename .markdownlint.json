@@ -21,7 +21,8 @@
       "kbd",
       "pre",
       "sub",
-      "sup"
+      "sup",
+      "video"
     ]
   },
   "MD040": false
