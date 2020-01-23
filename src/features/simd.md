@@ -121,21 +121,21 @@ As per their description, MediaPipe is a framework for building multimodal (eg. 
 
 One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a following hand-tracking system. Without SIMD, you can get only around 3 frames per second on a modern laptop, while with SIMD enabled you get a much smoother experience at 15-16 frames per second.
 
-![Hand tracking](/src/_img/simd/handgif.gif)
+![Hand tracking](/_img/simd/handgif.gif)
 
 Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
 
 Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
-![Card reading](/src/_img/simd/credit_card.gif)
+![Card reading](/_img/simd/credit_card.gif)
 
 Card reading
 
-![Invisibility cloak](/src/_img/simd/invisibilityCloak.gif)
+![Invisibility cloak](/_img/simd/invisibilityCloak.gif)
 
 Invisibility cloak
 
-![Emoji replacement](/src/_img/simd/emotionRecognizer.gif)
+![Emoji replacement](/_img/simd/emotionRecognizer.gif)
 
 Emoji replacement
 
