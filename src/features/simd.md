@@ -1,5 +1,5 @@
 ---
-title: 'Enable High Performance Workloads using WebAssembly SIMD, and V8'
+title: 'Enable high-performance workloads using WebAssembly SIMD and V8'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52))'
 date: 2019-17-12
 tags:
