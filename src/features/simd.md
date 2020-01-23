@@ -127,9 +127,7 @@ One of the most visually appealing demos where it’s easy to observe the differ
 
 ![](/src/_img/simd/handgif.gif) 
 
-[https://pursuit.page.link/MediaPipeHandTrackingSimd](https://pursuit.page.link/MediaPipeHandTrackingSimd)
-
-Visit the link above in Chrome Canary with SIMD enabled to try it!
+Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
 
 Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
@@ -150,4 +148,4 @@ Emoji replacement
 
 The Current SIMD proposal is in Phase 2, so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations. 
 
-To try out current experimental support, use the latest-upstream emscripten toolchain, and a recent Chrome Canary as detailed [above](#using-webassembly-simd).
+To try out current experimental support, use the latest-upstream emscripten toolchain, and a recent Chrome Canary as detailed [above](#using-webassembly-simd). Please note that as the support is experimental, we are actively working on feature completion and performance so some breakage, or performance inconsistencies are possible. 
