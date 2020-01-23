@@ -1,7 +1,7 @@
 ---
 title: 'Enable high-performance workloads using WebAssembly SIMD and V8'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52))'
-date: 2019-17-12
+date: 2019-12-17
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
@@ -61,13 +61,9 @@ For example, consider the following function that multiplies the elements of two
 
 ```cpp
 void multiply_arrays(int* out, int* in_a, int* in_b, int size) {
-
     for (int i = 0; i < size; i++) {
-
         out[i] = in_a[i] * in_b[i];
-
     }
-
 }
 ```
 
@@ -75,19 +71,12 @@ Without passing the -msimd128 flag, the compiler emits this WebAssembly loop:
 
 ```wasm
 (loop
-
     (i32.store
-
         ... get address in `out` …
-
         (i32.mul
-
             (i32.load ... get address in `in_a` ...)
-
             (i32.load ... get address in `in_b` ...)
-
     ...
-
 )
 ```
 
@@ -95,21 +84,13 @@ But when the -msimd128 flag is used, the autovectorizer will turn this into code
 
 ```wasm
 (loop
-
     (v128.store align=4
-
         ... get address in `out` ...
-
         (i32x4.mul
-
                (v128.load align=4 ... get address in `in_a` ...)
-
                (v128.load align=4 ... get address in `in_b` ...)
-
     ...
-
     )
-
 )
 ```
 
@@ -123,29 +104,22 @@ As an example, here is the same function from before manually rewritten to use t
 #include <wasm_simd128.h>
 
 void multiply_arrays(int* out, int* in_a, int* in_b, int size) {
-
     for (int i = 0; i < size; i += 4) {
-
         v128_t a = wasm_v128_load(&in_a[i]);
-
         v128_t b = wasm_v128_load(&in_b[i]);
-
         v128_t prod = wasm_i32x4_mul(a, b);
-
         wasm_v128_store(&out[i], prod);
-
     }
-
 }
 ```
 
 This manually rewritten code assumes that the input and output arrays are aligned and do not alias and that size is a multiple of four. The autovectorizer cannot make these assumptions and has to generate extra code to handle the cases where they are not true, so hand-written SIMD code often ends up being smaller than autovectorized SIMD code.
 
-## Compelling Use Cases
+## Compelling use cases
 
-The WebAssembly SIMD proposal seeks to accelerate high compute applications like audio/video codecs, image processing applications, cryptographic applications, etc. Currently WebAssembly SIMD is experimentally supported in widely used open source projects like [Halide]([https://github.com/halide/Halide/blob/master/README_webassembly.md](https://github.com/halide/Halide/blob/master/README_webassembly.md)), [OpenCV.js]([https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html)), and [XNNPACK]([https://github.com/google/XNNPACK](https://github.com/google/XNNPACK)). [TODO: add links]
+The WebAssembly SIMD proposal seeks to accelerate high compute applications like audio/video codecs, image processing applications, cryptographic applications, etc. Currently WebAssembly SIMD is experimentally supported in widely used open source projects like [Halide](https://github.com/halide/Halide/blob/master/README_webassembly.md), [OpenCV.js](https://docs.opencv.org/3.4/d5/d10/tutorial_js_root.html), and [XNNPACK](https://github.com/google/XNNPACK). 
 
-Some interesting demos come from the [MediaPipe project]([https://github.com/google/mediapipe](https://github.com/google/mediapipe)) by the Google Research team.
+Some interesting demos come from the [MediaPipe project](https://github.com/google/mediapipe) by the Google Research team.
 
 As per their description, MediaPipe is a framework for building multimodal (eg. video, audio, any time series data) applied ML pipelines. And they have a [Web version](mediapipe.page.link/web), too!
 
@@ -157,7 +131,7 @@ One of the most visually appealing demos where it’s easy to observe the differ
 
 Visit the link above in Chrome Canary with SIMD enabled to try it!
 
-Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by link bit.ly/opencv-camera-demos, or you can check out the pre-recorded versions below:
+Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
 ![image alt text](/src/_img/simd/image_3.gif)
 
@@ -172,7 +146,7 @@ Invisibility cloak
 Emoji replacement
 
 
-## Future Work
+## Future work
 
 The Current SIMD proposal is in Phase 2, so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations. 
 
