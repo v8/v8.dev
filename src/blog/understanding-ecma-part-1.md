@@ -14,7 +14,7 @@ tweet: ''
 
 ## Preface
 
-Even if you know JavaScript, reading its language specification, the ECMAScript spec, can be pretty daunting. At least that's how I felt when I started reading it for the first time. Reading the spec from the start doesn't help either, as the spec is not designed to be read in that order, and notations are not explained before they occur.
+Even if you know JavaScript, reading its language specification, [ECMAScript Language specification, or the ECMAScript spec for short](https://tc39.es/ecma262/), can be pretty daunting. At least that's how I felt when I started reading it for the first time.
 
 Let's start with a concrete example and walk through the spec to understand it. The following code demonstrates usage of Object.prototype.hasOwnProperty:
 
@@ -58,9 +58,9 @@ Let's find out!
 
 ## ECMAScript Language Types and ECMAScript Specification Types
 
-Let's start with something that looks familiar. The spec uses values such as undefined, true and false, which you already know from JavaScript. They all are **ECMAScript language values**, values of **ECMAScript language types** which the spec also defines.
+Let's start with something that looks familiar. The spec uses values such as undefined, true and false, which we already know from JavaScript. They all are **ECMAScript language values**, values of **ECMAScript language types** which the spec also defines.
 
-The spec also uses ECMAScript language values internally, for example, an internal record might contain a field whose possible values are true and false.
+The spec also uses ECMAScript language values internally, for example, an internal data type might contain a field whose possible values are true and false.
 
 [Spec: ECMAScript language types](https://tc39.es/ecma262/#sec-ecmascript-language-types)
 
@@ -102,7 +102,7 @@ Each internal method delegates to a similarly-named abstract operation:
 
 _OrdinaryGetOwnProperty_ is not an internal method, since it's not associated with any object; instead, the object it operates on is passed as a parameter.
 
-_OrdinaryGetOwnProperty_ is called "ordinary" since it operates on ordinary objects. EcmaScript objects can be either **ordinary** or **exotic**. Ordinary objects must have the default behavior for a set of methods called **essential internal methods**. If an object deviates from the default behavior, it's exotic.
+_OrdinaryGetOwnProperty_ is called "ordinary" since it operates on ordinary objects. ECMAScript objects can be either **ordinary** or **exotic**. Ordinary objects must have the default behavior for a set of methods called **essential internal methods**. If an object deviates from the default behavior, it's exotic.
 
 The most well-known exotic object is the _Array_, since its length property behaves in a non-default way: setting the length property can remove elements from the _Array_.
 
@@ -228,5 +228,5 @@ Now we have built the understanding needed for reading the spec for simple metho
 ## Useful links
 
 
-[How to Read the ECMAScript Specification](https://timothygu.me/es-howto/)
+[How to Read the ECMAScript Specification](https://timothygu.me/es-howto/): A tutorial which covers much of the material covered in this post, from a slightly different angle.
 
