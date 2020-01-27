@@ -16,7 +16,7 @@ tweet: ''
 
 Even if you know JavaScript, reading its language specification, [ECMAScript Language specification, or the ECMAScript spec for short](https://tc39.es/ecma262/), can be pretty daunting. At least that's how I felt when I started reading it for the first time.
 
-Let's start with a concrete example and walk through the spec to understand it. The following code demonstrates usage of Object.prototype.hasOwnProperty:
+Let's start with a concrete example and walk through the spec to understand it. The following code demonstrates usage of `Object.prototype.hasOwnProperty`:
 
 ```javascript
 let o = {'foo': 1};
@@ -24,9 +24,9 @@ o.hasOwnProperty('foo'); // true
 o.hasOwnProperty('bar'); // false
 ```
 
-In the example, _o_ doesn't have a property called _hasOwnProperty_, so we walk up the prototype chain and look for it. We find it in _o_'s prototype, which is _Object.prototype_.
+In the example, `o` doesn't have a property called `hasOwnProperty`, so we walk up the prototype chain and look for it. We find it in `o`'s prototype, which is `Object.prototype`.
 
-When trying to find out how _Object.prototype.hasOwnProperty_ is defined, I bumped into pseudocode-like descriptions like this:
+When trying to find out how `Object.prototype.hasOwnProperty` is defined, I bumped into pseudocode-like descriptions like this:
 
 > Object.prototype.hasOwnProperty(V)
 >
@@ -84,9 +84,9 @@ Internal slots and methods are used in the algorithms described by the spec. Int
 
 [Spec: Object internal methods and internal slots](https://tc39.es/ecma262/#sec-object-internal-methods-and-internal-slots)
 
-For example, every JavaScript object has an internal slot \[\[Prototype\]\] and an internal method \[\[GetOwnProperty\]\].
+For example, every JavaScript object has an internal slot `[[Prototype]]` and an internal method `[[GetOwnProperty]]`.
 
-Internal slots and methods are not accessible from JavaScript, for example, you cannot access _o.\[\[Prototype\]\]_ or call _o.\[\[GetOwnProperty\]\]()_. A JavaScript engine can implement them for their own internal use, but doesn't have to.
+Internal slots and methods are not accessible from JavaScript, for example, you cannot access `o.[[Prototype]]` or call `o.[[GetOwnProperty]]()`. A JavaScript engine can implement them for their own internal use, but doesn't have to.
 
 Each internal method delegates to a similarly-named abstract operation:
 
@@ -100,11 +100,11 @@ Each internal method delegates to a similarly-named abstract operation:
 
 (We'll find out what the exclamation mark means in the next chapter.)
 
-_OrdinaryGetOwnProperty_ is not an internal method, since it's not associated with any object; instead, the object it operates on is passed as a parameter.
+`OrdinaryGetOwnProperty` is not an internal method, since it's not associated with any object; instead, the object it operates on is passed as a parameter.
 
-_OrdinaryGetOwnProperty_ is called "ordinary" since it operates on ordinary objects. ECMAScript objects can be either **ordinary** or **exotic**. Ordinary objects must have the default behavior for a set of methods called **essential internal methods**. If an object deviates from the default behavior, it's exotic.
+`OrdinaryGetOwnProperty` is called "ordinary" since it operates on ordinary objects. ECMAScript objects can be either **ordinary** or **exotic**. Ordinary objects must have the default behavior for a set of methods called **essential internal methods**. If an object deviates from the default behavior, it's exotic.
 
-The most well-known exotic object is the _Array_, since its length property behaves in a non-default way: setting the length property can remove elements from the _Array_.
+The most well-known exotic object is the `Array`, since its length property behaves in a non-default way: setting the length property can remove elements from the `Array`.
 
 Essential internal methods are the methods listed [here](https://tc39.es/ecma262/#table-5).
 
@@ -128,9 +128,9 @@ A Completion Record has three fields:
 
 Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it's implicitly wrapped into a Completion Record with the type "normal" (see [Implicit Completion Values](https://www.ecma-international.org/ecma-262/index.html#sec-implicit-completion-values)).
 
-If an algorithm throws an exception, it means returning a Completion Record with [[Type]] throw whose [[Value]] is the exception object. We'll ignore the break, continue and return types for now.
+If an algorithm throws an exception, it means returning a Completion Record with `[[Type]]` `throw` whose `[[Value]]` is the exception object. We'll ignore the `break`, `continue` and `return` types for now.
 
-_ReturnIfAbrupt(argument)_ means taking the following steps:
+`ReturnIfAbrupt(argument)` means taking the following steps:
 
 > 1. If argument is abrupt, return argument
 > 2. Set argument to argument.\[\[Value\]\]
@@ -139,27 +139,25 @@ That is, we inspect a Completion Record; if it's an abrupt completion, we return
 
 [Spec: ReturnIfAbrupt](https://tc39.es/ecma262/#sec-returnifabrupt)
 
-_ReturnIfAbrupt_ might look like a function call, but it's not. It causes the function where _ReturnIfAbrupt()_ occurs to return, not the "ReturnIfAbrupt" function itself. It behaves more like a macro in C-like languages.
+`ReturnIfAbrupt` might look like a function call, but it's not. It causes the function where `ReturnIfAbrupt()` occurs to return, not the `ReturnIfAbrupt` function itself. It behaves more like a macro in C-like languages.
 
-_ReturnIfAbrupt_ can be used like this:
+`ReturnIfAbrupt` can be used like this:
 
-> let obj be Foo()
-> // obj is a Completion Record
-> ReturnIfAbrupt(obj)
-> // If we're still here, obj is now the value extracted from the Completion Record
-> Bar(obj)
+> 1. Let obj be Foo() // obj is a Completion Record
+> 2. ReturnIfAbrupt(obj)
+> 3. Bar(obj) // If we're still here, obj is now the value extracted from the Completion Record
 
-And now the question mark comes into play: ? Foo() is equivalent to _ReturnIfAbrupt(Foo())_.
+And now the question mark comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`.
 
-Similarly, Let val be ! Foo() is equivalent to:
+Similarly, `Let val be ! Foo()` is equivalent to:
 
-> let val be Foo()
-> Assert: val is not an abrupt completion
-> Set val to val.\[\[Value\]\].
+> 1. Let val be Foo()
+> 2. Assert: val is not an abrupt completion
+> 3. Set val to val.\[\[Value\]\].
 
 [Spec: ReturnIfAbrupt shorthands](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands)
 
-Using this knowledge, we can rewrite _Object.prototype.hasOwnProperty_ like this:
+Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this:
 
 > Object.prototype.hasOwnProperty(P)
 >
@@ -174,7 +172,7 @@ Using this knowledge, we can rewrite _Object.prototype.hasOwnProperty_ like this
 > 9. Let temp be temp.\[\[Value\]\]
 > 9. Return NormalCompletion(temp)
 
-and _HasOwnProperty_ like this:
+and `HasOwnProperty` like this:
 
 > HasOwnProperty(O, P)
 >
@@ -186,7 +184,7 @@ and _HasOwnProperty_ like this:
 > 6. If desc is undefined, return NormalCompletion(false).
 > 7. Return NormalCompletion(true).
 
-We can also rewrite the _\[\[GetOwnProperty\]\]_ internal method without the exclamation mark like this:
+We can also rewrite the `[[GetOwnProperty]]` internal method without the exclamation mark like this:
 
 > O.\[\[GetOwnProperty\]\]
 >
@@ -195,22 +193,22 @@ We can also rewrite the _\[\[GetOwnProperty\]\]_ internal method without the exc
 > 3. Let temp be temp.\[\[Value\]\]
 > 4. Return NormalCompletion(temp)
 
-Here we assume that _temp_ is a brand new temporary variable which doesn't collide with anything else.
+Here we assume that `temp` is a brand new temporary variable which doesn't collide with anything else.
 
-We've also used the knowledge that when a return statement returns something else than a Completion Record, it's implicitly wrapped inside a NormalCompletion.
+We've also used the knowledge that when a return statement returns something else than a Completion Record, it's implicitly wrapped inside a `NormalCompletion`.
 
 ### Side track: Return ? Foo()
 
-The spec uses the notation "Return ? Foo()" - why the question mark?
+The spec uses the notation `Return ? Foo()` - why the question mark?
 
-Return ? Foo() expands to:
+`Return ? Foo()` expands to:
 
 > 1. Let temp be Foo()
 > 2. If temp is an abrupt completion, return temp
 > 3. Set temp to temp.[[Value]]
 > 4. Return NormalCompletion(temp)
 
-Which is the same as "Return Foo()"; it behaves the same way for both abrupt and normal completions.
+Which is the same as `Return Foo()`; it behaves the same way for both abrupt and normal completions.
 
 ## Asserts
 
