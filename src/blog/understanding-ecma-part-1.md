@@ -19,7 +19,7 @@ Even if you know JavaScript, reading its language specification, [ECMAScript Lan
 Let's start with a concrete example and walk through the spec to understand it. The following code demonstrates usage of `Object.prototype.hasOwnProperty`:
 
 ```javascript
-let o = {'foo': 1};
+const o = {'foo': 1};
 o.hasOwnProperty('foo'); // true
 o.hasOwnProperty('bar'); // false
 ```
@@ -216,15 +216,13 @@ Asserts in the spec assert invariant conditions of the algorithms. They are adde
 
 ## Moving on
 
-Now we have built the understanding needed for reading the spec for simple methods and abstract operations like Object.prototype.hasOwnProperty and HasOwnProperty. They still delegate to other abstract operations, but based on this blog post you should be able to figure out what they do. You'll need to find out about Property Descriptors, which is just another ECMAScript specification type.
+Now we have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We'll need to find out about Property Descriptors, which is just another ECMAScript specification type.
 
 <figure>
   <img src="/_img/understanding-ecma-part-1-1.svg" height="306" width="1082" alt="Function call graph starting from Object.prototype.hasOwnProperty">
 </figure>
 
-
 ## Useful links
-
 
 [How to Read the ECMAScript Specification](https://timothygu.me/es-howto/): A tutorial which covers much of the material covered in this post, from a slightly different angle.
 
