@@ -1,7 +1,7 @@
 ---
-title: 'Enable high-performance workloads using WebAssembly SIMD and V8'
+title: ' WebAssembly SIMD: Enable Fast, Parallel applications'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52))'
-date: 2019-12-17
+date: 2020-01-28
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
@@ -117,7 +117,7 @@ The WebAssembly SIMD proposal seeks to accelerate high compute applications like
 
 Some interesting demos come from the [MediaPipe project](https://github.com/google/mediapipe) by the Google Research team.
 
-As per their description, MediaPipe is a framework for building multimodal (eg. video, audio, any time series data) applied ML pipelines. And they have a [Web version](mediapipe.page.link/web), too!
+As per their description, MediaPipe is a framework for building multimodal (eg. video, audio, any time series data) applied ML pipelines. And they have a [Web version](https://mediapipe.page.link/web), too!
 
 One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a following hand-tracking system. Without SIMD, you can get only around 3 frames per second on a modern laptop, while with SIMD enabled you get a much smoother experience at 15-16 frames per second.
 
@@ -127,7 +127,7 @@ One of the most visually appealing demos where it’s easy to observe the differ
 
 Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
 
-Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
+Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](https://bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
 <figure>
   <video autoplay muted playsinline loop src="/_img/simd/credit_card.mp4"></video>
