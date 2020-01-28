@@ -1,5 +1,5 @@
 ---
-title: ' WebAssembly SIMD: Enable Fast, Parallel applications'
+title: 'Fast, parallel applications with WebAssembly SIMD'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52))'
 date: 2020-01-28
 tags:
