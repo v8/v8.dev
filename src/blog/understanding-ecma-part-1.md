@@ -56,15 +56,15 @@ But what's an "abstract operation"? What are the things inside \[\[ \]\]? Why is
 
 Let's find out!
 
-## ECMAScript Language Types and ECMAScript Specification Types
+## Language Types and Specification Types
 
-Let's start with something that looks familiar. The spec uses values such as undefined, true and false, which we already know from JavaScript. They all are **ECMAScript language values**, values of **ECMAScript language types** which the spec also defines.
+Let's start with something that looks familiar. The spec uses values such as undefined, true, and false, which we already know from JavaScript. They all are **language values**, values of **language types** which the spec also defines.
 
-The spec also uses ECMAScript language values internally, for example, an internal data type might contain a field whose possible values are true and false.
+The spec also uses language values internally, for example, an internal data type might contain a field whose possible values are true and false.
 
 [Spec: ECMAScript language types](https://tc39.es/ecma262/#sec-ecmascript-language-types)
 
-**ECMAScript specification types** are types that occur only in the ECMAScript spec, but not in the JavaScript language, and which might or might not occur as internal types in a JavaScript engine. In this blog post, we'll get to know the ECMAScript specification type _Record_ (and its subtype _Completion Record_).
+In addition to language types, the spec also uses **specification types**, which are types that occur only in the spec, but not in the JavaScript language. They might or might not occur as internal types in a JavaScript engine. In this blog post, we'll get to know the specification type _Record_ (and its subtype _Completion Record_).
 
 [Spec: ECMAScript specification types](https://tc39.es/ecma262/#sec-ecmascript-specification-types)
 
@@ -78,7 +78,7 @@ The spec also uses ECMAScript language values internally, for example, an intern
 
 **Internal slots** and **internal methods** use names enclosed in \[\[ \]\].
 
-Internal slots are (assumed) data members (of a JavaScript object or a spec-internal data type) and internal methods are (assumed) member functions (of a JavaScript object or a spec-internal data type).
+Internal slots are data members (of a JavaScript object or a spec-internal data type) and internal methods are member functions (of a JavaScript object or a spec-internal data type).
 
 Internal slots and methods are used in the algorithms described by the spec. Internal slots are used for storing the state of the object, and internal methods are functions associated with the object.
 
@@ -118,11 +118,13 @@ Again, the Completion Record is defined only for spec purposes. A JavaScript eng
 
 A Completion Record has three fields:
 
+:::table-wrapper
 | Name | Description |
 --- | ---
-| \[\[Type\]\] | One of: normal, break, continue, return, or throw. All other types except "normal" are referred to as "abrupt completions".|
-| \[\[Value\]\] | the value that was produced when the completion occurred, e.g., the return value of a function or the exception (if one is thrown)|
-| \[\[Target\]\] | used for directed control transfers (ignoring it for this blog post)|
+| `[[Type]]` | One of: normal, break, continue, return, or throw. All other types except "normal" are referred to as "abrupt completions".|
+| `[[Value]]` | The value that was produced when the completion occurred, for example, the return value of a function or the exception (if one is thrown).|
+| `[[Target]]` | Used for directed control transfers (ignoring it for this blog post).|
+:::
 
 [Spec: Completion Record](https://tc39.es/ecma262/#sec-completion-record-specification-type)
 
