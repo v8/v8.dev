@@ -26,29 +26,29 @@ o.hasOwnProperty('bar'); // false
 
 In the example, `o` doesn't have a property called `hasOwnProperty`, so we walk up the prototype chain and look for it. We find it in `o`'s prototype, which is `Object.prototype`.
 
-When trying to find out how `Object.prototype.hasOwnProperty` is defined, I bumped into pseudocode-like descriptions like this:
+To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocode-like descriptions like this:
 
-> Object.prototype.hasOwnProperty(V)
+> `Object.prototype.hasOwnProperty(V)`
 >
-> When the hasOwnProperty method is called with argument V, the following steps are taken:
+> When the hasOwnProperty method is called with argument `V`, the following steps are taken:
 >
-> 1. Let P be **?** ToPropertyKey(V).
-> 2. Let O be **?** ToObject(this value).
-> 3. Return **?** HasOwnProperty(O, P).
+> 1. Let `P` be `? ToPropertyKey(V)`.
+> 2. Let `O` be `? ToObject(this value)`.
+> 3. Return `? HasOwnProperty(O, P)`.
 
 [Spec: Object.prototype.hasOwnProperty](https://tc39.es/ecma262#sec-object.prototype.hasownproperty)
 
 and
 
-> HasOwnProperty(O, P)
+> `HasOwnProperty(O, P)`
 >
->The **abstract operation** HasOwnProperty is used to determine whether an object has an own property with the specified property key. A Boolean value is returned. The operation is called with arguments O and P where O is the object and P is the property key. This abstract operation performs the following steps:
+>The abstract operation `HasOwnProperty` is used to determine whether an object has an own property with the specified property key. A Boolean value is returned. The operation is called with arguments `O` and `P` where `O` is the object and `P` is the property key. This abstract operation performs the following steps:
 >
-> 1. **Assert**: Type(O) is Object.
-> 2. **Assert**: IsPropertyKey(P) is true.
-> 3. Let desc be **?** O.**\[\[GetOwnProperty\]\]**(P).
-> 4. If desc is undefined, return false.
-> 5. Return true.
+> 1. Assert: `Type(O)` is `Object`.
+> 2. Assert: `IsPropertyKey(P)` is `true`.
+> 3. Let `desc` be `? O.[[GetOwnProperty]](P)`.
+> 4. If `desc` is `undefined`, return `false`.
+> 5. Return `true`.
 
 [Spec: HasOwnProperty](https://tc39.es/ecma262#sec-hasownproperty)
 
@@ -58,9 +58,9 @@ Let's find out!
 
 ## Language Types and Specification Types
 
-Let's start with something that looks familiar. The spec uses values such as undefined, true, and false, which we already know from JavaScript. They all are **language values**, values of **language types** which the spec also defines.
+Let's start with something that looks familiar. The spec uses values such as `undefined`, `true`, and `false`, which we already know from JavaScript. They all are **language values**, values of **language types** which the spec also defines.
 
-The spec also uses language values internally, for example, an internal data type might contain a field whose possible values are true and false.
+The spec also uses language values internally, for example, an internal data type might contain a field whose possible values are `true` and `false`. However, JavaScript engines typically don't use language values internally. For example, if the JavaScript engine is written in C++, it would typically use the C++ `true` and `false` (and not its internal representations of the JavaScript `true` and `false`) in its internal data types.
 
 [Spec: ECMAScript language types](https://tc39.es/ecma262/#sec-ecmascript-language-types)
 
@@ -78,7 +78,7 @@ In addition to language types, the spec also uses **specification types**, which
 
 **Internal slots** and **internal methods** use names enclosed in \[\[ \]\].
 
-Internal slots are data members (of a JavaScript object or a spec-internal data type) and internal methods are member functions (of a JavaScript object or a spec-internal data type).
+Internal slots are data members (of a JavaScript object or a specification type) and internal methods are member functions (of a JavaScript object or a specification type).
 
 Internal slots and methods are used in the algorithms described by the spec. Internal slots are used for storing the state of the object, and internal methods are functions associated with the object.
 
@@ -86,15 +86,15 @@ Internal slots and methods are used in the algorithms described by the spec. Int
 
 For example, every JavaScript object has an internal slot `[[Prototype]]` and an internal method `[[GetOwnProperty]]`.
 
-Internal slots and methods are not accessible from JavaScript, for example, you cannot access `o.[[Prototype]]` or call `o.[[GetOwnProperty]]()`. A JavaScript engine can implement them for their own internal use, but doesn't have to.
+Internal slots and methods are not accessible from JavaScript. For example, you cannot access `o.[[Prototype]]` or call `o.[[GetOwnProperty]]()`. A JavaScript engine can implement them for their own internal use, but doesn't have to.
 
-Each internal method delegates to a similarly-named abstract operation:
+Sometimes internal methods delegate to similarly-named abstract operations, such as in the case of ordinary objects' `[[GetOwnProperty]]:`
 
-> \[\[GetOwnProperty\]\](P)
+> `[[GetOwnProperty]](P)`
 >
-> When the \[\[GetOwnProperty\]\] internal method of O is called with property key P, the following steps are taken:
+> When the `[[GetOwnProperty]]` internal method of `O` is called with property key `P`, the following steps are taken:
 >
-> Return ! OrdinaryGetOwnProperty(O, P).
+> Return `! OrdinaryGetOwnProperty(O, P)`.
 
 [Spec: \[\[GetOwnProperty\]\]](https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots-getownproperty-p)
 
@@ -121,21 +121,21 @@ A Completion Record has three fields:
 :::table-wrapper
 | Name | Description |
 --- | ---
-| `[[Type]]` | One of: normal, break, continue, return, or throw. All other types except "normal" are referred to as "abrupt completions".|
+| `[[Type]]` | One of: `normal`, `break`, `continue`, `return`, or `throw`. All other types except `normal` are referred to as **abrupt completions**.|
 | `[[Value]]` | The value that was produced when the completion occurred, for example, the return value of a function or the exception (if one is thrown).|
-| `[[Target]]` | Used for directed control transfers (ignoring it for this blog post).|
+| `[[Target]]` | Used for directed control transfers (not relevant for this blog post).|
 :::
 
 [Spec: Completion Record](https://tc39.es/ecma262/#sec-completion-record-specification-type)
 
-Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it's implicitly wrapped into a Completion Record with the type "normal" (see [Implicit Completion Values](https://www.ecma-international.org/ecma-262/index.html#sec-implicit-completion-values)).
+Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it's implicitly wrapped into a Completion Record with the type `normal` (see [Implicit Completion Values](https://www.ecma-international.org/ecma-262/index.html#sec-implicit-completion-values)).
 
 If an algorithm throws an exception, it means returning a Completion Record with `[[Type]]` `throw` whose `[[Value]]` is the exception object. We'll ignore the `break`, `continue` and `return` types for now.
 
 `ReturnIfAbrupt(argument)` means taking the following steps:
 
-> 1. If argument is abrupt, return argument
-> 2. Set argument to argument.\[\[Value\]\]
+> 1. If `argument` is abrupt, return `argument`
+> 2. Set `argument` to `argument.[[Value]]`
 
 That is, we inspect a Completion Record; if it's an abrupt completion, we return immediately. Otherwise, we extract the value from the Completion Record.
 
