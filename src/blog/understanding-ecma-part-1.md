@@ -30,7 +30,7 @@ To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocod
 
 > `Object.prototype.hasOwnProperty(V)`
 >
-> When the hasOwnProperty method is called with argument `V`, the following steps are taken:
+> When the `hasOwnProperty` method is called with argument `V`, the following steps are taken:
 >
 > 1. Let `P` be `? ToPropertyKey(V)`.
 > 2. Let `O` be `? ToObject(this value)`.
@@ -60,7 +60,7 @@ Let's find out!
 
 Let's start with something that looks familiar. The spec uses values such as `undefined`, `true`, and `false`, which we already know from JavaScript. They all are **language values**, values of **language types** which the spec also defines.
 
-The spec also uses language values internally, for example, an internal data type might contain a field whose possible values are `true` and `false`. However, JavaScript engines typically don't use language values internally. For example, if the JavaScript engine is written in C++, it would typically use the C++ `true` and `false` (and not its internal representations of the JavaScript `true` and `false`) in its internal data types.
+The spec also uses language values internally, for example, an internal data type might contain a field whose possible values are `true` and `false`. In contrast, JavaScript engines don't typically use language values internally. For example, if the JavaScript engine is written in C++, it would typically use the C++ `true` and `false` (and not its internal representations of the JavaScript `true` and `false`).
 
 [Spec: ECMAScript language types](https://tc39.es/ecma262/#sec-ecmascript-language-types)
 
@@ -78,9 +78,7 @@ In addition to language types, the spec also uses **specification types**, which
 
 **Internal slots** and **internal methods** use names enclosed in \[\[ \]\].
 
-Internal slots are data members (of a JavaScript object or a specification type) and internal methods are member functions (of a JavaScript object or a specification type).
-
-Internal slots and methods are used in the algorithms described by the spec. Internal slots are used for storing the state of the object, and internal methods are functions associated with the object.
+Internal slots are data members (of a JavaScript object or a specification type). They are used for storing the state of the object. Internal methods are member functions (of a JavaScript object or a specification type).
 
 [Spec: Object internal methods and internal slots](https://tc39.es/ecma262/#sec-object-internal-methods-and-internal-slots)
 
@@ -112,9 +110,9 @@ Essential internal methods are the methods listed [here](https://tc39.es/ecma262
 
 What about the question marks and exclamation marks? To understand them, we need to look into **Completion Records**!
 
-A Completion Record is a "record" (or a "struct", if you're more familiar with that term) defined by the spec. A record is a data type which has a fixed set of named fields. C-like languages have structs - JavaScript doesn't, since you can always add properties into an object.
+A Completion Record is a "record" - a data type which has a fixed set of named fields.
 
-Again, the Completion Record is defined only for spec purposes. A JavaScript engine doesn't have to have a corresponding internal data type.
+Completion Record is a specification type (only defined for spec purposes). A JavaScript engine doesn't have to have a corresponding internal data type.
 
 A Completion Record has three fields:
 
@@ -130,7 +128,9 @@ A Completion Record has three fields:
 
 Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it's implicitly wrapped into a Completion Record with the type `normal` (see [Implicit Completion Values](https://www.ecma-international.org/ecma-262/index.html#sec-implicit-completion-values)).
 
-Note: The spec is not fully consitent in this regard; there are some helper functions which return bare values and whose return values are used as is, without extracting then value from the completion record. This is usually clear from the context.
+Note 1: The spec is not fully consitent in this regard; there are some helper functions which return bare values and whose return values are used as is, without extracting then value from the completion record. This is usually clear from the context.
+
+Note 2: The spec editors are looking into making the completion record handling more explicit.
 
 If an algorithm throws an exception, it means returning a Completion Record with `[[Type]]` `throw` whose `[[Value]]` is the exception object. We'll ignore the `break`, `continue` and `return` types for now.
 
@@ -174,7 +174,7 @@ Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this
 > 7. Let `temp` be `HasOwnProperty(O, P)`.
 > 8. If `temp` is an abrupt completion, return `temp`
 > 9. Let `temp` be `temp.[[Value]]`
-> 9. Return `NormalCompletion(temp)`
+> 10. Return `NormalCompletion(temp)`
 
 and `HasOwnProperty` like this:
 
