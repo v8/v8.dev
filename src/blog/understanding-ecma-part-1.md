@@ -126,9 +126,9 @@ A Completion Record is a "record" - a data type which has a fixed set of named f
 
 Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it's implicitly wrapped into a Completion Record with the type `normal` (see [Implicit Completion Values](https://www.ecma-international.org/ecma-262/index.html#sec-implicit-completion-values)).
 
-Note 1: The spec is not fully consitent in this regard; there are some helper functions which return bare values and whose return values are used as is, without extracting then value from the completion record. This is usually clear from the context.
+Note 1: The spec is not fully consitent in this regard; there are some helper functions which return bare values and whose return values are used as is, without extracting the value from the Completion Record. This is usually clear from the context.
 
-Note 2: The spec editors are looking into making the completion record handling more explicit.
+Note 2: The spec editors are looking into making the Completion Record handling more explicit.
 
 If an algorithm throws an exception, it means returning a Completion Record with `[[Type]]` `throw` whose `[[Value]]` is the exception object. We'll ignore the `break`, `continue` and `return` types for now.
 
@@ -145,9 +145,9 @@ That is, we inspect a Completion Record; if it's an abrupt completion, we return
 
 `ReturnIfAbrupt` can be used like this:
 
-> 1. Let `obj` be `Foo()` // obj is a Completion Record
+> 1. Let `obj` be `Foo()` // `obj` is a Completion Record
 > 2. `ReturnIfAbrupt(obj)`
-> 3. `Bar(obj)` // If we're still here, obj is the value extracted from the Completion Record
+> 3. `Bar(obj)` // If we're still here, `obj` is the value extracted from the Completion Record
 
 And now the question mark comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`.
 
