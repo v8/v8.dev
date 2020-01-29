@@ -64,13 +64,13 @@ The spec also uses language values internally, for example, an internal data typ
 
 [Spec: ECMAScript language types](https://tc39.es/ecma262/#sec-ecmascript-language-types)
 
-In addition to language types, the spec also uses **specification types**, which are types that occur only in the spec, but not in the JavaScript language. They might or might not occur as internal types in a JavaScript engine. In this blog post, we'll get to know the specification type _Record_ (and its subtype _Completion Record_).
+In addition to language types, the spec also uses **specification types**, which are types that occur only in the spec, but not in the JavaScript language. The JavaScript engine does not need to (but is free to) implement them. In this blog post, we'll get to know the specification type _Record_ (and its subtype _Completion Record_).
 
 [Spec: ECMAScript specification types](https://tc39.es/ecma262/#sec-ecmascript-specification-types)
 
 ## Abstract operations
 
-**Abstract operations** are functions defined in the ECMAScript spec; they are defined for the purpose of writing the spec elegantly and concisely. A JavaScript engine doesn't have to implement them as separate functions inside the engine. They cannot be directly called from JavaScript.
+**Abstract operations** are functions defined in the ECMAScript spec; they are defined for the purpose of writing the spec concisely. A JavaScript engine doesn't have to implement them as separate functions inside the engine. They cannot be directly called from JavaScript.
 
 [Spec: Abstract Operations](https://tc39.es/ecma262/#sec-abstract-operations)
 
@@ -129,6 +129,8 @@ A Completion Record has three fields:
 [Spec: Completion Record](https://tc39.es/ecma262/#sec-completion-record-specification-type)
 
 Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it's implicitly wrapped into a Completion Record with the type `normal` (see [Implicit Completion Values](https://www.ecma-international.org/ecma-262/index.html#sec-implicit-completion-values)).
+
+Note: The spec is not fully consitent in this regard; there are some helper functions which return bare values and whose return values are used as is, without extracting then value from the completion record. This is usually clear from the context.
 
 If an algorithm throws an exception, it means returning a Completion Record with `[[Type]]` `throw` whose `[[Value]]` is the exception object. We'll ignore the `break`, `continue` and `return` types for now.
 
