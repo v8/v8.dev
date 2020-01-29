@@ -64,7 +64,7 @@ The spec also uses language values internally, for example, an internal data typ
 
 [Spec: ECMAScript language types](https://tc39.es/ecma262/#sec-ecmascript-language-types)
 
-In addition to language types, the spec also uses **specification types**, which are types that occur only in the spec, but not in the JavaScript language. The JavaScript engine does not need to (but is free to) implement them. In this blog post, we'll get to know the specification type _Record_ (and its subtype _Completion Record_).
+In addition to language types, the spec also uses **specification types**, which are types that occur only in the spec, but not in the JavaScript language. The JavaScript engine does not need to (but is free to) implement them. In this blog post, we'll get to know the specification type Record (and its subtype Completion Record).
 
 [Spec: ECMAScript specification types](https://tc39.es/ecma262/#sec-ecmascript-specification-types)
 
