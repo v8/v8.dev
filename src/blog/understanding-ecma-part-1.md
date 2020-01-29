@@ -110,11 +110,9 @@ Essential internal methods are the methods listed [here](https://tc39.es/ecma262
 
 What about the question marks and exclamation marks? To understand them, we need to look into **Completion Records**!
 
-A Completion Record is a "record" - a data type which has a fixed set of named fields.
-
 Completion Record is a specification type (only defined for spec purposes). A JavaScript engine doesn't have to have a corresponding internal data type.
 
-A Completion Record has three fields:
+A Completion Record is a "record" - a data type which has a fixed set of named fields. A Completion Record has three fields:
 
 :::table-wrapper
 | Name | Description |
