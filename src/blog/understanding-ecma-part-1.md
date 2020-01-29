@@ -145,55 +145,55 @@ That is, we inspect a Completion Record; if it's an abrupt completion, we return
 
 `ReturnIfAbrupt` can be used like this:
 
-> 1. Let obj be Foo() // obj is a Completion Record
-> 2. ReturnIfAbrupt(obj)
-> 3. Bar(obj) // If we're still here, obj is now the value extracted from the Completion Record
+> 1. Let `obj` be `Foo()` // obj is a Completion Record
+> 2. `ReturnIfAbrupt(obj)`
+> 3. `Bar(obj)` // If we're still here, obj is the value extracted from the Completion Record
 
 And now the question mark comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`.
 
 Similarly, `Let val be ! Foo()` is equivalent to:
 
-> 1. Let val be Foo()
-> 2. Assert: val is not an abrupt completion
-> 3. Set val to val.\[\[Value\]\].
+> 1. Let `val` be `Foo()`
+> 2. Assert: `val` is not an abrupt completion
+> 3. Set `val` to `val.[[Value]]`.
 
 [Spec: ReturnIfAbrupt shorthands](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands)
 
 Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this:
 
-> Object.prototype.hasOwnProperty(P)
+> `Object.prototype.hasOwnProperty(P)`
 >
-> 1. Let P be ToPropertyKey(V).
-> 2. If P is an abrupt completion, return P
-> 3. Set P to P.[[Value]]
-> 4. Let O be ToObject(this value).
-> 5. If O is an abrupt completion, return O
-> 6. Set O to O.[[Value]]
-> 7. Let temp be HasOwnProperty(O, P).
-> 8. If temp is an abrupt completion, return temp
-> 9. Let temp be temp.\[\[Value\]\]
-> 9. Return NormalCompletion(temp)
+> 1. Let `P` be `ToPropertyKey(V)`.
+> 2. If `P` is an abrupt completion, return `P`
+> 3. Set `P` to `P.[[Value]]`
+> 4. Let `O` be `ToObject(this value)`.
+> 5. If `O` is an abrupt completion, return `O`
+> 6. Set `O` to `O.[[Value]]`
+> 7. Let `temp` be `HasOwnProperty(O, P)`.
+> 8. If `temp` is an abrupt completion, return `temp`
+> 9. Let `temp` be `temp.[[Value]]`
+> 9. Return `NormalCompletion(temp)`
 
 and `HasOwnProperty` like this:
 
-> HasOwnProperty(O, P)
+> `HasOwnProperty(O, P)`
 >
-> 1. Assert: Type(O) is Object.
-> 2. Assert: IsPropertyKey(P) is true.
-> 3. Let desc be O.\[\[GetOwnProperty\]\](P).
-> 4. If desc is an abrupt completion, return desc
-> 5. Set desc to desc.[[Value]]
-> 6. If desc is undefined, return NormalCompletion(false).
-> 7. Return NormalCompletion(true).
+> 1. Assert: `Type(O)` is `Object`.
+> 2. Assert: `IsPropertyKey(P)` is `true`.
+> 3. Let `desc` be `O.[[GetOwnProperty]](P)`.
+> 4. If `desc` is an abrupt completion, return `desc`
+> 5. Set `desc` to `desc.[[Value]]`
+> 6. If `desc` is `undefined`, return `NormalCompletion(false)`.
+> 7. Return `NormalCompletion(true)`.
 
 We can also rewrite the `[[GetOwnProperty]]` internal method without the exclamation mark like this:
 
-> O.\[\[GetOwnProperty\]\]
+> `O.[[GetOwnProperty]]`
 >
-> 1. Let temp be OrdinaryGetOwnProperty(O, P)
-> 2. Assert: temp is not an abrupt completion
-> 3. Let temp be temp.\[\[Value\]\]
-> 4. Return NormalCompletion(temp)
+> 1. Let `temp` be `OrdinaryGetOwnProperty(O, P)`
+> 2. Assert: `temp` is not an abrupt completion
+> 3. Let `temp` be `temp.[[Value]]`
+> 4. Return `NormalCompletion(temp)`
 
 Here we assume that `temp` is a brand new temporary variable which doesn't collide with anything else.
 
@@ -205,10 +205,10 @@ The spec uses the notation `Return ? Foo()` - why the question mark?
 
 `Return ? Foo()` expands to:
 
-> 1. Let temp be Foo()
-> 2. If temp is an abrupt completion, return temp
-> 3. Set temp to temp.[[Value]]
-> 4. Return NormalCompletion(temp)
+> 1. Let `temp` be `Foo()`
+> 2. If `temp` is an abrupt completion, return `temp`
+> 3. Set `temp` to `temp.[[Value]]`
+> 4. Return `NormalCompletion(temp)`
 
 Which is the same as `Return Foo()`; it behaves the same way for both abrupt and normal completions.
 
@@ -218,7 +218,7 @@ Asserts in the spec assert invariant conditions of the algorithms. They are adde
 
 ## Moving on
 
-Now we have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We'll need to find out about Property Descriptors, which is just another ECMAScript specification type.
+We have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We'll encounter Property Descriptors, which is just another specification type.
 
 <figure>
   <img src="/_img/understanding-ecma-part-1-1.svg" height="306" width="1082" alt="Function call graph starting from Object.prototype.hasOwnProperty">
