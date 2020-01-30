@@ -3,7 +3,7 @@ title: 'Understanding the ECMAScript spec, part 1'
 author: '[Marja Hölttä](https://twitter.com/marjakh), speculative specification spectator'
 avatars:
   - marja-holtta
-date: 2020-01-22 13:33:37
+date: 2020-01-30 13:33:37
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
@@ -78,7 +78,7 @@ In addition to language types, the spec also uses **specification types**, which
 
 **Internal slots** and **internal methods** use names enclosed in \[\[ \]\].
 
-Internal slots are data members (of a JavaScript object or a specification type). They are used for storing the state of the object. Internal methods are member functions (of a JavaScript object or a specification type).
+Internal slots are data members of a JavaScript object or a specification type. They are used for storing the state of the object. Internal methods are member functions of a JavaScript object.
 
 [Spec: Object internal methods and internal slots](https://tc39.es/ecma262/#sec-object-internal-methods-and-internal-slots)
 
@@ -112,7 +112,7 @@ What about the question marks and exclamation marks? To understand them, we need
 
 Completion Record is a specification type (only defined for spec purposes). A JavaScript engine doesn't have to have a corresponding internal data type.
 
-A Completion Record is a "record" - a data type which has a fixed set of named fields. A Completion Record has three fields:
+A Completion Record is a "record" &mdash; a data type which has a fixed set of named fields. A Completion Record has three fields:
 
 :::table-wrapper
 | Name | Description |
@@ -201,7 +201,7 @@ We've also used the knowledge that when a return statement returns something els
 
 ### Side track: Return ? Foo()
 
-The spec uses the notation `Return ? Foo()` - why the question mark?
+The spec uses the notation `Return ? Foo()` &mdash; why the question mark?
 
 `Return ? Foo()` expands to:
 
@@ -214,7 +214,7 @@ Which is the same as `Return Foo()`; it behaves the same way for both abrupt and
 
 ## Asserts
 
-Asserts in the spec assert invariant conditions of the algorithms. They are added for clarity, but don't add any requirements to the implementation - the implementation doesn't need to check them.
+Asserts in the spec assert invariant conditions of the algorithms. They are added for clarity, but don't add any requirements to the implementation &mdash; the implementation doesn't need to check them.
 
 ## Moving on
 
