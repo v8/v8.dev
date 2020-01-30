@@ -31,7 +31,7 @@ The proposal is in active development, both V8 and the toolchain have working pr
 
 ### Enabling experimental SIMD support in Chrome
 
-WebAssembly SIMD support is prototyped behind a flag in chrome, to try out the SIMD support on the browser, pass `--enable-features=WebAssemblySimd`, or toggle the WebAssemblySimd flag in `chrome://flags`. This work is bleeding edge, and continuously being worked on. To minimize the chances of breakage, please use the latest version of the toolchain as detailed below, and a recent Chrome Canary. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
+WebAssembly SIMD support is prototyped behind a flag in Chrome, to try out the SIMD support on the browser, pass `--enable-features=WebAssemblySimd`, or toggle the "WebAssembly SIMD support" flag in `chrome://flags`. This work is bleeding edge, and continuously being worked on. To minimize the chances of breakage, please use the latest version of the toolchain as detailed below, and a recent Chrome Canary. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
 
 ### Building C / C++ to target SIMD
 
