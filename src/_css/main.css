@@ -314,6 +314,7 @@ h4:hover a.bookmark {
 }
 figure {
   margin: 0 0 1em;
+  max-width: 100%;
   padding: 0;
   text-align: center;
 }
