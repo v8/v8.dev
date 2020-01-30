@@ -5,6 +5,7 @@ date: 2020-01-30
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
+tweet: '1222944308183085058'
 ---
 
 ## Introduction
