@@ -314,7 +314,6 @@ h4:hover a.bookmark {
 }
 figure {
   margin: 0 0 1em;
-  max-width: 100%;
   padding: 0;
   text-align: center;
 }
@@ -415,7 +414,8 @@ main .meta {
   background: var(--tag-background);
   color: var(--tag-color);
 }
-img {
+img,
+video {
   max-width: 100%;
   height: auto;
 }
