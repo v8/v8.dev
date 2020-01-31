@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const glob = require('glob');
 const imageSize = require('image-size');
@@ -6,7 +6,6 @@ const videoSize = require('get-video-dimensions');
 
 (async () => {
   const files = glob.sync('src/**/*.{html,md}');
-  console.log(files)
   for (const file of files) {
     const contents = fs.readFileSync(file, 'utf8').toString();
     let updatedContents = contents;
