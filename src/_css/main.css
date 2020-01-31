@@ -345,31 +345,29 @@ blockquote {
 figcaption {
   font-size: 0.9em;
 }
-iframe {
-  border: 0;
-  width: 100%;
-}
-iframe + h2, iframe + h3 {
-  margin-top: 1em;
-}
 /* https://alistapart.com/article/creating-intrinsic-ratios-for-video */
 .video {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
+  padding-bottom: 100%;
   padding-top: 25px;
   margin-bottom: 0.5em;
   height: 0;
 }
-/* If we ever need other ratios, add them like so:
 .video-16\:9 {
   padding-bottom: 56.25%;
 }
-*/
-.video iframe {
+.video-25\:9 {
+  padding-bottom: 36%;
+}
+.video iframe, .video video {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
+}
+iframe, video {
+  border: 0;
+  width: 100%;
 }
 .table-wrapper {
   overflow-x: auto;
