@@ -70,7 +70,7 @@ Without passing the `-msimd128` flag, the compiler emits this WebAssembly loop:
     (i32.mul
       (i32.load … get address in `in_a` …)
       (i32.load … get address in `in_b` …)
-  ...
+  …
 )
 ```
 
