@@ -120,7 +120,7 @@ As per their description, MediaPipe is a framework for building multimodal (eg. 
 One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a following hand-tracking system. Without SIMD, you can get only around 3 frames per second on a modern laptop, while with SIMD enabled you get a much smoother experience at 15-16 frames per second.
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/hand.mp4"></video>
+  <video autoplay muted playsinline loop width="600" height="216" src="/_img/simd/hand.mp4"></video>
 </figure>
 
 Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
@@ -128,17 +128,17 @@ Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome 
 Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](https://bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/credit-card.mp4"></video>
+  <video autoplay muted playsinline loop width="256" height="512" src="/_img/simd/credit-card.mp4"></video>
   <figcaption>Card reading</figcaption>
 </figure>
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/invisibility-cloak.mp4"></video>
+  <video autoplay muted playsinline loop width="600" height="646" src="/_img/simd/invisibility-cloak.mp4"></video>
   <figcaption>Invisibility cloak</figcaption>
 </figure>
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/emotion-recognizer.mp4"></video>
+  <video autoplay muted playsinline loop width="600" height="658" src="/_img/simd/emotion-recognizer.mp4"></video>
   <figcaption>Emoji replacement</figcaption>
 </figure>
 
