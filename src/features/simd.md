@@ -7,16 +7,13 @@ tags:
 description: 'Bringing vector operations to WebAssembly'
 tweet: '1222944308183085058'
 ---
-
-## Introduction
-
-SIMD stands for Single Instruction, Multiple Data. SIMD instructions are a special class of instructions that exploit data parallelism in applications by simultaneously performing the same operation on multiple data elements. Compute intensive applications like audio/video codecs, image processors, are all examples of applications that take advantage of SIMD instructions to accelerate performance. Most modern architectures support some variants of SIMD instructions.
+SIMD stands for _Single Instruction, Multiple Data_. SIMD instructions are a special class of instructions that exploit data parallelism in applications by simultaneously performing the same operation on multiple data elements. Compute intensive applications like audio/video codecs, image processors, are all examples of applications that take advantage of SIMD instructions to accelerate performance. Most modern architectures support some variants of SIMD instructions.
 
 The WebAssembly SIMD proposal defines a portable, performant subset of SIMD operations that are available across most modern architectures. This proposal derived many elements from the [SIMD.js proposal](https://github.com/tc39/ecmascript_simd), which in turn was originally derived from the [Dart SIMD](https://www.researchgate.net/publication/261959129_A_SIMD_programming_model_for_dart_javascriptand_other_dynamically_typed_scripting_languages) specification. The SIMD.js proposal was an API proposed at TC39 with new types and functions for performing SIMD computations, but this was archived in favor of supporting SIMD operations more transparently in WebAssembly. The [WebAssembly SIMD proposal](https://github.com/WebAssembly/simd) was introduced as a way for browsers to take advantage of the data level parallelism using the underlying hardware.
 
 ## WebAssembly SIMD proposal
 
-The high level goal of the WebAssembly SIMD proposal is to introduce vector operations to the WebAssembly Specification, in a way that guarantees portable performance.
+The high-level goal of the WebAssembly SIMD proposal is to introduce vector operations to the WebAssembly Specification, in a way that guarantees portable performance.
 
 The set of SIMD instructions is large, and varied across architectures. The set of operations included in the WebAssembly SIMD proposal consist of operations that are well supported on a wide variety of platforms, and are proven to be performant. To this end, the current proposal is limited to standardizing Fixed-Width 128-bit SIMD operations.
 
@@ -69,10 +66,10 @@ Without passing the `-msimd128` flag, the compiler emits this WebAssembly loop:
 ```wasm
 (loop
   (i32.store
-    ... get address in `out` …
+    … get address in `out` …
     (i32.mul
-      (i32.load ... get address in `in_a` ...)
-      (i32.load ... get address in `in_b` ...)
+      (i32.load … get address in `in_a` …)
+      (i32.load … get address in `in_b` …)
   ...
 )
 ```
@@ -123,7 +120,7 @@ As per their description, MediaPipe is a framework for building multimodal (eg. 
 One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a following hand-tracking system. Without SIMD, you can get only around 3 frames per second on a modern laptop, while with SIMD enabled you get a much smoother experience at 15-16 frames per second.
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/handgif.mp4"></video>
+  <video autoplay muted playsinline loop src="/_img/simd/hand.mp4"></video>
 </figure>
 
 Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
@@ -131,17 +128,17 @@ Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome 
 Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](https://bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/credit_card.mp4"></video>
+  <video autoplay muted playsinline loop src="/_img/simd/credit-card.mp4"></video>
   <figcaption>Card reading</figcaption>
 </figure>
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/invisibilityCloak.mp4"></video>
+  <video autoplay muted playsinline loop src="/_img/simd/invisibility-cloak.mp4"></video>
   <figcaption>Invisibility cloak</figcaption>
 </figure>
 
 <figure>
-  <video autoplay muted playsinline loop src="/_img/simd/emotionRecognizer.mp4"></video>
+  <video autoplay muted playsinline loop src="/_img/simd/emotion-recognizer.mp4"></video>
   <figcaption>Emoji replacement</figcaption>
 </figure>
 
