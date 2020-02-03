@@ -52,7 +52,7 @@ and
 
 [Spec: HasOwnProperty](https://tc39.es/ecma262#sec-hasownproperty)
 
-But what's an "abstract operation"? What are the things inside \[\[ \]\]? Why is there a "?" in front of a function? What do the asserts mean?
+But what's an "abstract operation"? What are the things inside `[[ ]]`? Why is there a `?` in front of a function? What do the asserts mean?
 
 Let's find out!
 
@@ -76,7 +76,7 @@ In addition to language types, the spec also uses **specification types**, which
 
 ## Internal slots and internal methods
 
-**Internal slots** and **internal methods** use names enclosed in \[\[ \]\].
+**Internal slots** and **internal methods** use names enclosed in `[[ ]]`.
 
 Internal slots are data members of a JavaScript object or a specification type. They are used for storing the state of the object. Internal methods are member functions of a JavaScript object.
 
@@ -117,7 +117,7 @@ A Completion Record is a "record" &mdash; a data type which has a fixed set of n
 :::table-wrapper
 | Name | Description |
 --- | ---
-| `[[Type]]` | One of: `normal`, `break`, `continue`, `return`, or `throw`. All other types except `normal` are referred to as **abrupt completions**.|
+| `[[Type]]` | One of: `normal`, `break`, `continue`, `return`, or `throw`. All other types except `normal` are **abrupt completions**.|
 | `[[Value]]` | The value that was produced when the completion occurred, for example, the return value of a function or the exception (if one is thrown).|
 | `[[Target]]` | Used for directed control transfers (not relevant for this blog post).|
 :::
@@ -199,7 +199,7 @@ Here we assume that `temp` is a brand new temporary variable which doesn't colli
 
 We've also used the knowledge that when a return statement returns something else than a Completion Record, it's implicitly wrapped inside a `NormalCompletion`.
 
-### Side track: Return ? Foo()
+### Side track: `Return ? Foo()`
 
 The spec uses the notation `Return ? Foo()` &mdash; why the question mark?
 
@@ -221,10 +221,9 @@ Asserts in the spec assert invariant conditions of the algorithms. They are adde
 We have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We'll encounter Property Descriptors, which is just another specification type.
 
 <figure>
-  <img src="/_img/understanding-ecma-part-1-1.svg" height="306" width="1082" alt="Function call graph starting from Object.prototype.hasOwnProperty">
+  <img src="/_img/understanding-ecma-part-1-1.svg" height="306" width="1082" alt="Function call graph starting from Object.prototype.hasOwnProperty" loading="lazy">
 </figure>
 
 ## Useful links
 
 [How to Read the ECMAScript Specification](https://timothygu.me/es-howto/): A tutorial which covers much of the material covered in this post, from a slightly different angle.
-
