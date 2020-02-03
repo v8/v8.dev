@@ -7,6 +7,7 @@ date: 2020-02-03 13:33:37
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
+tweet: '1224363301146189824'
 ---
 In this article, we take a simple function in the spec and try to understand the notation. Let’s go!
 
@@ -26,7 +27,7 @@ In the example, `o` doesn’t have a property called `hasOwnProperty`, so we wal
 
 To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocode-like descriptions:
 
-> [`Object.prototype.hasOwnProperty(V)`](https://tc39.es/ecma262#sec-object.prototype.hasownproperty)
+> **[`Object.prototype.hasOwnProperty(V)`](https://tc39.es/ecma262#sec-object.prototype.hasownproperty)**
 >
 > When the `hasOwnProperty` method is called with argument `V`, the following steps are taken:
 >
@@ -36,7 +37,7 @@ To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocod
 
 …and…
 
-> [`HasOwnProperty(O, P)`](https://tc39.es/ecma262#sec-hasownproperty)
+> **[`HasOwnProperty(O, P)`](https://tc39.es/ecma262#sec-hasownproperty)**
 >
 > The abstract operation `HasOwnProperty` is used to determine whether an object has an own property with the specified property key. A Boolean value is returned. The operation is called with arguments `O` and `P` where `O` is the object and `P` is the property key. This abstract operation performs the following steps:
 >
@@ -139,7 +140,7 @@ Similarly, `Let val be ! Foo()` is equivalent to:
 
 Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this:
 
-> `Object.prototype.hasOwnProperty(P)`
+> **`Object.prototype.hasOwnProperty(P)`**
 >
 > 1. Let `P` be `ToPropertyKey(V)`.
 > 2. If `P` is an abrupt completion, return `P`
@@ -154,7 +155,7 @@ Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this
 
 …and we can rewrite `HasOwnProperty` like this:
 
-> `HasOwnProperty(O, P)`
+> **`HasOwnProperty(O, P)`**
 >
 > 1. Assert: `Type(O)` is `Object`.
 > 2. Assert: `IsPropertyKey(P)` is `true`.
@@ -166,7 +167,7 @@ Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this
 
 We can also rewrite the `[[GetOwnProperty]]` internal method without the exclamation mark:
 
-> `O.[[GetOwnProperty]]`
+> **`O.[[GetOwnProperty]]`**
 >
 > 1. Let `temp` be `OrdinaryGetOwnProperty(O, P)`
 > 2. Assert: `temp` is not an abrupt completion
@@ -199,7 +200,7 @@ Asserts in the spec assert invariant conditions of the algorithms. They are adde
 We have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We’ll encounter Property Descriptors, which is just another specification type.
 
 <figure>
-  <img src="/_img/understanding-ecma-part-1-1.svg" height="306" width="1082" alt="Function call graph starting from Object.prototype.hasOwnProperty" loading="lazy">
+  <img src="/_img/understanding-ecmascript-part-1/call-graph.svg" width="1082" height="306" alt="Function call graph starting from Object.prototype.hasOwnProperty">
 </figure>
 
 ## Useful links
