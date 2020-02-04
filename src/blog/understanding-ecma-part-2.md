@@ -66,7 +66,7 @@ The internal method `[[Get]]` delegates to `OrdinaryGet`:
 
 `OrdinaryGet` is defined like this:
 
-> OrdinaryGet ( O, P, Receiver )
+> `OrdinaryGet ( O, P, Receiver )`
 >
 > When the abstract operation `OrdinaryGet` is called with Object `O`, property key `P`, and ECMAScript language value `Receiver`, the following steps are taken:
 >
@@ -99,13 +99,13 @@ o2.x = 50;
 o2.sneaky; // will return 50
 ```
 
-It really works! We were able to predict the feature based on what we read in the spec.
+It really works! We were able to predict the behavior of this code snippet based on what we read in the spec.
 
 ## Accessing properties - why does it invoke `[[Get]]`?
 
-But where does the spec say that the `[[Get]]` we were looking at will get invoked when accessing a property like `o2.foo` or `o2.sneaky`? Surely that has to be defined somewhere. Don't take my word for it!
+But where does the spec say that the Object internal method `[[Get]]` will get invoked when accessing a property like `o2.foo` or `o2.sneaky`? Surely that has to be defined somewhere. Don't take my word for it!
 
-Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value (in this case, an Object), the reference name (in this case, a String), and a strict flag (bool).
+Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value (in this case, an Object), the reference name (in this case, a String), and a strict mode flag (bool).
 
 ### Side track: References
 
@@ -113,11 +113,11 @@ Side track: A Reference is not a Record, even though it sounds like it could be 
 
 ### Syntax-directed operations
 
-So, we found out that the internal method `[[Get]]` is called from the abstract operation `GetValue` which operates on References.
+We found out that the Object internal method `[[Get]]` is called from the abstract operation `GetValue` which operates on References. But where is `GetValue` called from?
 
 The grammar rules of the spec define the syntax of the language, and the [syntax-directed operations](https://tc39.es/ecma262/#sec-algorithm-conventions-syntax-directed-operations) define what the syntactic constructs mean (how to evaluate them).
 
-We'll look into the grammar rules deeper in a later episode, let's keep it simple for now!
+We'll take a deeper look into the grammar rules in a later episode, let's keep it simple for now!
 
 Runtime semantics for the grammar production `MemberExpression` `:` `MemberExpression` `.` `IdentifierName` define how to evaluate it:
 
@@ -145,7 +145,7 @@ The algorithm delegates to the abstract operation `EvaluatePropertyAccessWithIde
 
 That is: `EvaluatePropertyAccessWithIdentifierKey` constructs a Reference which uses the provided `baseValue` as the base and the string value of `identifierName` as the property name.
 
-Eventually this Reference gets passed to `GetValue`. This is defined in various based depending on how the reference ends up being used.
+Eventually this Reference gets passed to `GetValue`. This is defined in several places in the spec, depending on how the Reference ends up being used.
 
 For example, if we use it as a parameter:
 
@@ -153,7 +153,7 @@ For example, if we use it as a parameter:
 console.log(o.foo);
 ```
 
-This is defined in the ArgumentList production which calls `GetValue` on the argument:
+This is defined in the `ArgumentList` production which calls `GetValue` on the argument:
 
 > Runtime Semantics: ArgumentListEvaluation
 >
@@ -165,7 +165,7 @@ This is defined in the ArgumentList production which calls `GetValue` on the arg
 
 [Spec: Runtime Semantics: ArgumentListEvaluation](https://tc39.es/ecma262/#sec-argument-lists-runtime-semantics-argumentlistevaluation)
 
-Now the `AssignmentExpression` is `o.foo` and the result of evaluating it is the above mentioned Reference. Now we call GetValue on it.
+Now the `AssignmentExpression` is `o.foo` and the result of evaluating it is the above mentioned Reference. Now we call `GetValue` on it.
 
 If we use it as the right hand side of an assignment:
 
@@ -197,4 +197,4 @@ This is defined in the runtime semantics for the `AssignmentExpression` producti
 
 Now the `LeftHandSideExpression` is not an object literal or an array literal, so we take the if branch in step 1. The assignment expression is `o.foo`, and it's not a function definition, so we take the else branch in 1 d. There we evaluate the `AssignmentExpression` and call `GetValue` on it.
 
-In any case, `GetValue` will be called on the Reference which is the result of evaluating the `MemberExpression`. Thus, we know that the object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
+In any case, `GetValue` will be called on the Reference which is the result of evaluating the `MemberExpression`. Thus, we know that the Object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
