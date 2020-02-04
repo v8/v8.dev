@@ -84,7 +84,7 @@ The internal method `[[Get]]` delegates to `OrdinaryGet`:
 
 [Spec: OrdinaryGet](https://tc39.es/ecma262/#sec-ordinaryget)
 
-And here's we see the prototype chain walk: if we don't find the property as an own property, we recurse into the prototype's `[[Get]]` method.
+The prototype chain walk is inside step 3: if we don't find the property as an own property, we recurse into the prototype's `[[Get]]` method.
 
 We also pass the original `Receiver`, the object on which `Get` was originally called, through the recursion. The `Receiver` is only used if the property is an accessor property, in which case it's passed as the "this object" when calling the getter function.
 
@@ -147,13 +147,15 @@ That is: `EvaluatePropertyAccessWithIdentifierKey` constructs a Reference which 
 
 Eventually this Reference gets passed to `GetValue`. This is defined in several places in the spec, depending on how the Reference ends up being used.
 
-For example, if we use it as a parameter:
+### Property access as a parameter
+
+For example, we can use the property access as a parameter.
 
 ```javascript
 console.log(o.foo);
 ```
 
-This is defined in the `ArgumentList` production which calls `GetValue` on the argument:
+In this case, the behavior is defined in the runtime semantics of `ArgumentList` production which calls `GetValue` on the argument:
 
 > Runtime Semantics: ArgumentListEvaluation
 >
@@ -167,13 +169,15 @@ This is defined in the `ArgumentList` production which calls `GetValue` on the a
 
 Now the `AssignmentExpression` is `o.foo` and the result of evaluating it is the above mentioned Reference. Now we call `GetValue` on it.
 
-If we use it as the right hand side of an assignment:
+### Property access as a right hand side of an assignemnt
+
+We can also use the property access as a right hand side of an assignment:
 
 ```javascript
 const x = o.foo;
 ```
 
-This is defined in the runtime semantics for the `AssignmentExpression` production which calls `GetValue` on the right hand side:
+In this case, the behavior is defined in the runtime semantics for the `AssignmentExpression` production which calls `GetValue` on the right hand side:
 
 > `AssignmentExpression : LeftHandSideExpression = AssignmentExpression`
 >
