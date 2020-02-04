@@ -18,11 +18,12 @@ tweet: ''
 
 ## Ready for part 2?
 
-A fun way to get to know the spec is to start with a JavaScript feature you know is there, and find out how it's specified.
+A fun way to get to know the spec is to start with a JavaScript feature we know is there, and find out how it's specified.
 
 We know that properties are looked up in the prototype chain: if an object doesn't have the property we're looking for, we walk up the prototype chain until we find it (or the prototype doesn't exist).
 
 For example:
+
 ```javascript
 const o1 = {'foo' : 2511};
 const o2 = {};
@@ -68,7 +69,7 @@ The internal method `[[Get]]` delegates to `OrdinaryGet`:
 > OrdinaryGet ( O, P, Receiver )
 >
 > When the abstract operation `OrdinaryGet` is called with Object `O`, property key `P`, and ECMAScript language value `Receiver`, the following steps are taken:
-
+>
 > 1. Assert: `IsPropertyKey(P)` is `true`.
 > 2. Let `desc` be `? O.[[GetOwnProperty]](P)`.
 > 3. If `desc` is `undefined`, then
@@ -134,19 +135,20 @@ The algorithm delegates to the abstract operation `EvaluatePropertyAccessWithIde
 > Runtime Semantics: `EvaluatePropertyAccessWithIdentifierKey( baseValue, identifierName, strict )`
 >
 > The abstract operation `EvaluatePropertyAccessWithIdentifierKey` takes as arguments a value `baseValue`, a Parse Node `identifierName`, and a Boolean argument `strict`. It performs the following steps:
-
+>
 > 1. Assert: `identifierName` is an IdentifierName
 > 2. Let `bv` be `? RequireObjectCoercible(baseValue)`.
 > 3. Let `propertyNameString` be StringValue of `identifierName`.
 > 4. Return a value of type Reference whose base value component is `bv`, whose referenced name component is `propertyNameString`, and whose strict reference flag is `strict`.
 
-[Spec: Runtime Semantics: EvaluatePropertyAccessWithIdentifierKey]()
+[Spec: Runtime Semantics: EvaluatePropertyAccessWithIdentifierKey](https://tc39.es/ecma262/#sec-evaluate-property-access-with-identifier-key)
 
 That is: `EvaluatePropertyAccessWithIdentifierKey` constructs a Reference which uses the provided `baseValue` as the base and the string value of `identifierName` as the property name.
 
 Eventually this Reference gets passed to `GetValue`. This is defined in various based depending on how the reference ends up being used.
 
 For example, if we use it as a parameter:
+
 ```javascript
 console.log(o.foo);
 ```
@@ -165,7 +167,7 @@ This is defined in the ArgumentList production which calls `GetValue` on the arg
 
 Now the `AssignmentExpression` is `o.foo` and the result of evaluating it is the above mentioned Reference. Now we call GetValue on it.
 
-If you use it as the right hand side of an assignment:
+If we use it as the right hand side of an assignment:
 
 ```javascript
 const x = o.foo;
@@ -196,6 +198,3 @@ This is defined in the runtime semantics for the `AssignmentExpression` producti
 Now the `LeftHandSideExpression` is not an object literal or an array literal, so we take the if branch in step 1. The assignment expression is `o.foo`, and it's not a function definition, so we take the else branch in 1 d. There we evaluate the `AssignmentExpression` and call `GetValue` on it.
 
 In any case, `GetValue` will be called on the Reference which is the result of evaluating the `MemberExpression`. Thus, we know that the object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
-
-
-
