@@ -75,7 +75,7 @@ Internal slots and methods are not accessible from JavaScript. For example, you 
 
 Sometimes internal methods delegate to similarly-named abstract operations, such as in the case of ordinary objects' `[[GetOwnProperty]]:`
 
-> [`[[GetOwnProperty]](P)`](https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots-getownproperty-p)
+> **[`[[GetOwnProperty]](P)`](https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots-getownproperty-p)**
 >
 > When the `[[GetOwnProperty]]` internal method of `O` is called with property key `P`, the following steps are taken:
 >
