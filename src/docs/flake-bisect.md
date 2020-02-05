@@ -63,9 +63,9 @@ If a failing run times out, while a pass is running very fast, it is useful to t
 
 In some runs, confidence is very low. E.g. calibration is satisfied if four flakes are seen in one run. During bisection, every run with one or more flakes is counted as bad. In such cases it might be useful to restart the bisect job setting to_revision to the culprit and using a higher number of repetitions or total timeout than the original job and confirm that the same conclusion is reached again.
 
-### Working around [known timeout issues on Windows](https://crbug.com/v8/8170)
+### Working around timeout issues
 
-Sometimes the overall timeout option doesn’t work on Windows. In this case it’s best to estimate a fitting number of repetitions and set `total_timeout_sec` to `0`.
+In case the overall timeout option causes builds to hang, it’s best to estimate a fitting number of repetitions and set `total_timeout_sec` to `0`.
 
 ### Test behavior depending on random seed
 
