@@ -214,9 +214,9 @@ Now the `LeftHandSideExpression` is not an object literal or an array literal, s
 
 In any case, `GetValue` will be called on the Reference which is the result of evaluating the `MemberExpression`. Thus, we know that the Object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
 
-### Why is `o.foo` an `AssignmentExpression`?
+### Why is `o2.foo` an `AssignmentExpression`?
 
-Just one more thing. In the grammar rules, we used `o.foo` as an `AssignmentExpression`. It doesn't look like one though. Why is it an `AssignmentExpression`?
+Just one more thing. Previously, we used `o2.foo` as an `AssignmentExpression`. It doesn't look like one though. Why is it an `AssignmentExpression`?
 
 The spec actually allows an `AssignmentExpression` both as an argument and as the right hand side of an assignment. For example:
 
@@ -234,7 +234,7 @@ x; // 5
 y; // 5
 ```
 
-`o.foo` is a "degenerate" `AssignmentExpression` which doesn't assign anything. This follows from the following grammar productions, each one taking the "simplest" or "most degenerate" case until the last one.
+`o2.foo` is a "degenerate" `AssignmentExpression` which doesn't assign anything. This follows from the following grammar productions, each one taking the "simplest" or "most degenerate" case until the last one.
 
 (Let's ignore the subscripts of the grammar productions for now, we'll find out what they mean in a later episode.)
 
@@ -242,7 +242,7 @@ An `AssignmentExpresssion` doesn't need to have an assignment, it can also be ju
 
 > [`AssignmentExpression : ConditionalExpression`](https://tc39.es/ecma262/#sec-assignment-operators)
 
-A `ConditionalExpression` doesn't need to have a conditional (`foo == bar ? 1 : 0`), it can also be just a `ShortcircuitExpression`:
+A `ConditionalExpression` doesn't need to have a conditional (`a == b ? c : d`), it can also be just a `ShortcircuitExpression`:
 
 > [`ConditionalExpression : ShortCircuitExpression`](https://tc39.es/ecma262/#sec-conditional-operator)
 
@@ -290,7 +290,7 @@ None of the productions of `LeftHandSideExpression` sound particularly degenerat
 
 > [`MemberExpression : MemberExpression . IdentifierName`](https://tc39.es/ecma262/#prod-MemberExpression)
 
-So, `o.foo` can be a `MemberExpression` if `o` is a valid `MemberExpression`. Luckily it's much easier to see:
+So, `o2.foo` can be a `MemberExpression` if `o2` is a valid `MemberExpression`. Luckily it's much easier to see:
 
 > [`MemberExpression : PrimaryExpression`](https://tc39.es/ecma262/#prod-MemberExpression)
 >
@@ -298,7 +298,7 @@ So, `o.foo` can be a `MemberExpression` if `o` is a valid `MemberExpression`. Lu
 >
 > [`IdentifierReference : Identifier`](https://tc39.es/ecma262/#prod-IdentifierReference)
 
-`o` surely is an identifier so we're good.
+`o2` surely is an identifier so we're good.
 
 ## Final words
 
