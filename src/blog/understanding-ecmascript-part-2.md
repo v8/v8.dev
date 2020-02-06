@@ -134,11 +134,25 @@ We found out that the Object internal method `[[Get]]` is called from the abstra
 
 ### Runtime Semantics
 
-The grammar rules of the spec define the syntax of the language. [Runtime semantics](https://tc39.es/ecma262/#sec-runtime-semantics) define what the syntactic constructs "mean" (how to evaluate them).
+The grammar rules of the spec define the syntax of the language. [Runtime semantics](https://tc39.es/ecma262/#sec-runtime-semantics) define what the syntactic constructs "mean" (how to evaluate them at runtime).
 
-We'll take a deeper look into the grammar rules in a later episode, let's keep it simple for now!
+We'll take a deeper look into the grammar rules in a later episode, let's keep it simple for now! In particular, we can ignore the subscripts (`Yield`, `Await` and so on) in the productions for this episode.
 
-Runtime semantics for the grammar production `MemberExpression` `:` `MemberExpression` `.` `IdentifierName` define the set of steps to take when evaluating it:
+The following productions describe how a `MemberExpression` looks like:
+
+> [`MemberExpression`](https://tc39.es/ecma262/#prod-MemberExpression):
+>
+> `PrimaryExpression`
+> `MemberExpression [ Expression ]`
+> `MemberExpression . IdentifierName`
+> `MemberExpression TemplateLiteral`
+> `SuperProperty`
+> `MetaProperty`
+> `new MemberExpression Arguments`
+
+Here we have 8 productions for `MemberExpression`. A `MemberExpression` can be just a `PrimaryExpression` (production: `MemberExpression` : `PrimaryExpression`). Alternatively, a `MemberExpression` can be constructed from another `MemberExpression` and `Expression` by piecing them together: `MemberExpression [ Expression ]`, for example `o2['foo']`. Or it can be `MemberExpression . IdentifierName`, for example `o2.foo` &mdash; this is the production relevant for our example.
+
+Runtime semantics for the production `MemberExpression` `:` `MemberExpression` `.` `IdentifierName` define the set of steps to take when evaluating it:
 
 > [Runtime Semantics: Evaluation for `MemberExpression` `:` `MemberExpression` `.` `IdentifierName`](https://tc39.es/ecma262/#sec-property-accessors-runtime-semantics-evaluation)
 >
@@ -236,8 +250,6 @@ y; // 5
 
 `o2.foo` is a "degenerate" `AssignmentExpression` which doesn't assign anything. This follows from the following grammar productions, each one taking the "simplest" or "most degenerate" case until the last one.
 
-(Let's ignore the subscripts of the grammar productions for now, we'll find out what they mean in a later episode.)
-
 An `AssignmentExpresssion` doesn't need to have an assignment, it can also be just a `ConditionalExpression`:
 
 > [`AssignmentExpression : ConditionalExpression`](https://tc39.es/ecma262/#sec-assignment-operators)
@@ -280,7 +292,7 @@ Don't despair! Just a couple of more productions...
 >
 > [`UpdateExpression : LeftHandSideExpression`](https://tc39.es/ecma262/#prod-UpdateExpression)
 
-None of the productions of `LeftHandSideExpression` sound particularly degenerate, but we just need to know (or find out) that a `NewExpression` doesn't actually have to have a `new`.
+None of the productions of `LeftHandSideExpression` sound particularly degenerate, but we just need to know (or find out) that a `NewExpression` doesn't actually have to have the `new` keyword.
 
 > [`LeftHandSideExpression : NewExpression`](https://tc39.es/ecma262/#prod-LeftHandSideExpression)
 >
@@ -290,7 +302,7 @@ None of the productions of `LeftHandSideExpression` sound particularly degenerat
 
 > [`MemberExpression : MemberExpression . IdentifierName`](https://tc39.es/ecma262/#prod-MemberExpression)
 
-So, `o2.foo` can be a `MemberExpression` if `o2` is a valid `MemberExpression`. Luckily it's much easier to see:
+So, `o2.foo` is a `MemberExpression` if `o2` is a valid `MemberExpression`. Luckily it's much easier to see:
 
 > [`MemberExpression : PrimaryExpression`](https://tc39.es/ecma262/#prod-MemberExpression)
 >
