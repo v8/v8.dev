@@ -78,11 +78,11 @@ The `Receiver` parameter is only used in the case of accessor properties. It's p
 
 `OrdinaryGet` passes the original `Receiver` throughout the recursion, unchanged (step 3c of `OrdinaryGet`). Let's find out where the `Receiver` is originally coming from!
 
-Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value (in this case, an Object), the reference name (in this case, a String), and a strict mode flag (bool).
+Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value, the reference name and a strict reference flag. In the case of `o2.foo`, the base value is the object`o2`, the reference name is the String `"foo"` and the strict reference flag is `false`, since the example code is sloppy.
 
 ### Side track: References
 
-Side track: A Reference is not a Record, even though it sounds like it could be &mdash; it contains three fixed named values. Here the spec takes a different approach, and defines References as a higher-level data type. This is because of historical reasons.
+Side track: A Reference is not a Record, even though it sounds like it could be. It contains three components, which could equally well be expressed as three fixed named values. Here the spec takes a different approach, and defines References as a higher-level data type. This is because of historical reasons.
 
 ### Back to `GetValue`
 
