@@ -16,7 +16,7 @@ tweet: ''
 
 If you haven't had a look at the previous episodes, now it's a good time to do so!
 
-[Part 1](https://v8.dev/blog/understanding-ecmascript-part-1)
+In [part 1](https://v8.dev/blog/understanding-ecmascript-part-1) we read through a simple method, `Object.prorotype.hasOwnProperty`, and other **abstract operations** it invokes. We familiarized ourselves with the shorhands `?` and `!`related to error handling. We encountered **language types**, **specification types**, **internal slots** and **internal methods**.
 
 ## Ready for part 2?
 
@@ -50,6 +50,8 @@ The internal method `[[Get]]` delegates to `OrdinaryGet`:
 >
 > 1. Return `? OrdinaryGet(O, P, Receiver)`.
 
+We'll see shortly that `Receiver` is the value which is used as the **this value** when calling a getter function of an accessor property.
+
 `OrdinaryGet` is defined like this:
 
 > [`OrdinaryGet ( O, P, Receiver )`](https://tc39.es/ecma262/#sec-ordinaryget)
@@ -70,11 +72,11 @@ The internal method `[[Get]]` delegates to `OrdinaryGet`:
 
 The prototype chain walk is inside step 3: if we don't find the property as an own property, we recurse into the prototype's `[[Get]]` method.
 
-## Where's the Receiver coming from?
+## What's `Receiver` and where is it coming from?
 
-`OrdinaryGet` also passes the original `Receiver` throughout the recursion, unchanged. The `Receiver` is only used if the property is an accessor property, in which case it's passed as the **this value** when calling the getter function.
+The `Receiver` parameter is only used in the case of accessor properties. It's passed as the **this value** when calling the getter function of an accessor property (step 8 of `OrdinaryGet`).
 
-Let's find out where the `Receiver` is coming from!
+`OrdinaryGet` passes the original `Receiver` throughout the recursion, unchanged (step 3c of `OrdinaryGet`). Let's find out where the `Receiver` is originally coming from!
 
 Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value (in this case, an Object), the reference name (in this case, a String), and a strict mode flag (bool).
 
