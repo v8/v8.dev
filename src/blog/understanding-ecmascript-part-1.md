@@ -35,7 +35,7 @@ To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocod
 > 2. Let `O` be `? ToObject(this value)`.
 > 3. Return `? HasOwnProperty(O, P)`.
 
-…and…
+and
 
 > **[`HasOwnProperty(O, P)`](https://tc39.es/ecma262#sec-hasownproperty)**
 >
@@ -130,7 +130,7 @@ That is, we inspect a Completion Record; if it’s an abrupt completion, we retu
 > 2. `ReturnIfAbrupt(obj)`
 > 3. `Bar(obj)`. (If we’re still here, `obj` is the value extracted from the Completion Record.)
 
-And now [the question mark](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands) comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`.
+And now [the question mark](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands) comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`. Using a shorthand is practical, so that we don't need to find the error handling code explicitly each time.
 
 Similarly, `Let val be ! Foo()` is equivalent to:
 
