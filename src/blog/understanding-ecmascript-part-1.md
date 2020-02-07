@@ -35,7 +35,7 @@ To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocod
 > 2. Let `O` be `? ToObject(this value)`.
 > 3. Return `? HasOwnProperty(O, P)`.
 
-and
+…and…	
 
 > **[`HasOwnProperty(O, P)`](https://tc39.es/ecma262#sec-hasownproperty)**
 >
