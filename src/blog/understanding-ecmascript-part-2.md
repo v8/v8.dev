@@ -74,11 +74,11 @@ The prototype chain walk is inside step 3: if we don't find the property as an o
 
 ## What's `Receiver` and where is it coming from?
 
-The `Receiver` parameter is only used in the case of accessor properties. It's passed as the **this value** when calling the getter function of an accessor property (step 8 of `OrdinaryGet`).
+The `Receiver` parameter is only used in the case of accessor properties in step 8. It's passed as the **this value** when calling the getter function of an accessor property.
 
-`OrdinaryGet` passes the original `Receiver` throughout the recursion, unchanged (step 3c of `OrdinaryGet`). Let's find out where the `Receiver` is originally coming from!
+`OrdinaryGet` passes the original `Receiver` throughout the recursion, unchanged (step 3 c). Let's find out where the `Receiver` is originally coming from!
 
-Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value, the reference name and a strict reference flag. In the case of `o2.foo`, the base value is the object`o2`, the reference name is the String `"foo"` and the strict reference flag is `false`, since the example code is sloppy.
+Searching for places where `[[Get]]` is called we find an abstract operation `GetValue` which operates on References. Reference is a specification type, consisting of a base value, the reference name and a strict reference flag. In the case of `o2.foo`, the base value is the Object `o2`, the reference name is the String `"foo"` and the strict reference flag is `false`, since the example code is sloppy.
 
 ### Side track: References
 
@@ -103,7 +103,9 @@ Let's look at how `GetValue` is defined:
 > a. Assert: `base` is an Environment Record.
 > b. Return `? base.GetBindingValue(GetReferencedName(V), IsStrictReference(V))`
 
-For property references such as `o.foo`, we take the branch 5 b. The `Receiver` we pass is `GetThisValue(V)`. In this case, it's just the base of the Reference:
+The reference in our example is `o2.foo` which is a property reference. So we take branch 5. We don't take the branch in 5 a, since the base (`o2`) is not a primitive value (a Boolean, String, Symbol, BigInt or Number).
+
+Then we call `[[Get]]` in step 5 b. The `Receiver` we pass is `GetThisValue(V)`. In this case, it's just the basevalue of the Reference:
 
 > [`GetThisValue( V )`](https://tc39.es/ecma262/#sec-getthisvalue)
 >
@@ -112,25 +114,35 @@ For property references such as `o.foo`, we take the branch 5 b. The `Receiver` 
 > a. Return the value of the `thisValue` component of the reference `V`.
 > 3. Return `GetBase(V)`.
 
-Interesting! The `this` inside the getter refers to the original object where we tried to get the property from, not the one where we found the property during the prototype chain walk. Let's try it out!
+Again, for `o2.foo`, we don't take the branch in step 2, since it's not a super reference (such as `super.foo`), but we take step 3 and return the base value of the reference which is `o2`.
+
+Piecing everything together, we find out that we set the `Receiver` to be the base of the original reference, and then we keep it unchanged during the prototype chain walk. Finally, if the property we find is an accessor property, we use the `Receiver` as the **this value** when calling it.
+
+In particular, the **this value** inside a getter refers to the original object where we tried to get the property from, not the one where we found the property during the prototype chain walk.
+
+Let's try it out!
 
 ```javascript
-const o = { x: 10, get sneaky() { return this.x; } };
+const o = { x: 10, get foo() { return this.x; } };
 let o2 = {};
 o2.__proto__ = o;
-o2.sneaky; // will return 10
 o2.x = 50;
-o2.sneaky; // will return 50
-o.sneaky; // will return 10
+o2.foo; // will return 50
 ```
 
-It really works! We were able to predict the behavior of this code snippet based on what we read in the spec.
+In this example, we have an accessor property called `foo` and we define a getter for it. The getter returns `this.x`.
+
+Then we access `o2.foo` - what does the getter return?
+
+We found out that when we call the getter, the **this value** is the object where we originally tried to get the property from, not the object where we found it. In this case the **this value** is `o2`, not `o`. We can verify that by checking whether the getter returns `o2.x` or `o.x`, and indeed, it returns `o2.x`.
 
 (Note that setting `o2.x = 50` adds a property called `x` in `o2` and doesn't overwrite the property `x` in `o`.)
 
+It works! We were able to predict the behavior of this code snippet based on what we read in the spec.
+
 ## Accessing properties - why does it invoke `[[Get]]`?
 
-But where does the spec say that the Object internal method `[[Get]]` will get invoked when accessing a property like `o2.foo` or `o2.sneaky`? Surely that has to be defined somewhere. Don't take my word for it!
+But where does the spec say that the Object internal method `[[Get]]` will get invoked when accessing a property like `o2.foo`? Surely that has to be defined somewhere. Don't take my word for it!
 
 We found out that the Object internal method `[[Get]]` is called from the abstract operation `GetValue` which operates on References. But where is `GetValue` called from?
 
