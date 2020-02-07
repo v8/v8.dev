@@ -130,7 +130,7 @@ That is, we inspect a Completion Record; if it’s an abrupt completion, we retu
 > 2. `ReturnIfAbrupt(obj)`
 > 3. `Bar(obj)`. (If we’re still here, `obj` is the value extracted from the Completion Record.)
 
-And now [the question mark](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands) comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`. Using a shorthand is practical, so that we don't need to write the error handling code explicitly each time.
+And now [the question mark](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands) comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`. Using a shorthand is practical: we don’t need to write the error handling code explicitly each time.
 
 Similarly, `Let val be ! Foo()` is equivalent to:
 
