@@ -191,6 +191,8 @@ The spec uses the notation `Return ? Foo()` — why the question mark?
 
 Which is the same as `Return Foo()`; it behaves the same way for both abrupt and normal completions.
 
+`Return ? Foo()` is only used for editorial reasons, to make it more explicit that `Foo` returns a Completion Record.
+
 ## Asserts
 
 Asserts in the spec assert invariant conditions of the algorithms. They are added for clarity, but don't add any requirements to the implementation — the implementation doesn’t need to check them.
