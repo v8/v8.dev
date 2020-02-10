@@ -30,7 +30,7 @@ For example:
 const o1 = {'foo' : 2511};
 const o2 = {};
 console.log(o2.foo); // undefined
-o2.__proto__ = o1;
+Object.setPrototypeOf(o2, o1);
 console.log(o2.foo); // 2511
 ```
 
@@ -123,9 +123,9 @@ In particular, the **this value** inside a getter refers to the original object 
 Let's try it out!
 
 ```javascript
-const o = { x: 10, get foo() { return this.x; } };
+const o1 = { x: 10, get foo() { return this.x; } };
 let o2 = {};
-o2.__proto__ = o;
+Object.setPrototypeOf(o2, o1);
 o2.x = 50;
 o2.foo; // will return 50
 ```
@@ -134,9 +134,9 @@ In this example, we have an accessor property called `foo` and we define a gette
 
 Then we access `o2.foo` - what does the getter return?
 
-We found out that when we call the getter, the **this value** is the object where we originally tried to get the property from, not the object where we found it. In this case the **this value** is `o2`, not `o`. We can verify that by checking whether the getter returns `o2.x` or `o.x`, and indeed, it returns `o2.x`.
+We found out that when we call the getter, the **this value** is the object where we originally tried to get the property from, not the object where we found it. In this case the **this value** is `o2`, not `o1`. We can verify that by checking whether the getter returns `o2.x` or `o1.x`, and indeed, it returns `o2.x`.
 
-(Note that setting `o2.x = 50` adds a property called `x` in `o2` and doesn't overwrite the property `x` in `o`.)
+(Note that setting `o2.x = 50` adds a property called `x` in `o2` and doesn't overwrite the property `x` in `o1`.)
 
 It works! We were able to predict the behavior of this code snippet based on what we read in the spec.
 
