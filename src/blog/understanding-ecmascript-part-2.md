@@ -114,7 +114,7 @@ Then we call `[[Get]]` in step 5 b. The `Receiver` we pass is `GetThisValue(V)`.
 > a. Return the value of the `thisValue` component of the reference `V`.
 > 3. Return `GetBase(V)`.
 
-Again, for `o2.foo`, we don't take the branch in step 2, since it's not a super reference (such as `super.foo`), but we take step 3 and return the base value of the reference which is `o2`.
+For `o2.foo`, we don't take the branch in step 2, since it's not a super reference (such as `super.foo`), but we take step 3 and return the base value of the reference which is `o2`.
 
 Piecing everything together, we find out that we set the `Receiver` to be the base of the original reference, and then we keep it unchanged during the prototype chain walk. Finally, if the property we find is an accessor property, we use the `Receiver` as the **this value** when calling it.
 
@@ -164,11 +164,11 @@ The following productions describe how a `MemberExpression` looks like:
 > `MetaProperty`
 > `new MemberExpression Arguments`
 
-Here we have 8 productions for `MemberExpression`. A `MemberExpression` can be just a `PrimaryExpression` (production: `MemberExpression` : `PrimaryExpression`). Alternatively, a `MemberExpression` can be constructed from another `MemberExpression` and `Expression` by piecing them together: `MemberExpression [ Expression ]`, for example `o2['foo']`. Or it can be `MemberExpression . IdentifierName`, for example `o2.foo` &mdash; this is the production relevant for our example.
+Here we have 8 productions for `MemberExpression`. A `MemberExpression` can be just a `PrimaryExpression`. Alternatively, a `MemberExpression` can be constructed from another `MemberExpression` and `Expression` by piecing them together: `MemberExpression [ Expression ]`, for example `o2['foo']`. Or it can be `MemberExpression . IdentifierName`, for example `o2.foo` &mdash; this is the production relevant for our example.
 
-Runtime semantics for the production `MemberExpression` `:` `MemberExpression` `.` `IdentifierName` define the set of steps to take when evaluating it:
+Runtime semantics for the production `MemberExpression` : `MemberExpression` `.` `IdentifierName` define the set of steps to take when evaluating it:
 
-> [Runtime Semantics: Evaluation for `MemberExpression` `:` `MemberExpression` `.` `IdentifierName`](https://tc39.es/ecma262/#sec-property-accessors-runtime-semantics-evaluation)
+> [Runtime Semantics: Evaluation for `MemberExpression` : `MemberExpression` `.` `IdentifierName`](https://tc39.es/ecma262/#sec-property-accessors-runtime-semantics-evaluation)
 >
 > 1. Let `baseReference` be the result of evaluating `MemberExpression`.
 > 2. Let `baseValue` be `? GetValue(baseReference)`.
@@ -186,7 +186,7 @@ The algorithm delegates to the abstract operation `EvaluatePropertyAccessWithIde
 > 3. Let `propertyNameString` be StringValue of `identifierName`.
 > 4. Return a value of type Reference whose base value component is `bv`, whose referenced name component is `propertyNameString`, and whose strict reference flag is `strict`.
 
-That is: `EvaluatePropertyAccessWithIdentifierKey` constructs a Reference which uses the provided `baseValue` as the base and the string value of `identifierName` as the property name.
+That is: `EvaluatePropertyAccessWithIdentifierKey` constructs a Reference which uses the provided `baseValue` as the base, the string value of `identifierName` as the property name, and `strict` as the strict mode flag.
 
 Eventually this Reference gets passed to `GetValue`. This is defined in several places in the spec, depending on how the Reference ends up being used.
 
@@ -195,7 +195,7 @@ Eventually this Reference gets passed to `GetValue`. This is defined in several 
 For example, we can use the property access as a parameter.
 
 ```javascript
-console.log(o.foo);
+console.log(o2.foo);
 ```
 
 In this case, the behavior is defined in the runtime semantics of `ArgumentList` production which calls `GetValue` on the argument:
@@ -208,39 +208,41 @@ In this case, the behavior is defined in the runtime semantics of `ArgumentList`
 > 2. Let `arg` be `? GetValue(ref)`.
 > 3. Return a List whose sole item is `arg`.
 
-Now the `AssignmentExpression` is `o.foo` and the result of evaluating it is the above mentioned Reference. Now we call `GetValue` on it.
+`o2.foo` doesn't look like an `AssignmentExpression` but it is one, so this production is applicable. (Why `o2.foo` is an `AssignmentExpression` will be explained later in this post.)
+
+So, the `AssignmentExpression` is `o2.foo`. `ref`, the result of evaluating `o2.foo`, is the above mentioned Reference. Now we call `GetValue` on it.
 
 ### Property access as the right hand side of an assignemnt
 
 We can also use the property access as a right hand side of an assignment:
 
 ```javascript
-const x = o.foo;
+x = o2.foo;
 ```
 
-In this case, the behavior is defined in the runtime semantics for the `AssignmentExpression` production which calls `GetValue` on the right hand side:
+In this case, the behavior is defined in the runtime semantics for the `AssignmentExpression` : `LeftHandSide` `=` `AssignemntExpression` production. Also this ends up calling `GetValue` on the result of evaluating the right hand side `AssignmentExpression`.
 
 > [Runtime Semantics: Evaluation for `AssignmentExpression : LeftHandSideExpression = AssignmentExpression`](https://tc39.es/ecma262/#sec-assignment-operators-runtime-semantics-evaluation)
 >
 > 1. If `LeftHandSideExpression` is neither an `ObjectLiteral` nor an `ArrayLiteral`, then
-> a. Let `lref` be the result of evaluating `LeftHandSideExpression`.
-> b. ReturnIfAbrupt(lref).
-> c. If `IsAnonymousFunctionDefinition(AssignmentExpression)` and `IsIdentifierRef` of `LeftHandSideExpression` are both `true`, then
-> i. Let `rval` be `NamedEvaluation` of `AssignmentExpression` with argument `GetReferencedName(lref)`.
-> d. Else,
-> i. Let `rref` be the result of evaluating `AssignmentExpression`.
-> ii. Let `rval` be `? GetValue(rref)`.
-> e. Perform `? PutValue(lref, rval)`.
-> f. Return `rval`.
-> 2. Let `assignmentPattern` be the `AssignmentPattern` that is covered by `LeftHandSideExpression`.
-> 3. Let `rref` be the result of evaluating `AssignmentExpression`.
-> 4. Let `rval` be `? GetValue(rref)`.
-> 5. Perform `? DestructuringAssignmentEvaluation` of `assignmentPattern` using `rval` as the argument.
-> 6. Return `rval`.
+>     1. Let `lref` be the result of evaluating `LeftHandSideExpression`.
+>     1. ReturnIfAbrupt(lref).
+>     1. If `IsAnonymousFunctionDefinition(AssignmentExpression)` and `IsIdentifierRef` of `LeftHandSideExpression` are both `true`, then
+>         1. Let `rval` be `NamedEvaluation` of `AssignmentExpression` with argument `GetReferencedName(lref)`.
+>     1. Else,
+>         1. Let `rref` be the result of evaluating `AssignmentExpression`.
+>         1. Let `rval` be `? GetValue(rref)`.
+>     1. Perform `? PutValue(lref, rval)`.
+>     1. Return `rval`.
+> 1. Let `assignmentPattern` be the `AssignmentPattern` that is covered by `LeftHandSideExpression`.
+> 1. Let `rref` be the result of evaluating `AssignmentExpression`.
+> 1. Let `rval` be `? GetValue(rref)`.
+> 1. Perform `? DestructuringAssignmentEvaluation` of `assignmentPattern` using `rval` as the argument.
+> 1. Return `rval`.
 
-Now the `LeftHandSideExpression` is not an object literal or an array literal, so we take the if branch in step 1. The assignment expression is `o.foo`, and it's not a function definition, so we take the else branch in 1 d. There we evaluate the `AssignmentExpression` and call `GetValue` on it.
+Now the `LeftHandSideExpression` (`x`) is not an object literal or an array literal, so we take the if branch in step 1. The `AssignmentExpression` is `o2.foo`, and it's not a function definition, so we take the else branch in 1 d. There we evaluate the `AssignmentExpression` and call `GetValue` on it.
 
-In any case, `GetValue` will be called on the Reference which is the result of evaluating the `MemberExpression`. Thus, we know that the Object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
+In any case, `GetValue` will be called on the Reference which is the result of evaluating `o2.foo`. Thus, we know that the Object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
 
 ### Why is `o2.foo` an `AssignmentExpression`?
 
@@ -257,7 +259,7 @@ x; // 1
 and
 
 ```javascript
-let x = (y = 5);
+x = (y = 5);
 x; // 5
 y; // 5
 ```
