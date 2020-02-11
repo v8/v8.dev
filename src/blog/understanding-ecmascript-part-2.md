@@ -3,7 +3,7 @@ title: 'Understanding the ECMAScript spec, part 2'
 author: '[Marja Hölttä](https://twitter.com/marjakh), speculative specification spectator'
 avatars:
   - marja-holtta
-date: 2020-02-05 13:33:37
+date: 2020-02-11 13:33:37
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
@@ -154,7 +154,7 @@ We'll take a deeper look into the grammar rules in a later episode, let's keep i
 
 The following productions describe how a `MemberExpression` looks like:
 
-> [`MemberExpression`](https://tc39.es/ecma262/#prod-MemberExpression):
+> [`MemberExpression :`](https://tc39.es/ecma262/#prod-MemberExpression)
 >
 > `PrimaryExpression`
 > `MemberExpression [ Expression ]`
@@ -166,9 +166,9 @@ The following productions describe how a `MemberExpression` looks like:
 
 Here we have 8 productions for `MemberExpression`. A `MemberExpression` can be just a `PrimaryExpression`. Alternatively, a `MemberExpression` can be constructed from another `MemberExpression` and `Expression` by piecing them together: `MemberExpression [ Expression ]`, for example `o2['foo']`. Or it can be `MemberExpression . IdentifierName`, for example `o2.foo` &mdash; this is the production relevant for our example.
 
-Runtime semantics for the production `MemberExpression` : `MemberExpression` `.` `IdentifierName` define the set of steps to take when evaluating it:
+Runtime semantics for the production `MemberExpression : MemberExpression . IdentifierName` define the set of steps to take when evaluating it:
 
-> [Runtime Semantics: Evaluation for `MemberExpression` : `MemberExpression` `.` `IdentifierName`](https://tc39.es/ecma262/#sec-property-accessors-runtime-semantics-evaluation)
+> [Runtime Semantics: Evaluation for `MemberExpression : MemberExpression . IdentifierName`](https://tc39.es/ecma262/#sec-property-accessors-runtime-semantics-evaluation)
 >
 > 1. Let `baseReference` be the result of evaluating `MemberExpression`.
 > 2. Let `baseValue` be `? GetValue(baseReference)`.
@@ -181,9 +181,9 @@ The algorithm delegates to the abstract operation `EvaluatePropertyAccessWithIde
 >
 > The abstract operation `EvaluatePropertyAccessWithIdentifierKey` takes as arguments a value `baseValue`, a Parse Node `identifierName`, and a Boolean argument `strict`. It performs the following steps:
 >
-> 1. Assert: `identifierName` is an IdentifierName
+> 1. Assert: `identifierName` is an `IdentifierName`
 > 2. Let `bv` be `? RequireObjectCoercible(baseValue)`.
-> 3. Let `propertyNameString` be StringValue of `identifierName`.
+> 3. Let `propertyNameString` be `StringValue` of `identifierName`.
 > 4. Return a value of type Reference whose base value component is `bv`, whose referenced name component is `propertyNameString`, and whose strict reference flag is `strict`.
 
 That is: `EvaluatePropertyAccessWithIdentifierKey` constructs a Reference which uses the provided `baseValue` as the base, the string value of `identifierName` as the property name, and `strict` as the strict mode flag.
@@ -212,7 +212,7 @@ In this case, the behavior is defined in the runtime semantics of `ArgumentList`
 
 So, the `AssignmentExpression` is `o2.foo`. `ref`, the result of evaluating `o2.foo`, is the above mentioned Reference. Now we call `GetValue` on it.
 
-### Property access as the right hand side of an assignemnt
+### Property access as the right hand side of an assignment
 
 We can also use the property access as a right hand side of an assignment:
 
@@ -220,7 +220,7 @@ We can also use the property access as a right hand side of an assignment:
 x = o2.foo;
 ```
 
-In this case, the behavior is defined in the runtime semantics for the `AssignmentExpression` : `LeftHandSide` `=` `AssignemntExpression` production. Also this ends up calling `GetValue` on the result of evaluating the right hand side `AssignmentExpression`.
+In this case, the behavior is defined in the runtime semantics for the `AssignmentExpression : LeftHandSide = AssignmentExpression` production. Also this ends up calling `GetValue` on the result of evaluating the right hand side `AssignmentExpression`.
 
 > [Runtime Semantics: Evaluation for `AssignmentExpression : LeftHandSideExpression = AssignmentExpression`](https://tc39.es/ecma262/#sec-assignment-operators-runtime-semantics-evaluation)
 >
@@ -264,7 +264,7 @@ x; // 5
 y; // 5
 ```
 
-`o2.foo` is a "degenerate" `AssignmentExpression` which doesn't assign anything. This follows from the following grammar productions, each one taking the "simplest" or "most degenerate" case until the last one.
+`o2.foo` is a "degenerate" `AssignmentExpression` which doesn't assign anything. This follows from the following grammar productions, each one taking the "simplest" or "most degenerate" case until the last one:
 
 An `AssignmentExpresssion` doesn't need to have an assignment, it can also be just a `ConditionalExpression`:
 
@@ -328,6 +328,6 @@ So, `o2.foo` is a `MemberExpression` if `o2` is a valid `MemberExpression`. Luck
 
 `o2` surely is an identifier so we're good.
 
-## Final words
+## Summary
 
 In this episode, we looked at how a language feature, in this case prototype lookup, in defined across all the different layers: the syntactic constructs that trigger the feature and the algorithms defining it.
