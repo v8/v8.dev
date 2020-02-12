@@ -152,6 +152,8 @@ The grammar rules of the spec define the syntax of the language. [Runtime semant
 
 We'll take a deeper look into the grammar rules in a later episode, let's keep it simple for now! In particular, we can ignore the subscripts (`Yield`, `Await` and so on) in the productions for this episode.
 
+(If you're not familiar with [context-free grammars](https://en.wikipedia.org/wiki/Context-free_grammar), it's a good idea to have a look now!)
+
 The following productions describe how a `MemberExpression` looks like:
 
 > [`MemberExpression :`](https://tc39.es/ecma262/#prod-MemberExpression)
