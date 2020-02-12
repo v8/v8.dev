@@ -45,6 +45,6 @@ We encourage embedders on restricted platforms or with special security requirem
 
 ## FAQ
 
-*What's the difference between `--jitless` and `--no-opt`?*
+*What’s the difference between `--jitless` and `--no-opt`?*
 
 `--no-opt` disables the TurboFan optimizing compiler. `--jitless` disables all runtime allocation of executable memory.

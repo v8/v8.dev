@@ -123,7 +123,7 @@ One of the most visually appealing demos where it’s easy to observe the differ
   <video autoplay muted playsinline loop width="600" height="216" src="/_img/simd/hand.mp4"></video>
 </figure>
 
-Visit the [link](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
+Visit the [demo](https://pursuit.page.link/MediaPipeHandTrackingSimd) in Chrome Canary with SIMD enabled to try it!
 
 Another interesting set of demos that makes use of SIMD for smooth experience, come from OpenCV - a popular computer vision library that can also be compiled to WebAssembly. They’re available by [link](https://bit.ly/opencv-camera-demos), or you can check out the pre-recorded versions below:
 
