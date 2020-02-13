@@ -228,7 +228,7 @@ In this case, the behavior is defined in the runtime semantics for the `Assignme
 >
 > 1. If `LeftHandSideExpression` is neither an `ObjectLiteral` nor an `ArrayLiteral`, then
 >     1. Let `lref` be the result of evaluating `LeftHandSideExpression`.
->     1. ReturnIfAbrupt(lref).
+>     1. `ReturnIfAbrupt(lref)`.
 >     1. If `IsAnonymousFunctionDefinition(AssignmentExpression)` and `IsIdentifierRef` of `LeftHandSideExpression` are both `true`, then
 >         1. Let `rval` be `NamedEvaluation` of `AssignmentExpression` with argument `GetReferencedName(lref)`.
 >     1. Else,
@@ -242,7 +242,7 @@ In this case, the behavior is defined in the runtime semantics for the `Assignme
 > 1. Perform `? DestructuringAssignmentEvaluation` of `assignmentPattern` using `rval` as the argument.
 > 1. Return `rval`.
 
-Now the `LeftHandSideExpression` (`x`) is not an object literal or an array literal, so we take the if branch in step 1. The `AssignmentExpression` is `o2.foo`, and it's not a function definition, so we take the else branch in 1 d. There we evaluate the `AssignmentExpression` and call `GetValue` on it.
+Now the `LeftHandSideExpression` (`x`) is not an object literal or an array literal, so we take the if branch in step 1. In step 1 a, we evaluate the left-hand side (`x`) and store the result into `lref`. `o2.foo` is not a function definition, so we don't take the if branch in 1 c, but the else branch in 1 d. There we evaluate `o2.foo` and call `GetValue` on it.
 
 In any case, `GetValue` will be called on the Reference which is the result of evaluating `o2.foo`. Thus, we know that the Object internal method `[[Get]]` will get invoked when accessing a property on an Object, and the prototype chain walk will occur.
 
@@ -271,6 +271,8 @@ y; // 5
 An `AssignmentExpresssion` doesn't need to have an assignment, it can also be just a `ConditionalExpression`:
 
 > [`AssignmentExpression : ConditionalExpression`](https://tc39.es/ecma262/#sec-assignment-operators)
+
+(There are other productions too, here we show only the relevant one.)
 
 A `ConditionalExpression` doesn't need to have a conditional (`a == b ? c : d`), it can also be just a `ShortcircuitExpression`:
 
@@ -310,10 +312,15 @@ Don't despair! Just a couple of more productions...
 >
 > [`UpdateExpression : LeftHandSideExpression`](https://tc39.es/ecma262/#prod-UpdateExpression)
 
-None of the productions of `LeftHandSideExpression` sound particularly degenerate, but we just need to know (or find out) that a `NewExpression` doesn't actually have to have the `new` keyword.
+Then we hit the productions for `LeftHandSideExpression`:
 
-> [`LeftHandSideExpression : NewExpression`](https://tc39.es/ecma262/#prod-LeftHandSideExpression)
->
+> [`LeftHandSideExpression :`](https://tc39.es/ecma262/#prod-LeftHandSideExpression)
+> `NewExpression`
+> `CallExpression`
+> `OptionalExpression`
+
+None of the productions of `LeftHandSideExpression` sound particularly degenerate. We just need to know (or find out) that a `NewExpression` doesn't actually have to have the `new` keyword.
+
 > [`NewExpression : MemberExpression`](https://tc39.es/ecma262/#prod-NewExpression)
 
 `MemberExpression` sounds like something we were looking for, so now we take the non-degenerate production:
@@ -328,7 +335,7 @@ So, `o2.foo` is a `MemberExpression` if `o2` is a valid `MemberExpression`. Luck
 >
 > [`IdentifierReference : Identifier`](https://tc39.es/ecma262/#prod-IdentifierReference)
 
-`o2` surely is an identifier so we're good.
+`o2` is surely an `Identifier` so we're good.
 
 ## Summary
 
