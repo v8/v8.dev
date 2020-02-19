@@ -235,6 +235,12 @@ pre, article footer, .note {
 ol, ul {
   padding-inline-start: var(--offset);
 }
+.ecmascript-algorithm ol > li > ol {
+  list-style-type: lower-alpha;
+}
+.ecmascript-algorithm ol > li > ol > li > ol {
+  list-style-type: lower-roman;
+}
 li pre {
   width: calc(100% + 3 * var(--offset));
   left: calc(-1 * var(--offset));
