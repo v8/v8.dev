@@ -27,6 +27,7 @@ In the example, `o` doesn’t have a property called `hasOwnProperty`, so we wal
 
 To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocode-like descriptions:
 
+:::ecmascript-algorithm
 > **[`Object.prototype.hasOwnProperty(V)`](https://tc39.es/ecma262#sec-object.prototype.hasownproperty)**
 >
 > When the `hasOwnProperty` method is called with argument `V`, the following steps are taken:
@@ -34,9 +35,11 @@ To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocod
 > 1. Let `P` be `? ToPropertyKey(V)`.
 > 2. Let `O` be `? ToObject(this value)`.
 > 3. Return `? HasOwnProperty(O, P)`.
+:::
 
 …and…
 
+:::ecmascript-algorithm
 > **[`HasOwnProperty(O, P)`](https://tc39.es/ecma262#sec-hasownproperty)**
 >
 > The abstract operation `HasOwnProperty` is used to determine whether an object has an own property with the specified property key. A Boolean value is returned. The operation is called with arguments `O` and `P` where `O` is the object and `P` is the property key. This abstract operation performs the following steps:
@@ -46,6 +49,7 @@ To describe how `Object.prototype.hasOwnProperty` works, the spec uses pseudocod
 > 3. Let `desc` be `? O.[[GetOwnProperty]](P)`.
 > 4. If `desc` is `undefined`, return `false`.
 > 5. Return `true`.
+:::
 
 But what’s an “abstract operation”? What are the things inside `[[ ]]`? Why is there a `?` in front of a function? What do the asserts mean?
 
@@ -75,11 +79,13 @@ Internal slots and methods are not accessible from JavaScript. For example, you 
 
 Sometimes internal methods delegate to similarly-named abstract operations, such as in the case of ordinary objects' `[[GetOwnProperty]]:`
 
+:::ecmascript-algorithm
 > **[`[[GetOwnProperty]](P)`](https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots-getownproperty-p)**
 >
 > When the `[[GetOwnProperty]]` internal method of `O` is called with property key `P`, the following steps are taken:
 >
-> Return `! OrdinaryGetOwnProperty(O, P)`.
+> 1. Return `! OrdinaryGetOwnProperty(O, P)`.
+:::
 
 (We’ll find out what the exclamation mark means in the next chapter.)
 
@@ -100,11 +106,11 @@ Completion Record is a specification type (only defined for spec purposes). A Ja
 A Completion Record is a “record” — a data type which has a fixed set of named fields. A Completion Record has three fields:
 
 :::table-wrapper
-| Name | Description |
---- | ---
-| `[[Type]]` | One of: `normal`, `break`, `continue`, `return`, or `throw`. All other types except `normal` are **abrupt completions**.|
-| `[[Value]]` | The value that was produced when the completion occurred, for example, the return value of a function or the exception (if one is thrown).|
-| `[[Target]]` | Used for directed control transfers (not relevant for this blog post).|
+| Name         | Description                                                                                                                                |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `[[Type]]`   | One of: `normal`, `break`, `continue`, `return`, or `throw`. All other types except `normal` are **abrupt completions**.                   |
+| `[[Value]]`  | The value that was produced when the completion occurred, for example, the return value of a function or the exception (if one is thrown). |
+| `[[Target]]` | Used for directed control transfers (not relevant for this blog post).                                                                     |
 :::
 
 Every abstract operation implicitly returns a Completion Record. Even if it looks like an abstract operation would return a simple type such as Boolean, it’s implicitly wrapped into a Completion Record with the type `normal` (see [Implicit Completion Values](https://tc39.es/ecma262/#sec-implicit-completion-values)).
@@ -117,8 +123,12 @@ If an algorithm throws an exception, it means returning a Completion Record with
 
 [`ReturnIfAbrupt(argument)`](https://tc39.es/ecma262/#sec-returnifabrupt) means taking the following steps:
 
+:::ecmascript-algorithm
+<!-- markdownlint-disable blanks-around-lists -->
 > 1. If `argument` is abrupt, return `argument`
-> 2. Set `argument` to `argument.[[Value]]`
+> 2. Set `argument` to `argument.[[Value]]`.
+<!-- markdownlint-enable blanks-around-lists -->
+:::
 
 That is, we inspect a Completion Record; if it’s an abrupt completion, we return immediately. Otherwise, we extract the value from the Completion Record.
 
@@ -126,20 +136,29 @@ That is, we inspect a Completion Record; if it’s an abrupt completion, we retu
 
 `ReturnIfAbrupt` can be used like this:
 
+:::ecmascript-algorithm
+<!-- markdownlint-disable blanks-around-lists -->
 > 1. Let `obj` be `Foo()`. (`obj` is a Completion Record.)
-> 2. `ReturnIfAbrupt(obj)`
+> 2. `ReturnIfAbrupt(obj)`.
 > 3. `Bar(obj)`. (If we’re still here, `obj` is the value extracted from the Completion Record.)
+<!-- markdownlint-enable blanks-around-lists -->
+:::
 
 And now [the question mark](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands) comes into play: `? Foo()` is equivalent to `ReturnIfAbrupt(Foo())`. Using a shorthand is practical: we don’t need to write the error handling code explicitly each time.
 
 Similarly, `Let val be ! Foo()` is equivalent to:
 
-> 1. Let `val` be `Foo()`
-> 2. Assert: `val` is not an abrupt completion
+:::ecmascript-algorithm
+<!-- markdownlint-disable blanks-around-lists -->
+> 1. Let `val` be `Foo()`.
+> 2. Assert: `val` is not an abrupt completion.
 > 3. Set `val` to `val.[[Value]]`.
+<!-- markdownlint-enable blanks-around-lists -->
+:::
 
 Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this:
 
+:::ecmascript-algorithm
 > **`Object.prototype.hasOwnProperty(P)`**
 >
 > 1. Let `P` be `ToPropertyKey(V)`.
@@ -152,9 +171,11 @@ Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this
 > 8. If `temp` is an abrupt completion, return `temp`
 > 9. Let `temp` be `temp.[[Value]]`
 > 10. Return `NormalCompletion(temp)`
+:::
 
 …and we can rewrite `HasOwnProperty` like this:
 
+:::ecmascript-algorithm
 > **`HasOwnProperty(O, P)`**
 >
 > 1. Assert: `Type(O)` is `Object`.
@@ -164,15 +185,20 @@ Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this
 > 5. Set `desc` to `desc.[[Value]]`
 > 6. If `desc` is `undefined`, return `NormalCompletion(false)`.
 > 7. Return `NormalCompletion(true)`.
+:::
 
 We can also rewrite the `[[GetOwnProperty]]` internal method without the exclamation mark:
 
+:::ecmascript-algorithm
+<!-- markdownlint-disable blanks-around-lists -->
 > **`O.[[GetOwnProperty]]`**
 >
-> 1. Let `temp` be `OrdinaryGetOwnProperty(O, P)`
-> 2. Assert: `temp` is not an abrupt completion
-> 3. Let `temp` be `temp.[[Value]]`
-> 4. Return `NormalCompletion(temp)`
+> 1. Let `temp` be `OrdinaryGetOwnProperty(O, P)`.
+> 2. Assert: `temp` is not an abrupt completion.
+> 3. Let `temp` be `temp.[[Value]]`.
+> 4. Return `NormalCompletion(temp)`.
+<!-- markdownlint-enable blanks-around-lists -->
+:::
 
 Here we assume that `temp` is a brand new temporary variable which doesn’t collide with anything else.
 
@@ -184,10 +210,14 @@ The spec uses the notation `Return ? Foo()` — why the question mark?
 
 `Return ? Foo()` expands to:
 
-> 1. Let `temp` be `Foo()`
-> 2. If `temp` is an abrupt completion, return `temp`
-> 3. Set `temp` to `temp.[[Value]]`
-> 4. Return `NormalCompletion(temp)`
+:::ecmascript-algorithm
+<!-- markdownlint-disable blanks-around-lists -->
+> 1. Let `temp` be `Foo()`.
+> 2. If `temp` is an abrupt completion, return `temp`.
+> 3. Set `temp` to `temp.[[Value]]`.
+> 4. Return `NormalCompletion(temp)`.
+<!-- markdownlint-enable blanks-around-lists -->
+:::
 
 Which is the same as `Return Foo()`; it behaves the same way for both abrupt and normal completions.
 

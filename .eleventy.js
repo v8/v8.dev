@@ -41,6 +41,7 @@ const md = markdownIt(markdownItConfig)
   .use(markdownItAttrs)
   .use(markdownItContainer, 'note')
   .use(markdownItContainer, 'table-wrapper')
+  .use(markdownItContainer, 'ecmascript-algorithm')
   .use(markdownItMultiMdTable, {
     rowspan: true,
   })
