@@ -40,7 +40,7 @@ languageNames.of('de');
 // → '德文'
 ```
 
-The following example gets currency names in Simplified Chinese using [ISO-4217 3-letter currency codes](https://www.iso.org/iso-4217-currency-codes.html). In languages that have distinct singular and plural forms, the currency names are singular. For plural forms, [Intl.NumberFormat](https://v8.dev/features/intl-numberformat) may be used.
+The following example gets currency names in Simplified Chinese using [ISO-4217 3-letter currency codes](https://www.iso.org/iso-4217-currency-codes.html). In languages that have distinct singular and plural forms, the currency names are singular. For plural forms, [`Intl.NumberFormat`](https://v8.dev/features/intl-numberformat) may be used.
 
 ```js
 const currencyNames = new Intl.DisplayNames(['zh-Hans'], {type: 'currency'});
