@@ -7,7 +7,6 @@ date: 2020-02-24
 tags:
   - release
 description: 'V8 v8.1 features improved internationalization support, Intl.DisplayNames.'
-tweet: 'XXX'
 ---
 
 V8 release v8.1
