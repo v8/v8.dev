@@ -39,6 +39,6 @@ Shift the burden of translation data maintenance to the runtime today! See the [
 
 ## V8 API
 
-Please use `git log branch-heads/8.0..branch-heads/8.1 include/v8.h` to get a list of the API changes. 
+Please use `git log branch-heads/8.0..branch-heads/8.1 include/v8.h` to get a list of the API changes.
 
 Developers with an [active V8 checkout](/docs/source-code#using-git) can use `git checkout -b 8.1 -t branch-heads/8.1` to experiment with the new features in V8 v8.1. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
