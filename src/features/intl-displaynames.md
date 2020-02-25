@@ -106,7 +106,8 @@ Like other `Intl` APIs, as `Intl.DisplayNames` become more widely available, lib
 
 ## `Intl.DisplayNames` support { #support }
 
-<feature-support chrome="81 /blog/v8-release-81#intl.displaynames"
+<feature-support chrome="81"
                  firefox="no"
                  safari="no"
+                 nodejs="14"
                  babel="no"></feature-support>
