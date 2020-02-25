@@ -2,8 +2,8 @@
 title: 'V8 release v8.1'
 author: 'Dominik Inführ'
 avatars:
-  - 'dinfuehr'
-date: 2020-02-24
+  - 'dominik-infuehr'
+date: 2020-02-25
 tags:
   - release
 description: 'V8 v8.1 features improved internationalization support, Intl.DisplayNames.'
