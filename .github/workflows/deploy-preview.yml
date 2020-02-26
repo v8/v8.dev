@@ -1,0 +1,14 @@
+name: Deploy Preview
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: developit/firebase-hosting-preview-action@v1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          firebase-token: "${{ secrets.FIREBASE_TOKEN }}"
+          use-web-tld: true
