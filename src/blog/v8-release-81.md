@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v8.1'
-author: 'Dominik Inführ'
+author: 'Dominik Inführ, international(ization) man of mystery'
 avatars:
   - 'dominik-infuehr'
 date: 2020-02-25
