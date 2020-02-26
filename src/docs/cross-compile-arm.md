@@ -86,6 +86,24 @@ d8>
 
 ## Debugging
 
+### d8
+
+Remote debugging `d8` on an Android device is relatively simple. First start `gdbserver` on the Android device:
+
+```bash
+bullhead:/data/local/tmp/v8/bin $ gdbserver :5039 $D8 <arguments>
+```
+
+Then connect to the server on your host device.
+
+```bash
+adb forward tcp:5039 tcp:5039
+gdb $D8
+gdb> target remote :5039
+```
+
+`gdb` and `gdbserver` need to be compatible with each other, if in doubt use the binaries from the [Android NDK](https://developer.android.com/ndk). Note that by default the `d8` binary is stripped (debugging info removed), `$OUT_DIR/exe.unstripped/d8` contains the unstripped binary though.
+
 ### Logging
 
 By default, some of `d8`’s debugging output ends up in the Android system log, which can be dumped using [`logcat`](https://developer.android.com/studio/command-line/logcat). Unfortunately, sometimes part of a particular debugging output is split between system log and `adb`, and sometimes some part seems to be completely missing. To avoid these issues, it is recommended to add the following setting to the `gn args`:
