@@ -7,7 +7,7 @@ date: 2020-03-02
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification, part 2'
-tweet: ''
+tweet: '1234550773629014016'
 ---
 
 ... where we practice our awesome spec reading skills some more.
