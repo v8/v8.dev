@@ -313,11 +313,12 @@ Don't despair! Just a couple of more productions...
 > [`UpdateExpression : LeftHandSideExpression`](https://tc39.es/ecma262/#prod-UpdateExpression)
 
 Then we hit the productions for `LeftHandSideExpression`:
-
+<!-- markdownlint-disable blanks-around-lists -->
 > [`LeftHandSideExpression :`](https://tc39.es/ecma262/#prod-LeftHandSideExpression)
-> `NewExpression`
-> `CallExpression`
-> `OptionalExpression`
+> - `NewExpression`
+> - `CallExpression`
+> - `OptionalExpression`
+<!-- markdownlint-enable blanks-around-lists -->
 
 None of the productions of `LeftHandSideExpression` sound particularly degenerate. We just need to know (or find out) that a `NewExpression` doesn't actually have to have the `new` keyword.
 
