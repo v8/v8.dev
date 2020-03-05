@@ -119,7 +119,7 @@ The Reference in our example is `o2.foo`, which is a property reference. So we t
 Then we call `[[Get]]` in step 5.b. The `Receiver` we pass is `GetThisValue(V)`. In this case, it’s just the base value of the Reference:
 
 :::ecmascript-algorithm
-> [`GetThisValue( V )`](https://tc39.es/ecma262/#sec-getthisvalue)
+> **[`GetThisValue( V )`](https://tc39.es/ecma262/#sec-getthisvalue)**
 >
 > 1. Assert: `IsPropertyReference(V)` is `true`.
 > 1. If `IsSuperReference(V)` is `true`, then
@@ -164,17 +164,16 @@ If you’re not familiar with [context-free grammars](https://en.wikipedia.org/w
 
 We’ll take a deeper look into the grammar rules in a later episode, let’s keep it simple for now! In particular, we can ignore the subscripts (`Yield`, `Await` and so on) in the productions for this episode.
 
-The following productions describe what a `MemberExpression` looks like:
+The following productions describe what a [`MemberExpression`](https://tc39.es/ecma262/#prod-MemberExpression) looks like:
 
-> [`MemberExpression :`](https://tc39.es/ecma262/#prod-MemberExpression)
->
-> `PrimaryExpression`
-> `MemberExpression [ Expression ]`
-> `MemberExpression . IdentifierName`
-> `MemberExpression TemplateLiteral`
-> `SuperProperty`
-> `MetaProperty`
-> `new MemberExpression Arguments`
+<pre><code class="language-grammar">MemberExpression :
+  PrimaryExpression
+  MemberExpression <b>[</b> Expression <b>]</b>
+  MemberExpression <b>.</b> IdentifierName
+  MemberExpression TemplateLiteral
+  SuperProperty
+  MetaProperty
+  <b>new</b> MemberExpression Arguments</code></pre>
 
 Here we have 7 productions for `MemberExpression`. A `MemberExpression` can be just a `PrimaryExpression`. Alternatively, a `MemberExpression` can be constructed from another `MemberExpression` and `Expression` by piecing them together: `MemberExpression [ Expression ]`, for example `o2['foo']`. Or it can be `MemberExpression . IdentifierName`, for example `o2.foo` — this is the production relevant for our example.
 
