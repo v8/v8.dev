@@ -9,7 +9,6 @@ tags:
 description: 'Tutorial on reading the ECMAScript specification, part 2'
 tweet: '1234550773629014016'
 ---
-
 Let’s practice our awesome spec reading skills some more. If you haven’t had a look at the previous episodes, now it’s a good time to do so!
 
 In [part 1 of this series](/blog/understanding-ecmascript-part-1) we read through a simple method — `Object.prototype.hasOwnProperty` — and **abstract operations** it invokes. We familiarized ourselves with the shorthands `?` and `!` related to error handling. We encountered **language types**, **specification types**, **internal slots**, and **internal methods**.
@@ -214,7 +213,7 @@ console.log(o2.foo);
 In this case, the behavior is defined in the runtime semantics of `ArgumentList` production which calls `GetValue` on the argument:
 
 :::ecmascript-algorithm
-> **[Runtime Semantics: ArgumentListEvaluation](https://tc39.es/ecma262/#sec-argument-lists-runtime-semantics-argumentlistevaluation)**
+> **[Runtime Semantics: `ArgumentListEvaluation`](https://tc39.es/ecma262/#sec-argument-lists-runtime-semantics-argumentlistevaluation)**
 >
 > `ArgumentList : AssignmentExpression`
 >
