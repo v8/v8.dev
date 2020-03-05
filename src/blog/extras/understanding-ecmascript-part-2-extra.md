@@ -12,19 +12,23 @@ tweet: ''
 
 ### Why is `o2.foo` an `AssignmentExpression`?
 
-`o2.foo` doesn't look like an `AssignmentExpression` since there's no assignment. Why is it an `AssignmentExpression`?
+`o2.foo` doesn’t look like an `AssignmentExpression` since there’s no assignment. Why is it an `AssignmentExpression`?
 
 The spec actually allows an `AssignmentExpression` both as an argument and as the right hand side of an assignment. For example:
 
-```javascript
-function simple(a) { console.log('The argument was ' + a); }
-simple(x = 1); // Prints out: The argument was 1
-x; // 1
+```js
+function simple(a) {
+  console.log('The argument was ' + a);
+}
+simple(x = 1);
+// → Logs “The argument was 1”.
+x;
+// → 1
 ```
 
-and
+…and…
 
-```javascript
+```js
 x = y = 5;
 x; // 5
 y; // 5
@@ -34,13 +38,13 @@ y; // 5
 
 An `AssignmentExpresssion` doesn't need to have an assignment, it can also be just a `ConditionalExpression`:
 
-> [`AssignmentExpression : ConditionalExpression`](https://tc39.es/ecma262/#sec-assignment-operators)
+> **[`AssignmentExpression : ConditionalExpression`](https://tc39.es/ecma262/#sec-assignment-operators)**
 
 (There are other productions too, here we show only the relevant one.)
 
 A `ConditionalExpression` doesn't need to have a conditional (`a == b ? c : d`), it can also be just a `ShortcircuitExpression`:
 
-> [`ConditionalExpression : ShortCircuitExpression`](https://tc39.es/ecma262/#sec-conditional-operator)
+> **[`ConditionalExpression : ShortCircuitExpression`](https://tc39.es/ecma262/#sec-conditional-operator)**
 
 And so on:
 
@@ -60,7 +64,7 @@ And so on:
 >
 > [`RelationalExpression : ShiftExpression`](https://tc39.es/ecma262/#prod-RelationalExpression)
 
-Almost there...
+Almost there…
 
 > [`ShiftExpression : AdditiveExpression`](https://tc39.es/ecma262/#prod-ShiftExpression)
 >
@@ -70,7 +74,7 @@ Almost there...
 >
 > [`ExponentialExpression : UnaryExpression`](https://tc39.es/ecma262/#prod-ExponentiationExpression)
 
-Don't despair! Just a couple of more productions...
+Don’t despair! Just a couple of more productions…
 
 > [`UnaryExpression : UpdateExpression`](https://tc39.es/ecma262/#prod-UnaryExpression)
 >
@@ -83,7 +87,7 @@ Then we hit the productions for `LeftHandSideExpression`:
 > `CallExpression`
 > `OptionalExpression`
 
-It's not clear which production might apply to `o2.foo`. We just need to know (or find out) that a `NewExpression` doesn't actually have to have the `new` keyword.
+It’s not clear which production might apply to `o2.foo`. We just need to know (or find out) that a `NewExpression` doesn’t actually have to have the `new` keyword.
 
 > [`NewExpression : MemberExpression`](https://tc39.es/ecma262/#prod-NewExpression)
 

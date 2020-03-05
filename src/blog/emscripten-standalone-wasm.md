@@ -59,7 +59,7 @@ and one more function, `_start`,
 
 One nice thing about a standalone Wasm file like this is that you can write custom JavaScript to load and run it, which can be very minimal depending on your use case. For example, we can do this in Node.js:
 
-```javascript
+```js
 // load-add.js
 const binary = require('fs').readFileSync('add.wasm');
 
