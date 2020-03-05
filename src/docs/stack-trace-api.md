@@ -42,7 +42,7 @@ To pass this flag to V8 when running Google Chrome, use:
 
 ## Async stack traces
 
-The `--async-stack-traces` flag (currently turned off by default) enables the new [zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `stack` property of `Error` instances with async stack frames, i.e. `await` locations in the code. These async frames are marked with `async` in the `stack` string:
+The `--async-stack-traces` flag (turned on by default since [V8 v7.3](https://v8.dev/blog/v8-release-73#async-stack-traces)) enables the new [zero-cost async stack traces](https://bit.ly/v8-zero-cost-async-stack-traces), which enriches the `stack` property of `Error` instances with async stack frames, i.e. `await` locations in the code. These async frames are marked with `async` in the `stack` string:
 
 ```
 ReferenceError: FAIL is not defined
