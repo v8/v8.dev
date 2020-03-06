@@ -19,6 +19,11 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
     ```bash
     gclient sync
     ```
+    For Googlers - If you see Failed to fetch file or Login required errors when running the hooks, try authenticating with Google Storage first by running:
+    ```bash
+    gsutil.py config
+    ```
+    Login with your @google.com account, and enter `0` when asked for a project ID.
 
 1. This step is only needed on Linux. Install additional build dependencies:
 
