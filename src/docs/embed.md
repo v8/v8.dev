@@ -131,14 +131,14 @@ Local<Array> NewPointArray(int x, int y, int z) {
   v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
   // We will be creating temporary handles so we use a handle scope.
-  EscapableHandleScope handle_scope(isolate);
+  v8::EscapableHandleScope handle_scope(isolate);
 
   // Create a new empty array.
-  Local<Array> array = Array::New(isolate, 3);
+  v8::Local<v8::Array> array = v8::Array::New(isolate, 3);
 
   // Return an empty result if there was an error creating the array.
   if (array.IsEmpty())
-    return Local<Array>();
+    return v8::Local<v8::Array>();
 
   // Fill out the values
   array->Set(0, Integer::New(isolate, x));
@@ -194,13 +194,14 @@ The following code provides an example of creating a template for the global obj
 ```cpp
 // Create a template for the global object and set the
 // built-in global functions.
-Local<ObjectTemplate> global = ObjectTemplate::New(isolate);
-global->Set(String::NewFromUtf8(isolate, "log"),
-            FunctionTemplate::New(isolate, LogCallback));
+v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate);
+global->Set(v8::String::NewFromUtf8(isolate, "log"),
+            v8::FunctionTemplate::New(isolate, LogCallback));
 
 // Each processor gets its own context so different processors
 // do not affect each other.
-Persistent<Context> context = Context::New(isolate, NULL, global);
+v8::Persistent<v8::Context> context =
+    v8::Context::New(isolate, nullptr, global);
 ```
 
 This example code is taken from `JsHttpProcessor::Initializer` in the `process.cc` sample.
@@ -219,22 +220,25 @@ The complexity of an accessor depends upon the type of data you are manipulating
 Let’s say there are two C++ integer variables, `x` and `y` that are to be made available to JavaScript as global variables within a context. To do this, you need to call C++ accessor functions whenever a script reads or writes those variables. These accessor functions convert a C++ integer to a JavaScript integer using `Integer::New`, and convert a JavaScript integer to a C++ integer using `Int32Value`. An example is provided below:
 
 ```cpp
-void XGetter(Local<String> property,
-              const PropertyCallbackInfo<Value>& info) {
+void XGetter(v8::Local<v8::String> property,
+              const v8::PropertyCallbackInfo<Value>& info) {
   info.GetReturnValue().Set(x);
 }
 
-void XSetter(Local<String> property, Local<Value> value,
-             const PropertyCallbackInfo<void>& info) {
+void XSetter(v8::Local<v8::String> property, v8::Local<v8::Value> value,
+             const v8::PropertyCallbackInfo<void>& info) {
   x = value->Int32Value();
 }
 
 // YGetter/YSetter are so similar they are omitted for brevity
 
-Local<ObjectTemplate> global_templ = ObjectTemplate::New(isolate);
-global_templ->SetAccessor(String::NewFromUtf8(isolate, "x"), XGetter, XSetter);
-global_templ->SetAccessor(String::NewFromUtf8(isolate, "y"), YGetter, YSetter);
-Persistent<Context> context = Context::New(isolate, NULL, global_templ);
+v8::Local<v8::ObjectTemplate> global_templ = v8::ObjectTemplate::New(isolate);
+global_templ->SetAccessor(v8::String::NewFromUtf8(isolate, "x"),
+                          XGetter, XSetter);
+global_templ->SetAccessor(v8::String::NewFromUtf8(isolate, "y"),
+                          YGetter, YSetter);
+v8::Persistent<v8::Context> context =
+    v8::Context::v8::New(isolate, nullptr, global_templ);
 ```
 
 Note that the object template in the code above is created at the same time as the context. The template could have been created in advance and then used for any number of contexts.
@@ -256,7 +260,7 @@ To make any number of C++ `point` instances available to JavaScript we need to c
 First create an object template for the `point` wrapper object:
 
 ```cpp
-Local<ObjectTemplate> point_templ = ObjectTemplate::New(isolate);
+v8::Local<v8::ObjectTemplate> point_templ = v8::ObjectTemplate::New(isolate);
 ```
 
 Each JavaScript `point` object keeps a reference to the C++ object for which it is a wrapper with an internal field. These fields are so named because they cannot be accessed from within JavaScript, they can only be accessed from C++ code. An object can have any number of internal fields, the number of internal fields is set on the object template as follows:
@@ -270,16 +274,18 @@ Here the internal field count is set to `1` which means the object has one inter
 Add the `x` and `y` accessors to the template:
 
 ```cpp
-point_templ->SetAccessor(String::NewFromUtf8(isolate, "x"), GetPointX, SetPointX);
-point_templ->SetAccessor(String::NewFromUtf8(isolate, "y"), GetPointY, SetPointY);
+point_templ->SetAccessor(v8::String::NewFromUtf8(isolate, "x"),
+                         GetPointX, SetPointX);
+point_templ->SetAccessor(v8::String::NewFromUtf8(isolate, "y"),
+                         GetPointY, SetPointY);
 ```
 
 Next, wrap a C++ point by creating a new instance of the template and then setting the internal field `0` to an external wrapper around the point `p`.
 
 ```cpp
 Point* p = ...;
-Local<Object> obj = point_templ->NewInstance();
-obj->SetInternalField(0, External::New(isolate, p));
+v8::Local<v8::Object> obj = point_templ->NewInstance();
+obj->SetInternalField(0, v8::External::New(isolate, p));
 ```
 
 The external object is simply a wrapper around a `void*`. External objects can only be used to store reference values in internal fields. JavaScript objects can not have references to C++ objects directly so the external value is used as a "bridge" to go from JavaScript into C++.  In that sense external values are the opposite of handles since handles lets C++ make references to JavaScript objects.
@@ -289,17 +295,19 @@ Here’s the definition of the `get` and `set` accessors for `x`, the `y` access
 ```cpp
 void GetPointX(Local<String> property,
                const PropertyCallbackInfo<Value>& info) {
-  Local<Object> self = info.Holder();
-  Local<External> wrap = Local<External>::Cast(self->GetInternalField(0));
+  v8::Local<v8::Object> self = info.Holder();
+  v8::Local<v8::External> wrap =
+      v8::Local<v8::External>::Cast(self->GetInternalField(0));
   void* ptr = wrap->Value();
   int value = static_cast<Point*>(ptr)->x_;
   info.GetReturnValue().Set(value);
 }
 
-void SetPointX(Local<String> property, Local<Value> value,
-               const PropertyCallbackInfo<void>& info) {
-  Local<Object> self = info.Holder();
-  Local<External> wrap = Local<External>::Cast(self->GetInternalField(0));
+void SetPointX(v8::Local<v8::String> property, v8::Local<v8::Value> value,
+               const v8::PropertyCallbackInfo<void>& info) {
+  v8::Local<v8::Object> self = info.Holder();
+  v8::Local<v8::External> wrap =
+      v8::Local<v8::External>::Cast(self->GetInternalField(0));
   void* ptr = wrap->Value();
   static_cast<Point*>(ptr)->x_ = value->Int32Value();
 }
@@ -318,15 +326,15 @@ You can also specify a callback for whenever a script accesses any object proper
 The sample `process.cc`, provided with the V8 source code, includes an example of using interceptors. In the following code snippet `SetNamedPropertyHandler` specifies the `MapGet` and `MapSet` interceptors:
 
 ```cpp
-Local<ObjectTemplate> result = ObjectTemplate::New(isolate);
+v8::Local<v8::ObjectTemplate> result = v8::ObjectTemplate::New(isolate);
 result->SetNamedPropertyHandler(MapGet, MapSet);
 ```
 
 The `MapGet` interceptor is provided below:
 
 ```cpp
-void JsHttpRequestProcessor::MapGet(Local<String> name,
-                                    const PropertyCallbackInfo<Value>& info) {
+void JsHttpRequestProcessor::MapGet(v8::Local<v8::String> name,
+                                    const v8::PropertyCallbackInfo<Value>& info) {
   // Fetch the map wrapped by this object.
   map<string, string> *obj = UnwrapMap(info.Holder());
 
@@ -341,8 +349,8 @@ void JsHttpRequestProcessor::MapGet(Local<String> name,
 
   // Otherwise fetch the value and wrap it in a JavaScript string.
   const string &value = (*iter).second;
-  info.GetReturnValue().Set(
-      String::NewFromUtf8(value.c_str(), String::kNormalString, value.length()));
+  info.GetReturnValue().Set(v8::String::NewFromUtf8(
+      value.c_str(), v8::String::kNormalString, value.length()));
 }
 ```
 
@@ -367,11 +375,11 @@ V8 returns an empty handle if an operation did not succeed. It is therefore impo
 You can catch exceptions with `TryCatch`, for example:
 
 ```cpp
-TryCatch trycatch(isolate);
-Local<Value> v = script->Run();
+v8::TryCatch trycatch(isolate);
+v8::Local<v8::Value> v = script->Run();
 if (v.IsEmpty()) {
-  Local<Value> exception = trycatch.Exception();
-  String::Utf8Value exception_str(exception);
+  v8::Local<v8::Value> exception = trycatch.Exception();
+  v8::String::Utf8Value exception_str(exception);
   printf("Exception: %s\n", *exception_str);
   // ...
 }
@@ -410,10 +418,10 @@ All instances of `bicycle()` will now have the `wheels` property prebuilt into t
 The same approach is used in V8 with templates. Each `FunctionTemplate` has a `PrototypeTemplate` method which gives a template for the function’s prototype. You can set properties, and associate C++ functions with those properties, on a `PrototypeTemplate` which will then be present on all instances of the corresponding `FunctionTemplate`. For example:
 
 ```cpp
-Local<FunctionTemplate> biketemplate = FunctionTemplate::New(isolate);
+v8::Local<v8::FunctionTemplate> biketemplate = v8::FunctionTemplate::New(isolate);
 biketemplate->PrototypeTemplate().Set(
-    String::NewFromUtf8(isolate, "wheels"),
-    FunctionTemplate::New(isolate, MyWheelsMethodCallback)->GetFunction()
+    v8::String::NewFromUtf8(isolate, "wheels"),
+    v8::FunctionTemplate::New(isolate, MyWheelsMethodCallback)->GetFunction()
 );
 ```
 
@@ -422,5 +430,5 @@ This causes all instances of `biketemplate` to have a `wheels` method in their p
 V8’s `FunctionTemplate` class provides the public member function `Inherit()` which you can call when you want a function template to inherit from another function template, as follows:
 
 ```cpp
-void Inherit(Local<FunctionTemplate> parent);
+void Inherit(v8::Local<v8::FunctionTemplate> parent);
 ```
