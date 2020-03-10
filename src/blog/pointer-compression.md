@@ -42,12 +42,11 @@ JavaScript values in V8, whether they are objects, arrays, numbers or strings, a
 
 V8 always allocates objects in the heap at word-aligned addresses, which allows to use the 2 or 3 least significant bits for tagging (depending on the machine word size). On 32-bit architectures, V8 uses the least significant bit to distinguish small integers (Smis) from heap object pointers, and for heap pointers uses the second least significant bit to distinguish strong references from weak ones:
 
-TODO: Can I use bold in here?
-```
- 	                    |----- 32 bits -----|
-Pointer:	            |_____address_____**w1**|
-Smi: 	                |___int31_value____**0**|
-```
+<pre>
+                        |----- 32 bits -----|
+Pointer:                |_____address_____<b>w1</b>|
+Smi:                    |___int31_value____<b>0</b>|
+</pre>
 
 where w is a bit used for distinguishing strong pointers from the weak ones.
 
@@ -55,12 +54,11 @@ Note that a Smi value can only carry a 31-bit payload, including the sign bit. I
 
 On 64-bit architectures V8 values look like this:
 
-TODO: Can I use bold in here?
-```
- 	        |----- 32 bits -----|----- 32 bits -----|
-Pointer:	|________________address______________**w1**|
-Smi: 	    |____int32_value____|000000000000000000**0**|
-```
+<pre>
+            |----- 32 bits -----|----- 32 bits -----|
+Pointer:    |________________address______________<b>w1</b>|
+Smi:        |____int32_value____|000000000000000000<b>0</b>|
+</pre>
 
 You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can use 32 bits for the Smi value payload. The benefits of 32-bit Smis will be discussed in the following sections.
 
@@ -98,14 +96,14 @@ But if we just arrange V8 heap in a contiguous 4GB region of address space somew
 
 If we also ensure that the base is 4GB-aligned then the upper 32 bits will be the same for all pointers:
 ```
- 	        |----- 32 bits -----|----- 32 bits -----|
-Pointer:	|________base_______|______offset_____w1|
+            |----- 32 bits -----|----- 32 bits -----|
+Pointer:    |________base_______|______offset_____w1|
 ```
 
 We can also make Smis them compressible by limiting the Smi payload to 31 bits and arithmetically shifting it to the lower 32 bits.
 ```
- 	    |----- 32 bits -----|----- 32 bits -----|
-Smi: 	|sssssssssssssssssss|____int31_value___0|
+         |----- 32 bits -----|----- 32 bits -----|
+Smi:     |sssssssssssssssssss|____int31_value___0|
 ```
 
 where s is the sign value of the Smi payload. We need this sign-extended representation in order to be able to convert Smi to int64_t (and back) with just a one-bit arithmetic shift of the 64-bit word.
@@ -356,7 +354,6 @@ You can read more about hidden classes and properties and elements backing store
 
 On 64-bit architectures, double values are the same size as pointers. So, if we assume that Point’s fields always contain number values, we can store them directly in the object fields.
 
-TODO: GET GRAPH
 <figure>
   <img src="/_img/pointer-compression/heap-point-2.svg" width="832" height="112" alt="" loading="lazy">
 </figure>
