@@ -12,7 +12,10 @@ description: 'Learn how we reduced our heap size up to 43% in the deep dive of P
 tweet: ''
 ---
 
+<style type="text/css">@import url('http://fonts.googleapis.com/css?family=Gloria+Hallelujah');</style>
+
 ## Motivation
+
 Back in 2014 Chrome switched from being a 32-bit process to being a 64-bit process. The reasons were [security, stability and performance](https://blog.chromium.org/2014/08/64-bits-of-awesome-64-bit-windows_26.html) (x64 architecture provides more registers than x86). However, this came at a memory price since each pointer across the whole Chrome now occupies 8 bytes instead of 4.
 
 As of today, memory consumption in Chrome is still not perfect — we’ve all seen the memes — and it is something we at V8 (and Chrome in general) are always trying to improve.
@@ -75,20 +78,21 @@ So, now we have to do something about heap layout to ensure that 32-bit pointers
 #### Trivial heap layout
 The trivial compression scheme would be to allocate objects in the first 4GB of address space.
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-0.svg" width="960" height="540" alt="Trivial heap layout" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-0.svg" width="827" height="260" alt="Trivial heap layout" loading="lazy">
   <figcaption>Trivial heap layout</figcaption>
 </figure>
 
 However, this is not an option for V8 since Chrome’s renderer process to may need to create multiple V8 instances in the same renderer process:
 * One for the main JavaScript thread
 * One per **Web/Service Worker**
+
 And in this case the 4GB limit will be imposed for all the JavaScript instances together.
 
 #### Heap layout, v1
 But if we just arrange V8 heap in a contiguous 4GB region of address space somewhere else then an **unsigned** 32-bit offset from the base will uniquely identify the pointer.
 
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-1.svg" width="960" height="540" alt="Heap layout, base aligned to start" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="Heap layout, base aligned to start" loading="lazy">
   <figcaption>Heap layout, base aligned to start</figcaption>
 </figure>
 
@@ -141,7 +145,7 @@ Let’s try to change the compression scheme to simplify the decompression code.
 If instead we put the base in the _middle_ of the 4GB reservation, we can treat the compressed value as a **signed** 32-bit offset from the base.
 
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-2.svg" width="960" height="540" alt="Heap layout, base aligned to the middle" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-2.svg" width="827" height="363" alt="Heap layout, base aligned to the middle" loading="lazy">
   <figcaption>Heap layout, base aligned to the middle</figcaption>
 </figure>
 
@@ -184,7 +188,7 @@ We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-gene
 This graph shows Octane's score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation.
 
 <figure>
-  <img src="/_img/pointer-compression/perf-octane-1.svg" width="960" height="540" alt="First round of Octane's improvements" loading="lazy">
+  <img src="/_img/pointer-compression/perf-octane-1.svg" width="913" height="218" alt="First round of Octane's improvements" loading="lazy">
   <figcaption>First round of Octane's improvements</figcaption>
 </figure>
 
@@ -249,7 +253,7 @@ Unsuccessful attempts to find a match are not a failure, and therefore the prese
 One example of a “broken” optimization was allocation preternuring (see [the paper](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43823.pdf) for details). Once we updated the pattern matching to be aware of the new compression/decompression nodes we got another 11% improvement (4).
 
 <figure>
-  <img src="/_img/pointer-compression/perf-octane-2.svg" width="960" height="540" alt="Second round of Octane's improvements" loading="lazy">
+  <img src="/_img/pointer-compression/perf-octane-2.svg" width="859" height="178" alt="Second round of Octane's improvements" loading="lazy">
   <figcaption>Second round of Octane's improvements</figcaption>
 </figure>
 
@@ -292,7 +296,7 @@ int64_t uncompressed_tagged = base + int64_t(compressed_tagged);
 Since we don’t care about sign extending the Smi, this change also allows us to return to heap layout v1 (with the base pointing to the beginning of the 4GB reservation).
 
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-1.svg" width="960" height="540" alt="Heap layout, base aligned to start" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="Heap layout, base aligned to start" loading="lazy">
   <figcaption>Heap layout, base aligned to start</figcaption>
 </figure>
 
@@ -312,7 +316,7 @@ So, we adapted all the Smi-using code pieces in V8 to the new compression scheme
 The remaining performance gap is explained by two optimizations for 64-bit builds that we had to disable due to fundamental incompatibility with Pointer Compression.
 
 <figure>
-  <img src="/_img/pointer-compression/perf-octane-2.svg" width="960" height="540" alt="Final round of Octane's improvements" loading="lazy">
+  <img src="/_img/pointer-compression/perf-octane-3.svg" width="858" height="300" alt="Final round of Octane's improvements" loading="lazy">
   <figcaption>Final round of Octane's improvements</figcaption>
 </figure>
 
@@ -344,7 +348,7 @@ let p = new Point(3.1, 5.3);
 Generally speaking, if we look at how the object **p** looks like in memory, we’ll see something like this: 
 
 <figure>
-  <img src="/_img/pointer-compression/heap-point-1.svg" width="960" height="540" alt="Object p in memory" loading="lazy">
+  <img src="/_img/pointer-compression/heap-point-1.svg" width="832" height="232" alt="Object p in memory" loading="lazy">
   <figcaption>Object p in memory</figcaption>
 </figure>
 
@@ -354,7 +358,7 @@ On 64-bit architectures, double values are the same size as pointers. So, if we 
 
 TODO: GET GRAPH
 <figure>
-  <img src="/_img/pointer-compression/heap-point-2.svg" width="960" height="540" alt="" loading="lazy">
+  <img src="/_img/pointer-compression/heap-point-2.svg" width="832" height="112" alt="" loading="lazy">
 </figure>
 
 If the assumption breaks for some field, say after executing this line
@@ -364,7 +368,7 @@ let q = new Point(2, “ab”);
 then number values must be stored boxed instead, and if there is speculatively-optimized code somewhere that relied on this assumption it must no longer be used and must be thrown away (deoptimized).
 
 <figure>
-  <img src="/_img/pointer-compression/heap-point-3.svg" width="960" height="540" alt="Objects p and q in memory" loading="lazy">
+  <img src="/_img/pointer-compression/heap-point-3.svg" width="832" height="262" alt="Objects p and q in memory" loading="lazy">
   <figcaption>Objects p and q in memory</figcaption>
 </figure>
 
@@ -482,5 +486,3 @@ We are always looking forward to improving things, and have the following relate
 ## Related work
 [1] [Compressed oops in the Hotspot JVM](https://wiki.openjdk.java.net/display/HotSpot/CompressedOops)
 [2] [Compressed pointers support in IBM J9 VM. Whitepaper](ftp://public.dhe.ibm.com/software/webserver/appserv/was/WAS_V7_64-bit_performance.pdf)
-TODO: This [3] is never mentioned. Remove?
-[3] [Object-Relative Addressing: Compressed Pointers in 64-bit Java Virtual Machines](http://users.elis.ugent.be/~leeckhou/papers/ecoop07.pdf)
