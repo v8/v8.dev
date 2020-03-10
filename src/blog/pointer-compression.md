@@ -12,8 +12,6 @@ description: 'Learn how we reduced our heap size up to 43% in the deep dive of P
 tweet: ''
 ---
 
-<style type="text/css">@import url('http://fonts.googleapis.com/css?family=Gloria+Hallelujah');</style>
-
 ## Motivation
 
 Back in 2014 Chrome switched from being a 32-bit process to being a 64-bit process. The reasons were [security, stability and performance](https://blog.chromium.org/2014/08/64-bits-of-awesome-64-bit-windows_26.html) (x64 architecture provides more registers than x86). However, this came at a memory price since each pointer across the whole Chrome now occupies 8 bytes instead of 4.
