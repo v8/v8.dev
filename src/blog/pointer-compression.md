@@ -12,8 +12,6 @@ description: 'Learn how we reduced our heap size up to 43% in the deep dive of P
 tweet: ''
 ---
 
-## Motivation
-
 Back in 2014 Chrome switched from being a 32-bit process to being a 64-bit process. The reasons were [security, stability and performance](https://blog.chromium.org/2014/08/64-bits-of-awesome-64-bit-windows_26.html) (x64 architecture provides more registers than x86). However, this came at a memory price since each pointer across the whole Chrome now occupies 8 bytes instead of 4.
 
 As of today, memory consumption in Chrome is still not perfect — we’ve all seen the memes — and it is something we at V8 (and Chrome in general) are always trying to improve.
@@ -35,7 +33,7 @@ The V8 heap contains a whole slew of items, such as floating point values, strin
 
 Let’s take a closer look at tagged values.
 
-### Value tagging in V8
+## Value tagging in V8
 JavaScript values in V8, whether they are objects, arrays, numbers or strings, are represented as objects and allocated storage in the V8 heap. This allows us to represent any value as a pointer to this object. However, many JavaScript programs perform calculation on integer values, such as incrementing an index in a loop. To avoid us having to allocate new number storage each time an integer is incremented, V8 uses a well-known [pointer tagging](https://en.wikipedia.org/wiki/Tagged_pointer) technique to store additional or alternative data in V8 heap pointers. The tagged values thus serve a dual purpose: they are either strong/weak pointers to objects located in V8 heap, or a so-called small integer (“Smi”). Thanks to this, the value of an integer can be stored directly in the tagged value, without having to allocate additional storage for it.
 
 V8 always allocates objects in the heap at word-aligned addresses, which allows to use the 2 or 3 least significant bits for tagging (depending on the machine word size). On 32-bit architectures, V8 uses the least significant bit to distinguish small integers (Smis) from heap object pointers, and for heap pointers uses the second least significant bit to distinguish strong references from weak ones:
@@ -60,7 +58,7 @@ Smi:        |____int32_value____|000000000000000000<b>0</b>|
 
 You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can use 32 bits for the Smi value payload. The benefits of 32-bit Smis will be discussed in the following sections.
 
-### Compressed tagged values and new heap layout
+## Compressed tagged values and new heap layout
 With Pointer Compression, our goal is to somehow fit both kinds of tagged values on 64-bit architectures into 32 bits. We can fit Pointers into 32 bits by:
  * making sure all V8 objects are allocated within a 4Gb memory range
  * representing pointers as offsets within this range
@@ -71,7 +69,7 @@ Other V8 embedders, such as Node.js, may require bigger heaps, and thus either t
 
 So, now we have to do something about heap layout to ensure that 32-bit pointers will uniquely identify V8 objects.
 
-#### Trivial heap layout
+### Trivial heap layout
 The trivial compression scheme would be to allocate objects in the first 4GB of address space.
 <figure>
   <img src="/_img/pointer-compression/heap-layout-0.svg" width="827" height="260" alt="Trivial heap layout" loading="lazy">
@@ -84,7 +82,7 @@ However, this is not an option for V8 since Chrome’s renderer process to may n
 
 And in this case the 4GB limit will be imposed for all the JavaScript instances together.
 
-#### Heap layout, v1
+### Heap layout, v1
 But if we just arrange V8 heap in a contiguous 4GB region of address space somewhere else then an **unsigned** 32-bit offset from the base will uniquely identify the pointer.
 
 <figure>
@@ -137,7 +135,7 @@ if (compressed_tagged & 1) {
 
 Let’s try to change the compression scheme to simplify the decompression code.
 
-#### Heap layout, v2
+### Heap layout, v2
 If instead we put the base in the _middle_ of the 4GB reservation, we can treat the compressed value as a **signed** 32-bit offset from the base.
 
 <figure>
@@ -175,10 +173,10 @@ int64_t uncompressed_tagged =
 
 So we decided to start with the branchless implementation.
 
-### Performance evolution
+## Performance evolution
 It took some time before we got a fully working Pointer Compression implementation in V8, passing all the tests and working in Chrome. However, we got there in the end, and finally we could start looking at the actual performance and quality of the code.
 
-#### Initial performance
+### Initial performance
 We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-genesis-of-octane) -- a peak-performance benchmark we have used in the past. Although we are no longer focusing on improving peak performance in our day-to-day work, we also don’t want to regress peak performance, particularly for something as performance-sensitive as _all pointers_. Octane continues to be a good benchmark for this task.
 
 This graph shows Octane's score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation.
@@ -191,7 +189,7 @@ This graph shows Octane's score on x64 architecture while we were optimizing and
 In the graph, higher is better. The red line is the existing full-sized-pointer x64 build, while the green line is the pointer compressed version.
 
 With the first working implementation, we had a ~35% regression gap.
-##### Bump (1), +7%
+#### Bump (1), +7%
 First we validated our “branchless is faster” hypothesis, by comparing the branchless decompression with the branchful one. It turned out that our hypothesis was wrong, and the branchful version was 7% faster on x64. That was quite a significant difference!
 
 Let’s take a look at the x64 assembly.
@@ -220,7 +218,7 @@ On Arm64 we observed the same - the branchful version was clearly faster on powe
 On low-end Arm64 devices we observed almost no performance difference in either direction.
 
 The takeaway is: It seems that branch predictors in modern CPUs are very good and code size (particularly execution path length) affected performance more.
-##### Bump (2), +2%
+#### Bump (2), +2%
 [TurboFan](https://v8.dev/docs/turbofan) is V8’s optimizing compiler, built around a concept called “Sea of Nodes”. This page outlines a [high-level overview of TurboFan](https://v8.dev/blog/turbofan-jit), but in short, each operation is represented as a node in a graph. These nodes have various dependencies, including both data-flow and control-flow.
 
 There are two operations that are crucial for Pointer Compression: Loads and Stores. If  we were to decompress every time we loaded a compressed value from the heap, and compress it before we store it, then the pipeline could just keep working as it otherwise did in full-pointer mode. Thus we added new explicit value operations in the node graph - Decompress and Compress.
@@ -228,7 +226,7 @@ There are two operations that are crucial for Pointer Compression: Loads and Sto
 Obviously, there are cases where the decompression is not actually necessary. A trivial example is when a compressed value is loaded from somewhere and then stored to a new location. There are also more complicated examples.
 
 In order to optimize unnecessary operations, we implemented a new “Decompression Elimination” phase in TurboFan. Its job is to eliminate decompressions directly followed by compressions. Since these nodes might not be directly next to each other it also tries to propagate decompressions through the graph, with the hope of encountering a compress down the line and eliminate them both. This gave us a 2% improvement (2) of Octane’ score.
-##### Bump (3), +2%
+#### Bump (3), +2%
 While we were looking at the generated code, we noticed that the decompression of a value that had just been loaded produced code that was a bit too verbose:
 ```cpp
 movl rax, <mem>   // load
@@ -240,7 +238,7 @@ Once we fixed that to sign extend the value loaded from memory directly:
 movlsxlq rax, <mem>
 ```
 we got yet another 2% improvement (3).
-##### Bump (4), +11%
+#### Bump (4), +11%
 TurboFan optimization phases work by using pattern matching on the graph: once a sub-graph matches a certain pattern it is replaced with a semantically equivalent (but more optimal) sub-graph or instruction. 
 
 Unsuccessful attempts to find a match are not a failure, and therefore the presence of explicit Decompress/Compress operations in the graph caused previously successful pattern matching attempts to no longer succeed, which resulted in optimizations silently failing.
@@ -252,7 +250,7 @@ One example of a “broken” optimization was allocation preternuring (see [the
   <figcaption>Second round of Octane's improvements</figcaption>
 </figure>
 
-##### Bump (5), +0.5%
+#### Bump (5), +0.5%
 While implementing the Decompression Elimination in TurboFan we learned a lot. The explicit Decompression/Compression node approach had the following properties:
 
 Pros: 
@@ -269,7 +267,7 @@ So, we decided to take a step back and think of a simpler way of supporting Poin
 In short, the new approach is to drop all explicit Compression/Decompression nodes and Compressed Pointer/Smi/Any representations completely. Instead, we assume that the semantics are “uncompress-on-load / compress-on-store”, and we set a “should-decompress”/”should-compress” flag on the Load and Store nodes directly. Such an approach significantly reduced the complexity of Pointer Compression support in TurboFan and improved the quality of generated code.
 
 The new implementation (5) was as effective as the initial version and gave another 0.5% improvement.
-##### Bump (6), +2.5%
+#### Bump (6), +2.5%
 We were getting close to parity, but the performance gap was still too big. At some point we came up with a new idea: what if we ensure that any code that deals with Smi values will never “look” at the upper 32 bits? Remember the decompression implementation:
 
 ```cpp
@@ -307,7 +305,7 @@ Here’s the assembly code for comparison:
 
 So, we adapted all the Smi-using code pieces in V8 to the new compression scheme (6), which gave us another 2.5% improvement.
 
-#### Remaining gap
+### Remaining gap
 The remaining performance gap is explained by two optimizations for 64-bit builds that we had to disable due to fundamental incompatibility with Pointer Compression.
 
 <figure>
@@ -315,7 +313,7 @@ The remaining performance gap is explained by two optimizations for 64-bit build
   <figcaption>Final round of Octane's improvements</figcaption>
 </figure>
 
-##### 32-bit Smi optimization (7), -1%
+#### 32-bit Smi optimization (7), -1%
 Let’s recall what Smis look like in full pointer mode on 64-bit architectures.
 
 ```
@@ -329,7 +327,7 @@ Smi:    |____int32_value____|0000000000000000000|
 
 This optimization can’t be done with Pointer Compression, because there’s no space in the 32-bit compressed pointer for the bit which distinguishes pointers from Smis. If we disable it in the full-pointer 64-bit version we see a 1% regression of the Octane score.
 
-##### Double field unboxing (8), -3%
+#### Double field unboxing (8), -3%
 This optimization tries to store floating point values directly in the object’s fields under certain assumptions, to reduce the amount of number object allocations even more than Smis do alone.
 
 Imagine the following JavaScript code:
@@ -374,17 +372,17 @@ With Pointer Compression enabled, the double values simply do not fit into the c
 
 Note that number-crunching code which requires high throughput could be rewritten in an optimizable way even without this double field unboxing optimization (in a way compatible with Pointer Compression), by storing data in Float64 TypedArrays, or even by using [Wasm](https://webassembly.github.io/spec/core/).
 
-##### More improvements (9), 1%
+#### More improvements (9), 1%
 Finally, a bit of fine-tuning of the decompression elimination optimization gave another 1% performance improvement.
 
-### Some implementation details
+## Some implementation details
 In order to simplify integration of Pointer Compression into existing code we decided to decompress values on every load and to compress them on every store thus changing only storage format of tagged values while keeping the execution format unchanged.
 
-#### Native code side
+### Native code side
 In order to be able to generate efficient code when decompression is required the base value must always be available. Luckily V8 already had a dedicated register always pointing to a “roots table” containing references to JavaScript and V8-internal objects which must be always available (for example, undefined, null, true, false and many more). This register is called “root register” and it is used for generating smaller and [shareable builtins code](https://v8.dev/blog/embedded-builtins). 
 So, we put the roots table into the V8 heap reservation area and thus the root register became usable for both purposes - as a root pointer and as a base value for decompression.
 
-#### C++ side
+### C++ side
 V8 runtime accesses objects in V8 heap through C++ classes providing a convenient view on the data stored in the heap. Note that V8 objects are rather POD-like structures than a C++ objects. The helper “view” classes contain just one uintptr_t field with a respective tagged value. Since the view classes are word-sized we can pass them around by value with zero overhead (many thanks to modern C++ compilers). 
 
 Here is an pseudo example of a helper class:
