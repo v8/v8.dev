@@ -451,7 +451,7 @@ We use a set of web pages for measuring our memory and performance metrics that 
 In turn, it reduces Chrome’s renderer process memory by 20% on Desktop and 10% in Mobile. This difference appears due to V8 being a lower percentage of the renderer process memory on Mobile.
 
 <figure>
-  <img src="/_img/pointer-compression/V8-heap-memory.svg" width="600" height="371" alt="Memory savings when browsing in Windows 10" loading="lazy">
+  <img src="/_img/pointer-compression/v8-heap-memory.svg" width="600" height="371" alt="Memory savings when browsing in Windows 10" loading="lazy">
   <figcaption>Memory savings when browsing in Windows 10</figcaption>
 </figure>
 
