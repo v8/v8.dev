@@ -459,7 +459,7 @@ We are proud to announce that these memory improvements came hand in hand with p
 
 :::table-wrapper
 |             | V8’s time | Desktop     | Mobile      |
-|-------------|-----------|-------------|-------------|
+|-------------|-----------|:-----------:|:-----------:|
 | Facebook    | CPU<br>GC | -8%<br>-10% | -6%<br>-17% |
 | CNN         | CPU<br>GC | -3%<br>-14% | -8%<br>-20% |
 | Google Maps | CPU<br>GC | -4%<br>-7%  | -6%<br>-12% |
