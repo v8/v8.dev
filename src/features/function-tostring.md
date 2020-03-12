@@ -28,7 +28,7 @@ foo.toString();
 // → 'function /* comment */ foo () {}'
 ```
 
-## Optional `catch` binding support { #support }
+## Feature support { #support }
 
 <feature-support chrome="66 /blog/v8-release-66#function-tostring"
                  firefox="yes"

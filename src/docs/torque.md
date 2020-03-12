@@ -99,6 +99,7 @@ Torque code is packaged in individual source files. Each source file consists of
   AbstractTypeDeclaration
   ClassDeclaration
   TypeAliasDeclaration
+  EnumDeclaration
   CallableDeclaration
   ConstDeclaration
   GenericSpecialization
@@ -346,6 +347,61 @@ The way this is policed in the type system is that it is illegal to access a val
 const fastArray : FastJSArray = Cast<FastJSArray>(array) otherwise Bailout;
 Call(f, Undefined);
 return fastArray; // Type error: fastArray is invalid here.
+```
+
+#### Enums
+
+Enumerations provide a means to define a set of constants and group them under a name similar to
+the enum classes in C++. A declaration is introduced by the `enum` keyword and adheres to the following
+syntactical structure:
+
+<pre><code class="language-grammar">EnumDeclaration :
+  <b>extern</b> <b>enum</b> IdentifierName ExtendsDeclaration<sub>opt</sub> ConstexprDeclaration<sub>opt</sub> <b>{</b> IdentifierName<sub>list+</sub> (<b>, ...</b>)<sub>opt</sub> <b>}</b>
+</code></pre>
+
+A basic example looks like this:
+
+```torque
+extern enum LanguageMode extends Smi {
+  kStrict,
+  kSloppy
+}
+```
+
+This declaration defines a new type `LanguageMode`, where the `extends` clause specifies the underlying
+type, that is the runtime type used to represent a value of the enum. In this example, this is `TNode<Smi>`,
+since this is what the type `Smi` `generates`. A `constexpr LanguageMode` converts to `LanguageMode`
+in the generated CSA files since no `constexpr` clause is specified on the enum to replace the default name.
+If the `extends` clause is omitted, Torque will generate only the `constexpr` version of the type. The `extern` keyword tells Torque that there is a C++ definition of this enum. Currently, only `extern` enums are supported.
+
+Torque generates a distinct type and constant for each of the enum's entries. Those are defined
+inside a namespace that matches the enum's name. Necessary specializations of `FromConstexpr<>` are
+generated to convert from the entry's `constexpr` types to the enum type. The value generated for an entry in the C++ files is `<enum-constexpr>::<entry-name>` where `<enum-constexpr>` is the `constexpr` name generated for the enum. In the above example, those are `LanguageMode::kStrict` and `LanguageMode::kSloppy`.
+
+Torque's enumerations work very well together with the `typeswitch` construct, because the
+values are defined using distinct types:
+
+```torque
+typeswitch(language_mode) {
+  case (LanguageMode::kStrict): {
+    // ...
+  }
+  case (LanguageMode::kSloppy): {
+    // ...
+  }
+}
+```
+
+If the C++ definition of the enum contains more values than those used in `.tq` files, Torque needs to know that. This is done by declaring the enum 'open' by appending a `...` after the last entry. Consider the `ExtractFixedArrayFlag` for example, where only some of the options are available/used from within
+Torque:
+
+```torque
+enum ExtractFixedArrayFlag constexpr 'CodeStubAssembler::ExtractFixedArrayFlag' {
+  kFixedDoubleArrays,
+  kAllFixedArrays,
+  kFixedArrays,
+  ...
+}
 ```
 
 ### Callables

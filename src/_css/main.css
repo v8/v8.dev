@@ -85,7 +85,7 @@ html, body, fieldset, nav ul, nav ul li, h1, h2, h3 {
   padding: 0;
 }
 html {
-  font: 16px/1.6 sans-serif;
+  font: 100%/1.6 sans-serif;
   color: var(--html-color);
   background: var(--html-background);
 }
@@ -113,7 +113,7 @@ body {
 }
 #header h1 a {
   padding: 1em;
-  font-size: 16px;
+  font-size: 1rem;
   position: absolute;
   bottom: 0;
   background: url(/_img/v8-outline.svg) no-repeat center center;
@@ -128,7 +128,7 @@ body {
   color: var(--black);
   font-weight: bold;
   background: rgba(255, 255, 255, .8);
-  font-size: 16px;
+  font-size: 1em;
   margin-right: 1em;
   display: block;
 }
@@ -224,7 +224,6 @@ pre, code, var, kbd, samp {
 pre {
   background: #171717;
   color: #E6E1DC;
-  overflow: auto;
   white-space: pre;
   overflow: auto;
 }
@@ -235,6 +234,12 @@ pre, article footer, .note {
 }
 ol, ul {
   padding-inline-start: var(--offset);
+}
+.ecmascript-algorithm ol > li > ol {
+  list-style-type: lower-alpha;
+}
+.ecmascript-algorithm ol > li > ol > li > ol {
+  list-style-type: lower-roman;
 }
 li pre {
   width: calc(100% + 3 * var(--offset));
@@ -304,6 +309,9 @@ main a:hover code, main a:focus code {
   color: var(--white);
   background-color: var(--darkblue);
 }
+.note pre {
+  width: calc(100% + 1.5 * var(--offset));
+}
 a.bookmark {
   display: none;
 }
@@ -347,29 +355,9 @@ figcaption {
 }
 iframe {
   border: 0;
-  width: 100%;
 }
 iframe + h2, iframe + h3 {
   margin-top: 1em;
-}
-/* https://alistapart.com/article/creating-intrinsic-ratios-for-video */
-.video {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  padding-top: 25px;
-  margin-bottom: 0.5em;
-  height: 0;
-}
-/* If we ever need other ratios, add them like so:
-.video-16\:9 {
-  padding-bottom: 56.25%;
-}
-*/
-.video iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
 }
 .table-wrapper {
   overflow-x: auto;
@@ -406,7 +394,7 @@ main nav a {
   border-bottom: 0;
 }
 main .meta {
-  font-size: 14px;
+  font-size: 0.875em;
   margin-top: -0.2em;
 }
 .tag:not(.token) {
@@ -414,9 +402,40 @@ main .meta {
   background: var(--tag-background);
   color: var(--tag-color);
 }
-img {
-  max-width: 100%;
+img,
+video {
   height: auto;
+  max-width: 100%;
+}
+@supports (aspect-ratio: attr(width) / 1) {
+  /* https://drafts.csswg.org/css-sizing-4/#example-2476aa5b */
+  iframe {
+    aspect-ratio: attr(width) / attr(height);
+    max-width: 100%;
+    height: auto;
+  }
+}
+@supports not (aspect-ratio: attr(width) / 1) {
+  /* https://alistapart.com/article/creating-intrinsic-ratios-for-video */
+  .video {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    margin-bottom: 0.5em;
+    height: 0;
+  }
+  /* If we ever need other ratios, add them like so:
+  .video-16\:9 {
+    padding-bottom: 56.25%;
+  }
+  */
+  .video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .language-grammar {
@@ -454,6 +473,9 @@ dark-mode-toggle {
   li pre {
     width: calc(100% + 4 * var(--offset));
     left: calc(-2 * var(--offset));
+  }
+  .note pre {
+    width: calc(100% + 2.5 * var(--offset) + 1px);
   }
 }
 
