@@ -574,10 +574,6 @@ pre mark .token.punctuation {
   color: #333;
 }
 
-.token.regex {
-  color: #9B71C6;
-}
-
 .token.function,
 .token.constant {
   color: #E5A638;
@@ -587,7 +583,8 @@ pre mark .token.punctuation {
   color: #FDFBA8;
 }
 
-.token.number {
+.token.number,
+.token.regex {
   color: #FCC934;
 }
 
