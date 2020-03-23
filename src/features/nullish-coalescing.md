@@ -6,6 +6,7 @@ avatars:
 date: 2019-09-17
 tags:
   - ECMAScript
+  - ES2020
 description: 'The JavaScript nullish coalescing operator enables safer default expressions.'
 tweet: '1173971116865523714'
 ---
