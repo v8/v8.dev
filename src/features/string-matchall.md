@@ -91,6 +91,6 @@ The general idea is that you just write a simple `for`-`of` loop, and `String#ma
 
 <feature-support chrome="73 /blog/v8-release-73#string.prototype.matchall"
                  firefox="67"
-                 safari="no"
+                 safari="13"
                  nodejs="12"
                  babel="yes"></feature-support>

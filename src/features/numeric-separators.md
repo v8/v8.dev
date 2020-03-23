@@ -56,6 +56,6 @@ Note that JavaScript also has a legacy syntax for octal literals without the exp
 
 <feature-support chrome="75 /blog/v8-release-75#numeric-separators"
                  firefox="70 https://hacks.mozilla.org/2019/10/firefox-70-a-bountiful-release-for-all/"
-                 safari="no"
+                 safari="13"
                  nodejs="12.5.0 https://nodejs.org/en/blog/release/v12.5.0/"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-numeric-separator"></feature-support>
