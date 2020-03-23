@@ -125,6 +125,6 @@ As this API becomes more widely available, you’ll find libraries such as [Glob
 
 <feature-support chrome="63 /blog/v8-release-63"
                  firefox="58"
-                 safari="no"
+                 safari="13"
                  nodejs="10"
                  babel="no"></feature-support>
