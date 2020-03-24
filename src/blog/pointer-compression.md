@@ -196,6 +196,7 @@ First we validated our “branchless is faster” hypothesis, by comparing the b
 
 Let’s take a look at the x64 assembly.
 
+<!-- markdownlint-disable no-inline-html -->
 :::table-wrapper
 <!-- markdownlint-disable no-space-in-code -->
 | Decompression | Branchless              | Branchful                    |
@@ -213,17 +214,20 @@ Let’s take a look at the x64 assembly.
 |               | no branches             | 1 branch                     |
 <!-- markdownlint-enable no-space-in-code -->
 :::
+<!-- markdownlint-enable no-inline-html -->
 
 **r13** here is a dedicated register used for the base value. Notice how the branchless code is both bigger, and requires more registers.
 
 On Arm64, we observed the same - the branchful version was clearly faster on powerful CPUs (although the code size was the same for both cases).
 
+<!-- markdownlint-disable no-inline-html -->
 :::table-wrapper
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
 | Code          | `ldur w6, [...]`<br>`sbfx x16, x6, #0, #1`<br>`and x16, x16, x26`<br>`add x6, x16, w6, sxtw`<br><br> | `ldur w6, [...]`<br>`sxtw x6, w6`<br>`tbz w6, #0, #done`<br>`add x6, x26, x6`<br>`done:` |
 | Summary       | 16 bytes<br>4 instructions executed<br>no branches<br>1 additional register<br> | 16 bytes<br>3 or 4 instructions executed<br>1 branch |
 :::
+<!-- markdownlint-enable no-inline-html -->
 
 On low-end Arm64 devices we observed almost no performance difference in either direction.
 
@@ -322,12 +326,15 @@ Also, since we don’t care about sign extending the Smi anymore, this change al
 In terms of the decompression code, it changes a sign-extension operation to a zero-extension, which is just as cheap. However, this simplifies things on the runtime (C++) side. For example, the address space region reservation code (see the [Some implementation details](#some-implementation-details) section).
 
 Here’s the assembly code for comparison:
+
+<!-- markdownlint-disable no-inline-html -->
 :::table-wrapper
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
 | Code          | `movsxlq r11,[...]`<br>`testb r11,0x1`<br>`jz done`<br>`addq r11,r13`<br>`done:` | `movl r11,[rax+0x13]`<br>`addq r11,r13`<br><br><br><br> |
 | Summary       | 13 bytes<br>3 or 4 instructions executed<br>1 branch | 7 bytes<br>2 instructions executed<br>no branches |
 :::
+<!-- markdownlint-enable no-inline-html -->
 
 So, we adapted all the Smi-using code pieces in V8 to the new compression scheme, which gave us another 2.5% improvement.
 
