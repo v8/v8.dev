@@ -488,14 +488,10 @@ Another important thing to notice is that not every website improves the same am
 
 In addition to these memory improvements we have also seen real-world  performance improvements. On real websites we utilize less CPU and garbage collector time!
 
-:::table-wrapper
-|             | V8’s time | Desktop     | Mobile      |
-|-------------|-----------|:-----------:|:-----------:|
-| Facebook    | CPU<br>GC | -8%<br>-10% | -6%<br>-17% |
-| CNN         | CPU<br>GC | -3%<br>-14% | -8%<br>-20% |
-| Google Maps | CPU<br>GC | -4%<br>-7%  | -6%<br>-12% |
-:::
-Improvements in CPU and garbage collection time.
+<figure>
+  <img src="/_img/pointer-compression/performance-improvements.svg" width="600" height="371" alt="Improvements in CPU and garbage collection time." loading="lazy">
+  <figcaption>Improvements in CPU and garbage collection time</figcaption>
+</figure>
 
 ## Conclusion
 
