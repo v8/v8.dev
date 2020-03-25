@@ -267,7 +267,7 @@ movlsxlq rax, rax // sign extend
 
 Once we fixed that to sign extend the value loaded from memory directly:
 
-```
+```asm
 movlsxlq rax, <mem>
 ```
 
