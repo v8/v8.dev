@@ -224,7 +224,7 @@ On Arm64, we observed the same - the branchful version was clearly faster on pow
 :::table-wrapper
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
-| Code          | `ldur w6, [...]`<br>`sbfx x16, x6, #0, #1`<br>`and x16, x16, x26`<br>`add x6, x16, w6, sxtw`<br><br> | `ldur w6, [...]`<br>`sxtw x6, w6`<br>`tbz w6, #0, #done`<br>`add x6, x26, x6`<br>`done:` |
+| Code          | <pre>`ldur w6, [...]`<br>`sbfx x16, x6, #0, #1`<br>`and x16, x16, x26`<br>`add x6, x16, w6, sxtw`<br><br></pre> | <pre>`ldur w6, [...]`<br>`sxtw x6, w6`<br>`tbz w6, #0, #done`<br>`add x6, x26, x6`<br>`done:`</pre> |
 | Summary       | 16 bytes<br>4 instructions executed<br>no branches<br>1 additional register<br> | 16 bytes<br>3 or 4 instructions executed<br>1 branch |
 :::
 <!-- markdownlint-enable no-inline-html -->
@@ -331,7 +331,7 @@ Here’s the assembly code for comparison:
 :::table-wrapper
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
-| Code          | `movsxlq r11,[...]`<br>`testb r11,0x1`<br>`jz done`<br>`addq r11,r13`<br>`done:` | `movl r11,[rax+0x13]`<br>`addq r11,r13`<br><br><br><br> |
+| Code          | <pre>`movsxlq r11,[...]`<br>`testb r11,0x1`<br>`jz done`<br>`addq r11,r13`<br>`done:`</pre> | <pre>`movl r11,[rax+0x13]`<br>`addq r11,r13`<br><br><br><br></pre> |
 | Summary       | 13 bytes<br>3 or 4 instructions executed<br>1 branch | 7 bytes<br>2 instructions executed<br>no branches |
 :::
 <!-- markdownlint-enable no-inline-html -->
