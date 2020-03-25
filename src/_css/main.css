@@ -376,6 +376,10 @@ th, td {
 tbody tr:nth-child(odd) {
   background-color: var(--alt-table-row-background);
 }
+td > pre {
+  margin: 0;
+  width: 100%;
+}
 .note {
   color: var(--note-color);
   background: var(--note-background);
