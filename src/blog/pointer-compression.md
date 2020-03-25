@@ -207,11 +207,12 @@ Let’s take a look at the x64 assembly.
 |               | andl r10,0x1            | jz done                      \
 |               | negq r10                | addq r11,r13                 \
 |               | andq r10,r13            | done:                        \
-|               | addq r11,r10            | ```                          \
-|               | ```                     |                              |
+|               | addq r11,r10            |  ```                         \
+|               | ```                     |  <br>                        |
 | Summary       | 20 bytes                | 13 bytes                     \
 |               | 6 instructions executed | 3 or 4 instructions executed \
-|               | no branches             | 1 branch                     |
+|               | no branches             | 1 branch                     \
+|               | 1 additional register   | <br>                         |
 <!-- markdownlint-enable no-space-in-code -->
 :::
 <!-- markdownlint-enable no-inline-html -->
@@ -222,10 +223,22 @@ On Arm64, we observed the same - the branchful version was clearly faster on pow
 
 <!-- markdownlint-disable no-inline-html -->
 :::table-wrapper
+<!-- markdownlint-disable no-space-in-code -->
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
-| Code          | <pre>`ldur w6, [...]`<br>`sbfx x16, x6, #0, #1`<br>`and x16, x16, x26`<br>`add x6, x16, w6, sxtw`<br><br></pre> | <pre>`ldur w6, [...]`<br>`sxtw x6, w6`<br>`tbz w6, #0, #done`<br>`add x6, x26, x6`<br>`done:`</pre> |
-| Summary       | 16 bytes<br>4 instructions executed<br>no branches<br>1 additional register<br> | 16 bytes<br>3 or 4 instructions executed<br>1 branch |
+| Code          | ```asm                  | ```asm                       \
+|               | ldur w6, [...]          | ldur w6, [...]               \
+|               | sbfx x16, x6, #0, #1    | sxtw x6, w6                  \
+|               | and x16, x16, x26       | tbz w6, #0, #done            \
+|               | add x6, x16, w6, sxtw   | add x6, x26, x6              \
+|               | ```                     | done:                        \
+|               | <br>                    |  ```                         \
+|               |                         |                              |
+| Summary       | 16 bytes                | 16 bytes                     \
+|               | 4 instructions executed | 3 or 4 instructions executed \
+|               | no branches             | 1 branch                     \
+|               | 1 additional register   | <br>                         |
+<!-- markdownlint-enable no-space-in-code -->
 :::
 <!-- markdownlint-enable no-inline-html -->
 
@@ -329,10 +342,20 @@ Here’s the assembly code for comparison:
 
 <!-- markdownlint-disable no-inline-html -->
 :::table-wrapper
-| Decompression | Branchless              | Branchful                    |
-|---------------|-------------------------|------------------------------|
-| Code          | <pre>`movsxlq r11,[...]`<br>`testb r11,0x1`<br>`jz done`<br>`addq r11,r13`<br>`done:`</pre> | <pre>`movl r11,[rax+0x13]`<br>`addq r11,r13`<br><br><br><br></pre> |
-| Summary       | 13 bytes<br>3 or 4 instructions executed<br>1 branch | 7 bytes<br>2 instructions executed<br>no branches |
+<!-- markdownlint-disable no-space-in-code -->
+| Decompression | Branchful                    | Smi-corrupting               |
+|---------------|------------------------------|------------------------------|
+| Code          | ```asm                       | ```asm                       \
+|               |   movsxlq r11,[...]          |   movl r11,[rax+0x13]        \
+|               |   testb r11,0x1              |   addq r11,r13               \
+|               |   jz done                    | ```                          \
+|               |   addq r11,r13               | <br>                         \
+|               | done:                        | <br>                         \
+|               | ```                          | <br>                         |
+| Summary       | 13 bytes                     | 7 bytes                      \
+|               | 3 or 4 instructions executed | 2 instructions executed      \
+|               | 1 branch                     | no branches                  |
+<!-- markdownlint-enable no-space-in-code -->
 :::
 <!-- markdownlint-enable no-inline-html -->
 
