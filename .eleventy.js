@@ -44,6 +44,7 @@ const md = markdownIt(markdownItConfig)
   .use(markdownItContainer, 'ecmascript-algorithm')
   .use(markdownItMultiMdTable, {
     rowspan: true,
+    multiline: true,
   })
   .use(markdownItAnchor, markdownItAnchorConfig);
 
