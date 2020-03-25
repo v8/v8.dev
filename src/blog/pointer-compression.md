@@ -260,7 +260,7 @@ In order to optimize unnecessary operations, we implemented a new “Decompressi
 
 While we were looking at the generated code, we noticed that the decompression of a value that had just been loaded produced code that was a bit too verbose:
 
-```
+```asm
 movl rax, <mem>   // load
 movlsxlq rax, rax // sign extend
 ```
