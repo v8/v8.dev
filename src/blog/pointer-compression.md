@@ -197,10 +197,21 @@ First we validated our “branchless is faster” hypothesis, by comparing the b
 Let’s take a look at the x64 assembly.
 
 :::table-wrapper
+<!-- markdownlint-disable no-space-in-code -->
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
-| Code          | `movsxlq r11,[...]`<br>`movl r10,r11`<br>`andl r10,0x1`<br>`negq r10`<br>`andq r10,r13`<br>`addq r11,r10` | `movsxlq r11,[...]`<br>`testb r11,0x1`<br>`jz done`<br>`addq r11,r13`<br>`done:`<br><br> |
-| Summary       | 20 bytes<br>6 instructions executed<br>no branches<br>1 additional register<br> | 13 bytes<br>3 or 4 instructions executed<br>1 branch |
+| Code          | ```asm                  | ```asm                       \
+|               | movsxlq r11,[...]       | movsxlq r11,[...]            \
+|               | movl r10,r11            | testb r11,0x1                \
+|               | andl r10,0x1            | jz done                      \
+|               | negq r10                | addq r11,r13                 \
+|               | andq r10,r13            | done:                        \
+|               | addq r11,r10            | ```                          \
+|               | ```                     |                              |
+| Summary       | 20 bytes                | 13 bytes                     \
+|               | 6 instructions executed | 3 or 4 instructions executed \
+|               | no branches             | 1 branch                     |
+<!-- markdownlint-enable no-space-in-code -->
 :::
 
 **r13** here is a dedicated register used for the base value. Notice how the branchless code is both bigger, and requires more registers.
@@ -466,7 +477,7 @@ DescriptorArray Map::instance_descriptors(const Isolate* isolate) const {
 
   uint32_t compressed_da = *reinterpret_cast<uint32_t*>(field_address);
 
-  // No rounding is needed since the Isolate pointer is already the base.  
+  // No rounding is needed since the Isolate pointer is already the base.
   uintptr_t base = reinterpret_cast<uintptr_t>(isolate);
   uintptr_t da = DecompressTagged(base, compressed_value);
   return DescriptorArray(da);
