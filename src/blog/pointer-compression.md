@@ -346,10 +346,10 @@ Here’s the assembly code for comparison:
 | Decompression | Branchful                    | Smi-corrupting               |
 |---------------|------------------------------|------------------------------|
 | Code          | ```asm                       | ```asm                       \
-|               |   movsxlq r11,[...]          |   movl r11,[rax+0x13]        \
-|               |   testb r11,0x1              |   addq r11,r13               \
-|               |   jz done                    | ```                          \
-|               |   addq r11,r13               | <br>                         \
+|               | movsxlq r11,[...]            | movl r11,[rax+0x13]          \
+|               | testb r11,0x1                | addq r11,r13                 \
+|               | jz done                      | ```                          \
+|               | addq r11,r13                 | <br>                         \
 |               | done:                        | <br>                         \
 |               | ```                          | <br>                         |
 | Summary       | 13 bytes                     | 7 bytes                      \
