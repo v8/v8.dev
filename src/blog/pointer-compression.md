@@ -271,7 +271,7 @@ Once we fixed that to sign extend the value loaded from memory directly:
 movlsxlq rax, <mem>
 ```
 
-swe got yet another 2% improvement.
+so got yet another 2% improvement.
 
 ##### Bump (4), +11%
 
