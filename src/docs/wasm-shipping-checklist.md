@@ -1,5 +1,5 @@
 ---
-title: 'Checklist for Staging and Shipping of WebAssembly features'
+title: 'Checklist for staging and shipping of WebAssembly features'
 description: 'This document provides checklists of engineering requirements on when to stage and ship a WebAssembly feature in V8.'
 ---
 This document should provide checklists of engineering requirements on when to
