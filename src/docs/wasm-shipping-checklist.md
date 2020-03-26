@@ -18,7 +18,7 @@ The [staging](https://docs.google.com/document/d/1ZgyNx7iLtRByBtbYi1GssWGefXXciL
     - Implementation in the interpreter (if applicable)
 - Tests in V8 are available
 - Spec tests are rolled into V8 by running [`tools/wasm/update-wasm-spec-tests.sh`](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh)
-- Pass all existing proposal spec tests. Missing spec tests are unfortunate but should not block staging.
+- All existing proposal spec tests pass. Missing spec tests are unfortunate but should not block staging.
 
 Note that the stage of the feature proposal in the standardization process does not matter for staging the feature in V8. The proposal should, however, be mostly stable.
 
