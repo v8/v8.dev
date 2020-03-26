@@ -2,8 +2,7 @@
 title: 'Checklist for staging and shipping of WebAssembly features'
 description: 'This document provides checklists of engineering requirements on when to stage and ship a WebAssembly feature in V8.'
 ---
-This document should provide checklists of engineering requirements on when to
-stage and when to ship a WebAssembly feature in V8. These checklists are meant
+This document provides checklists of engineering requirements for staging and shipping WebAssembly features in V8. These checklists are meant
 as a guideline and may not be applicable to all features. The actual launch
 process is described in the [V8 Launch process](https://v8.dev/docs/feature-launch-process).
 
