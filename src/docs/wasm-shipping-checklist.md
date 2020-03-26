@@ -22,7 +22,7 @@ The [staging](https://docs.google.com/document/d/1ZgyNx7iLtRByBtbYi1GssWGefXXciL
 
 Note that the stage of the feature proposal in the standardization process does not matter for staging the feature in V8. The proposal should, however, be mostly stable.
 
-### How to stage a WebAssembly Feature
+### How to stage a WebAssembly feature
 
 * In [src/wasm/wasm-feature-flags.h](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_EXPERIMENTAL_FEATURE_FLAG` macro list to the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list.
 * In [tools/wasm/update-wasm-spec-tests.sh](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh), add the proposal repository name to the `repos` list of repositories.
