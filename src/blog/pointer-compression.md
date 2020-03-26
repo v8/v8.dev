@@ -207,12 +207,12 @@ Let’s take a look at the x64 assembly.
 |               | andl r10,0x1            | jz done                      \
 |               | negq r10                | addq r11,r13                 \
 |               | andq r10,r13            | done:                        \
-|               | addq r11,r10            |  ```                         \
-|               | ```                     |  <br>                        |
-| Summary       | 20 bytes                | 13 bytes                     \
-|               | 6 instructions executed | 3 or 4 instructions executed \
-|               | no branches             | 1 branch                     \
-|               | 1 additional register   | <br>                         |
+|               | addq r11,r10            | ```                          \
+|               | ```                     | <br>                         |
+| Summary       | 20 bytes                | 13 bytes                     |
+| ^^            | 6 instructions executed | 3 or 4 instructions executed |
+| ^^            | no branches             | 1 branch                     |
+| ^^            | 1 additional register   |                              |
 <!-- markdownlint-enable no-space-in-code -->
 :::
 <!-- markdownlint-enable no-inline-html -->
@@ -232,12 +232,11 @@ On Arm64, we observed the same - the branchful version was clearly faster on pow
 |               | and x16, x16, x26       | tbz w6, #0, #done            \
 |               | add x6, x16, w6, sxtw   | add x6, x26, x6              \
 |               | ```                     | done:                        \
-|               | <br>                    |  ```                         \
-|               |                         |                              |
-| Summary       | 16 bytes                | 16 bytes                     \
-|               | 4 instructions executed | 3 or 4 instructions executed \
-|               | no branches             | 1 branch                     \
-|               | 1 additional register   | <br>                         |
+|               | <br>                    | ```                          |
+| Summary       | 16 bytes                | 16 bytes                     |
+| ^^            | 4 instructions executed | 3 or 4 instructions executed |
+| ^^            | no branches             | 1 branch                     |
+| ^^            | 1 additional register   |                              |
 <!-- markdownlint-enable no-space-in-code -->
 :::
 <!-- markdownlint-enable no-inline-html -->
@@ -352,9 +351,9 @@ Here’s the assembly code for comparison:
 |               | addq r11,r13                 | <br>                         \
 |               | done:                        | <br>                         \
 |               | ```                          | <br>                         |
-| Summary       | 13 bytes                     | 7 bytes                      \
-|               | 3 or 4 instructions executed | 2 instructions executed      \
-|               | 1 branch                     | no branches                  |
+| Summary       | 13 bytes                     | 7 bytes                      |
+| ^^            | 3 or 4 instructions executed | 2 instructions executed      |
+| ^^            | 1 branch                     | no branches                  |
 <!-- markdownlint-enable no-space-in-code -->
 :::
 <!-- markdownlint-enable no-inline-html -->
