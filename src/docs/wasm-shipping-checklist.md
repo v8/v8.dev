@@ -14,9 +14,9 @@ process is described in the [V8 Launch process](https://v8.dev/docs/feature-laun
 The [staging](https://docs.google.com/document/d/1ZgyNx7iLtRByBtbYi1GssWGefXXciLeADZBR_FxG-hE) of a WebAssembly feature defines the end of its implementation phase. The implementation phase is finished when the following checklist is done:
 
 - The implementation in V8 is complete. This includes:
-  - Implementation in TurboFan (if applicable)
-  - Implementation in Liftoff (if applicable)
-  - Implementation in the interpreter (if applicable)
+    - Implementation in TurboFan (if applicable)
+    - Implementation in Liftoff (if applicable)
+    - Implementation in the interpreter (if applicable)
 - Tests in V8 are available
 - Spec tests are rolled into V8 by running [`tools/wasm/update-wasm-spec-tests.sh`](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh)
 - Pass all existing proposal spec tests. Missing spec tests are unfortunate but should not block staging.
@@ -44,6 +44,7 @@ See the [staging of type reflection](https://crrev.com/c/1771791) as a reference
 - The implementation is covered by a fuzzer (if applicable).
 
 ## How to ship a WebAssembly Feature
+
 - In [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_SHIPPED_FEATURE_FLAG` macro list.
 - Additionally, enable the feature by default by changing the third parameter in `FOREACH_WASM_SHIPPED_FEATURE_FLAG` to `true`.
 - Set a reminder to remove the feature flag after two milestones.
