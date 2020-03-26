@@ -37,10 +37,10 @@ See the [staging of type reflection](https://crrev.com/c/1771791) as a reference
 ## When is a WebAssembly feature ready to be shipped
 
 - The [V8 Launch process](https://v8.dev/docs/feature-launch-process) is satisfied.
+- The implementation is covered by a fuzzer (if applicable).
 - The feature has been staged for several weeks to get fuzzer coverage.
 - The feature proposal is [stage 4](https://github.com/WebAssembly/proposals).
 - All [spec tests](https://github.com/WebAssembly/spec/tree/master/test) pass.
-- The implementation is covered by a fuzzer (if applicable).
 
 ## How to ship a WebAssembly Feature
 
