@@ -380,6 +380,9 @@ td > pre {
   margin: 0;
   width: 100%;
 }
+.td-with-just-pre {
+  padding: 0;
+}
 .note {
   color: var(--note-color);
   background: var(--note-background);

@@ -48,6 +48,20 @@ const md = markdownIt(markdownItConfig)
   })
   .use(markdownItAnchor, markdownItAnchorConfig);
 
+// Simulating `td:has(>pre:only-child)` with a markdown-it render rule.
+// Can be removed when (if?) CSS4 is actually implemented in browsers.
+const prevTdRenderer = md.renderer.rules.table_column_open;
+md.renderer.rules.table_column_open = (tokens, idx, options, env, self) => {
+  if (tokens[idx + 1].type === 'fence' && tokens[idx + 2].type === 'table_column_close') {
+    tokens[idx].attrJoin('class', 'td-with-just-pre');
+  }
+  if (prevTdRenderer) {
+    return prevTdRenderer(tokens, idx, options, env, self);
+  } else {
+    return self.renderToken(tokens, idx, options);
+  }
+};
+
 module.exports = (eleventyConfig) => {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight, {
