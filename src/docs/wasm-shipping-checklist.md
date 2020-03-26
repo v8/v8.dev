@@ -43,6 +43,6 @@ See the [staging of type reflection](https://crrev.com/c/1771791) as a reference
 * The implementation is covered by a fuzzer (if applicable).
 
 ### How to ship a WebAssembly Feature
-* In [src/wasm/wasm-feature-flags.h](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_SHIPPED_FEATURE_FLAG` macro list.
+* In [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_SHIPPED_FEATURE_FLAG` macro list.
 * Additionally, enable the feature by default by changing the third parameter in `FOREACH_WASM_SHIPPED_FEATURE_FLAG` to `true`.
 * Set a reminder to remove the feature flag after two milestones.
