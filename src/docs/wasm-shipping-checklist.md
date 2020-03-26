@@ -9,7 +9,7 @@ process is described in the [V8 Launch process](https://v8.dev/docs/feature-laun
 
 ## Staging
 
-### When to stage a WebAssembly Feature
+### When to stage a WebAssembly feature
 
 The [staging](https://docs.google.com/document/d/1ZgyNx7iLtRByBtbYi1GssWGefXXciLeADZBR_FxG-hE) of a WebAssembly feature defines the end of its implementation phase. The implementation phase is finished when the following checklist is done:
 * The implementation in V8 is complete. This includes:
