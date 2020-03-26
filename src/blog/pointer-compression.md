@@ -19,7 +19,7 @@ Back in 2014 Chrome switched from being a 32-bit process to a 64-bit process. Th
 Before diving into the implementation, we need to know where we are standing to correctly assess the situation. To measure our memory and performance we use a set of [web pages](https://v8.dev/blog/optimizing-v8-memory) that reflect popular real-world websites. The data showed that V8 contributes up to 60% of Chrome’s [renderer process](https://www.chromium.org/developers/design-documents/multi-process-architecture) memory consumption on desktop, with an average of 40%.
 
 <figure>
-  <img src="/_img/pointer-compression/memory-chrome.svg" width="845" height="522" alt="V8 memory consumption percentage in Chrome’s renderer memory" loading="lazy">
+  <img src="/_img/pointer-compression/memory-chrome.svg" width="600" height="371" alt="V8 memory consumption percentage in Chrome’s renderer memory" loading="lazy">
   <figcaption>V8 memory consumption percentage in Chrome’s renderer memory</figcaption>
 </figure>
 
