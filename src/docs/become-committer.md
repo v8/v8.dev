@@ -2,6 +2,9 @@
 title: 'Becoming a committer'
 description: 'How does one become a V8 committer? This document explains.'
 ---
+
+*Note to googlers: There is a [slightly different approach for v8 team members](http://go/v8/setup_permissions.md).*
+
 Technically, committers are people who have write access to the V8 Git repository. Committers can submit their own patches or patches from others.
 
 This privilege is granted with some expectation of responsibility: committers are people who care about the V8 project and want to help meet its goals. Committers are not just people who can make changes, but people who have demonstrated their ability to collaborate with the team, get the most knowledgeable people to review code, contribute high-quality code, and follow through to fix issues (in code or tests).
