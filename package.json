@@ -57,7 +57,7 @@
     "markdown-it-container": "^2.0.0",
     "markdown-it-footnote": "^3.0.2",
     "markdown-it-multimd-table": "^4.0.0",
-    "markdownlint-cli": "^0.18.0",
+    "markdownlint-cli": "^0.22.0",
     "minify-xml": "^1.0.3",
     "post-npm-install": "^2.0.0",
     "postcss-cli": "^6.1.3",
