@@ -5,7 +5,7 @@ const assert = require("assert");
 const getImageSize = require("image-size");
 const { inspect } = require("util");
 
-function toMarkdown(nodes) {
+function toMarkdown(nodes, inEm) {
   let res = "";
   for (let node of nodes) {
     switch (node.nodeName) {
@@ -23,11 +23,17 @@ function toMarkdown(nodes) {
         let [attr, ...rest] = node.attrs;
         assert.deepEqual(rest, []);
         assert.strictEqual(attr.name, "href");
-        res += `[${toMarkdown(node.childNodes)}](${attr.value})`;
+        res += `[${toMarkdown(node.childNodes, inEm)}](${attr.value})`;
         break;
       }
+      case "em":
+        if (inEm) {
+          throw new Error(`Can't handle emphasis inside emphasis`);
+        }
+        res += `*${toMarkdown(node.childNodes, true)}*`;
+        break;
       default: {
-        throw new TypeError(`Unhandled node type ${node.type}`);
+        throw new TypeError(`Unhandled node type ${node.nodeName}`);
       }
     }
   }

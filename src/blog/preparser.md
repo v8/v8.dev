@@ -172,10 +172,7 @@ The `optimize-js` benchmark results don’t exactly reflect the real world. The 
 
 There is still a cost though, especially a memory cost, so it’s not a good idea to eagerly compile everything:
 
-<figure>
-  <img src="/_img/preparser/eager-compilation-overhead.svg" width="477" height="295" alt="" loading="lazy">
-  <figcaption>Eagerly compiling <em>all</em> JavaScript comes at a significant memory cost.</figcaption>
-</figure>
+![Eagerly compiling *all* JavaScript comes at a significant memory cost.](/_img/preparser/eager-compilation-overhead.svg)
 
 While adding parentheses around functions you need during startup is a good idea (e.g., based on profiling startup), using a package like `optimize-js` that applies simple static heuristics is not a great idea. It for example assumes that a function will be called during startup if it’s an argument to a function call. If such a function implements an entire module that’s only needed much later, however, you end up compiling too much. Over-eagerly compilation is bad for performance: V8 without lazy compilation significantly regresses load time. Additionally, some of the benefits of `optimize-js` come from issues with UglifyJS and other minifiers which remove parentheses from PIFEs that aren’t IIFEs, removing useful hints that could have been applied to e.g., [Universal Module Definition](https://github.com/umdjs/umd)-style modules. This is likely an issue that minifiers should fix to get the maximum performance on browsers that eagerly compile PIFEs.
 
