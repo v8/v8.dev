@@ -344,10 +344,7 @@ So, we adapted all the Smi-using code pieces in V8 to the new compression scheme
 
 The remaining performance gap is explained by two optimizations for 64-bit builds that we had to disable due to fundamental incompatibility with Pointer Compression.
 
-<figure>
-  <img src="/_img/pointer-compression/perf-octane-3.svg" width="858" height="300" alt="" loading="lazy">
-  <figcaption>Final round of Octane's improvements</figcaption>
-</figure>
+![Final round of Octane's improvements](/_img/pointer-compression/perf-octane-3.svg)
 
 #### 32-bit Smi optimization (7), -1%
 
