@@ -64,8 +64,9 @@ You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can 
 ## Compressed tagged values and new heap layout
 
 With Pointer Compression, our goal is to somehow fit both kinds of tagged values into 32 bits on 64-bit architectures. We can fit pointers into 32 bits by:
-    - making sure all V8 objects are allocated within a 4GB memory range
-    - representing pointers as offsets within this range
+
+- making sure all V8 objects are allocated within a 4GB memory range
+- representing pointers as offsets within this range
 
 Having such a hard limit is unfortunate, but V8 in Chrome already has a 2GB or 4GB limit on the size of the V8 heap (depending on how powerful the underlying device is), even on 64-bit architectures. Other V8 embedders, such as Node.js, may require bigger heaps. If we impose a maximum of 4GB range, it would mean that these embedders cannot use Pointer Compression.
 
