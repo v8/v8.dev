@@ -16,7 +16,12 @@ Don’t just `git clone` either of these URLs! if you want to build V8 from your
 
 ## Instructions
 
-1. On Linux or macOS, first install Git and then [`depot_tools`](https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up).
+1. On Linux or macOS, first install Git and then [`depot_tools`](https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up). Unlike in the instructions, set up PATH so that depot_tools comes before the system path:
+
+    ```
+    export PATH=/path/to/depot_tools:$PATH
+    ```
+
 
     On Windows, follow the Chromium instructions ([for Googlers](https://goto.google.com/building-chrome-win), [for non-Googlers](https://chromium.googlesource.com/chromium/src/+/master/docs/windows_build_instructions.md#Setting-up-Windows)) to install Visual Studio, Debugging tools for Windows, and `depot_tools` (which on Windows includes Git).
 
