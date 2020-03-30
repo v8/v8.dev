@@ -53,7 +53,7 @@ In Chrome, large enough scripts are “streaming”-parsed on worker threads whi
 We found an additional issue in V8’s preparser, which most commonly runs on a worker thread: property names were unnecessarily deduplicated. Removing this deduplication improved the streaming parser by another 10.5%. This also improves main-thread parse time of scripts that aren’t streamed, like small scripts and inline scripts.
 
 <figure>
-  <img src="/_img/v8-release-74/parser-performance.jpg" srcset="/_img/v8-release-74/parser-performance@2x.jpg" width="1069" height="244" alt="" loading="lazy">
+  <img src="/_img/v8-release-74/parser-performance.jpg" srcset="/_img/v8-release-74/parser-performance@2x.jpg 2x" width="1069" height="244" alt="" loading="lazy">
   <figcaption>Each drop in the above chart represents one of the performance improvements in the streaming parser.</figcaption>
 </figure>
 
