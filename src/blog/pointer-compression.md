@@ -57,8 +57,6 @@ Pointer:    |________________address______________<b>w1</b>|
 Smi:        |____int32_value____|000000000000000000<b>0</b>|
 </pre>
 
-You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can use 32 bits for the Smi value payload. The benefits of 32-bit Smis will be discussed in the following sections.
-
 You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can use 32 bits for the Smi value payload. The implications of 32-bit Smis on pointer compression will be discussed in the following sections.
 
 ## Compressed tagged values and new heap layout
