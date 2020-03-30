@@ -52,7 +52,8 @@ In addition to passively doing nothing, you should also try your best to activel
 This may be obvious, but it’s worth making explicit — whenever you ship new code, that code is not yet cached. Whenever the browser makes an HTTP request for a script URL, it can include the date of the last fetch of that URL, and if the server knows that the file hasn’t changed, it can send back a 304 Not Modified response, which keeps our code cache hot. Otherwise, a 200 OK response updates our cached resource, and clears the code cache, reverting it back to a cold run.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/http-200-vs-304.jpg" width="600" height="515" alt="" title="Drake prefers HTTP 304 responses to HTTP 200 responses." loading="lazy">
+  <img src="/_img/code-caching-for-devs/http-200-vs-304.jpg" width="600" height="515" alt="" loading="lazy">
+  <figcaption>Drake prefers HTTP 304 responses to HTTP 200 responses</figcaption>
 </figure>
 
 It’s tempting to always push your latest code changes immediately, particularly if you want to measure the impact of a certain change, but for caches it’s much better to leave code be, or at least update it as rarely as possible. Consider imposing a limit of `≤ x` deployments per week, where `x` is the slider you can adjust to trade-off caching vs. staleness.
@@ -84,7 +85,8 @@ In this case, only `A()` or `B()` is compiled and executed on the warm run, and 
 Certainly the advice to do “nothing”, whether passively or actively, is not very satisfying. So in addition to doing “nothing”, given our current heuristics and implementation, there are some things you can do. Please remember, though, that heuristics can change, this advice may change, and there is no substitute for profiling.
 
 <figure>
-  <img src="/_img/code-caching-for-devs/with-great-power.jpg" width="500" height="209" alt="" title="Uncle Ben suggests that Peter Parker should be cautious when optimizing his web app’s cache behavior." loading="lazy">
+  <img src="/_img/code-caching-for-devs/with-great-power.jpg" width="500" height="209" alt="" loading="lazy">
+  <figcaption>Uncle Ben suggests that Peter Parker should be cautious when optimizing his web app’s cache behavior</figcaption>
 </figure>
 
 ### Split out libraries from code using them { #split }
