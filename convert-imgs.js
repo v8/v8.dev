@@ -47,7 +47,11 @@ Promise.all(
           child => !(child.nodeName === "#text" && child.value.match(/^\s*$/))
         );
         assert.deepEqual(rest2, []);
-        assert.strictEqual(img.nodeName, "img");
+        if (img.nodeName !== 'img') {
+          // Not an error, this is just a video or something.
+          // Return original matched chunk as-is.
+          return chunk;
+        }
         let {
           src,
           width,
