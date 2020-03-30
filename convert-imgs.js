@@ -73,20 +73,7 @@ Promise.all(
         assert.deepEqual(other, {});
         assert(src.startsWith("/_img/"));
         let dimensions = getImageSize("src" + src);
-        if (width != dimensions.width || height != dimensions.height) {
-          // if (src.endsWith(".svg")) {
-          //   let svg = require('fs').readFileSync("src" + src);
-          //   svg = svg.replace(/<svg([^>]*)>/, (_, attrs) => {
-          //     attrs = attrs.replace(/ (?:width|height)="\d+"/, '');
-          //     return `<svg${attrs} width="${width}" height="${height}">`;
-          //   });
-          //   require('fs').writeFileSync("src" + src, svg);
-          // } else {
-          assert.fail(
-            `${width}x${height} != ${dimensions.width}x${dimensions.height}`
-          );
-          // }
-        }
+        assert.strictEqual(`${width}x${height}`, `${dimensions.width}x${dimensions.height}`);
         if (srcset) {
           assert.strictEqual(srcset, `${src.replace(/\.[^.]*$/, "@2x$&")} 2x`);
         }
