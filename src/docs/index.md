@@ -33,6 +33,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Release process](/docs/release-process)
     - [Design review guidelines](/docs/design-review-guidelines)
     - [Implementing and shipping JavaScript/WebAssembly language features](/docs/feature-launch-process)
+    - [Checklist for staging and shipping of WebAssembly features](/docs/wasm-shipping-checklist)
     - [Flake bisect](/docs/flake-bisect)
     - [Handling of ports](/docs/ports)
     - [Merging & patching](/docs/merge-patch)
