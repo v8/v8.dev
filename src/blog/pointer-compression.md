@@ -9,7 +9,7 @@ tags:
   - internals
   - memory
 description: 'V8 reduced its heap size up to 43%! Learn how in “Pointer Compression in V8”!'
-tweet: ''
+tweet: '1244653541379182596'
 ---
 
 There is a constant battle between memory and performance. As users, we would like things to be fast as well as consume as little memory as possible. Unfortunately, usually improving performance comes at a cost of memory consumption (and vice versa).
