@@ -14,10 +14,7 @@ Starting today, experimental support for WebAssembly is available in V8 and Chro
 
 The WebAssembly project website has a [demo](https://webassembly.github.io/demo/) showcasing the runtime’s usage in a 3D game. In browsers that support WebAssembly, the demo page will load and instantiate a wasm module that uses WebGL and other web platform APIs to render an interactive game. In other browsers, the demo page falls back to an asm.js version of the same game.
 
-<figure>
-  <img src="/_img/webassembly-experimental/tanks.jpg" width="1116" height="681" alt="" loading="lazy">
-  <figcaption><a href="https://webassembly.github.io/demo/">WebAssembly demo</a></figcaption>
-</figure>
+![[WebAssembly demo](https://webassembly.github.io/demo/)](/_img/webassembly-experimental/tanks.jpg)
 
 Under the hood, the WebAssembly implementation in V8 is designed to reuse much of the existing JavaScript virtual machine infrastructure, specifically the [TurboFan compiler](/blog/turbofan-jit). A specialized WebAssembly decoder validates modules by checking types, local variable indices, function references, return values, and control flow structure in a single pass. The decoder produces a TurboFan graph which is processed by various optimization passes and finally turned into machine code by the same backend which generates machine code for optimized JavaScript and asm.js. In the next few months, the team will concentrate on improving the startup time of the V8 implementation through compiler tuning, parallelism, and compilation policy improvements.
 

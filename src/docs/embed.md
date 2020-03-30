@@ -113,9 +113,7 @@ Of course, creating a local handle every time you create an object can result in
 
 Returning to [our very simple hello world example](#hello-world), in the following diagram you can see the handle-stack and heap-allocated objects. Note that `Context::New()` returns a `Local` handle, and we create a new `Persistent` handle based on it to demonstrate the usage of `Persistent` handles.
 
-<figure>
-  <img src="/_img/docs/embed/local-persist-handles-review.png" width="748" height="292" alt="" loading="lazy">
-</figure>
+![](/_img/docs/embed/local-persist-handles-review.png)
 
 When the destructor `HandleScope::~HandleScope` is called, the handle scope is deleted. Objects referred to by handles within the deleted handle scope are eligible for removal in the next garbage collection if there are no other references to them. The garbage collector can also remove the `source_obj`, and `script_obj` objects from the heap as they are no longer referenced by any handles or otherwise reachable from JavaScript. Since the context handle is a persistent handle, it is not removed when the handle scope is exited.  The only way to remove the context handle is to explicitly call `Reset` on it.
 
@@ -162,9 +160,7 @@ In terms of CPU time and memory, it might seem an expensive operation to create 
 
 When you have created a context you can enter and exit it any number of times. While you are in context A you can also enter a different context, B, which means that you replace A as the current context with B. When you exit B then A is restored as the current context. This is illustrated below:
 
-<figure>
-  <img src="/_img/docs/embed/intro-contexts.png" width="417" height="484" alt="" loading="lazy">
-</figure>
+![](/_img/docs/embed/intro-contexts.png)
 
 Note that the built-in utility functions and objects of each context are kept separate. You can optionally set a security token when you create a context. See the [Security Model](#security-model) section for more information.
 

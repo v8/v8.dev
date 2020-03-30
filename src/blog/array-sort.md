@@ -226,10 +226,7 @@ Runs that are found this way are tracked using a stack that remembers a starting
 - `|C| > |B| + |A|`
 - `|B| > |A|`
 
-<figure>
-  <img src="/_img/array-sort/runs-stack.svg" width="770" height="427" alt="" loading="lazy">
-  <figcaption>Runs stack before and after merging <code>A</code> with <code>B</code></figcaption>
-</figure>
+![Runs stack before and after merging `A` with `B`](/_img/array-sort/runs-stack.svg)
 
 The image shows the case where `|A| > |B|` so `B` is merged with the smaller of the two runs.
 
@@ -281,9 +278,7 @@ A fast-path then simply becomes a set of function pointers. This means we only n
 
 ### Sort state
 
-<figure>
-  <img src="/_img/array-sort/sort-state.svg" width="570" height="710" alt="" loading="lazy">
-</figure>
+![](/_img/array-sort/sort-state.svg)
 
 The picture above shows the “sort state”. It’s a `FixedArray` that keeps track of all the things needed while sorting. Each time `Array#sort` is called, such a sort state is allocated. Entry 4 to 7 are the set of function pointers discussed above that comprise a fast-path.
 
@@ -305,23 +300,17 @@ Before we started with `Array#sort`, we added a lot of different micro-benchmark
 
 Keep in mind that in these cases the JIT compiler can do a lot of work, since sorting is nearly all we do. This also allows the optimizing compiler to inline the comparison function in the JavaScript version, while we have the call overhead from the builtin to JavaScript in the Torque case. Still, we perform better in nearly all cases.
 
-<figure>
-  <img src="/_img/array-sort/micro-bench-basic.svg" width="616" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/array-sort/micro-bench-basic.svg)
 
 The next chart shows the impact of Timsort when processing arrays that are already sorted completely, or have sub-sequences that are already sorted one-way or another. The chart uses Quicksort as a baseline and shows the speedup of Timsort (up to 17× in the case of “DownDown” where the array consists of two reverse-sorted sequences). As can be seen, expect in the case of random data, Timsort performs better in all other cases, even though we are sorting `PACKED_SMI_ELEMENTS`, where Quicksort outperformed Timsort in the microbenchmark above.
 
-<figure>
-  <img src="/_img/array-sort/micro-bench-presorted.svg" width="600" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/array-sort/micro-bench-presorted.svg)
 
 ### Web Tooling Benchmark
 
 The [Web Tooling Benchmark](https://github.com/v8/web-tooling-benchmark) is a collection of workloads of tools usually used by web developers such as Babel and TypeScript. The chart uses JavaScript Quicksort as a baseline and compares the speedup of Timsort against it. In almost all benchmarks we retain the same performance with the exception of chai.
 
-<figure>
-  <img src="/_img/array-sort/web-tooling-benchmark.svg" width="990" height="612" alt="" loading="lazy">
-</figure>
+![](/_img/array-sort/web-tooling-benchmark.svg)
 
 The chai benchmark spends *a third* of its time inside a single comparison function (a string distance calculation). The benchmark is the test suite of chai itself. Due to the data, Timsort needs some more comparisons in this case, which has a bigger impact on the overall runtime, as such a big portion of time is spent inside that particular comparison function.
 

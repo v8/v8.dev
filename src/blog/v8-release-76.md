@@ -17,10 +17,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 In modern JavaScript applications, JSON is commonly used as a format to communicate structured data. By speeding up JSON parsing, we can reduce the latency of this communication. In V8 v7.6, we’ve overhauled our JSON parser to be much faster at scanning and parsing JSON. This results in up to 2.7× faster parsing of data served by popular web pages.
 
-<figure>
-  <img src="/_img/v8-release-76/json-parsing.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Chart showing improved performance of <code>JSON.parse</code> on a variety of websites</figcaption>
-</figure>
+![Chart showing improved performance of `JSON.parse` on a variety of websites](/_img/v8-release-76/json-parsing.svg)
 
 Up to V8 v7.5, the JSON parser was a recursive parser that would use native stack space relative to the nesting depth of the incoming JSON data. This meant we could run out of stack for very deeply nested JSON data. V8 v7.6 switches to an iterative parser that manages its own stack, which is limited only by available memory.
 
@@ -38,10 +35,7 @@ Performance of calls on frozen or sealed arrays (and array-like objects) receive
 
 The chart below shows the improvements.
 
-<figure>
-  <img src="/_img/v8-release-76/frozen-sealed-elements.svg" width="660" height="408" alt="" loading="lazy">
-  <figcaption>Chart showing performance boost on a variety of array operations</figcaption>
-</figure>
+![Chart showing performance boost on a variety of array operations](/_img/v8-release-76/frozen-sealed-elements.svg)
 
 [See the “fast frozen & sealed elements in V8” design doc](https://bit.ly/fast-frozen-sealed-elements-in-v8) for more details.
 

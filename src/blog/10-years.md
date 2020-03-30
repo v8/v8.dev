@@ -54,10 +54,7 @@ Recently, we shipped a baseline compiler for WebAssembly named [Liftoff](/blog/l
 
 Chrome’s V8 Bench score over the years shows the performance impact of V8’s changes. (We’re using the V8 Bench because it’s one of the few benchmarks that can still run in the original Chrome beta.)
 
-<figure>
-  <img src="/_img/10-years/v8-bench.svg" width="693" height="318" alt="" loading="lazy">
-  <figcaption>Chrome’s <a href="http://www.netchain.com/Tools/v8/">V8 Bench</a> score from 2008 to 2018</figcaption>
-</figure>
+![Chrome’s [V8 Bench](http://www.netchain.com/Tools/v8/) score from 2008 to 2018](/_img/10-years/v8-bench.svg)
 
 Our score on this benchmark went up **4×** over the last ten years!
 
@@ -65,10 +62,7 @@ However, you might notice two performance dips over the years. Both are interest
 
 Another take-away from this chart is that it starts to level off around 2013. Does that mean V8 gave up and stopped investing in performance? Quite the opposite! The flattening of the graphs represents the V8 team’s pivot from synthetic micro-benchmarks (such as V8 Bench and Octane) to optimizing for [real-world performance](/blog/real-world-performance). V8 Bench is an old benchmark that doesn’t use any modern JavaScript features, nor does it approximate actual real-world production code. Contrast this with the more recent Speedometer benchmark suite:
 
-<figure>
-  <img src="/_img/10-years/speedometer-1.svg" width="693" height="318" alt="" loading="lazy">
-  <figcaption>Chrome’s <a href="https://browserbench.org/Speedometer/">Speedometer 1</a> score from 2013 to 2018</figcaption>
-</figure>
+![Chrome’s [Speedometer 1](https://browserbench.org/Speedometer/) score from 2013 to 2018](/_img/10-years/speedometer-1.svg)
 
 Although V8 Bench shows minimal improvements from 2013 to 2018, our Speedometer 1 score went up (another) **4×** during this same time period. (We used Speedometer 1 because Speedometer 2 uses modern JavaScript features that weren’t yet supported in 2013.)
 

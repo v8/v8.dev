@@ -17,6 +17,7 @@ const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAttrs = require('markdown-it-attrs');
 const markdownItContainer = require('markdown-it-container');
+const markdownItImplicitFigures = require('markdown-it-implicit-figures');
 const markdownItFootnote = require('markdown-it-footnote');
 const markdownItMultiMdTable = require('markdown-it-multimd-table');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
@@ -46,7 +47,31 @@ const md = markdownIt(markdownItConfig)
     rowspan: true,
     multiline: true,
   })
-  .use(markdownItAnchor, markdownItAnchorConfig);
+  .use(markdownItAnchor, markdownItAnchorConfig)
+  .use(markdownItImplicitFigures, {
+    figcaption: true
+  })
+  .use(md => {
+    const imageSize = require('image-size');
+    const { existsSync } = require('fs');
+
+    md.inline.ruler2.push('image_size', state => {
+      for (let t of state.tokens) {
+        if (t.type !== 'image') continue;
+        let imgSrc = t.attrGet('src');
+        if (imgSrc.startsWith('/_img/')) {
+          let { width, height } = imageSize('src' + imgSrc);
+          t.attrs.push(['width', width], ['height', height], ['loading', 'lazy']);
+          let imgSrc2x = imgSrc.replace(/\.[^.]*$/, '@2x$&');
+          if (existsSync('src' + imgSrc2x)) {
+            t.attrs.push(['srcset', `${imgSrc2x} 2x`]);
+          }
+        } else {
+          throw new Error(`Image ${imgSrc} is not in the "/_img/..." directory.`);
+        }
+      }
+    });
+  });
 
 // Simulating `td:has(>pre:only-child)` with a markdown-it render rule.
 // Can be removed when (if?) CSS4 is actually implemented in browsers.

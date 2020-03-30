@@ -10,10 +10,7 @@ Over the last year the V8 team has developed a new methodology to measure and un
 
 The old adage “what gets measured gets improved” is particularly true in the world of JavaScript virtual machine (VM) development. Choosing the right metrics to guide performance optimization is one of the most important things a VM team can do over time. The following timeline roughly illustrates how JavaScript benchmarking has evolved since the initial release of V8:
 
-<figure>
-  <img src="/_img/real-world-performance/evolution.png" width="698" height="351" alt="" loading="lazy">
-  <figcaption>Evolution of JavaScript benchmarks</figcaption>
-</figure>
+![Evolution of JavaScript benchmarks](/_img/real-world-performance/evolution.png)
 
 Historically, V8 and other JavaScript engines have measured performance using synthetic benchmarks. Initially, VM developers used microbenchmarks like [SunSpider](https://webkit.org/perf/sunspider/sunspider.html) and [Kraken](http://krakenbenchmark.mozilla.org/). As the browser market matured a second benchmarking era began, during which they used larger but nevertheless synthetic test suites such as [Octane](http://chromium.github.io/octane/) and [JetStream](http://browserbench.org/JetStream/).
 
@@ -35,10 +32,7 @@ Analyzing these new, real-world performance metrics and comparing them to tradit
 
 From these measurements, we discovered that Octane performance was actually a poor proxy for performance on the majority of our 25 tested websites. You can see in the chart below: Octane’s color bar distribution is very different than any other workload, especially those for the real-world websites. When running Octane, V8’s bottleneck is often the execution of JavaScript code. However, most real-world websites instead stress V8’s parser and compiler. We realized that optimizations made for Octane often lacked impact on real-world web pages, and in some cases these [optimizations made real-world websites slower](https://benediktmeurer.de/2016/12/16/the-truth-about-traditional-javascript-benchmarks/#a-closer-look-at-octane).
 
-<figure>
-  <img src="/_img/real-world-performance/startup-distribution.png" width="1600" height="945" alt="" loading="lazy">
-  <figcaption>Distribution of time running all of Octane, running the line-items of Speedometer, and loading websites from our test suite on Chrome 57</figcaption>
-</figure>
+![Distribution of time running all of Octane, running the line-items of Speedometer, and loading websites from our test suite on Chrome 57](/_img/real-world-performance/startup-distribution.png)
 
 We also discovered that another benchmark was actually a better proxy for real websites. [Speedometer](http://browserbench.org/Speedometer/), a WebKit benchmark that includes applications written in React, Angular, Ember, and other frameworks, demonstrated a very similar runtime profile to the 25 sites. Although no benchmark matches the fidelity of real web pages, we believe Speedometer does a better job of approximating the real-world workloads of modern JavaScript on the web than Octane.
 

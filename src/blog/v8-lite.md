@@ -59,10 +59,7 @@ To bring most of these savings to regular V8 without these regressions, we inste
 
 One additional complication with this approach is related to the fact that feedback vectors form a tree, with the feedback vectors for inner functions being held as entries in their outer function’s feedback vector. This is necessary so that newly created function closures receive the same feedback vector array as all other closures created for the same function. With lazy allocation of feedback vectors we can’t form this tree using feedback vectors, since there is no guarantee that an outer function will have allocated its feedback vector by the time an inner function does so. To address this, we created a new `ClosureFeedbackCellArray` to maintain this tree, then swap out a function’s `ClosureFeedbackCellArray` with a full `FeedbackVector` when it becomes hot.
 
-<figure>
-  <img src="/_img/v8-lite/lazy-feedback.svg" width="1257" height="480" alt="" loading="lazy">
-  <figcaption>Feedback vector trees before and after lazy feedback allocation.</figcaption>
-</figure>
+![Feedback vector trees before and after lazy feedback allocation.](/_img/v8-lite/lazy-feedback.svg)
 
 Our lab experiments and in-the-field telemetry showed no performance regressions for lazy feedback on desktop, and on mobile platforms we actually saw a performance improvement on low-end devices due to a reduction in garbage collection. As such, we have enabled lazy feedback allocation in all builds of V8, including *Lite mode* where the slight regression in memory compared to our original no-feedback allocation approach is more than compensated by the improvement in real world performance.
 
@@ -86,10 +83,7 @@ There were technical challenges to ensure that bytecode is only ever flushed whe
 
 In addition to flushing bytecode, we also flush feedback vectors associated with these flushed functions. However we can’t flush feedback vectors during the same GC cycle as the bytecode because they aren’t retained by the same object - bytecode is held by a native-context independent `SharedFunctionInfo`, whereas the feedback vector is retained by the native-context dependent `JSFunction`. As a result we flush feedback vectors on the subsequent GC cycle.
 
-<figure>
-  <img src="/_img/v8-lite/bytecode-flushing.svg" width="1200" height="492" alt="" loading="lazy">
-  <figcaption>The object layout for an aged function after two GC cycles.</figcaption>
-</figure>
+![The object layout for an aged function after two GC cycles.](/_img/v8-lite/bytecode-flushing.svg)
 
 ## Additional optimizations
 
@@ -103,23 +97,14 @@ The second optimization is related to how we deoptimize from TurboFan optimized 
 
 We have released the optimizations described above over the last seven releases of V8. Typically they landed first in *Lite mode*, and then were later brought to the default configuration of V8.
 
-<figure>
-  <img src="/_img/v8-lite/savings-by-release.svg" width="700" height="433" alt="" loading="lazy">
-  <figcaption>Average V8 heap size for a set of typical web pages on an AndroidGo device.</figcaption>
-</figure>
+![Average V8 heap size for a set of typical web pages on an AndroidGo device.](/_img/v8-lite/savings-by-release.svg)
 
-<figure>
-  <img src="/_img/v8-lite/breakdown-by-page.svg" width="677" height="411" alt="" loading="lazy">
-  <figcaption>Per-page breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).</figcaption>
-</figure>
+![Per-page breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).](/_img/v8-lite/breakdown-by-page.svg)
 
 Over this time, we have reduced the V8 heap size by an average of 18% across a range of typical websites, which corresponds to an average decrease of 1.5 MB for low-end AndroidGo mobile devices. This has been possible without any significant impact on JavaScript performance either on benchmarks or as measured on real world webpage interactions.
 
 *Lite mode* can provide further memory savings at some cost to JavaScript execution throughput by disabling function optimization. On average *Lite mode* provides 22% memory savings, with some pages seeing up to 32% reductions. This corresponds to a 1.8 MB reduction in V8 heap size on an AndroidGo device.
 
-<figure>
-  <img src="/_img/v8-lite/breakdown-by-optimization.svg" width="677" height="411" alt="" loading="lazy">
-  <figcaption>Breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).</figcaption>
-</figure>
+![Breakdown of memory savings of V8 v7.8 (Chrome 78) compared to v7.1 (Chrome 71).](/_img/v8-lite/breakdown-by-optimization.svg)
 
 When split by the impact of each individual optimization, it is clear that different pages derive a different proportion of their benefit from each of these optimizations. Going forward, we will continue to identify potential optimizations which can further reduce V8’s memory usage while still remaining blazingly fast at JavaScript execution.

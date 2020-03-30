@@ -18,9 +18,7 @@ For more information, see [our dedicated blog post](/blog/launching-ignition-and
 
 [WebAssembly `TrapIf` support](https://chromium.googlesource.com/v8/v8/+/98fa962e5f342878109c26fd7190573082ac3abe) significantly reduced the time spent compiling code (~30%).
 
-<figure>
-  <img src="/_img/v8-release-59/angrybots.png" width="600" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-59/angrybots.png)
 
 ## V8 API
 

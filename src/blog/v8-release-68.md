@@ -13,15 +13,11 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 JavaScript functions unnecessarily kept outer functions and their metadata (known as `SharedFunctionInfo` or `SFI`) alive. Especially in function-heavy code that relies on short-lived IIFEs, this could lead to spurious memory leaks. Before this change, an active `Context` (i.e. an on-heap representation of a function activation) kept the `SFI` alive of the function that created the context:
 
-<figure>
-  <img src="/_img/v8-release-68/context-jsfunction-before.svg" width="714" height="210" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-68/context-jsfunction-before.svg)
 
 By letting the `Context` point to a `ScopeInfo` object which contains the stripped-down information necessary for debugging, we can break the dependency on the `SFI`.
 
-<figure>
-  <img src="/_img/v8-release-68/context-jsfunction-after.svg" width="714" height="187" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-68/context-jsfunction-after.svg)
 
 We’ve already observed 3% V8 memory improvements on mobile devices over a set of top 10 pages.
 
@@ -43,9 +39,7 @@ So far `Object.assign` had a fast path written in C++. That meant that the JavaS
 
 Performance for sorting `TypedArray`s without a comparison function stays the same while there is a speedup of up to 2.5× when sorting using a comparison function.
 
-<figure>
-  <img src="/_img/v8-release-68/typedarray-sort.svg" width="600" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-68/typedarray-sort.svg)
 
 ## WebAssembly
 

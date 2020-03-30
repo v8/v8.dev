@@ -16,10 +16,7 @@ Given the nature of an evolving spec, the differences between various types of c
 
 When TC39 decided to publish more frequent updates to the JavaScript specification, the most up-to-date version of the language became the master, draft version. Although versions of the ECMAScript spec are still produced yearly and ratified, V8 implements a combination of the most recently ratified version (e.g. ES2015), certain features which are close enough to standardization that they are safe to implement (e.g. the exponentiation operator and `Array.prototype.includes()` from the ES2016 candidate draft), and a collection of bug fixes and web compatibility amendments from more recent drafts. Part of the rationale for such an approach is that language implementations in browsers should match the specification, even if the it’s the specification that needs to be updated. In fact, the process of implementing a ratified version of the spec often uncovers many of the fixes and clarifications that comprise the next version of the spec.
 
-<figure>
-  <img src="/_img/modern-javascript/shipped-features.png" width="652" height="241" alt="" loading="lazy">
-  <figcaption>Currently shipping parts of the evolving ECMAScript specification</figcaption>
-</figure>
+![Currently shipping parts of the evolving ECMAScript specification](/_img/modern-javascript/shipped-features.png)
 
 For example, when implementing the ES2015 [RegExp sticky flag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/sticky), the V8 team discovered that the semantics of the ES2015 spec broke many existing sites (including all sites using versions 2.x.x of the popular [XRegExp](https://github.com/slevithan/xregexp) library). Since compatibility is a cornerstone of the web, engineers from the V8 and Safari JavaScriptCore teams [proposed an amendment](https://github.com/tc39/ecma262/pull/511) to the RegExp specification to fix the breakage, which was agreed upon by TC39. The amendment won't appear in a ratified version until ES2017, but it's still a part of the ECMAScript language and we've implemented it in order to ship the RegExp sticky flag.
 

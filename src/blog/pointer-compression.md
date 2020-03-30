@@ -18,10 +18,7 @@ Back in 2014 Chrome switched from being a 32-bit process to a 64-bit process. Th
 
 Before diving into the implementation, we need to know where we are standing to correctly assess the situation. To measure our memory and performance we use a set of [web pages](https://v8.dev/blog/optimizing-v8-memory) that reflect popular real-world websites. The data showed that V8 contributes up to 60% of Chrome’s [renderer process](https://www.chromium.org/developers/design-documents/multi-process-architecture) memory consumption on desktop, with an average of 40%.
 
-<figure>
-  <img src="/_img/pointer-compression/memory-chrome.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>V8 memory consumption percentage in Chrome’s renderer memory</figcaption>
-</figure>
+![V8 memory consumption percentage in Chrome’s renderer memory](/_img/pointer-compression/memory-chrome.svg)
 
 Pointer Compression is one of several ongoing efforts in V8 to reduce memory consumption. The idea is very simple: instead of storing 64-bit pointers we can store 32-bit offsets from some “base” address. With such a simple idea, how much can we gain from such a compression in V8?
 
@@ -73,10 +70,7 @@ The question is now how to update the heap layout to ensure that 32-bit pointers
 ### Trivial heap layout
 
 The trivial compression scheme would be to allocate objects in the first 4GB of address space.
-<figure>
-  <img src="/_img/pointer-compression/heap-layout-0.svg" width="827" height="260" alt="" loading="lazy">
-  <figcaption>Trivial heap layout</figcaption>
-</figure>
+![Trivial heap layout](/_img/pointer-compression/heap-layout-0.svg)
 
 Unfortunately, this is not an option for V8 since Chrome’s renderer process may need to create multiple V8 instances in the same renderer process, for example for Web/Service Workers. Otherwise, with this scheme all these V8 instances will compete for the same 4GB address space and thus there will be a 4GB memory limit imposed on all V8 instances together.
 
@@ -140,10 +134,7 @@ Let’s try to change the compression scheme to simplify the decompression code.
 
 If instead of having the base at the beginning of the 4GB we put the base in the _middle_, we can treat the compressed value as a **signed** 32-bit offset from the base. Note that the whole reservation is not 4GB aligned anymore but the base is.
 
-<figure>
-  <img src="/_img/pointer-compression/heap-layout-2.svg" width="827" height="363" alt="" loading="lazy">
-  <figcaption>Heap layout, base aligned to the middle</figcaption>
-</figure>
+![Heap layout, base aligned to the middle](/_img/pointer-compression/heap-layout-2.svg)
 
 In this new layout, the compression code will stay the same.
 
@@ -182,10 +173,7 @@ Then, we decided to start with the branchless implementation.
 We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-genesis-of-octane) -- a peak-performance benchmark we have used in the past. Although we are no longer focusing on improving peak performance in our day-to-day work, we also don’t want to regress peak performance, particularly for something as performance-sensitive as _all pointers_. Octane continues to be a good benchmark for this task.
 
 This graph shows Octane's score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation. In the graph, higher is better. The red line is the existing full-sized-pointer x64 build, while the green line is the pointer compressed version.
-<figure>
-  <img src="/_img/pointer-compression/perf-octane-1.svg" width="913" height="218" alt="" loading="lazy">
-  <figcaption>First round of Octane's improvements</figcaption>
-</figure>
+![First round of Octane's improvements](/_img/pointer-compression/perf-octane-1.svg)
 
 With the first working implementation, we had a ~35% regression gap.
 
@@ -277,10 +265,7 @@ One example of a “broken” optimization was [allocation preternuring](https:/
 
 ### Further improvements
 
-<figure>
-  <img src="/_img/pointer-compression/perf-octane-2.svg" width="859" height="178" alt="" loading="lazy">
-  <figcaption>Second round of Octane's improvements</figcaption>
-</figure>
+![Second round of Octane's improvements](/_img/pointer-compression/perf-octane-2.svg)
 
 #### Bump (5), +0.5%
 
@@ -396,18 +381,13 @@ let p = new Point(3.1, 5.3);
 
 Generally speaking, if we look at how the object p looks like in memory, we’ll see something like this:
 
-<figure>
-  <img src="/_img/pointer-compression/heap-point-1.svg" width="832" height="232" alt="" loading="lazy">
-  <figcaption>Object p in memory</figcaption>
-</figure>
+![Object p in memory](/_img/pointer-compression/heap-point-1.svg)
 
 You can read more about hidden classes and properties and elements backing stores in [this article](https://v8.dev/blog/fast-properties).
 
 On 64-bit architectures, double values are the same size as pointers. So, if we assume that Point’s fields always contain number values, we can store them directly in the object fields.
 
-<figure>
-  <img src="/_img/pointer-compression/heap-point-2.svg" width="832" height="112" alt="" loading="lazy">
-</figure>
+![](/_img/pointer-compression/heap-point-2.svg)
 
 If the assumption breaks for some field, say after executing this line:
 
@@ -417,10 +397,7 @@ let q = new Point(2, “ab”);
 
 then number values for the y property must be stored boxed instead. Additionally, if there is speculatively-optimized code somewhere that relies on this assumption it must no longer be used and must be thrown away (deoptimized). The reason for such a “field type” generalization is to minimize the number of shapes of objects created from the same constructor function, which in turn is necessary for more stable performance.
 
-<figure>
-  <img src="/_img/pointer-compression/heap-point-3.svg" width="832" height="262" alt="" loading="lazy">
-  <figcaption>Objects p and q in memory</figcaption>
-</figure>
+![Objects p and q in memory](/_img/pointer-compression/heap-point-3.svg)
 
 If applied, double field unboxing gives the following benefits:
 
@@ -516,19 +493,13 @@ Let’s take a look at Pointer Compression’s final numbers! For these results,
 
 In them, we observed that Pointer Compression reduces **V8 heap size up to 43%**! In turn, it reduces **Chrome’s renderer process memory up to 20%** on Desktop.
 
-<figure>
-  <img src="/_img/pointer-compression/v8-heap-memory.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Memory savings when browsing in Windows 10</figcaption>
-</figure>
+![Memory savings when browsing in Windows 10](/_img/pointer-compression/v8-heap-memory.svg)
 
 Another important thing to notice is that not every website improves the same amount. For example, V8 heap memory used to be bigger on Facebook than New York Times, but with Pointer Compression it is actually the reverse. This difference can be explained by the fact that some websites have more Tagged values than others.
 
 In addition to these memory improvements we have also seen real-world  performance improvements. On real websites we utilize less CPU and garbage collector time!
 
-<figure>
-  <img src="/_img/pointer-compression/performance-improvements.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Improvements in CPU and garbage collection time</figcaption>
-</figure>
+![Improvements in CPU and garbage collection time](/_img/pointer-compression/performance-improvements.svg)
 
 ## Conclusion
 

@@ -20,10 +20,7 @@ Chrome 41 included a [task scheduler for the Blink rendering engine](https://blo
 
 An example of this occurs when Chrome is showing an animation on a web page. The animation will update the screen at 60 FPS, giving Chrome around 16.6 ms of time to perform the update. As such, Chrome will start work on the current frame as soon as the previous frame has been displayed, performing input, animation and frame rendering tasks for this new frame. If Chrome completes all this work in less than 16.6 ms, then it has nothing else to do for the remaining time until it needs to start rendering the next frame. Chrome’s scheduler enables V8 to take advantage of this _idle time period_ by scheduling special _idle tasks_ when Chrome would otherwise be idle.
 
-<figure>
-  <img src="/_img/free-garbage-collection/frame-rendering.png" width="624" height="136" alt="" loading="lazy">
-  <figcaption>Figure 1: Frame rendering with idle tasks</figcaption>
-</figure>
+![Figure 1: Frame rendering with idle tasks](/_img/free-garbage-collection/frame-rendering.png)
 
 Idle tasks are special low-priority tasks which are run when the scheduler determines it is in an idle period. Idle tasks are given a deadline which is the scheduler’s estimate of how long it expects to remain idle. In the animation example in Figure 1, this would be the time at which the next frame should start being drawn. In other situations (e.g., when no on-screen activity is happening) this could be the time when the next pending task is scheduled to be run, with an upper bound of 50 ms to ensure that Chrome remains responsive to unexpected user input. The deadline is used by the idle task to estimate how much work it can do without causing jank or delays in input response.
 
@@ -62,10 +59,7 @@ In order to evaluate the impact of running garbage collection during idle time, 
 
 Figure 2 shows the percentage of garbage collection that was scheduled during idle time. The workstation’s faster hardware results in more overall idle time compared to the Nexus 6, thereby enabling a greater percentage of garbage collection to be scheduled during this idle time (43% compared to 31% on the Nexus 6) resulting in about 7% improvement on our [jank metric](https://www.chromium.org/developers/design-documents/rendering-benchmarks).
 
-<figure>
-  <img src="/_img/free-garbage-collection/idle-time-gc.png" width="600" height="363" alt="" loading="lazy">
-  <figcaption>Figure 2: The percentage of garbage collection that occurs during idle time</figcaption>
-</figure>
+![Figure 2: The percentage of garbage collection that occurs during idle time](/_img/free-garbage-collection/idle-time-gc.png)
 
 As well as improving the smoothness of page rendering, these idle periods also provide an opportunity to perform more aggressive garbage collection when the page becomes fully idle. Recent improvements in Chrome 45 take advantage of this to drastically reduce the amount of memory consumed by idle foreground tabs. Figure 3 shows a sneak peek at how memory usage of Gmail’s JavaScript heap can be reduced by about 45% when it becomes idle, compared to the same page in Chrome 43.
 

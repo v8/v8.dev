@@ -40,22 +40,13 @@ One of the main challenges when optimizing for performance in general is to get 
 
 A common workflow during our optimization efforts involves selecting an instance type that takes up a large portion of the heap in the timeline view, as depicted in Figure 1. Once an instance type is selected, the tool then shows a distribution of uses of this type. In this example we selected V8’s internal FixedArray data structure, which is an untyped vector-like container used ubiquitously in all sorts of places in the VM. Figure 2 shows a typical FixedArray distribution, where we can see that the majority of memory can be attributed to a specific FixedArray usage scenario. In this case FixedArrays are used as the backing store for sparse JavaScript arrays (what we call DICTIONARY\_ELEMENTS). With this information it is possible to refer back to the actual code and either verify whether this distribution is indeed the expected behavior or whether an optimization opportunity exists. We used the tool to identify inefficiencies with a number of internal types.
 
-<figure>
-  <img src="/_img/optimizing-v8-memory/timeline-view.png" width="1600" height="524" alt="" loading="lazy">
-  <figcaption>Figure 1: Timeline view of managed heap and off-heap memory</figcaption>
-</figure>
+![Figure 1: Timeline view of managed heap and off-heap memory](/_img/optimizing-v8-memory/timeline-view.png)
 
-<figure>
-  <img src="/_img/optimizing-v8-memory/distribution.png" width="950" height="496" alt="" loading="lazy">
-  <figcaption>Figure 2: Distribution of instance type</figcaption>
-</figure>
+![Figure 2: Distribution of instance type](/_img/optimizing-v8-memory/distribution.png)
 
 Figure 3 shows C++ heap memory consumption, which consists primarily of zone memory (temporary memory regions used by V8 used for  a short period of time; discussed in more detail below).  Since zone memory is used most extensively by the V8 parser and compilers, the spikes correspond to parsing and compilation events. A well-behaved execution consists only of spikes, indicating that memory is freed as soon as it is no longer needed. In contrast, plateaus (i.e. longer periods of time with higher memory consumption) indicate that there is room for optimization.
 
-<figure>
-  <img src="/_img/optimizing-v8-memory/zone-memory.png" width="1600" height="490" alt="" loading="lazy">
-  <figcaption>Figure 3: Zone memory</figcaption>
-</figure>
+![Figure 3: Zone memory](/_img/optimizing-v8-memory/zone-memory.png)
 
 Early adopters can also try out the integration into [Chrome’s tracing infrastructure](https://www.chromium.org/developers/how-tos/trace-event-profiling-tool). Therefore you need to run the latest Chrome Canary with `--track-gc-object-stats` and [capture a trace](https://www.chromium.org/developers/how-tos/trace-event-profiling-tool/recording-tracing-runs#TOC-Capture-a-trace-on-Chrome-desktop) including the category `v8.gc_stats`. The data will then show up under the `V8.GC_Object_Stats` event.
 
@@ -71,10 +62,7 @@ To better balance the right tradeoffs for these low-memory mobile devices, we in
 
 Figure 4 depicts some of the improvements on low memory devices since Chrome 53. Most noticeably, the average V8 heap memory consumption of the mobile New York Times benchmark reduced by about 66%. Overall, we observed a 50% reduction of average V8 heap size on this set of benchmarks.
 
-<figure>
-  <img src="/_img/optimizing-v8-memory/heap-memory-reduction.png" width="1122" height="694" alt="" loading="lazy">
-  <figcaption>Figure 4: V8 heap memory reduction since Chrome 53 on low-memory devices</figcaption>
-</figure>
+![Figure 4: V8 heap memory reduction since Chrome 53 on low-memory devices](/_img/optimizing-v8-memory/heap-memory-reduction.png)
 
 Another optimization introduced recently not only reduces memory on low-memory devices but beefier mobile and desktop machines. Reducing the V8 heap page size from 1 MB to 512 kB results in a smaller memory footprint when not many live objects are present and lower overall memory fragmentation up to 2×. It also allows V8 to perform more compaction work since smaller work chunks allow more work to be done in parallel by the memory compaction threads.
 
@@ -88,10 +76,7 @@ Another improvement results from better packing of fields in _abstract syntax tr
 
 Figure 5 shows the peak zone memory improvements since Chrome 54 which reduced by about 40% on average over the measured websites.
 
-<figure>
-  <img src="/_img/optimizing-v8-memory/peak-zone-memory-reduction.png" width="853" height="527" alt="" loading="lazy">
-  <figcaption>Figure 5: V8 peak zone memory reduction since Chrome 54 on desktop</figcaption>
-</figure>
+![Figure 5: V8 peak zone memory reduction since Chrome 54 on desktop](/_img/optimizing-v8-memory/peak-zone-memory-reduction.png)
 
 Over the next months we will continue our work on reducing the memory footprint of V8. We have more zone memory optimizations planned for the parser and we plan to focus on devices ranging from 512 MB – 1 GB of memory.
 

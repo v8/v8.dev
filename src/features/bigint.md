@@ -25,10 +25,7 @@ Arbitrary-precision integers unlock lots of new use cases for JavaScript.
 
 Previously, JavaScript applications with any of these use cases had to resort to userland libraries that emulate `BigInt`-like functionality. When `BigInt` becomes widely available, such applications can drop these run-time dependencies in favor of native `BigInt`s. This helps reduce load time, parse time, and compile time, and on top of all that offers significant run-time performance improvements.
 
-<figure>
-  <img src="/_img/bigint/performance.svg" width="809" height="337" alt="" loading="lazy">
-  <figcaption>The native <code>BigInt</code> implementation in Chrome performs better than popular userland libraries.</figcaption>
-</figure>
+![The native `BigInt` implementation in Chrome performs better than popular userland libraries.](/_img/bigint/performance.svg)
 
 ## The status quo: `Number` {: #number }
 

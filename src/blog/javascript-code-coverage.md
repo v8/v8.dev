@@ -23,26 +23,17 @@ As a JavaScript developer, you may often find yourself in a situation in which c
 
 Earlier this year, we added native support for JavaScript code coverage to V8. The initial release in version 5.9 provided coverage at function granularity (showing which functions have been executed), which was later extended to support coverage at block granularity in v6.2 (likewise, but for individual expressions).
 
-<figure>
-  <img src="/_img/javascript-code-coverage/function-vs-block.png" width="488" height="180" alt="" loading="lazy">
-  <figcaption>Function granularity (left) and block granularity (right)</figcaption>
-</figure>
+![Function granularity (left) and block granularity (right)](/_img/javascript-code-coverage/function-vs-block.png)
 
 ### For JavaScript developers
 
 There are currently two primary ways to access coverage information. For JavaScript developers, Chrome DevTools’ [Coverage tab](https://developers.google.com/web/updates/2017/04/devtools-release-notes#coverage) exposes JS (and CSS) coverage ratios and highlights dead code in the Sources panel.
 
-<figure>
-  <img src="/_img/javascript-code-coverage/block-coverage.png" width="604" height="491" alt="" loading="lazy">
-  <figcaption>Block coverage in the DevTools Coverage pane. Covered lines are highlighted in green, uncovered in red.</figcaption>
-</figure>
+![Block coverage in the DevTools Coverage pane. Covered lines are highlighted in green, uncovered in red.](/_img/javascript-code-coverage/block-coverage.png)
 
 Thanks to [Benjamin Coe](https://twitter.com/BenjaminCoe), there is also [ongoing](https://github.com/bcoe/c8) work to integrate V8’s code coverage information into the popular [Istanbul.js](https://istanbul.js.org/) code coverage tool.
 
-<figure>
-  <img src="/_img/javascript-code-coverage/istanbul.png" width="1600" height="847" alt="" loading="lazy">
-  <figcaption>An Istanbul.js report based on V8 coverage data.</figcaption>
-</figure>
+![An Istanbul.js report based on V8 coverage data.](/_img/javascript-code-coverage/istanbul.png)
 
 ### For embedders
 

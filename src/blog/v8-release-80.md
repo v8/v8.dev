@@ -38,10 +38,7 @@ Tagged values are as big as the system pointer: they are 32 bits wide for 32-bit
 
 Luckily for us, we have a trick up our sleeve. The top bits can be synthesized from the lower bits. Then, we only need to store the unique lower bits into the heap saving precious memory resources... to save an average of 40% of the heap memory!
 
-<figure>
-  <img src="/_img/v8-release-80/pointer-compression-chart.svg" width="638" height="371" alt="" loading="lazy">
-  <figcaption>Pointer compression saves an average of 40% of memory.</figcaption>
-</figure>
+![Pointer compression saves an average of 40% of memory.](/_img/v8-release-80/pointer-compression-chart.svg)
 
 When improving memory, usually it comes at the cost of performance. Usually. We are proud to announce that we saw improvements in performance on real websites in the time spent in V8, and in its garbage collector!
 

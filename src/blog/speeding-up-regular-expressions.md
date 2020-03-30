@@ -27,10 +27,7 @@ Our new design for the RegExp migration is based on the [CodeStubAssembler](/blo
 
 Results have been very positive. Our score on [a substantial RegExp workload](https://github.com/chromium/octane/blob/master/regexp.js) has improved by 15%, more than regaining our recent subclassing-related performance losses. Microbenchmarks (Figure 1) show improvements across the board, from 7% for [`RegExp.prototype.exec`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec), up to 102% for [`RegExp.prototype[@@split]`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/@@split).
 
-<figure>
-  <img src="/_img/speeding-up-regular-expressions/perf.png" width="1024" height="576" alt="" loading="lazy">
-  <figcaption>Figure 1: RegExp speedup broken down by function</figcaption>
-</figure>
+![Figure 1: RegExp speedup broken down by function](/_img/speeding-up-regular-expressions/perf.png)
 
 So how can you, as a JavaScript developer, ensure that your RegExps are fast? If you are not interested in hooking into RegExp internals, make sure that neither the RegExp instance, nor its prototype is modified in order to get the best performance:
 

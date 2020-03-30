@@ -101,10 +101,7 @@ When compiling bytecode from JavaScript, source position tables are generated th
 
 To avoid this, we now compile bytecode without collecting source positions (assuming no debugger or profiler is attached). The source positions are only collected when a stack trace is actually generated, for instance when calling `Error.stack` or printing an exception’s stack trace to the console. This does have some cost, as generating source positions requires the function to be reparsed and compiled, however most websites don’t symbolize stack traces in production and therefore don’t see any observable performance impact. In our lab testing we saw between 1-2.5% reductions in V8’s memory usage.
 
-<figure>
-  <img src="/_img/v8-release-78/memory-savings.svg" width="699" height="432" alt="" loading="lazy">
-  <figcaption>Memory savings from lazy source positions on an AndroidGo device</figcaption>
-</figure>
+![Memory savings from lazy source positions on an AndroidGo device](/_img/v8-release-78/memory-savings.svg)
 
 ### Faster RegExp match failures
 

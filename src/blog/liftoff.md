@@ -41,9 +41,7 @@ Liftoff is a simple code generator, and fast. It performs only one pass over the
 
 Let’s go through a very simple function to see how Liftoff generates code for that.
 
-<figure>
-  <img src="/_img/liftoff/example-1.svg" width="808" height="700" alt="" loading="lazy">
-</figure>
+![](/_img/liftoff/example-1.svg)
 
 This example function takes two parameters and returns their sum. When Liftoff decodes the bytes of this function, it first begins by initializing its internal state for the local variables according to the calling convention for WebAssembly functions. For x64, V8’s calling convention passes the two parameters in the registers *rax* and *rdx*.
 
@@ -55,9 +53,7 @@ For the sake of simplicity, the example above does not contain any blocks (`if`,
 
 Let’s look at an example of that.
 
-<figure>
-  <img src="/_img/liftoff/example-2.svg" width="946" height="590" alt="" loading="lazy">
-</figure>
+![](/_img/liftoff/example-2.svg)
 
 The example above assumes a virtual stack with two values on the operand stack. Before starting the new block, the top value on the virtual stack is popped as argument to the `if` instruction. The remaining stack value needs to be put in another register, since it is currently shadowing the first parameter, but when branching back to this state we might need to hold two different values for the stack value and the parameter. In this case Liftoff chooses to deduplicate it into the *rcx* register. This state is then snapshotted, and the active state is modified within the block. At the end of the block, we implicitly branch back to the parent block, so we merge the current state into the snapshot by moving register *rbx* into *rcx* and reloading register *rdx* from the stack frame.
 
@@ -75,9 +71,7 @@ From these constraints we concluded that dynamic tier-up is not the right tradeo
 
 The picture below shows the trace of compiling and executing [the EpicZenGarden benchmark](https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html). It shows that right after Liftoff compilation we can instantiate the WebAssembly module and start executing it. TurboFan compilation still takes several more seconds, so during that tier-up period the observed execution performance gradually increases since individual TurboFan functions are used as soon as they are finished.
 
-<figure>
-  <img src="/_img/liftoff/tierup-liftoff-turbofan.png" width="890" height="723" alt="" loading="lazy">
-</figure>
+![](/_img/liftoff/tierup-liftoff-turbofan.png)
 
 ## Performance
 
@@ -98,15 +92,9 @@ For each benchmark, we measure the raw compilation time using the tracing output
 
 The graphs below show the results of these benchmarks. Each benchmark was executed three times, and we report the average compilation time.
 
-<figure>
-  <img src="/_img/liftoff/performance-unity-macbook.svg" width="490" height="282" alt="" loading="lazy">
-  <figcaption>Code generation performance of Liftoff vs. TurboFan on a MacBook</figcaption>
-</figure>
+![Code generation performance of Liftoff vs. TurboFan on a MacBook](/_img/liftoff/performance-unity-macbook.svg)
 
-<figure>
-  <img src="/_img/liftoff/performance-unity-z840.svg" width="490" height="282" alt="" loading="lazy">
-  <figcaption>Code generation performance of Liftoff vs. TurboFan on a Z840</figcaption>
-</figure>
+![Code generation performance of Liftoff vs. TurboFan on a Z840](/_img/liftoff/performance-unity-z840.svg)
 
 As expected, the Liftoff compiler generates code much faster both on the high-end desktop workstation as well as on the MacBook. The speedup of Liftoff over TurboFan is even bigger on the less-capable MacBook hardware.
 
@@ -126,17 +114,11 @@ For measuring Liftoff code performance, we turned off tier-up in order to measur
 
 Just as before, we execute each benchmark three times and use the average of the three runs. Since the scale of the recorded numbers differs significantly between the benchmarks, we report the *relative performance of Liftoff vs. TurboFan*. A value of *+30%* means that Liftoff code runs 30% slower than TurboFan. Negative numbers indicate that Liftoff executes faster. Here are the results:
 
-<figure>
-  <img src="/_img/liftoff/performance-unity-compile.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Liftoff Performance on Unity</figcaption>
-</figure>
+![Liftoff Performance on Unity](/_img/liftoff/performance-unity-compile.svg)
 
 On Unity, Liftoff code execute on average around 50% slower than TurboFan code on the desktop machine and 70% slower on the MacBook. Interestingly, there is one case (Mandelbrot Script) where Liftoff code outperforms TurboFan code. This is likely an outlier where, for example, the register allocator of TurboFan is doing poorly in a hot loop. We are investigating to see if TurboFan can be improved to handle this case better.
 
-<figure>
-  <img src="/_img/liftoff/performance-pspdfkit-compile.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Liftoff Performance on PSPDFKit</figcaption>
-</figure>
+![Liftoff Performance on PSPDFKit](/_img/liftoff/performance-pspdfkit-compile.svg)
 
 On the PSPDFKit benchmark, Liftoff code executes 18-54% slower than optimized code, while initialization improves significantly, as expected. These numbers show that for real-world code which also interacts with the browser via JavaScript calls, the performance loss of unoptimized code is generally lower than on more computation-intensive benchmarks.
 

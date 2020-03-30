@@ -19,10 +19,7 @@ The parser now does not [need to preparse a function a second time](https://docs
 
 `Object.is()`’s performance is now roughly on-par with alternatives. In general, V8 v6.3 continues the path to better the ES2015+ performance. Beside other items we boosted the [speed of polymorphic access to symbols](https://bugs.chromium.org/p/v8/issues/detail?id=6367), [polymorphic inlining of constructor calls](https://bugs.chromium.org/p/v8/issues/detail?id=6885) and [(tagged) template literals](https://pasteboard.co/GLYc4gt.png).
 
-<figure>
-  <img src="/_img/v8-release-63/ares6.svg" width="969" height="553" alt="" loading="lazy">
-  <figcaption>V8’s performance over the past six releases</figcaption>
-</figure>
+![V8’s performance over the past six releases](/_img/v8-release-63/ares6.svg)
 
 Weak optimized function list is gone. More information can be found in [the dedicated blog post](/blog/lazy-unlinking).
 

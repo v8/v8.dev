@@ -58,19 +58,13 @@ Although the example is made-up, the sequence of bytecodes described here occurs
 
 ## Results
 
-<figure>
-  <img src="/_img/regexp-tier-up/results-memory.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Figure 1: Memory savings for different tier-up values</figcaption>
-</figure>
+![Figure 1: Memory savings for different tier-up values](/_img/regexp-tier-up/results-memory.svg)
 
 Figure 1 shows the impact on memory of different tier-up strategies for Facebook, Reddit, Twitter and Tumblr browsing stories. The default is the size of JITted code, and then we have size of regexp code we end up using (bytecode size if we don’t tier-up, native code size if we do) for ticks initialized to 1, 10, and 100. Finally, we have the size of regexp code if we interpret all regular expressions. We’ve used these results and other benchmarks to decide to turn on the tier-up with ticks initialized to 1, i.e. we interpret the regular expression once, and then tier up.
 
 With this tier-up strategy in place, we’ve reduced V8’s heap code size between 4 and 7% on real sites and V8’s effective size between 1 and 2%.
 
-<figure>
-  <img src="/_img/regexp-tier-up/results-speed.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Figure 2: RegExp performance comparison</figcaption>
-</figure>
+![Figure 2: RegExp performance comparison](/_img/regexp-tier-up/results-speed.svg)
 
 Figure 2 shows the impact on the performance of the RegExp interpreter for all improvements described in this blog post[^strict-bounds] on the RexBench benchmark suite. For reference, the performance of JIT compiled RegExp is also shown (Native).
 
