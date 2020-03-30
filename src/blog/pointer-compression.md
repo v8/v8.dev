@@ -19,7 +19,7 @@ Back in 2014 Chrome switched from being a 32-bit process to a 64-bit process. Th
 Before diving into the implementation, we need to know where we are standing to correctly assess the situation. To measure our memory and performance we use a set of [web pages](https://v8.dev/blog/optimizing-v8-memory) that reflect popular real-world websites. The data showed that V8 contributes up to 60% of Chrome’s [renderer process](https://www.chromium.org/developers/design-documents/multi-process-architecture) memory consumption on desktop, with an average of 40%.
 
 <figure>
-  <img src="/_img/pointer-compression/memory-chrome.svg" width="600" height="371" alt="V8 memory consumption percentage in Chrome’s renderer memory" loading="lazy">
+  <img src="/_img/pointer-compression/memory-chrome.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>V8 memory consumption percentage in Chrome’s renderer memory</figcaption>
 </figure>
 
@@ -75,7 +75,7 @@ The question is now how to update the heap layout to ensure that 32-bit pointers
 
 The trivial compression scheme would be to allocate objects in the first 4GB of address space.
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-0.svg" width="827" height="260" alt="Trivial heap layout" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-0.svg" width="827" height="260" alt="" loading="lazy">
   <figcaption>Trivial heap layout</figcaption>
 </figure>
 
@@ -85,7 +85,7 @@ Unfortunately, this is not an option for V8 since Chrome’s renderer process ma
 
 If we arrange V8’s heap in a contiguous 4GB region of address space somewhere else, then an **unsigned** 32-bit offset from the base will uniquely identify the pointer.
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="Heap layout, base aligned to start" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="" loading="lazy">
   <figcaption>Heap layout, base aligned to start</figcaption>
 </figure>
 
@@ -142,7 +142,7 @@ Let’s try to change the compression scheme to simplify the decompression code.
 If instead of having the base at the beginning of the 4GB we put the base in the _middle_, we can treat the compressed value as a **signed** 32-bit offset from the base. Note that the whole reservation is not 4GB aligned anymore but the base is.
 
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-2.svg" width="827" height="363" alt="Heap layout, base aligned to the middle" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-2.svg" width="827" height="363" alt="" loading="lazy">
   <figcaption>Heap layout, base aligned to the middle</figcaption>
 </figure>
 
@@ -184,7 +184,7 @@ We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-gene
 
 This graph shows Octane's score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation. In the graph, higher is better. The red line is the existing full-sized-pointer x64 build, while the green line is the pointer compressed version.
 <figure>
-  <img src="/_img/pointer-compression/perf-octane-1.svg" width="913" height="218" alt="First round of Octane's improvements" loading="lazy">
+  <img src="/_img/pointer-compression/perf-octane-1.svg" width="913" height="218" alt="" loading="lazy">
   <figcaption>First round of Octane's improvements</figcaption>
 </figure>
 
@@ -279,7 +279,7 @@ One example of a “broken” optimization was [allocation preternuring](https:/
 ### Further improvements
 
 <figure>
-  <img src="/_img/pointer-compression/perf-octane-2.svg" width="859" height="178" alt="Second round of Octane's improvements" loading="lazy">
+  <img src="/_img/pointer-compression/perf-octane-2.svg" width="859" height="178" alt="" loading="lazy">
   <figcaption>Second round of Octane's improvements</figcaption>
 </figure>
 
@@ -288,13 +288,15 @@ One example of a “broken” optimization was [allocation preternuring](https:/
 While implementing the Decompression Elimination in TurboFan we learned a lot. The explicit Decompression/Compression node approach had the following properties:
 
 Pros:
-    - Explicitness of such operations allowed us to optimize unnecessary decompressions by doing canonical pattern matching of sub-graphs.
+
+- Explicitness of such operations allowed us to optimize unnecessary decompressions by doing canonical pattern matching of sub-graphs.
 
 But, as we continued the implementation, we discovered cons:
-    - A combinatorial explosion of possible conversion operations because of new internal value representations became unmanageable. We could now have compressed pointer, compressed Smi, and compressed any (compressed values which we could be either pointer or Smi), in addition to the existing set of representations (tagged Smi, tagged pointer, tagged any, word8, word16, word32, word64, float32, float64, simd128).
-    - Some existing optimizations based on graph pattern-matching silently didn’t fire, which caused regressions here and there. Although we found and fixed some of them, the complexity of TurboFan continued to increase.
-    - The register allocator was increasingly unhappy about the amount of nodes in the graph, and quite often generated bad code.
-    - The larger node graphs slowed the TurboFan optimization phases, and increased memory consumption during compilation.
+
+- A combinatorial explosion of possible conversion operations because of new internal value representations became unmanageable. We could now have compressed pointer, compressed Smi, and compressed any (compressed values which we could be either pointer or Smi), in addition to the existing set of representations (tagged Smi, tagged pointer, tagged any, word8, word16, word32, word64, float32, float64, simd128).
+- Some existing optimizations based on graph pattern-matching silently didn’t fire, which caused regressions here and there. Although we found and fixed some of them, the complexity of TurboFan continued to increase.
+- The register allocator was increasingly unhappy about the amount of nodes in the graph, and quite often generated bad code.
+- The larger node graphs slowed the TurboFan optimization phases, and increased memory consumption during compilation.
 
 We decided to take a step back and think of a simpler way of supporting Pointer Compression in TurboFan.  The new approach is to drop the Compressed Pointer / Smi / Any representations, and make all explicit Compression / Decompression nodes implicit within Stores and Loads with the assumption that we always decompress before loading and compress before storing.
 
@@ -327,7 +329,7 @@ int64_t uncompressed_tagged = base + int64_t(compressed_tagged);
 Also, since we don’t care about sign extending the Smi anymore, this change allows us to return to heap layout v1. This is the one with the base pointing to the beginning of the 4GB reservation.
 
 <figure>
-  <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="Heap layout, base aligned to start" loading="lazy">
+  <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="" loading="lazy">
   <figcaption>Heap layout, base aligned to start</figcaption>
 </figure>
 
@@ -373,8 +375,9 @@ Smi:    |____int32_value____|0000000000000000000|
 ```
 
 32-bit Smi has the following benefits:
-    - it can represent a bigger range of integers without the need to box them into number objects; and
-    - such a shape provides direct access to the 32-bit value when reading/writing.
+
+- it can represent a bigger range of integers without the need to box them into number objects; and
+- such a shape provides direct access to the 32-bit value when reading/writing.
 
 This optimization can’t be done with Pointer Compression, because there’s no space in the 32-bit compressed pointer due to having the bit which distinguishes pointers from Smis. If we disable 32-bit smis in the full-pointer 64-bit version we see a 1% regression of the Octane score.
 
@@ -395,7 +398,7 @@ let p = new Point(3.1, 5.3);
 Generally speaking, if we look at how the object p looks like in memory, we’ll see something like this:
 
 <figure>
-  <img src="/_img/pointer-compression/heap-point-1.svg" width="832" height="232" alt="Object p in memory" loading="lazy">
+  <img src="/_img/pointer-compression/heap-point-1.svg" width="832" height="232" alt="" loading="lazy">
   <figcaption>Object p in memory</figcaption>
 </figure>
 
@@ -416,13 +419,14 @@ let q = new Point(2, “ab”);
 then number values for the y property must be stored boxed instead. Additionally, if there is speculatively-optimized code somewhere that relies on this assumption it must no longer be used and must be thrown away (deoptimized). The reason for such a “field type” generalization is to minimize the number of shapes of objects created from the same constructor function, which in turn is necessary for more stable performance.
 
 <figure>
-  <img src="/_img/pointer-compression/heap-point-3.svg" width="832" height="262" alt="Objects p and q in memory" loading="lazy">
+  <img src="/_img/pointer-compression/heap-point-3.svg" width="832" height="262" alt="" loading="lazy">
   <figcaption>Objects p and q in memory</figcaption>
 </figure>
 
 If applied, double field unboxing gives the following benefits:
-    - provides direct access to the floating point data through the object pointer, avoiding the additional dereference via number object; and
-    - allows us to generate smaller and faster optimized code for tight loops doing a lot of double field accesses (for example in number-crunching applications)
+
+- provides direct access to the floating point data through the object pointer, avoiding the additional dereference via number object; and
+- allows us to generate smaller and faster optimized code for tight loops doing a lot of double field accesses (for example in number-crunching applications)
 
 With Pointer Compression enabled, the double values simply do not fit into the compressed fields anymore. However, in the future we may adapt this optimization for Pointer Compression.
 
@@ -514,7 +518,7 @@ Let’s take a look at Pointer Compression’s final numbers! For these results,
 In them, we observed that Pointer Compression reduces **V8 heap size up to 43%**! In turn, it reduces **Chrome’s renderer process memory up to 20%** on Desktop.
 
 <figure>
-  <img src="/_img/pointer-compression/v8-heap-memory.svg" width="600" height="371" alt="Memory savings when browsing in Windows 10" loading="lazy">
+  <img src="/_img/pointer-compression/v8-heap-memory.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Memory savings when browsing in Windows 10</figcaption>
 </figure>
 
@@ -523,7 +527,7 @@ Another important thing to notice is that not every website improves the same am
 In addition to these memory improvements we have also seen real-world  performance improvements. On real websites we utilize less CPU and garbage collector time!
 
 <figure>
-  <img src="/_img/pointer-compression/performance-improvements.svg" width="600" height="371" alt="Improvements in CPU and garbage collection time." loading="lazy">
+  <img src="/_img/pointer-compression/performance-improvements.svg" width="600" height="371" alt="" loading="lazy">
   <figcaption>Improvements in CPU and garbage collection time</figcaption>
 </figure>
 
@@ -532,6 +536,7 @@ In addition to these memory improvements we have also seen real-world  performan
 The journey to get here was no bed of roses but it was worth our while. [300+ commits](https://github.com/v8/v8/search?o=desc&q=repo%3Av8%2Fv8+%22%5Bptr-compr%5D%22&s=committer-date&type=Commits) later, V8 with Pointer Compression uses as much memory as if we were running a 32-bit application, while having the performance of a 64-bit one.
 
 We are always looking forward to improving things, and have the following related tasks in our pipeline:
-    - Improve quality of generated assembly code. We know that in some cases we can generate less code which should improve performance.
-    - Address related performance regressions, including a mechanism which allows unboxing double fields again in a pointer-compression-friendly way.
-    - Explore the idea of supporting bigger heaps, in the 8 to 16 GB range.
+
+- Improve quality of generated assembly code. We know that in some cases we can generate less code which should improve performance.
+- Address related performance regressions, including a mechanism which allows unboxing double fields again in a pointer-compression-friendly way.
+- Explore the idea of supporting bigger heaps, in the 8 to 16 GB range.
