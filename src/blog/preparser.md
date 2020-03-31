@@ -44,10 +44,7 @@ function g() {
 
 First the receiver (i.e. the `this` value for `f`, which is `globalThis` since it’s a sloppy function call) is pushed on the stack, followed by the called function `f`. Then arguments `1` and `2` are pushed on the stack. At that point the function `f` is called. To execute the call, we first save the state of `g` on the stack: the “return instruction pointer” (`rip`; what code we need to return to) of `f` as well as the “frame pointer” (`fp`; what the stack should look like on return). Then we enter `f`, which allocates space for the local variable `c`, as well as any temporary space it may need. This ensures that any data used by the function disappears when the function activation goes out of scope: it’s simply popped from the stack.
 
-<figure>
-  <img src="/_img/preparser/stack-1.svg" width="173" height="333" alt="" loading="lazy">
-  <figcaption>Stack layout of a call to function <code>f</code> with arguments <code>a</code>, <code>b</code>, and local variable <code>c</code> allocated on the stack.</figcaption>
-</figure>
+![Stack layout of a call to function `f` with arguments `a`, `b`, and local variable `c` allocated on the stack.](/_img/preparser/stack-1.svg)
 
 The problem with this setup is that functions can reference variables declared in outer functions. Inner functions can outlive the activation in which they were created:
 
@@ -68,10 +65,7 @@ function g() {
 
 In the above example, the reference from `inner` to the local variable `d` declared in `make_f` is evaluated after `make_f` has returned. To implement this, VMs for languages with lexical closures allocate variables referenced from inner functions on the heap, in a structure called a “context”.
 
-<figure>
-  <img src="/_img/preparser/stack-2.svg" width="428" height="292" alt="" loading="lazy">
-  <figcaption>Stack layout of a call to <code>make_f</code> with the argument copied to a context allocated on the heap for later use by <code>inner</code> that captures <code>d</code>.</figcaption>
-</figure>
+![Stack layout of a call to `make_f` with the argument copied to a context allocated on the heap for later use by `inner` that captures `d`.](/_img/preparser/stack-2.svg)
 
 This means that for each variable declared in a function, we need to know whether an inner function references the variable, so we can decide whether to allocate the variable on the stack or in a heap-allocated context. When we evaluate a function literal, we allocate a closure that points both to the code for the function, as well as the current context: the object that contains the variable values it may need access to.
 
@@ -139,26 +133,17 @@ The function directly points to the outer context which contains the values of v
 
 To compute whether or not the lazy compiled function itself needs a context, though, we need to perform scope resolution again: We need to know whether functions nested in the lazy-compiled function reference the variables declared by the lazy function. We can figure this out by re-preparsing those functions. This is exactly what V8 did up to V8 v6.3 / Chrome 63. This is not ideal performance-wise though, as it makes the relation between source size and parse cost nonlinear: we would preparse functions as many times as they are nested. In addition to natural nesting of dynamic programs, JavaScript packers commonly wrap code in “[immediately-invoked function expressions](https://en.wikipedia.org/wiki/Immediately_invoked_function_expression)” (IIFEs), making most JavaScript programs have multiple nesting layers.
 
-<figure>
-  <img src="/_img/preparser/parse-complexity-before.svg" width="960" height="540" alt="" loading="lazy">
-  <figcaption>Each reparse adds at least the cost of parsing the function.</figcaption>
-</figure>
+![Each reparse adds at least the cost of parsing the function.](/_img/preparser/parse-complexity-before.svg)
 
 To avoid the nonlinear performance overhead, we perform full scope resolution even during preparsing. We store enough metadata so we can later simply _skip_ inner functions, rather than having to re-preparse them. One way would be to store variable names referenced by inner functions. This is expensive to store and requires us to still duplicate work: we have already performed variable resolution during preparse.
 
 Instead, we serialize where variables are allocated as a dense array of flags per variable. When we lazy-parse a function, variables are recreated in the same order as the preparser saw them, and we can simply apply the metadata to the variables. Now that the function is compiled, the variable allocation metadata is not needed anymore and can be garbage-collected. Since we only need this metadata for functions that actually contain inner functions, a large fraction of all functions does not even need this metadata, significantly reducing the memory overhead.
 
-<figure>
-  <img src="/_img/preparser/parse-complexity-after.svg" width="960" height="540" alt="" loading="lazy">
-  <figcaption>By keeping track of metadata for preparsed functions we can completely skip inner functions.</figcaption>
-</figure>
+![By keeping track of metadata for preparsed functions we can completely skip inner functions.](/_img/preparser/parse-complexity-after.svg)
 
 The performance impact of skipping inner functions is, just like the overhead of re-preparsing inner functions, nonlinear. There are sites that hoist all their functions to the top-level scope. Since their nesting level is always 0, the overhead is always 0. Many modern sites, however, do actually deeply nest functions. On those sites we saw significant improvements when this feature launched in V8 v6.3 / Chrome 63. The main advantage is that now it doesn’t matter anymore how deeply nested the code is: any function is at most preparsed once, and fully parsed once[^1].
 
-<figure>
-  <img src="/_img/preparser/skipping-inner-functions.svg" width="796" height="503" alt="" loading="lazy">
-  <figcaption>Main thread and off-the-main-thread parse time, before and after launching the “skipping inner functions” optimization.</figcaption>
-</figure>
+![Main thread and off-the-main-thread parse time, before and after launching the “skipping inner functions” optimization.](/_img/preparser/skipping-inner-functions.svg)
 
 [^1]: For memory reasons, V8 [flushes bytecode](/blog/v8-release-74#bytecode-flushing) when it’s unused for a while. If the code ends up being needed again later on, we reparse and compile it again. Since we allow the variable metadata to die during compilation, that causes a reparse of inner functions upon lazy recompilation. At that point we recreate the metadata for its inner functions though, so we don’t need to re-preparse inner functions of its inner functions again.
 
@@ -179,10 +164,7 @@ Since V8 eagerly compiles PIFEs, they can be used as [profile-directed feedback]
 
 At a time when V8 still reparsed inner functions, some developers had noticed the impact of JS parsing on startup was pretty high. The package [`optimize-js`](https://github.com/nolanlawson/optimize-js) turns functions into PIFEs based on static heuristics. At the time the package was created, this had a huge impact on load performance on V8. We’ve replicated these results by running the benchmarks provided by `optimize-js` on V8 v6.1, only looking at minified scripts.
 
-<figure>
-  <img src="/_img/preparser/eager-parse-compile-pife.svg" width="979" height="605" alt="" loading="lazy">
-  <figcaption>Eagerly parsing and compiling PIFEs results in slightly faster cold and warm startup (first and second page load, measuring total parse + compile + execute times). The benefit is much smaller on V8 v7.5 than it used to be on V8 v6.1 though, due to significant improvements to the parser.</figcaption>
-</figure>
+![Eagerly parsing and compiling PIFEs results in slightly faster cold and warm startup (first and second page load, measuring total parse + compile + execute times). The benefit is much smaller on V8 v7.5 than it used to be on V8 v6.1 though, due to significant improvements to the parser.](/_img/preparser/eager-parse-compile-pife.svg)
 
 Nevertheless, now that we don’t reparse inner functions anymore and since the parser has gotten much faster, the performance improvement obtained through `optimize-js` is much reduced. The default configuration for v7.5 is in fact already much faster than the optimized version running on v6.1 was. Even on v7.5 it can still makes sense to use PIFEs sparingly for code that is needed during startup: we avoid preparse since we learn early that the function will be needed.
 
@@ -190,10 +172,7 @@ The `optimize-js` benchmark results don’t exactly reflect the real world. The 
 
 There is still a cost though, especially a memory cost, so it’s not a good idea to eagerly compile everything:
 
-<figure>
-  <img src="/_img/preparser/eager-compilation-overhead.svg" width="477" height="295" alt="" loading="lazy">
-  <figcaption>Eagerly compiling <em>all</em> JavaScript comes at a significant memory cost.</figcaption>
-</figure>
+![Eagerly compiling *all* JavaScript comes at a significant memory cost.](/_img/preparser/eager-compilation-overhead.svg)
 
 While adding parentheses around functions you need during startup is a good idea (e.g., based on profiling startup), using a package like `optimize-js` that applies simple static heuristics is not a great idea. It for example assumes that a function will be called during startup if it’s an argument to a function call. If such a function implements an entire module that’s only needed much later, however, you end up compiling too much. Over-eagerly compilation is bad for performance: V8 without lazy compilation significantly regresses load time. Additionally, some of the benefits of `optimize-js` come from issues with UglifyJS and other minifiers which remove parentheses from PIFEs that aren’t IIFEs, removing useful hints that could have been applied to e.g., [Universal Module Definition](https://github.com/umdjs/umd)-style modules. This is likely an issue that minifiers should fix to get the maximum performance on browsers that eagerly compile PIFEs.
 

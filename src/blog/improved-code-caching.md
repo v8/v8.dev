@@ -25,9 +25,7 @@ In the previous approach, code caching was coupled with the requests to compile 
 
 Embedders could request that V8 serialize the code it generated during its top-level compilation of a new JavaScript source file. V8 returned the serialized code after compiling the script. When Chrome requests the same script again, V8 fetches the serialized code from the cache and deserializes it. V8 completely avoids recompiling functions that are already in the cache. These scenarios are shown in the following figure:
 
-<figure>
-  <img src="/_img/improved-code-caching/warm-hot-run-1.png" width="624" height="195" alt="" loading="lazy">
-</figure>
+![](/_img/improved-code-caching/warm-hot-run-1.png)
 
 V8 only compiles the functions that are expected to be immediately executed (IIFEs) during the top-level compile and marks other functions for lazy compilation. This helps improve page load times by avoiding compiling functions that are not required, however it means that the serialized data only contains the code for the functions that are eagerly compiled.
 
@@ -37,20 +35,14 @@ With [the launch of Ignition](/blog/launching-ignition-and-turbofan) in Chrome 5
 
 V8 exposes a new API, `ScriptCompiler::CreateCodeCache`, to request code caches independent of the compile requests. Requesting code caches along with compile requests is deprecated and would not work in V8 v6.6 onwards. Since version 66, Chrome uses this API to request the code cache after the top-level execute. The following figure shows the new scenario of requesting the code cache. The code cache is requested after the top level execute and hence contains the code for functions that were compiled later during the execution of the script. In the later runs (shown as hot runs in the following figure), it avoids compilation of functions during top level execute.
 
-<figure>
-  <img src="/_img/improved-code-caching/warm-hot-run-2.png" width="624" height="191" alt="" loading="lazy">
-</figure>
+![](/_img/improved-code-caching/warm-hot-run-2.png)
 
 ## Results
 
 The performance of this feature is measured using our internal [real-world benchmarks](https://cs.chromium.org/chromium/src/tools/perf/page_sets/v8_top_25.py?q=v8.top&sq=package:chromium&l=1). The following graph shows the reduction in the parse and compile time over the earlier caching scheme. There is a reduction of around 20–40% in both parse and compilation time on most of the pages.
 
-<figure>
-  <img src="/_img/improved-code-caching/parse.png" width="1530" height="946" alt="" loading="lazy">
-</figure>
+![](/_img/improved-code-caching/parse.png)
 
-<figure>
-  <img src="/_img/improved-code-caching/compile.png" width="1532" height="946" alt="" loading="lazy">
-</figure>
+![](/_img/improved-code-caching/compile.png)
 
 Data from the wild shows similar results with a 20–40% reduction in the time spent in compiling JavaScript code both on desktop and mobile. On Android, this optimization also translates to a 1–2% reduction in the top-level page-load metrics like the time a webpage takes to become interactive. We also monitored the memory and disk usage of Chrome and did not see any noticeable regressions.

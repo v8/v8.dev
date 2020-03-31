@@ -29,10 +29,7 @@ However, JavaScript functions can still get to the actual parameters by means of
 
 There are scenarios where the engine knows that arguments adaption is not necessary since the actual parameters cannot be observed, namely when the callee is a strict mode function, and uses neither `arguments` nor rest parameters. In these cases, V8 now completely skips arguments adaption, reducing call overhead by up to **60%**.
 
-<figure>
-  <img src="/_img/v8-release-74/argument-mismatch-performance.svg" width="600" height="290" alt="" loading="lazy">
-  <figcaption>Performance impact of skipping arguments adaption, as measured through <a href="https://gist.github.com/bmeurer/4916fc2b983acc9ee1d33f5ee1ada1d3#file-bench-call-overhead-js">a micro-benchmark</a>.</figcaption>
-</figure>
+![Performance impact of skipping arguments adaption, as measured through [a micro-benchmark](https://gist.github.com/bmeurer/4916fc2b983acc9ee1d33f5ee1ada1d3#file-bench-call-overhead-js).](/_img/v8-release-74/argument-mismatch-performance.svg)
 
 The graph shows that there’s no overhead anymore, even in case of an arguments mismatch (assuming that the callee cannot observe the actual arguments). For more details, see the [design document](https://bit.ly/v8-faster-calls-with-arguments-mismatch).
 
@@ -40,9 +37,7 @@ The graph shows that there’s no overhead anymore, even in case of an arguments
 
 The Angular team [discovered](https://mhevery.github.io/perf-tests/DOM-megamorphic.html) that calling into native accessors (i.e. DOM property accessors) directly via their respective `get` functions was significantly slower in Chrome than the [monomorphic](https://en.wikipedia.org/wiki/Inline_caching#Monomorphic_inline_caching) or even the [megamorphic](https://en.wikipedia.org/wiki/Inline_caching#Megamorphic_inline_caching) property access. This was due to taking the slow-path in V8 for calling into DOM accessors via [`Function#call()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call), instead of the fast-path that was already there for property accesses.
 
-<figure>
-  <img src="/_img/v8-release-74/native-accessor-performance.svg" width="600" height="271" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-74/native-accessor-performance.svg)
 
 We managed to improve the performance of calling into native accessors, making it significantly faster than the megamorphic property access. For more background, see [V8 issue #8820](https://bugs.chromium.org/p/v8/issues/detail?id=8820).
 
@@ -52,10 +47,7 @@ In Chrome, large enough scripts are “streaming”-parsed on worker threads whi
 
 We found an additional issue in V8’s preparser, which most commonly runs on a worker thread: property names were unnecessarily deduplicated. Removing this deduplication improved the streaming parser by another 10.5%. This also improves main-thread parse time of scripts that aren’t streamed, like small scripts and inline scripts.
 
-<figure>
-  <img src="/_img/v8-release-74/parser-performance.jpg" srcset="/_img/v8-release-74/parser-performance@2x.jpg 2x" width="1069" height="244" alt="" loading="lazy">
-  <figcaption>Each drop in the above chart represents one of the performance improvements in the streaming parser.</figcaption>
-</figure>
+![Each drop in the above chart represents one of the performance improvements in the streaming parser.](/_img/v8-release-74/parser-performance.jpg)
 
 ## Memory
 
@@ -67,9 +59,7 @@ In order to reduce V8’s memory overhead, we have implemented support for flush
 
 Our experiments with bytecode flushing show that it provides significant memory savings for users of Chrome, reducing the amount of memory in V8’s heap by between 5–15% while not regressing performance or significantly increasing the amount of CPU time spent compiling JavaScript code.
 
-<figure>
-  <img src="/_img/v8-release-74/bytecode-flushing.svg" width="600" height="271" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-74/bytecode-flushing.svg)
 
 ### Bytecode dead basic block elimination
 

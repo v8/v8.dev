@@ -13,10 +13,7 @@ There are multiple drivers for the formalization of V8’s design reviews:
 
 ## Summary
 
-<figure>
-  <img src="/_img/docs/design-review-guidelines/design-review-guidelines.svg" width="960" height="540" alt="" loading="lazy">
-  <figcaption>V8’s Design Review Guidelines at a glance</figcaption>
-</figure>
+![V8’s Design Review Guidelines at a glance](/_img/docs/design-review-guidelines/design-review-guidelines.svg)
 
 Important:
 
@@ -65,10 +62,7 @@ The V8 Eng Review Owners can overrule non-LGTMs or LGTMs.
 
 ## Detailed workflow
 
-<figure>
-  <img src="/_img/docs/design-review-guidelines/design-review-guidelines.svg" width="960" height="540" alt="" loading="lazy">
-  <figcaption>V8’s Design Review Guidelines at a glance</figcaption>
-</figure>
+![V8’s Design Review Guidelines at a glance](/_img/docs/design-review-guidelines/design-review-guidelines.svg)
 
 1. Start: IC decides to work on a feature/gets a feature assigned to them
 1. IC sends out their early design doc/explainer/one pager to a few RRotDs

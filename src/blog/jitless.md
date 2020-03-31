@@ -28,10 +28,7 @@ Ultimately, these changes allowed us to create V8’s heap without requiring exe
 
 Since JIT-less mode disables the optimizing compiler, it comes with a performance penalty. We looked at a variety of benchmarks to better understand how V8’s performance characteristics change. [Speedometer 2.0](/blog/speedometer-2) is intended to represent a typical web application; the [Web Tooling Benchmark](/blog/web-tooling-benchmark) includes a set of common JS developer tools; and we also include a benchmark that simulates a [browsing workflow on the Living Room YouTube app](https://chromeperf.appspot.com/report?sid=518c637ffa0961f965afe51d06979375467b12b87e72061598763e5a36876306). All measurements were made locally on an x64 Linux desktop over 5 runs.
 
-<figure>
-  <img src="/_img/jitless/benchmarks.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>JIT-less vs. default V8. Scores are normalized to 100 for V8’s default configuration.</figcaption>
-</figure>
+![JIT-less vs. default V8. Scores are normalized to 100 for V8’s default configuration.](/_img/jitless/benchmarks.svg)
 
 Speedometer 2.0 is around 40% slower in JIT-less mode. Roughly half of the regression can be attributed to the disabled optimizing compiler. The other half is caused by the regular expression interpreter, which was originally intended as a debugging aid, and will see performance improvements in the future.
 

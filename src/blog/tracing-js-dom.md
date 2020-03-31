@@ -47,10 +47,7 @@ window.globalVariable = new Leak();
 
 It is important to understand the notion of retaining paths to find the root cause of a memory leak. A retaining path is a chain of objects that prevents garbage collection of the leaking object. The chain starts at a root object such as the global object of the main window. The chain ends at the leaking object. Each intermediate object in the chain has a direct reference to the next object in the chain. For example, the retaining path of the `Leak` object in the iframe looks as follows:
 
-<figure>
-  <img src="/_img/tracing-js-dom/retaining-path.svg" width="375" height="533" alt="" loading="lazy">
-  <figcaption>Figure 1: Retaining path of an object leaked via <code>iframe</code> and event listener</figcaption>
-</figure>
+![Figure 1: Retaining path of an object leaked via `iframe` and event listener](/_img/tracing-js-dom/retaining-path.svg)
 
 Note that the retaining path crosses the JavaScript / DOM boundary (highlighted in green/red, respectively) two times. The JavaScript objects live in the V8 heap, while DOM objects are C++ objects in Chrome.
 
@@ -58,10 +55,7 @@ Note that the retaining path crosses the JavaScript / DOM boundary (highlighted 
 
 We can inspect the retaining path of any object by taking a heap snapshot in DevTools. The heap snapshot precisely captures all objects on the V8 heap. Up until recently it had only approximate information about the C++ DOM objects. For instance, Chrome 65 shows an incomplete retaining path for the `Leak` object from the toy example:
 
-<figure>
-  <img src="/_img/tracing-js-dom/chrome-65.png" width="1513" height="877" alt="" loading="lazy">
-  <figcaption>Figure 2: Retaining path in Chrome 65</figcaption>
-</figure>
+![Figure 2: Retaining path in Chrome 65](/_img/tracing-js-dom/chrome-65.png)
 
 Only the first row is precise: the `Leak` object is indeed stored in the `global_variable` of the iframe’s window object. Subsequent rows approximate the real retaining path and make debugging of the memory leak hard.
 

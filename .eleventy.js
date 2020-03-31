@@ -17,6 +17,8 @@ const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAttrs = require('markdown-it-attrs');
 const markdownItContainer = require('markdown-it-container');
+const markdownItEmbedImage = require('./md-embed-image.js');
+const markdownItImplicitFigures = require('markdown-it-implicit-figures');
 const markdownItFootnote = require('markdown-it-footnote');
 const markdownItMultiMdTable = require('markdown-it-multimd-table');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
@@ -46,7 +48,11 @@ const md = markdownIt(markdownItConfig)
     rowspan: true,
     multiline: true,
   })
-  .use(markdownItAnchor, markdownItAnchorConfig);
+  .use(markdownItAnchor, markdownItAnchorConfig)
+  .use(markdownItImplicitFigures, {
+    figcaption: true
+  })
+  .use(markdownItEmbedImage);
 
 // Simulating `td:has(>pre:only-child)` with a markdown-it render rule.
 // Can be removed when (if?) CSS4 is actually implemented in browsers.

@@ -23,10 +23,7 @@ In V8 v7.9, we got rid of MutableHeapNumber, and instead use HeapNumbers that ar
 
 This relatively simple change improved the Speedometer AngularJS score by 4%.
 
-<figure>
-  <img src="/_img/v8-release-79/speedometer-angularjs.svg" width="701" height="380" alt="" loading="lazy">
-  <figcaption>Speedometer AngularJS score improvements</figcaption>
-</figure>
+![Speedometer AngularJS score improvements](/_img/v8-release-79/speedometer-angularjs.svg)
 
 ### Handle API getters in builtins
 
@@ -38,10 +35,7 @@ In general, [the inline caching (IC) mechanism](https://mathiasbynens.be/notes/s
 
 Now in V8 v7.9, these getters are handled in the builtins without having to miss to the C++ runtime even when they don’t have IC handlers installed, by taking advantage of special API stubs that can call directly into the API getter. This results in a 12% decrease in the amount of time spent in IC runtime in Speedometer’s Backbone and jQuery benchmark.
 
-<figure>
-  <img src="/_img/v8-release-79/speedometer.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Speedometer Backbone and jQuery improvements</figcaption>
-</figure>
+![Speedometer Backbone and jQuery improvements](/_img/v8-release-79/speedometer.svg)
 
 ### OSR caching
 
@@ -49,10 +43,7 @@ When V8 identifies that certain functions are hot it marks them for optimization
 
 If the function is executed a second time, it is very likely to be OSRed again. Before V8 v7.9 we needed to re-optimize the function again in order to OSR it. However, from v7.9 we added OSR caching to retain optimized code for OSR replacements, keyed by the loop header that was used as the entry point in the OSRed function. This has improved performance of some peak-performance benchmarks by 5–18%.
 
-<figure>
-  <img src="/_img/v8-release-79/osr-caching.svg" width="769" height="476" alt="" loading="lazy">
-  <figcaption>OSR caching improvements</figcaption>
-</figure>
+![OSR caching improvements](/_img/v8-release-79/osr-caching.svg)
 
 ## WebAssembly
 

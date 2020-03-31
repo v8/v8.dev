@@ -32,10 +32,7 @@ The on-disk code cache is managed by Chrome (specifically, by Blink), and it fil
 
 In summary:
 
-<figure>
-  <img src="/_img/code-caching-for-devs/overview.svg" width="487" height="280" alt="" loading="lazy">
-  <figcaption>Code caching is split into cold, warm, and hot runs, using the in-memory cache on warm runs and the disk cache on hot runs.</figcaption>
-</figure>
+![Code caching is split into cold, warm, and hot runs, using the in-memory cache on warm runs and the disk cache on hot runs.](/_img/code-caching-for-devs/overview.svg)
 
 Based on this description, we can give our best tips for improving your website’s use of the code caches.
 
@@ -193,10 +190,7 @@ None of the above suggestions is guaranteed to speed up your web app. Unfortunat
 
 `chrome://tracing` records instrumented traces of Chrome during some period of time, where the resulting trace visualization looks something like this:
 
-<figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-visualization.png" srcset="/_img/code-caching-for-devs/chrome-tracing-visualization@2x.png 2x" width="722" height="672" alt="" loading="lazy">
-  <figcaption>The <code>chrome://tracing</code> UI with a recording of a warm cache run</figcaption>
-</figure>
+![The `chrome://tracing` UI with a recording of a warm cache run](/_img/code-caching-for-devs/chrome-tracing-visualization.png)
 
 Tracing records the behavior of the entire browser, including other tabs, windows, and extensions, so it works best when done in a clean user profile, with extensions disabled, and with no other browser tabs open:
 
@@ -207,33 +201,23 @@ google-chrome --user-data-dir="$(mktemp -d)" --disable-extensions
 
 When collecting a trace, you have to select what categories to trace. In most cases you can simply select the “Web developer” set of categories, but you can also pick categories manually. The important category for code caching is `v8`.
 
-<figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-1.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-1@2x.png 2x" width="721" height="607" alt="" loading="lazy">
-</figure>
+![](/_img/code-caching-for-devs/chrome-tracing-categories-1.png)
 
-<figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-categories-2.png" srcset="/_img/code-caching-for-devs/chrome-tracing-categories-2@2x.png 2x" width="721" height="607" alt="" loading="lazy">
-</figure>
+![](/_img/code-caching-for-devs/chrome-tracing-categories-2.png)
 
 After recording a trace with the `v8` category, look for `v8.compile` slices in the trace. (Alternatively, you could enter `v8.compile` in the tracing UI’s search box.) These list the file being compiled, and some metadata about the compilation.
 
 On a cold run of a script, there is no information about code caching — this means that the script was not involved in producing or consuming cache data.
 
-<figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-cold-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-cold-run@2x.png 2x" width="405" height="318" alt="" loading="lazy">
-</figure>
+![](/_img/code-caching-for-devs/chrome-tracing-cold-run.png)
 
 On a warm run, there are two `v8.compile` entries per script: one for the actual compilation (as above), and one (after execution) for producing the cache. You can recognize the latter as it has `cacheProduceOptions` and `producedCacheSize` metadata fields.
 
-<figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-warm-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-warm-run@2x.png 2x" width="404" height="386" alt="" loading="lazy">
-</figure>
+![](/_img/code-caching-for-devs/chrome-tracing-warm-run.png)
 
 On a hot run, you’ll see a `v8.compile` entry for consuming the cache, with metadata fields `cacheConsumeOptions` and `consumedCacheSize`. All sizes are expressed in bytes.
 
-<figure>
-  <img src="/_img/code-caching-for-devs/chrome-tracing-hot-run.png" srcset="/_img/code-caching-for-devs/chrome-tracing-hot-run@2x.png 2x" width="406" height="363" alt="" loading="lazy">
-</figure>
+![](/_img/code-caching-for-devs/chrome-tracing-hot-run.png)
 
 ## Conclusion
 

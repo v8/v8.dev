@@ -81,10 +81,7 @@ LittleEndian.prototype.getUint32 = function(byteOffset) {
 
 `TypedArray`s are already heavily optimized in V8, so they represent the performance goal that we wanted to match.
 
-<figure>
-  <img src="/_img/dataview/dataview-original.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Original <code>DataView</code> performance</figcaption>
-</figure>
+![Original `DataView` performance](/_img/dataview/dataview-original.svg)
 
 Our benchmark shows that native `DataView` getter performance was as much as **4 times** slower than the `Uint8Array`-based wrapper, for both big-endian and little-endian reads.
 
@@ -122,10 +119,7 @@ macro LoadDataViewUint32(buffer: JSArrayBuffer, offset: intptr,
 
 Moving the `DataView` methods to Torque already showed a **3× improvement** in performance, but did not quite match `Uint8Array`-based wrapper performance yet.
 
-<figure>
-  <img src="/_img/dataview/dataview-torque.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Torque <code>DataView</code> performance</figcaption>
-</figure>
+![Torque `DataView` performance](/_img/dataview/dataview-torque.svg)
 
 ## Optimizing for TurboFan
 
@@ -137,10 +131,7 @@ In particular, a function call, such as calling one of the `DataView` methods, i
 
 However, TurboFan allows us to check whether the `JSCall` node is actually a call to a known function, for example one of the builtin functions, and inline this node in the IR. This means that the complicated `JSCall` gets replaced at compile-time by a subgraph that represents the function. This allows TurboFan to optimize the inside of the function in subsequent passes as part of a broader context, instead of on its own, and most importantly to get rid of the costly function call.
 
-<figure>
-  <img src="/_img/dataview/dataview-turbofan-initial.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Initial TurboFan <code>DataView</code> performance</figcaption>
-</figure>
+![Initial TurboFan `DataView` performance](/_img/dataview/dataview-turbofan-initial.svg)
 
 Implementing TurboFan inlining finally allowed us to match, and even exceed, the performance of our `Uint8Array` wrapper, and be **8 times** as fast as the former C++ implementation.
 
@@ -154,10 +145,7 @@ Following up on this idea of being as specialized as possible in TurboFan, we al
 
 Compared to the initial TurboFan implementation, this more than doubled the `DataView` benchmark score. `DataView`s are now up to 3 times as fast as the `Uint8Array` wrapper, and around **16 times as fast** as our original `DataView` implementation!
 
-<figure>
-  <img src="/_img/dataview/dataview-turbofan-final.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Final TurboFan <code>DataView</code> performance</figcaption>
-</figure>
+![Final TurboFan `DataView` performance](/_img/dataview/dataview-turbofan-final.svg)
 
 ## Impact
 
@@ -167,9 +155,6 @@ We’ve evaluated the performance impact of the new implementation on some real-
 
 We compared the overall performance of `DataView`s against `TypedArray`s. We found that our new `DataView` implementation provides almost the same performance as `TypedArray`s when accessing data aligned in the native endianness (little-endian on Intel processors), bridging much of the performance gap and making `DataView`s a practical choice in V8.
 
-<figure>
-  <img src="/_img/dataview/dataview-vs-typedarray.svg" width="586" height="362" alt="" loading="lazy">
-  <figcaption><code>DataView</code> vs. <code>TypedArray</code> peak performance</figcaption>
-</figure>
+![`DataView` vs. `TypedArray` peak performance](/_img/dataview/dataview-vs-typedarray.svg)
 
 We hope that you’re now able to start using `DataView`s where it makes sense, instead of relying on `TypedArray` shims. Please send us feedback on your `DataView` uses! You can reach us [via our bug tracker](https://crbug.com/v8/new), via mail to <v8-users@googlegroups.com>, or via [@v8js on Twitter](https://twitter.com/v8js).

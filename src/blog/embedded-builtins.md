@@ -21,10 +21,7 @@ Much has changed in this space over the last years.
 
 In 2016, V8 [began](/blog/speeding-up-regular-expressions) experimenting with builtins implemented in [CodeStubAssembler](/blog/csa) (CSA). This turned out to both be convenient (platform-independent, readable) and to produce efficient code, so CSA builtins became ubiquitous. For a variety of reasons, CSA builtins tend to produce larger code, and the size of V8 builtins roughly tripled as more and more were ported to CSA. By mid-2017, their per-Isolate overhead had grown significantly and we started thinking about a systematic solution.
 
-<figure>
-  <img src="/_img/embedded-builtins/snapshot-size.png" width="904" height="250" alt="" loading="lazy">
-  <figcaption>V8 snapshot size (including builtins) from 2015 until 2017</figcaption>
-</figure>
+![V8 snapshot size (including builtins) from 2015 until 2017](/_img/embedded-builtins/snapshot-size.png)
 
 In late 2017, we implemented [lazy builtin (and bytecode handler) deserialization](/blog/lazy-deserialization) as a first step. Our initial analysis showed that most sites used less than half of all builtins. With lazy deserialization, builtins are loaded on-demand, and unused builtins are never loaded into the Isolate. Lazy deserialization was shipped in Chrome 64 with promising memory savings. But: builtin memory overhead was still linear in the number of Isolates.
 
@@ -58,10 +55,7 @@ On x64 (and most other architectures), calls to other `Code` objects use an effi
 call <offset>
 ```
 
-<figure>
-  <img src="/_img/embedded-builtins/pc-relative-call.png" width="487" height="457" alt="" loading="lazy">
-  <figcaption>A pc-relative call</figcaption>
-</figure>
+![A pc-relative call](/_img/embedded-builtins/pc-relative-call.png)
 
 Code objects themselves live on the managed heap and are movable. When they are moved, the GC updates the offset at all relevant call sites.
 
@@ -69,10 +63,7 @@ In order to share builtins across processes, generated code must be immutable as
 
 To address both issues, we introduced an indirection through a dedicated, so-called root register, which holds a pointer into a known location within the current Isolate.
 
-<figure>
-  <img src="/_img/embedded-builtins/isolate-layout.png" width="727" height="412" alt="" loading="lazy">
-  <figcaption>Isolate layout</figcaption>
-</figure>
+![Isolate layout](/_img/embedded-builtins/isolate-layout.png)
 
 V8’s `Isolate` class contains the roots table, which itself contains pointers to root objects on the managed heap. The root register permanently holds the address of the roots table.
 
@@ -103,17 +94,11 @@ We initially evaluated two alternatives. Builtins could either be shared by `mma
 
 An executable binary file is split into several sections. For example, an ELF binary contains data in the `.data` (initialized data), `.ro_data` (initialized read-only data), and `.bss` (uninitialized data) sections, while native executable code is placed in `.text`. Our goal was to pack the builtins code into the `.text` section alongside native code.
 
-<figure>
-  <img src="/_img/embedded-builtins/binary-format.png" width="637" height="466" alt="" loading="lazy">
-  <figcaption>Sections of an executable binary file</figcaption>
-</figure>
+![Sections of an executable binary file](/_img/embedded-builtins/binary-format.png)
 
 This was done by introducing a new build step that used V8’s internal compiler pipeline to generate native code for all builtins and output their contents in `embedded.cc`. This file is then compiled into the final V8 binary.
 
-<figure>
-  <img src="/_img/embedded-builtins/build-process.png" width="892" height="202" alt="" loading="lazy">
-  <figcaption>The (simplified) V8 embedded build process</figcaption>
-</figure>
+![The (simplified) V8 embedded build process](/_img/embedded-builtins/build-process.png)
 
 The `embedded.cc` file itself contains both metadata and generated builtins machine code as a series of `.byte` directives that instruct the C++ compiler (in our case, clang or gcc) to place the specified byte sequence directly into the output object file (and later the executable).
 
@@ -134,17 +119,11 @@ Contents of the `.text` section are mapped into read-only executable memory at r
 
 But V8’s `Code` objects consist not only of the instruction stream, but also have various pieces of (sometimes isolate-dependent) metadata. Normal run-of-the-mill `Code` objects pack both metadata and the instruction stream into a variable-sized `Code` object that is located on the managed heap.
 
-<figure>
-  <img src="/_img/embedded-builtins/code-on-heap.png" width="787" height="592" alt="" loading="lazy">
-  <figcaption>On-heap <code>Code</code> object layout</figcaption>
-</figure>
+![On-heap `Code` object layout](/_img/embedded-builtins/code-on-heap.png)
 
 As we’ve seen, embedded builtins have their native instruction stream located outside the managed heap, embedded into the `.text` section. To preserve their metadata, each embedded builtin also has a small associated `Code` object on the managed heap, called the _off-heap trampoline_. Metadata is stored on the trampoline as for standard `Code` objects, while the inlined instruction stream simply contains a short sequence which loads the address of the embedded instructions and jumps there.
 
-<figure>
-  <img src="/_img/embedded-builtins/code-off-heap.png" width="892" height="502" alt="" loading="lazy">
-  <figcaption>Off-heap <code>Code</code> object layout</figcaption>
-</figure>
+![Off-heap `Code` object layout](/_img/embedded-builtins/code-off-heap.png)
 
 The trampoline allows V8 to handle all `Code` objects uniformly. For most purposes, it is irrelevant whether the given `Code` object refers to standard code on the managed heap or to an embedded builtin.
 
@@ -156,10 +135,7 @@ We began to hunt for optimization opportunities, and identified major sources of
 
 Our work thus concentrated on 1. reducing indirections, and 2. improving the builtin calling sequence. To address the former, we altered the Isolate object layout to turn most object loads into a single root-relative load. The global builtins constant pool still exists, but only contains infrequently-accessed objects.
 
-<figure>
-  <img src="/_img/embedded-builtins/isolate-layout-optimized.png" width="487" height="502" alt="" loading="lazy">
-  <figcaption>Optimized Isolate layout</figcaption>
-</figure>
+![Optimized Isolate layout](/_img/embedded-builtins/isolate-layout-optimized.png)
 
 Calling sequences were significantly improved on two fronts. Builtin-to-builtin calls were converted into a single pc-relative call instruction. This was not possible for runtime-generated JIT code since the pc-relative offset could exceed the maximal 32-bit value. There, we inlined the off-heap trampoline into all call sites, reducing the calling sequence from 6 to just 2 instructions.
 
@@ -169,10 +145,7 @@ With these optimizations, we were able to limit regressions on Speedometer 2.0 t
 
 We evaluated the impact of embedded builtins on x64 over the top 10k most popular websites, and compared against both lazy- and eager deserialization (described above).
 
-<figure>
-  <img src="/_img/embedded-builtins/results.png" width="1200" height="742" alt="" loading="lazy">
-  <figcaption>V8 heap size reduction vs. eager and lazy deserialization</figcaption>
-</figure>
+![V8 heap size reduction vs. eager and lazy deserialization](/_img/embedded-builtins/results.png)
 
 Whereas previously Chrome would ship with a memory-mapped snapshot that we’d deserialize on each Isolate, now the snapshot is replaced by embedded builtins that are still memory mapped but do not need to be deserialized. The cost for builtins used to be `c*(1 + n)` where `n` is the number of Isolates and `c` the memory cost of all builtins, whereas now it’s just `c * 1` (in practice, a small amount of per-Isolate overhead also remains for off heap trampolines).
 

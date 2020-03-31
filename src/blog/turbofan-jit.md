@@ -20,10 +20,7 @@ Compilers tend to become complex over time as new language features are supporte
 
 The TurboFan JIT implements more aggressive optimizations than CrankShaft through a number of advanced techniques. JavaScript enters the compiler pipeline in a mostly unoptimized form and is translated and optimized to progressively lower forms until machine code is generated. The centerpiece of the design is a more relaxed sea-of-nodes internal representation (IR) of the code which allows more effective reordering and optimization.
 
-<figure>
-  <img src="/_img/turbofan-jit/example-graph.png" width="841" height="388" alt="" loading="lazy">
-  <figcaption>Example TurboFan graph</figcaption>
-</figure>
+![Example TurboFan graph](/_img/turbofan-jit/example-graph.png)
 
 Numerical range analysis helps TurboFan understand number-crunching code much better. The graph-based IR allows most optimizations to be expressed as simple local reductions which are easier to write and test independently. An optimization engine applies these local rules in a systematic and thorough way. Transitioning out of the graphical representation involves an innovative scheduling algorithm that makes use of the reordering freedom to move code out of loops and into less frequently executed paths. Finally, architecture-specific optimizations like complex instruction selection exploit features of each target platform for the best quality code.
 

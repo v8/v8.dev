@@ -23,10 +23,7 @@ Related to the above-mentioned `--async-stack-traces` flag, we’re also enablin
 
 Via optimizations to the internals of Liftoff, we improved WebAssembly compilation speed significantly without regressing the quality of the generated code. For most workloads, compilation time reduced by 15–25%.
 
-<figure>
-  <img src="/_img/v8-release-73/liftoff-epic.svg" width="600" height="371" alt="" loading="lazy">
-  <figcaption>Liftoff compile time on <a href="https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html">the Epic ZenGarden demo</a></figcaption>
-</figure>
+![Liftoff compile time on [the Epic ZenGarden demo](https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html)](/_img/v8-release-73/liftoff-epic.svg)
 
 ## JavaScript language features
 

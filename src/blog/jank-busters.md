@@ -11,10 +11,7 @@ description: 'This article discusses optimizations that were implemented between
 ---
 Jank, or in other words visible stutters, can be noticed when Chrome fails to render a frame within 16.66 ms (disrupting 60 frames per second motion). As of today most of the V8 garbage collection work is performed on the main rendering thread, c.f. Figure 1, often resulting in jank when too many objects need to be maintained. Eliminating jank has always been a high priority for the V8 team ([1](https://blog.chromium.org/2011/11/game-changer-for-interactive.html), [2](https://www.youtube.com/watch?v=3vPOlGRH6zk), [3](/blog/free-garbage-collection)). This article discusses a few optimizations that were implemented between Chrome 41 and Chrome 46 which significantly reduce garbage collection pauses resulting in better user experience.
 
-<figure>
-  <img src="/_img/jank-busters/gc-main-thread.png" width="798" height="137" alt="" loading="lazy">
-  <figcaption>Figure 1: Garbage collection performed on the main thread</figcaption>
-</figure>
+![Figure 1: Garbage collection performed on the main thread](/_img/jank-busters/gc-main-thread.png)
 
 A major source of jank during garbage collection is processing various bookkeeping data structures. Many of these data structures enable optimizations that are unrelated to garbage collection. Two examples are the list of all ArrayBuffers, and each ArrayBuffer’s list of views. These lists allow for an efficient implementation of the DetachArrayBuffer operation without imposing any performance hit on access to an ArrayBuffer view. In situations, however, where a web page creates millions of ArrayBuffers, (e.g., WebGL-based games), updating those lists during garbage collection causes significant jank. In Chrome 46, we removed these lists and instead detect detached buffers by inserting checks before every load and store to ArrayBuffers. This amortizes the cost of walking the big bookkeeping list during GC by spreading it throughout program execution resulting in less jank. Although the per-access checks can theoretically slow down the throughput of programs that heavily use ArrayBuffers, in practice V8's optimizing compiler can often remove redundant checks and hoist remaining checks out of loops, resulting in a much smoother execution profile with little or no overall performance penalty.
 
@@ -22,10 +19,7 @@ Another source of jank is the bookkeeping associated with tracking the lifetimes
 
 Most of V8’s garbage collection is performed on the main rendering thread. Moving garbage collection operations to concurrent threads reduces the waiting time for the garbage collector and further reduces jank. This is an inherently complicated task since the main JavaScript application and the garbage collector may simultaneous observe and modify the same objects. Until now, concurrency was limited to sweeping the old generation of the regular object JS heap. Recently, we also implemented concurrent sweeping of the code and map space of the V8 heap. Additionally, we implemented concurrent unmapping of unused pages to reduce the work that has to be performed on the main thread, c.f. Figure 2.
 
-<figure>
-  <img src="/_img/jank-busters/gc-concurrent-threads.png" width="800" height="260" alt="" loading="lazy">
-  <figcaption>Figure 2: Some garbage collection operations performed on the concurrent garbage collection threads.</figcaption>
-</figure>
+![Figure 2: Some garbage collection operations performed on the concurrent garbage collection threads.](/_img/jank-busters/gc-concurrent-threads.png)
 
 The impact of the discussed optimizations is clearly visible in WebGL-based games, for example [Turbolenz’s Oort Online demo](http://oortonline.gl/). The following video compares Chrome 41 to Chrome 46:
 

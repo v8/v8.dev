@@ -18,8 +18,6 @@ Historically the V8 heap limit was conveniently set to fit the signed 32-bit int
 
 We also added a feature in DevTools to pause the application when it is close to running out of memory. This feature is useful to investigate bugs that cause the application to allocate a lot of memory in a short period of time. When running [this demo](https://ulan.github.io/misc/oom.html) with the latest Chrome Canary, DevTools pauses the application before the out-of-memory failure and increases the heap limit, giving the user a chance to inspect the heap, evaluate expressions on the console to free memory and then resume execution for further debugging.
 
-<figure>
-  <img src="/_img/heap-size-limit/debugger.png" width="1362" height="836" alt="" loading="lazy">
-</figure>
+![](/_img/heap-size-limit/debugger.png)
 
 V8 embedders can increase the heap limit using the [`set_max_old_space_size`](https://codesearch.chromium.org/chromium/src/v8/include/v8.h?q=set_max_old_space_size) function of the `ResourceConstraints` API. But watch out, some phases in the garbage collector have a linear dependency on the heap size. Garbage collection pauses may increase with larger heaps.

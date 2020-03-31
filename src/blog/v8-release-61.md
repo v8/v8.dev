@@ -12,21 +12,15 @@ Every six weeks, we create a new branch of V8 as part of our [release process](/
 
 Visiting all the elements of the Maps and Sets — either via [iteration](http://exploringjs.com/es6/ch_iteration.html) or the [`Map.prototype.forEach`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach) / [`Set.prototype.forEach`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach) methods — became significantly faster, with a raw performance improvement of up to 11× since V8 version 6.0. Check the [dedicated blog post](https://benediktmeurer.de/2017/07/14/faster-collection-iterators/) for additional information.
 
-<figure>
-  <img src="/_img/v8-release-61/iterating-collections.svg" width="967" height="597" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-61/iterating-collections.svg)
 
 In addition to that, work continued on the performance of other language features. For example, the [`Object.prototype.isPrototypeOf`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf) method, which is important for constructor-less code using mostly object literals and `Object.create` instead of classes and constructor functions, is now always as fast and often faster than using [the `instanceof` operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof).
 
-<figure>
-  <img src="/_img/v8-release-61/checking-prototype.svg" width="781" height="480" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-61/checking-prototype.svg)
 
 Function calls and constructor invocations with variable number of arguments also got significantly faster. Calls made with [`Reflect.apply`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/apply) and [`Reflect.construct`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct) received an up to 17× performance boost in the latest version.
 
-<figure>
-  <img src="/_img/v8-release-61/call-construct.svg" width="980" height="606" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-61/call-construct.svg)
 
 `Array.prototype.forEach` is now inlined in TurboFan and optimized for all major non-holey [elements kinds](/blog/elements-kinds).
 

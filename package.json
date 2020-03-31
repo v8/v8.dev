@@ -56,6 +56,7 @@
     "markdown-it-attrs": "^3.0.1",
     "markdown-it-container": "^2.0.0",
     "markdown-it-footnote": "^3.0.2",
+    "markdown-it-implicit-figures": "RReverser/markdown-it-implicit-figures#fix-img-alt",
     "markdown-it-multimd-table": "^4.0.0",
     "markdownlint-cli": "^0.22.0",
     "minify-xml": "^1.0.3",

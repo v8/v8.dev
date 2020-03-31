@@ -14,27 +14,19 @@ The performance of [`Object#toString`](https://developer.mozilla.org/en-US/docs/
 
 With the advent of ES2015, `Object#toString` became monkey-patchable via the new [`Symbol.toStringTag`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag) symbol, which also made `Object#toString` more heavy-weight and more challenging to speed up. In this release we ported an optimization initially implemented in the [SpiderMonkey JavaScript engine](https://bugzilla.mozilla.org/show_bug.cgi?id=1369042#c0) to V8, speeding up throughput of `Object#toString` by a factor of **6.5×**.
 
-<figure>
-  <img src="/_img/v8-release-62/perf.svg" width="681" height="421" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-62/perf.svg)
 
 It also impacts the Speedometer browser benchmark, specifically the AngularJS subtest, where we measured a solid 3% improvement. Read the [detailed blog post](https://ponyfoo.com/articles/investigating-performance-object-prototype-to-string-es2015) for additional information.
 
-<figure>
-  <img src="/_img/v8-release-62/speedometer.svg" width="733" height="453" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-62/speedometer.svg)
 
 We’ve also significantly improved the performance of [ES2015 proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), speeding up calling a proxy object via `someProxy(params)` or `new SomeOtherProxy(params)` by up to **5×**:
 
-<figure>
-  <img src="/_img/v8-release-62/proxy-call-construct.svg" width="600" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-62/proxy-call-construct.svg)
 
 And similarly, the performance of accessing a property on a proxy object via `someProxy.property` improved by almost **6.5×**:
 
-<figure>
-  <img src="/_img/v8-release-62/proxy-property.svg" width="600" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-62/proxy-property.svg)
 
 This is part of an ongoing internship. Stay tuned for a more detailed blog post and final results.
 
@@ -42,9 +34,7 @@ We’re also excited to announce that thanks to [contributions](https://chromium
 
 Hashcode lookups for internal hash tables got much faster, resulting in improved performance for `Map`, `Set`, `WeakMap`, and `WeakSet`. An upcoming blog post will explain this optimization in detail.
 
-<figure>
-  <img src="/_img/v8-release-62/hashcode-lookups.png" width="1600" height="309" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-62/hashcode-lookups.png)
 
 The garbage collector now uses a [Parallel Scavenger](https://bugs.chromium.org/p/chromium/issues/detail?id=738865) for collecting the so-called young generation of the heap.
 

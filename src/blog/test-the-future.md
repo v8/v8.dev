@@ -20,9 +20,7 @@ You can help test the new pipeline by opting-in and using it with Chrome on your
 2. Open the URL `about:flags` in Chrome
 3. Search for "**Experimental JavaScript Compilation Pipeline**" and set it to "**Enabled**"
 
-<figure>
-  <img src="/_img/test-the-future/58.png" width="1271" height="261" alt="" loading="lazy">
-</figure>
+![](/_img/test-the-future/58.png)
 
 ### In Chrome 59.0.3056 and above
 
@@ -30,9 +28,7 @@ You can help test the new pipeline by opting-in and using it with Chrome on your
 2. Open the URL `about:flags` in Chrome
 3. Search for "**Classic JavaScript Compilation Pipeline**" and set it to "**Disabled**"
 
-<figure>
-  <img src="/_img/test-the-future/59.png" width="1600" height="125" alt="" loading="lazy">
-</figure>
+![](/_img/test-the-future/59.png)
 
 The standard value is "**Default**", which means that either the new **or** the classic pipeline is active depending on the A/B test configuration.
 

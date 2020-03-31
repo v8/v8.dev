@@ -68,10 +68,7 @@ function specialMax(...args) {
 
 See the chart below for a comparison between V8 v5.4 and v5.6.
 
-<figure>
-  <img src="/_img/v8-release-56/perf.png" width="1147" height="709" alt="" loading="lazy">
-  <figcaption>Comparing the ES2015 feature performance of V8 v5.4 and v5.6 with <a href="https://fhinkel.github.io/six-speed/">SixSpeed</a></figcaption>
-</figure>
+![Comparing the ES2015 feature performance of V8 v5.4 and v5.6 with [SixSpeed](https://fhinkel.github.io/six-speed/)](/_img/v8-release-56/perf.png)
 
 This is just the beginning; there’s a lot more to follow in upcoming releases!
 

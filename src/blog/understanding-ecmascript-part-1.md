@@ -231,10 +231,7 @@ Asserts in the spec assert invariant conditions of the algorithms. They are adde
 
 We have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We’ll encounter Property Descriptors, which is just another specification type.
 
-<figure>
-  <img src="/_img/understanding-ecmascript-part-1/call-graph.svg" width="1082" height="306" alt="" loading="lazy">
-  <figcaption>Function call graph starting from <code>Object.prototype.hasOwnProperty</code></figcaption>
-</figure>
+![Function call graph starting from `Object.prototype.hasOwnProperty`](/_img/understanding-ecmascript-part-1/call-graph.svg)
 
 ## Useful links
 

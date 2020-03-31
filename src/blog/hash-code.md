@@ -71,9 +71,7 @@ Let’s discuss each of these.
 
 For the empty case, we can directly store the hash code in this offset on the `JSObject`.
 
-<figure>
-  <img src="/_img/hash-code/properties-backing-store-empty.png" width="323" height="160" alt="" loading="lazy">
-</figure>
+![](/_img/hash-code/properties-backing-store-empty.png)
 
 ### The properties backing store is an array
 
@@ -81,17 +79,13 @@ V8 represents integers less than 2<sup>31</sup> (on 32-bit systems) unboxed, as 
 
 Normally, arrays store their length as a Smi. Since we know that the maximum capacity of this array is only 1022, we only need 10 bits to store the length. We can use the remaining 21 bits to store the hash code!
 
-<figure>
-  <img src="/_img/hash-code/properties-backing-store-array.png" width="491" height="322" alt="" loading="lazy">
-</figure>
+![](/_img/hash-code/properties-backing-store-array.png)
 
 ### The properties backing store is a dictionary
 
 For the dictionary case, we increase the dictionary size by 1 word to store the hashcode in a dedicated slot at the beginning of the dictionary. We get away with potentially wasting a word of memory in this case, because the proportional increase in size isn’t as big as in the array case.
 
-<figure>
-  <img src="/_img/hash-code/properties-backing-store-dictionary.png" width="446" height="214" alt="" loading="lazy">
-</figure>
+![](/_img/hash-code/properties-backing-store-dictionary.png)
 
 With these changes, the hash code lookup no longer has to go through the complex JavaScript property lookup machinery.
 
@@ -99,18 +93,12 @@ With these changes, the hash code lookup no longer has to go through the complex
 
 The [SixSpeed](https://github.com/kpdecker/six-speed) benchmark tracks the performance of Map and Set, and these changes resulted in a ~500% improvement.
 
-<figure>
-  <img src="/_img/hash-code/sixspeed.png" width="1999" height="386" alt="" loading="lazy">
-</figure>
+![](/_img/hash-code/sixspeed.png)
 
 This change caused a 5% improvement on the Basic benchmark in [ARES6](https://webkit.org/blog/7536/jsc-loves-es6/) as well.
 
-<figure>
-  <img src="/_img/hash-code/ares-6.png" width="1999" height="505" alt="" loading="lazy">
-</figure>
+![](/_img/hash-code/ares-6.png)
 
 This also resulted in an 18% improvement in one of the benchmarks in the [Emberperf](http://emberperf.eviltrout.com/) benchmark suite that tests Ember.js.
 
-<figure>
-  <img src="/_img/hash-code/emberperf.jpg" width="1987" height="609" alt="" loading="lazy">
-</figure>
+![](/_img/hash-code/emberperf.jpg)

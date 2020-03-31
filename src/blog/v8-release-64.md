@@ -29,9 +29,7 @@ This way, the code is more readable, and you still get the same performance.
 
 Thanks to [Peter Wong](https://twitter.com/peterwmwong)’s latest contributions, [`WeakMap`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) and [`WeakSet`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet) are now implemented using the [CodeStubAssembler](/blog/csa), resulting in performance improvements of up to 5× across the board.
 
-<figure>
-  <img src="/_img/v8-release-64/weak-collection.svg" width="625" height="375" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-64/weak-collection.svg)
 
 As part of V8’s [on-going effort](https://bugs.chromium.org/p/v8/issues/detail?id=1956) to improve the performance of array built-ins, we improved `Array.prototype.slice` performance ~4× by reimplementing it using the CodeStubAssembler. Additionally, calls to `Array.prototype.map` and `Array.prototype.filter` are now inlined for many cases, giving them a performance profile competitive with hand-written versions.
 
@@ -41,9 +39,7 @@ We worked to make out-of-bounds loads in arrays, typed arrays, and strings [no l
 
 V8’s built-in code objects and bytecode handlers are now deserialized lazily from the snapshot, which can significantly reduce memory consumed by each Isolate. Benchmarks in Chrome show savings of several hundred KB per tab when browsing common sites.
 
-<figure>
-  <img src="/_img/v8-release-64/codespace-consumption.svg" width="600" height="371" alt="" loading="lazy">
-</figure>
+![](/_img/v8-release-64/codespace-consumption.svg)
 
 Look out for a dedicated blog post on this subject early next year.
 

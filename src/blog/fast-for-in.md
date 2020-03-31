@@ -12,13 +12,9 @@ description: 'This technical deep-dive explains how V8 made JavaScript’s for-i
 
 Many popular websites rely heavily on for-in and benefit from its optimization. For example, in early 2016 Facebook spent roughly 7% of its total JavaScript time during startup in the implementation of `for`-`in` itself. On Wikipedia this number was even higher at around 8%. By improving the performance of certain slow cases, Chrome 51 significantly improved the performance on these two websites:
 
-<figure>
-  <img src="/_img/fast-for-in/wikipedia.png" width="979" height="166" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/wikipedia.png)
 
-<figure>
-  <img src="/_img/fast-for-in/facebook.png" width="991" height="165" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/facebook.png)
 
 Wikipedia and Facebook both improved their total script time by 4% due to various `for`-`in` improvements. Note that during the same period, the rest of V8 also got faster, which yielded a total scripting improvement of more than 4%.
 
@@ -124,9 +120,7 @@ V8 keeps track of the object's structure by means of a hidden class or so-called
 
 Let’s for a moment assume that our JavaScript object has reached its final shape and no more properties will be added or removed. In this case we could use the descriptor array as a source for the keys. This works if there are only enumerable properties. To avoid the overhead of filtering out non-enumerable properties each time V8 uses a separate EnumCache accessible via the Map's descriptor array.
 
-<figure>
-  <img src="/_img/fast-for-in/enum-cache.png" width="621" height="99" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/enum-cache.png)
 
 Given that V8 expects that slow dictionary objects frequently change, (i.e. through addition and removal of properties), there is no descriptor array for slow objects with dictionary properties. Hence, V8 does not provide an EnumCache for slow properties. Similar assumptions hold for indexed properties, and as such they are excluded from the EnumCache as well.
 
@@ -291,9 +285,7 @@ We introduced a separate helper class, the `KeyAccumulator`, which dealt with th
 
 The `KeyAccumulator` consists of a fast part that only supports a limited set of actions but is able to complete them very efficiently. The slow accumulator supports all the complex cases, like ES6 Proxies.
 
-<figure>
-  <img src="/_img/fast-for-in/keyaccumulator.png" width="624" height="96" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/keyaccumulator.png)
 
 In order to properly filter out shadowing properties we have to maintain a separate list of non-enumerable properties that we have seen so far. For performance reasons we only do this after we figure out that there are enumerable properties on the prototype chain of an object.
 
@@ -341,25 +333,17 @@ var elements = {
 
 The following graph compares the original performance of running a `for`-`in` loop a million times in a tight loop without the help of our optimizing compiler.
 
-<figure>
-  <img src="/_img/fast-for-in/keyaccumulator-benchmark.png" width="938" height="345" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/keyaccumulator-benchmark.png)
 
 As we've outlined in the introduction, these improvements became very visible on Wikipedia and Facebook in particular.
 
-<figure>
-  <img src="/_img/fast-for-in/wikipedia.png" width="979" height="166" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/wikipedia.png)
 
-<figure>
-  <img src="/_img/fast-for-in/facebook.png" width="991" height="165" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/facebook.png)
 
 Besides the initial improvements available in Chrome 51, a second performance tweak yielded another significant improvement. The following graph shows our tracking data of the total time spent in scripting during startup on a Facebook page. The selected range around V8 revision 37937 corresponds to an additional 4% performance improvement!
 
-<figure>
-  <img src="/_img/fast-for-in/fastkeyaccumulator.png" width="784" height="209" alt="" loading="lazy">
-</figure>
+![](/_img/fast-for-in/fastkeyaccumulator.png)
 
 To underline the importance of improving `for`-`in` we can rely on the data from a tool we built back in 2016 that allows us to extract V8 measurements over a set of websites. The following table shows the relative time spent in V8 C++ entry points (runtime functions and builtins) for Chrome 49 over a set of roughly [25 representative real-world websites](/blog/real-world-performance).
 

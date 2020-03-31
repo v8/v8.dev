@@ -19,10 +19,7 @@ This milestone is significant because it marks:
 
 You can read more about WebAssembly on the [project site](http://webassembly.org/) as well as follow our [developers guide](http://webassembly.org/getting-started/developers-guide/) to test out WebAssembly compilation from C & C++ using Emscripten. The [binary format](http://webassembly.org/docs/binary-encoding/) and [JS API](http://webassembly.org/docs/js/) documents outline the binary encoding of WebAssembly and the mechanism to instantiate WebAssembly modules in the browser, respectively. Here’s a quick sample to show what wasm looks like:
 
-<figure>
-  <img src="/_img/webassembly-browser-preview/gcd.svg" width="408" height="514" alt="" loading="lazy">
-  <figcaption>An implementation of the Greatest Common Divisor function in WebAssembly, showing the raw bytes, the text format (WAST), and the C source code.</figcaption>
-</figure>
+![An implementation of the Greatest Common Divisor function in WebAssembly, showing the raw bytes, the text format (WAST), and the C source code.](/_img/webassembly-browser-preview/gcd.svg)
 
 Since WebAssembly is still behind a flag in Chrome ([chrome://flags/#enable-webassembly](chrome://flags/#enable-webassembly)), it is not yet recommended for production use. However, the Browser Preview period marks a time during which we are actively collecting [feedback](http://webassembly.org/community/feedback/) on the design and implementation of the spec. Developers are encouraged to test out compiling and porting applications and running them in the browser.
 
