@@ -267,7 +267,7 @@ movlsxlq rax, <mem>
 
 so got yet another 2% improvement.
 
-##### Bump (4), +11%
+#### Bump (4), +11%
 
 TurboFan optimization phases work by using pattern matching on the graph: once a sub-graph matches a certain pattern it is replaced with a semantically equivalent (but better) sub-graph or instruction.
 
@@ -380,7 +380,7 @@ Smi:    |____int32_value____|0000000000000000000|
 
 This optimization can’t be done with Pointer Compression, because there’s no space in the 32-bit compressed pointer due to having the bit which distinguishes pointers from Smis. If we disable 32-bit smis in the full-pointer 64-bit version we see a 1% regression of the Octane score.
 
-##### Double field unboxing (8), -3%
+#### Double field unboxing (8), -3%
 
 This optimization tries to store floating point values directly in the object’s fields under certain assumptions. This has the objective of reducing the amount of number object allocations even more than Smis do alone.
 
