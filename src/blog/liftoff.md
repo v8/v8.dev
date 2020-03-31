@@ -29,9 +29,7 @@ V8’s approach to compiling WebAssembly has relied on *TurboFan*, the optimizin
 
 The goal of Liftoff is to reduce startup time for WebAssembly-based apps by generating code as fast as possible. Code quality is secondary, as hot code is eventually recompiled with TurboFan anyway. Liftoff avoids the time and memory overhead of constructing an IR and generates machine code in a single pass over the bytecode of a WebAssembly function.
 
-<figure>
-  <img src="/_img/liftoff/pipeline.svg" width="701" height="470" alt="The Liftoff compilation pipeline is much simpler compared to the TurboFan compilation pipeline." loading="lazy">
-</figure>
+![The Liftoff compilation pipeline is much simpler compared to the TurboFan compilation pipeline.](/_img/liftoff/pipeline.svg)
 
 From the diagram above it is obvious that Liftoff should be able to generate code much faster than TurboFan since the pipeline only consists of two stages. In fact, the *function body decoder* does a single pass over the raw WebAssembly bytes and interacts with the subsequent stage via callbacks, so *code generation* is performed *while decoding and validating* the function body. Together with WebAssembly’s *[streaming APIs](/blog/v8-release-65)*, this allows V8 to compile WebAssembly code to machine code while downloading over the network.
 
