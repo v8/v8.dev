@@ -12,7 +12,7 @@ module.exports = md => {
       let imgSrc = t.attrGet('src');
       // We only embed self-hosted images.
       if (imgSrc.startsWith('/_img/')) {
-        let { width, height } = imageSize('src' + imgSrc);
+        const { width, height } = imageSize('src' + imgSrc);
         // Lazify image and embed its sizes to avoid layout jump.
         t.attrs.push(['width', width], ['height', height], ['loading', 'lazy']);
         // Check if `file@2x.ext` exists for `file.ext`.
