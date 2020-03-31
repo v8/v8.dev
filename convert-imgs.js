@@ -1,9 +1,10 @@
+"use strict";
+
 const glob = require("glob").sync;
 const fs = require("fs").promises;
 const parse5 = require("parse5");
 const assert = require("assert");
 const getImageSize = require("image-size");
-const { inspect } = require("util");
 
 function toMarkdown(nodes, inEm) {
   let res = "";
@@ -43,7 +44,7 @@ function toMarkdown(nodes, inEm) {
 Promise.all(
   glob("src/**/*.md").map(async path => {
     let f = await fs.readFile(path, "utf8");
-    let newF = f.replace(/<figure>(.*?)<\/figure>/sg, chunk => {
+    let newF = f.replace(/<figure>(.*?)<\/figure>/gs, chunk => {
       let srcForErr;
       try {
         let [ast, ...rest1] = parse5.parseFragment(chunk).childNodes;
@@ -53,7 +54,7 @@ Promise.all(
           child => !(child.nodeName === "#text" && child.value.match(/^\s*$/))
         );
         assert.deepEqual(rest2, []);
-        if (img.nodeName !== 'img') {
+        if (img.nodeName !== "img") {
           // Not an error, this is just a video or something.
           // Return original matched chunk as-is.
           return chunk;
@@ -73,7 +74,10 @@ Promise.all(
         assert.deepEqual(other, {});
         assert(src.startsWith("/_img/"));
         let dimensions = getImageSize("src" + src);
-        assert.strictEqual(`${width}x${height}`, `${dimensions.width}x${dimensions.height}`);
+        assert.strictEqual(
+          `${width}x${height}`,
+          `${dimensions.width}x${dimensions.height}`
+        );
         if (srcset) {
           assert.strictEqual(srcset, `${src.replace(/\.[^.]*$/, "@2x$&")} 2x`);
         }
@@ -94,9 +98,12 @@ Promise.all(
       await fs.writeFile(path, newF);
     }
   })
-).then(() => {
-  console.log('Done');
-}, err => {
-  console.error('Fatal:', err);
-  process.exit(1);
-});
+).then(
+  () => {
+    console.log("Done");
+  },
+  err => {
+    console.error("Fatal:", err);
+    process.exit(1);
+  }
+);
