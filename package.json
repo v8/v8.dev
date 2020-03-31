@@ -67,8 +67,5 @@
     "superstatic": "^6.0.4",
     "terser": "^4.3.9",
     "workbox-cli": "^4.3.1"
-  },
-  "dependencies": {
-    "node-video-lib": "^2.2.0"
   }
 }
