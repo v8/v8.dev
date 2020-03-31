@@ -6,7 +6,7 @@ const { existsSync } = require('fs');
 module.exports = md => {
   // Add a post-process rule for inline items.
   md.inline.ruler2.push('embed_image', state => {
-    for (let t of state.tokens) {
+    for (const t of state.tokens) {
       // Skip non-image tokens.
       if (t.type !== 'image') continue;
       let imgSrc = t.attrGet('src');
