@@ -134,7 +134,7 @@ In [JavaScript modules](/features/modules), it was already possible to use the f
 import * as utils from './utils.mjs';
 ```
 
-However, no symmetric `export` syntax existed… [until now](https://github.com/tc39/proposal-export-ns-from):
+However, no symmetric `export` syntax existed… [until now](/features/module-namespace-exports):
 
 ```js
 export * as utils from './utils.mjs';
