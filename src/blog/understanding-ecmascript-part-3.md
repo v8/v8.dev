@@ -50,13 +50,13 @@ For example, we cannot determine whether `/` is the division operator or the sta
 const x = 10 / 5;
 ```
 
-Here `/` is a DivPunctuator.
+Here `/` is a `DivPunctuator`.
 
 ```js
 const r = /foo/;
 ```
 
-Here the first `/` is the start of a RegularExpressionLiteral.
+Here the first `/` is the start of a `RegularExpressionLiteral`.
 
 Templates introduce a similar ambiguity &mdash; the interpretation of <code>}`</code> depends on the context it occurs in:
 
@@ -66,14 +66,14 @@ const what2 = 'late';
 const t = `I am a ${ what1 + what2 }`;
 ```
 
-Here <code>\`I am a ${</code> is TemplateHead and <code>}\`</code> is TemplateTail.
+Here <code>\`I am a ${</code> is TemplateHead and <code>}\`</code> is a `TemplateTail`.
 
 ```js
 if (0 == 1) {
 }`not very useful`;
 ```
 
-Here `}` is RightBracePunctuator and <code>\`</code> is the start of a NoSubstitutionTemplate.
+Here `}` is a `RightBracePunctuator` and <code>\`</code> is the start of a `NoSubstitutionTemplate`.
 
 Even though the interpretation of `/` and <code>}`</code> depends on their "context" &mdash; their position in the syntactic structure of the code &mdash; the grammars we'll describe next are still context-free.
 
@@ -289,7 +289,7 @@ It turns out that **static semantics** are needed for forbidding `await` as an i
 
 Static semantics describe static rules &mdash; that is, rules that are checked before the program runs.
 
-In this case, the [static semantics for BindingIdentifier](https://tc39.es/ecma262/#sec-identifiers-static-semantics-early-errors) define the following syntax-directed rule:
+In this case, the [static semantics for `BindingIdentifier`](https://tc39.es/ecma262/#sec-identifiers-static-semantics-early-errors) define the following syntax-directed rule:
 
 ><code>BindingIdentifier<sub>[Yield, Await]</sub> : await</code>
 >
