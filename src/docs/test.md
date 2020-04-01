@@ -19,8 +19,8 @@ gm check  # builds and tests all default platforms
 `gm` automatically builds any required targets before running the tests. You can also limit the tests to be run:
 
 ```bash
-gm x64.release.check test262
-gm x64.debug.check mjsunit/regress/regress-123
+gm x64.release test262
+gm x64.debug mjsunit/regress/regress-123
 ```
 
 If you have already built V8, you can run the tests manually:
