@@ -32,7 +32,7 @@ The [RegExp grammar](https://tc39.es/ecma262/#sec-patterns) describes how Unicod
 
 The [numeric string grammar](https://tc39.es/ecma262/#sec-tonumber-applied-to-the-string-type) describes how Strings are translated into numeric values.
 
-Each grammar is defined as a context-free grammar, consisting of a set of production rules.
+Each grammar is defined as a context-free grammar, consisting of a set of productions.
 
 The grammars use slighlty different notation: the syntactic grammar uses `LeftHandSideSymbol :` whereas the lexical grammar and the RegExp grammar use `LeftHandSideSymbol ::` and the numeric string grammar uses `LeftHandSideSymbol :::`.
 
@@ -218,7 +218,7 @@ To summarize: Async functions have a `FunctionBody_Await` and non-async function
 
 Maybe it's hard to remember which one is `FunctionBody` and which `FunctionBody_Await`. Is `FunctionBody_Await` for a function where `await` is an identifier, or for a function where `await` is a keyword?
 
-You can think of the `_Await` parameter meaning "`await` is a keyword". This approach is also future proof. Imagine a new keyword, `blob` being added, but only inside "blobby" functions. Non-blobby non-async non-generators would still have `FunctionBody` (without `_Await`, `_Yield` or `_Blob`), exactly like they have now. Blobby functions would have a `FunctionBody_Blob`, async blobby functions would have `FunctionBody_Await_Blob` and so on. We'd still need to add the `Blob` subscript to the rules, but the expanded forms of `FunctionBody` for already existing functions stay the same.
+You can think of the `_Await` parameter meaning "`await` is a keyword". This approach is also future proof. Imagine a new keyword, `blob` being added, but only inside "blobby" functions. Non-blobby non-async non-generators would still have `FunctionBody` (without `_Await`, `_Yield` or `_Blob`), exactly like they have now. Blobby functions would have a `FunctionBody_Blob`, async blobby functions would have `FunctionBody_Await_Blob` and so on. We'd still need to add the `Blob` subscript to the productions, but the expanded forms of `FunctionBody` for already existing functions stay the same.
 
 ### Disallowing `await` as an identifier
 
