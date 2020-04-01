@@ -332,8 +332,7 @@ There's also another related rule:
 This might be confusing at first. [`Identifier`](https://tc39.es/ecma262/#prod-Identifier) is defined like this:
 
 <!-- markdownlint-disable no-inline-html -->
-<pre><code class="language-grammar">
-Identifier :
+<pre><code class="language-grammar">Identifier :
   IdentifierName <span style="font-style: normal">but not</span> ReservedWord</code></pre>
 <!-- markdownlint-enable no-inline-html -->
 
