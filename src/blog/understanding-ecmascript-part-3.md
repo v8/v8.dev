@@ -3,7 +3,7 @@ title: 'Understanding the ECMAScript spec, part 3'
 author: '[Marja Hölttä](https://twitter.com/marjakh), speculative specification spectator'
 avatars:
   - marja-holtta
-date: 2020-03-02 13:33:37
+date: 2020-04-01
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
