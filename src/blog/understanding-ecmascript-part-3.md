@@ -346,7 +346,7 @@ So this works:
 
 ```js
 function old() {
-  var \0061wait;
+  var \u0061wait;
 }
 ```
 
@@ -354,7 +354,7 @@ And this doesn't:
 
 ```js
 async function modern() {
-  var \0061wait; // Syntax error
+  var \u0061wait; // Syntax error
 }
 ```
 
