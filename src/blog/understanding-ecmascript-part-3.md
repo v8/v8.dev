@@ -39,7 +39,7 @@ Next we’ll look into the lexical grammar and the syntactic grammar in more det
 
 ## Lexical grammar
 
-The spec defines ECMAScript source text as a sequence of Unicode code points. For example, variable names are not limited to ASCII characters but can also include other Unicode characters, such as emojis. The spec doesn’t talk about the actual encoding (for example, UTF-8 or UTF-16). It assumes that the source code has already been converted into a sequence of Unicode code points according to the encoding it was in.
+The spec defines ECMAScript source text as a sequence of Unicode code points. For example, variable names are not limited to ASCII characters but can also include other Unicode characters. The spec doesn’t talk about the actual encoding (for example, UTF-8 or UTF-16). It assumes that the source code has already been converted into a sequence of Unicode code points according to the encoding it was in.
 
 It’s not possible to tokenize ECMAScript source code in advance, which makes defining the lexical grammar slightly more complicated.
 
