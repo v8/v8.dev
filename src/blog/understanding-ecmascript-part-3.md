@@ -201,17 +201,17 @@ The expanded form of the production is:
   <b>function</b> BindingIdentifier <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b>
 
 FunctionDeclaration_Yield :
-  <b>function</b> BindingIdentifier_Yield <b>(</b> FormalParameters_Yield <b>)</b> <b>{</b> FunctionBody <b>}</b>
+  <b>function</b> BindingIdentifier_Yield <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b>
 
 FunctionDeclaration_Await :
-  <b>function</b> BindingIdentifier_Await <b>(</b> FormalParameters_Await <b>)</b> <b>{</b> FunctionBody <b>}</b>
+  <b>function</b> BindingIdentifier_Await <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b>
 
 FunctionDeclaration_Yield_Await :
-  <b>function</b> BindingIdentifier_Yield_Await <b>(</b> FormalParameters_Yield_Await <b>)</b> <b>{</b> FunctionBody <b>}</b></code></pre>
+  <b>function</b> BindingIdentifier_Yield_Await <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b></code></pre>
 
-In this production we always get `FunctionBody` (without `_Yield` and without `_Await`), since the `FunctionBody` in the non-expanded production is parameterized with `[~Yield, ~Await]`.
+In this production we always get `FunctionBody` and `FormalParameters` (without `_Yield` and without `_Await`), since they are parameterized with `[~Yield, ~Await]` in the non-expanded production.
 
-Function name and formal parameters are treated differently: they get the parameters `_Await` and `_Yield` if the left-hand side symbol has them.
+Function name is treated differently: it gets the parameters `_Await` and `_Yield` if the left-hand side symbol has them.
 
 To summarize: Async functions have a `FunctionBody_Await` and non-async functions have a `FunctionBody` (without `_Await`). Since we’re talking about non-generator functions, both our async example function and our non-async example function are parameterized without `_Yield`.
 
