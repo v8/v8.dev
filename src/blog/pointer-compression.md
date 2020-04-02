@@ -11,7 +11,6 @@ tags:
 description: 'V8 reduced its heap size up to 43%! Learn how in “Pointer Compression in V8”!'
 tweet: '1244653541379182596'
 ---
-
 There is a constant battle between memory and performance. As users, we would like things to be fast as well as consume as little memory as possible. Unfortunately, usually improving performance comes at a cost of memory consumption (and vice versa).
 
 Back in 2014 Chrome switched from being a 32-bit process to a 64-bit process. This gave Chrome better [security, stability and performance](https://blog.chromium.org/2014/08/64-bits-of-awesome-64-bit-windows_26.html), but it came at a memory cost since each pointer now occupies eight bytes instead of four. We took on the challenge to reduce this overhead in V8 to try and get back as many wasted 4 bytes as possible.
@@ -54,35 +53,36 @@ Pointer:    |________________address______________<b>w1</b>|
 Smi:        |____int32_value____|000000000000000000<b>0</b>|
 </pre>
 
-You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can use 32 bits for the Smi value payload. The implications of 32-bit Smis on pointer compression will be discussed in the following sections.
+You may notice that unlike 32-bit architectures, on 64-bit architectures V8 can use 32 bits for the Smi value payload. The implications of 32-bit Smis on pointer compression are discussed in the following sections.
 
 ## Compressed tagged values and new heap layout
 
 With Pointer Compression, our goal is to somehow fit both kinds of tagged values into 32 bits on 64-bit architectures. We can fit pointers into 32 bits by:
 
-- making sure all V8 objects are allocated within a 4GB memory range
+- making sure all V8 objects are allocated within a 4-GB memory range
 - representing pointers as offsets within this range
 
-Having such a hard limit is unfortunate, but V8 in Chrome already has a 2GB or 4GB limit on the size of the V8 heap (depending on how powerful the underlying device is), even on 64-bit architectures. Other V8 embedders, such as Node.js, may require bigger heaps. If we impose a maximum of 4GB range, it would mean that these embedders cannot use Pointer Compression.
+Having such a hard limit is unfortunate, but V8 in Chrome already has a 2-GB or 4-GB limit on the size of the V8 heap (depending on how powerful the underlying device is), even on 64-bit architectures. Other V8 embedders, such as Node.js, may require bigger heaps. If we impose a maximum of 4 GB, it would mean that these embedders cannot use Pointer Compression.
 
-The question is now how to update the heap layout to ensure that 32-bit pointers will uniquely identify V8 objects.
+The question is now how to update the heap layout to ensure that 32-bit pointers uniquely identify V8 objects.
 
 ### Trivial heap layout
 
-The trivial compression scheme would be to allocate objects in the first 4GB of address space.
+The trivial compression scheme would be to allocate objects in the first 4 GB of address space.
 ![Trivial heap layout](/_img/pointer-compression/heap-layout-0.svg)
 
-Unfortunately, this is not an option for V8 since Chrome’s renderer process may need to create multiple V8 instances in the same renderer process, for example for Web/Service Workers. Otherwise, with this scheme all these V8 instances will compete for the same 4GB address space and thus there will be a 4GB memory limit imposed on all V8 instances together.
+Unfortunately, this is not an option for V8 since Chrome’s renderer process may need to create multiple V8 instances in the same renderer process, for example for Web/Service Workers. Otherwise, with this scheme all these V8 instances compete for the same 4-GB address space and thus there is a 4-GB memory limit imposed on all V8 instances together.
 
 ### Heap layout, v1
 
-If we arrange V8’s heap in a contiguous 4GB region of address space somewhere else, then an **unsigned** 32-bit offset from the base will uniquely identify the pointer.
+If we arrange V8’s heap in a contiguous 4-GB region of address space somewhere else, then an **unsigned** 32-bit offset from the base uniquely identifies the pointer.
+
 <figure>
   <img src="/_img/pointer-compression/heap-layout-1.svg" width="827" height="323" alt="" loading="lazy">
   <figcaption>Heap layout, base aligned to start</figcaption>
 </figure>
 
-If we also ensure that the base is 4GB-aligned then the upper 32 bits will be the same for all pointers:
+If we also ensure that the base is 4-GB-aligned then the upper 32 bits are the same for all pointers:
 
 ```
             |----- 32 bits -----|----- 32 bits -----|
@@ -106,7 +106,7 @@ Compressed pointer:                     |______offset_____w1|
 Compressed Smi:                         |____int31_value___0|
 ```
 
-Given that the base is 4GB-aligned, the compression is just a truncation:
+Given that the base is 4-GB-aligned, the compression is just a truncation:
 
 ```cpp
 uint64_t uncompressed_tagged;
@@ -132,11 +132,11 @@ Let’s try to change the compression scheme to simplify the decompression code.
 
 ### Heap layout, v2
 
-If instead of having the base at the beginning of the 4GB we put the base in the _middle_, we can treat the compressed value as a **signed** 32-bit offset from the base. Note that the whole reservation is not 4GB aligned anymore but the base is.
+If instead of having the base at the beginning of the 4 GB we put the base in the _middle_, we can treat the compressed value as a **signed** 32-bit offset from the base. Note that the whole reservation is not 4-GB-aligned anymore but the base is.
 
 ![Heap layout, base aligned to the middle](/_img/pointer-compression/heap-layout-2.svg)
 
-In this new layout, the compression code will stay the same.
+In this new layout, the compression code stays the same.
 
 The decompression code, however, becomes nicer. Sign-extension is now common for both Smi and pointer cases and the only branch is on whether to add the base in the pointer case.
 
@@ -159,7 +159,7 @@ int32_t compressed_tagged;
 // Same code for both pointer and Smi cases
 int64_t sign_extended_tagged = int64_t(compressed_tagged);
 int64_t selector_mask = -(sign_extended_tagged & 1);
-// Mask will be 0 in case of Smi or all 1s in case of pointer
+// Mask is 0 in case of Smi or all 1s in case of pointer
 int64_t uncompressed_tagged =
     sign_extended_tagged + (base & selector_mask);
 ```
@@ -170,10 +170,10 @@ Then, we decided to start with the branchless implementation.
 
 ### Initial performance
 
-We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-genesis-of-octane) -- a peak-performance benchmark we have used in the past. Although we are no longer focusing on improving peak performance in our day-to-day work, we also don’t want to regress peak performance, particularly for something as performance-sensitive as _all pointers_. Octane continues to be a good benchmark for this task.
+We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-genesis-of-octane) — a peak-performance benchmark we have used in the past. Although we are no longer focusing on improving peak performance in our day-to-day work, we also don’t want to regress peak performance, particularly for something as performance-sensitive as _all pointers_. Octane continues to be a good benchmark for this task.
 
-This graph shows Octane's score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation. In the graph, higher is better. The red line is the existing full-sized-pointer x64 build, while the green line is the pointer compressed version.
-![First round of Octane's improvements](/_img/pointer-compression/perf-octane-1.svg)
+This graph shows Octane’s score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation. In the graph, higher is better. The red line is the existing full-sized-pointer x64 build, while the green line is the pointer compressed version.
+![First round of Octane’s improvements](/_img/pointer-compression/perf-octane-1.svg)
 
 With the first working implementation, we had a ~35% regression gap.
 
@@ -188,7 +188,7 @@ Let’s take a look at the x64 assembly.
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
 | Code          | ```asm                  | ```asm                       \
-|               | movsxlq r11,[...]       | movsxlq r11,[...]            \
+|               | movsxlq r11,[…]         | movsxlq r11,[…]              \
 |               | movl r10,r11            | testb r11,0x1                \
 |               | andl r10,0x1            | jz done                      \
 |               | negq r10                | addq r11,r13                 \
@@ -211,7 +211,7 @@ On Arm64, we observed the same - the branchful version was clearly faster on pow
 | Decompression | Branchless              | Branchful                    |
 |---------------|-------------------------|------------------------------|
 | Code          | ```asm                  | ```asm                       \
-|               | ldur w6, [...]          | ldur w6, [...]               \
+|               | ldur w6, […]            | ldur w6, […]                 \
 |               | sbfx x16, x6, #0, #1    | sxtw x6, w6                  \
 |               | and x16, x16, x26       | tbz w6, #0, #done            \
 |               | add x6, x16, w6, sxtw   | add x6, x26, x6              \
@@ -265,7 +265,7 @@ One example of a “broken” optimization was [allocation preternuring](https:/
 
 ### Further improvements
 
-![Second round of Octane's improvements](/_img/pointer-compression/perf-octane-2.svg)
+![Second round of Octane’s improvements](/_img/pointer-compression/perf-octane-2.svg)
 
 #### Bump (5), +0.5%
 
@@ -290,7 +290,7 @@ The new implementation was as effective as the initial version and gave another 
 
 #### Bump (6), +2.5%
 
-We were getting close to performance parity, but the gap was still there. We had to come up with fresher ideas. One of them was: what if we ensure that any code that deals with Smi values will never “look” at the upper 32 bits?
+We were getting close to performance parity, but the gap was still there. We had to come up with fresher ideas. One of them was: what if we ensure that any code that deals with Smi values never “looks” at the upper 32 bits?
 
 Let’s remember the decompression implementation:
 
@@ -303,7 +303,7 @@ if (uncompressed_tagged & 1) {
 }
 ```
 
-If the upper 32 bits of a Smi will be ignored, we can assume them to be undefined. Then, we can avoid the special casing between the pointer and Smi cases and unconditionally add the base when decompressing, even for Smis! We call this approach “Smi-corrupting”.
+If the upper 32 bits of a Smi are ignored, we can assume them to be undefined. Then, we can avoid the special casing between the pointer and Smi cases and unconditionally add the base when decompressing, even for Smis! We call this approach “Smi-corrupting”.
 
 ```cpp
 // New decompression implementation
@@ -326,7 +326,7 @@ Here’s the assembly code for comparison:
 | Decompression | Branchful                    | Smi-corrupting               |
 |---------------|------------------------------|------------------------------|
 | Code          | ```asm                       | ```asm                       \
-|               | movsxlq r11,[...]            | movl r11,[rax+0x13]          \
+|               | movsxlq r11,[…]              | movl r11,[rax+0x13]          \
 |               | testb r11,0x1                | addq r11,r13                 \
 |               | jz done                      |                              | \
 |               | addq r11,r13                 |                              | \
@@ -344,7 +344,7 @@ So, we adapted all the Smi-using code pieces in V8 to the new compression scheme
 
 The remaining performance gap is explained by two optimizations for 64-bit builds that we had to disable due to fundamental incompatibility with Pointer Compression.
 
-![Final round of Octane's improvements](/_img/pointer-compression/perf-octane-3.svg)
+![Final round of Octane’s improvements](/_img/pointer-compression/perf-octane-3.svg)
 
 #### 32-bit Smi optimization (7), -1%
 
@@ -429,9 +429,9 @@ Here is an pseudo example of a helper class:
 // Hidden class
 class Map {
  public:
-  ...
+  …
   inline DescriptorArray instance_descriptors() const;
-  ...
+  …
   // The actual tagged pointer value stored in the Map view object.
   const uintptr_t ptr_;
 };
@@ -449,7 +449,7 @@ In order to minimize the number of changes required for a first run of the point
 
 ```cpp
 inline uintptr_t GetBaseForPointerCompression(uintptr_t address) {
-  // Round address down to 4GB
+  // Round address down to 4 GB
   const uintptr_t kBaseAlignment = 1 << 32;
   return address & -kBaseAlignment;
 }
@@ -486,7 +486,7 @@ DescriptorArray Map::instance_descriptors(const Isolate* isolate) const {
 
 ## Results
 
-Let’s take a look at Pointer Compression’s final numbers! For these results, we will use the same browsing tests that we introduced at the beginning of this blog post. As a reminder, they are browsing user stories that we found were representative of usage of real-world websites.
+Let’s take a look at Pointer Compression’s final numbers! For these results, we use the same browsing tests that we introduced at the beginning of this blog post. As a reminder, they are browsing user stories that we found were representative of usage of real-world websites.
 
 In them, we observed that Pointer Compression reduces **V8 heap size up to 43%**! In turn, it reduces **Chrome’s renderer process memory up to 20%** on Desktop.
 
@@ -494,7 +494,7 @@ In them, we observed that Pointer Compression reduces **V8 heap size up to 43%**
 
 Another important thing to notice is that not every website improves the same amount. For example, V8 heap memory used to be bigger on Facebook than New York Times, but with Pointer Compression it is actually the reverse. This difference can be explained by the fact that some websites have more Tagged values than others.
 
-In addition to these memory improvements we have also seen real-world  performance improvements. On real websites we utilize less CPU and garbage collector time!
+In addition to these memory improvements we have also seen real-world performance improvements. On real websites we utilize less CPU and garbage collector time!
 
 ![Improvements in CPU and garbage collection time](/_img/pointer-compression/performance-improvements.svg)
 
