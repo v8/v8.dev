@@ -73,7 +73,14 @@ Note that this option only works if the patch applies cleanly on the release bra
 1. Modify the commit message:
    1. Prefix the title with "Merged: ".
    1. Remove lines from the footer that correspond to the original CL ("Change-Id", "Reviewed-on", "Reviewed-by", "Commit-Queue", "Cr-Commit-Position"). Definitely keep the "(cherry picked from commit XXX)" line, as this is needed by some tools to relate merges to original CLs.
-   1. Add "No-Try: true", "No-Presubmit: true" and "No-Tree-Checks: true" in the footer.
+   1. Add the following flags to the footer:
+
+       ```
+       No-Try: true
+       No-Presubmit: true
+       No-Tree-Checks: true
+       ```
+
 1. Send out to review, or add a "TBR=..." or "Tbr: ..." line if the CL is unmodified.
 
 ### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8/g/branches/console)
