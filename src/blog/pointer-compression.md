@@ -173,6 +173,7 @@ Then, we decided to start with the branchless implementation.
 We measured performance on [Octane](https://v8.dev/blog/retiring-octane#the-genesis-of-octane) — a peak-performance benchmark we have used in the past. Although we are no longer focusing on improving peak performance in our day-to-day work, we also don’t want to regress peak performance, particularly for something as performance-sensitive as _all pointers_. Octane continues to be a good benchmark for this task.
 
 This graph shows Octane’s score on x64 architecture while we were optimizing and polishing the Pointer Compression implementation. In the graph, higher is better. The red line is the existing full-sized-pointer x64 build, while the green line is the pointer compressed version.
+
 ![First round of Octane’s improvements](/_img/pointer-compression/perf-octane-1.svg)
 
 With the first working implementation, we had a ~35% regression gap.
