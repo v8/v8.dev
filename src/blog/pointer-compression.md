@@ -69,6 +69,7 @@ The question is now how to update the heap layout to ensure that 32-bit pointers
 ### Trivial heap layout
 
 The trivial compression scheme would be to allocate objects in the first 4 GB of address space.
+
 ![Trivial heap layout](/_img/pointer-compression/heap-layout-0.svg)
 
 Unfortunately, this is not an option for V8 since Chrome’s renderer process may need to create multiple V8 instances in the same renderer process, for example for Web/Service Workers. Otherwise, with this scheme all these V8 instances compete for the same 4-GB address space and thus there is a 4-GB memory limit imposed on all V8 instances together.

@@ -2,8 +2,34 @@
 
 const imageSize = require('image-size');
 const { existsSync } = require('fs');
+const assert = require('assert');
 
 module.exports = md => {
+  md.core.ruler.push('check_img_in_figure', state => {
+    let inFigure = false;
+    for (const t of state.tokens) {
+      switch (t.type) {
+        case 'figure_open':
+          assert(!inFigure);
+          inFigure = true;
+          break;
+        case 'figure_close':
+          assert(inFigure);
+          inFigure = false;
+          break;
+        case 'inline':
+          if (!inFigure) {
+            const image = t.children.find(t => t.type === 'image');
+            if (image) {
+              throw new Error(`Image ${image.attrGet('src')} is not in a separate block. Missing newlines around?`);
+            }
+          }
+          break;
+      }
+    }
+    assert(!inFigure);
+  });
+
   // Add a post-process rule for inline items.
   md.inline.ruler2.push('embed_image', state => {
     for (const t of state.tokens) {

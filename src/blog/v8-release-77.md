@@ -28,6 +28,7 @@ Our experiments from the wild show that this reduces V8’s heap size by 1–2% 
 Over the last milestones, we worked on scalability of background compilation of WebAssembly. The more cores your computer has, the more you benefit from this effort. The graphs below have been created on a 24-core Xeon machine, compiling [the Epic ZenGarden demo](https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html). Depending on the number of threads used, compilation takes less than half of the time compared to V8 v7.4.
 
 ![](/_img/v8-release-77/liftoff-compilation-speedup.svg)
+
 ![](/_img/v8-release-77/turbofan-compilation-speedup.svg)
 
 ### Stack trace improvements
