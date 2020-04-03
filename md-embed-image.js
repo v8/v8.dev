@@ -7,7 +7,7 @@ const assert = require('assert');
 module.exports = md => {
   md.core.ruler.push('check_img_in_figure', state => {
     let inFigure = false;
-    for (let t of state.tokens) {
+    for (const t of state.tokens) {
       switch (t.type) {
         case 'figure_open':
           assert(!inFigure);
