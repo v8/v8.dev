@@ -72,14 +72,45 @@ const installPrismLanguages = (Prism) => {
       /(?:extern|global)[^;\n]*/i,
       /(?:CPU|FLOAT|DEFAULT).*$/m
     ],
-    'register': {
-      pattern: /\b%?([abcd][hl]|[er]?[abcd]x|[er]?(di|si|bp|sp)|dil|sil|bpl|spl|r(8|9|1[0-5])[bdlw]?)\b/i,
-      alias: 'variable'
-    },
-    'number': /(?:\b|(?=\$))(?:0[hx][\da-f]*\.?[\da-f]+(?:p[+-]?\d+)?|\d[\da-f]+[hx]|\$\d[\da-f]*|0[oq][0-7]+|[0-7]+[oq]|0[by][01]+|[01]+[by]|0[dt]\d+|\d*\.?\d+(?:\.?e[+-]?\d+)?[dt]?)\b/i,
+    'register': [
+      // x86
+      {
+        pattern: /\b%?([abcd][hl]|[er]?[abcd]x|[er]?(di|si|bp|sp)|dil|sil|bpl|spl|r(8|9|1[0-5])[bdlw]?)\b/i,
+        alias: 'variable'
+      },
+      // arm
+      {
+        pattern: /\b(pc|sp|fp|lr|cp|ip|xzr|wzr|([rxw][0-9][0-9]?))\b/i,
+        alias: 'variable'
+      }
+    ],
+    'number': [
+      // Match a disassembled Arm instruction as a number.
+      /\b[\da-f]{8}\b/i,
+      // Match immediates.
+      /(#[+-]?)?\b(\d+|0x[\da-f]+)\b/i,
+    ],
     'operator': /[\[\]*+\-\/%<>=&|$!]/,
   };
 
+  // Suitable to print disassembly, the simulator debugger prompt as well as
+  // the output of --print-code.
+  Prism.languages.simulator = Prism.languages.extend('asm', {
+    'comment': [
+      /                  .*$/m,
+      /# .*/,
+    ],
+    'keyword': /sim>/,
+    // Print addresses as strings to differentiate them from regular numbers. We
+    // assume 0x followed by at least 6 hexadecimal characters is an address.
+    'string': [
+      // First match a line that starts with an address but also has an offset
+      // after 4 spaces.
+      /^0x[\da-f]{6}[\da-f]*    [\da-f ]{2}/im,
+      // Then match regular addresses.
+      /\b0x[\da-f]{6}[\da-f]*\b/i,
+    ]
+  });
 };
 
 module.exports = installPrismLanguages;
