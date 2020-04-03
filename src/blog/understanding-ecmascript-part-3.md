@@ -318,7 +318,7 @@ async function too_few_semicolons() {
 }
 ```
 
-This kind of inference with ASI was deemed too confusing, so static semantics were used for disallowing `await` as an identifier.
+This kind of interference with ASI was deemed too confusing, so static semantics were used for disallowing `await` as an identifier.
 
 ### Disallowed `StringValues` of identifiers
 
