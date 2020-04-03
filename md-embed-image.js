@@ -19,7 +19,7 @@ module.exports = md => {
           break;
         case 'inline':
           if (!inFigure) {
-            let image = t.children.find(t => t.type === 'image');
+            const image = t.children.find(t => t.type === 'image');
             if (image) {
               throw new Error(`Image ${image.attrGet('src')} is not in a separate block. Missing newlines around?`);
             }
