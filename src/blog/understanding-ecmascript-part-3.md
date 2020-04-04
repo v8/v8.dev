@@ -7,7 +7,7 @@ date: 2020-04-01
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
-tweet: ''
+tweet: '1245400717667577857'
 ---
 …where we dive deep in the syntax!
 
