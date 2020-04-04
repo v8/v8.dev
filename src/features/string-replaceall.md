@@ -105,6 +105,6 @@ An experimental implementation of `String.prototype.replaceAll` is available in 
 
 <feature-support chrome="no https://bugs.chromium.org/p/v8/issues/detail?id=9801"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1540021"
-                 safari="no https://bugs.webkit.org/show_bug.cgi?id=202471"
+                 safari="13.1 https://webkit.org/blog/10247/new-webkit-features-in-safari-13-1/"
                  nodejs="no"
                  babel="yes"></feature-support>
