@@ -165,14 +165,16 @@ We’ll take a deeper look into the grammar rules in a later episode, let’s ke
 
 The following productions describe what a [`MemberExpression`](https://tc39.es/ecma262/#prod-MemberExpression) looks like:
 
-<pre><code class="language-grammar">MemberExpression :
+```grammar
+MemberExpression :
   PrimaryExpression
-  MemberExpression <b>[</b> Expression <b>]</b>
-  MemberExpression <b>.</b> IdentifierName
+  MemberExpression [ Expression ]
+  MemberExpression . IdentifierName
   MemberExpression TemplateLiteral
   SuperProperty
   MetaProperty
-  <b>new</b> MemberExpression Arguments</code></pre>
+  new MemberExpression Arguments
+```
 
 Here we have 7 productions for `MemberExpression`. A `MemberExpression` can be just a `PrimaryExpression`. Alternatively, a `MemberExpression` can be constructed from another `MemberExpression` and `Expression` by piecing them together: `MemberExpression [ Expression ]`, for example `o2['foo']`. Or it can be `MemberExpression . IdentifierName`, for example `o2.foo` — this is the production relevant for our example.
 

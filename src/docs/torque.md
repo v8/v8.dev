@@ -95,7 +95,8 @@ In combination with generics, `constexpr` is a powerful Torque tool that can be 
 
 Torque code is packaged in individual source files. Each source file consists of a series of declarations, which themselves can optionally wrapped in a namespace declaration to separate the namespaces of declarations. The grammar for a `.tq` file is as follows:
 
-<pre><code class="language-grammar">Declaration :
+```grammar
+Declaration :
   AbstractTypeDeclaration
   ClassDeclaration
   TypeAliasDeclaration
@@ -105,11 +106,12 @@ Torque code is packaged in individual source files. Each source file consists of
   GenericSpecialization
 
 NamespaceDeclaration :
-  <b>namespace</b> IdentifierName <b>{</b> Declaration* <b>}</b>
+  namespace IdentifierName { Declaration* }
 
 FileDeclaration :
   NamespaceDeclaration
-  Declaration</code></pre>
+  Declaration
+```
 
 ## Namespaces
 
@@ -182,17 +184,19 @@ In Torque, there are three different kinds of types: Abstract, Function and Unio
 
 Torque’s abstract types map directly to C++ compile-time and CodeStubAssembler runtime values. Their declarations specify a name and a relationship to C++ types:
 
-<pre><code class="language-grammar">AbstractTypeDeclaration :
-  <b>type</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> ConstexprDeclaration<sub>opt</sub>
+```grammar
+AbstractTypeDeclaration :
+  type IdentifierName ExtendsDeclaration opt GeneratesDeclaration opt ConstexprDeclaration opt
 
 ExtendsDeclaration :
-  <b>extends</b> IdentifierName <b>;</b>
+  extends IdentifierName ;
 
 GeneratesDeclaration :
-  <b>generates</b> StringLiteral <b>;</b>
+  generates StringLiteral ;
 
 ConstexprDeclaration :
-  <b>constexpr</b> StringLiteral <b>;</b></code></pre>
+  constexpr StringLiteral ;
+```
 
 `IdentifierName` specifies the name of the abstract type, and `ExtendsDeclaration` optionally specifies the type from which the declared type derives. `GeneratesDeclaration` optionally specifies a string literal which corresponds to the C++ `TNode` type used in `CodeStubAssembler` code to contain a runtime value of its type. `ConstexprDeclaration` is a string literal specifying the C++ type corresponding to the `constexpr` version of the Torque type for build-time (`mksnapshot`-time) evaluation.
 
@@ -207,36 +211,37 @@ type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int31_t';
 
 Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
 
-<pre><code class="language-grammar">ClassDeclaration :
-  ClassAnnotation<b>*</b> <b>extern<sub>opt</sub></b> <b>class</b> IdentifierName ExtendsDeclaration<sub>opt</sub> GeneratesDeclaration<sub>opt</sub> <b>{</b>
-    ClassMethodDeclaration<b>*</b>
-    ClassFieldDeclaration<b>*</b>
-  <b>}</b>
+```grammar
+ClassDeclaration :
+  ClassAnnotation* extern opt class IdentifierName ExtendsDeclaration opt GeneratesDeclaration opt {
+    ClassMethodDeclaration*
+    ClassFieldDeclaration*
+  }
 
 ClassAnnotation :
-  <b>@abstract</b>
-  <b>@dirtyInstantiatedAbstractClass</b>
-  <b>@hasSameInstanceTypeAsParent</b>
-  <b>@generatePrint</b>
-  <b>@noVerifier</b>
-  <b>@generateCppClass</b>
+  @abstract
+  @dirtyInstantiatedAbstractClass
+  @hasSameInstanceTypeAsParent
+  @generatePrint
+  @noVerifier
+  @generateCppClass
 
 ClassMethodDeclaration :
-  <b>transitioning<sub>opt</sub></b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
+  transitioning opt IdentifierName ImplicitParameters opt ExplicitParameters ReturnType opt LabelsDeclaration opt StatementBlock
 
 ClassFieldDeclaration :
-  ConditionalAnnotation<sub>opt</sub> <b>@noVerifier<sub>opt</sub></b> <b>weak</b><sub>opt</sub> FieldDeclaration;
+  ConditionalAnnotation opt @noVerifier opt weak opt FieldDeclaration;
 
 ConditionalAnnotation :
-  ConditionalAnnotationTag <b>(</b> Identifier <b>)</b>
+  ConditionalAnnotationTag ( Identifier )
 
 ConditionalAnnotationTag :
-  <b>@if</b>
-  <b>@ifnot</b>
+  @if
+  @ifnot
 
 FieldDeclaration :
-  Identifier <b>:</b> Type <b>;</b>
-</code></pre>
+  Identifier : Type ;
+```
 
 An example class:
 
@@ -355,9 +360,10 @@ Enumerations provide a means to define a set of constants and group them under a
 the enum classes in C++. A declaration is introduced by the `enum` keyword and adheres to the following
 syntactical structure:
 
-<pre><code class="language-grammar">EnumDeclaration :
-  <b>extern</b> <b>enum</b> IdentifierName ExtendsDeclaration<sub>opt</sub> ConstexprDeclaration<sub>opt</sub> <b>{</b> IdentifierName<sub>list+</sub> (<b>, ...</b>)<sub>opt</sub> <b>}</b>
-</code></pre>
+```grammar
+EnumDeclaration :
+  extern enum IdentifierName ExtendsDeclaration opt ConstexprDeclaration opt { IdentifierName list+ (, ...) opt }
+```
 
 A basic example looks like this:
 
@@ -408,11 +414,13 @@ enum ExtractFixedArrayFlag constexpr 'CodeStubAssembler::ExtractFixedArrayFlag' 
 
 Callables are conceptually like functions in JavaScript or C++, but they have some additional semantics that allow them to interact in useful ways with CSA code and with the V8 runtime. Torque provides several different types of callables: `macro`s, `builtin`s, `runtime`s and `intrinsic`s.
 
-<pre><code class="language-grammar">CallableDeclaration :
+```grammar
+CallableDeclaration :
   MacroDeclaration
   BuiltinDeclaration
   RuntimeDeclaration
-  IntrinsicDeclaration</code></pre>
+  IntrinsicDeclaration
+```
 
 #### `macro` callables
 
@@ -420,10 +428,11 @@ Macros are a callable that correspond to a chunk of generated CSA-producing C++.
 
 `macro` declarations in Torque take the following form:
 
-<pre><code class="language-grammar">MacroDeclaration :
-   <b>transitioning<sub>opt</sub></b> <b>macro</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> StatementBlock
-  <b>extern</b> <b>transitioning<sub>opt</sub></b> <b>macro</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypes ReturnType<sub>opt</sub> LabelsDeclaration<sub>opt</sub> <b>;</b>
-</code></pre>
+```grammar
+MacroDeclaration :
+   transitioning opt macro IdentifierName ImplicitParameters opt ExplicitParameters ReturnType opt LabelsDeclaration opt StatementBlock
+  extern transitioning opt macro IdentifierName ImplicitParameters opt ExplicitTypes ReturnType opt LabelsDeclaration opt ;
+```
 
 Every non-`extern` Torque `macro` uses the `StatementBlock` body of the `macro` to create a CSA-generating function in its namespace’s generated `Assembler` class. This code looks just like other code that you might find in `code-stub-assembler.cc`, albeit a bit less readable because it’s machine-generated. `macro`s that are marked `extern` have no body written in Torque and simply provide the interface to hand-written C++ CSA code so that it’s usable from Torque.
 
@@ -449,10 +458,11 @@ macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object):
 
 `builtin` declarations in Torque have the following form:
 
-<pre><code class="language-grammar">MacroDeclaration :
-  <b>transitioning<sub>opt</sub></b> <b>javascript<sub>opt</sub></b> <b>builtin</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParametersOrVarArgs ReturnType<sub>opt</sub> StatementBlock
-  <b>extern <b>transitioning<sub>opt</sub></b> javascript<sub>opt</sub> builtin</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
-</code></pre>
+```grammar
+MacroDeclaration :
+  transitioning opt javascript opt builtin IdentifierName ImplicitParameters opt ExplicitParametersOrVarArgs ReturnType opt StatementBlock
+  extern transitioning opt javascript opt builtin IdentifierName ImplicitParameters opt ExplicitTypesOrVarArgs ReturnType opt ;
+```
 
 There is only one copy of the code for a Torque builtin, and that is in the generated builtin code object. Unlike `macro`s, when `builtin`s are called from Torque code, the CSA code is not inlined at the callsite, but instead a call is generated to the builtin.
 
@@ -466,9 +476,10 @@ If you are coding the implementation of a `builtin`, you can craft a [tailcall](
 
 `runtime` declarations in Torque have the following form:
 
-<pre><code class="language-grammar">MacroDeclaration :
-  <b>extern <b>transitioning<sub>opt</sub></b> runtime</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitTypesOrVarArgs ReturnType<sub>opt</sub> <b>;</b>
-</code></pre>
+```grammar
+MacroDeclaration :
+  extern transitioning opt runtime IdentifierName ImplicitParameters opt ExplicitTypesOrVarArgs ReturnType opt ;
+```
 
 The `extern runtime` specified with name <i>IdentifierName</i> corresponds to the runtime function specified by <code>Runtime::k<i>IdentifierName</i></code>.
 
@@ -480,9 +491,10 @@ You can also call a `runtime` function as a tailcall when appropriate. Simply in
 
 `intrinsic`s are builtin Torque callables that provide access to internal funtionality that can’t be otherwise implemented in Torque. They are declared in Torque, but not defined, since the implementation is provided by the Torque compiler. `intrinsic` declarations use the following grammar:
 
-<pre><code class="language-grammar">IntrinsicDeclaration :
-  <b>intrinsic</b> <b>%</b> IdentifierName ImplicitParameters<sub>opt</sub> ExplicitParameters ReturnType<sub>opt</sub> <b>;</b>
-</code></pre>
+```grammar
+IntrinsicDeclaration :
+  intrinsic % IdentifierName ImplicitParameters opt ExplicitParameters ReturnType opt ;
+```
 
 For the most part, “user” Torque code should rarely have to use `intrinsic`s directly. The currently supported intrinsics are:
 
@@ -523,10 +535,11 @@ Like `builtin`s and `runtime`s, `intrinsic`s cannot have labels.
 
 Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses V8’s internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
 
-<pre><code class="language-grammar">ExplicitParameters :
-  <b>(</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list*</sub> <b>)</b>
-  <b>(</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list+</sub> (<b>, ...</b> IdentifierName )<sub>opt</sub> <b>)</b>
-</code></pre>
+```grammar
+ExplicitParameters :
+  ( ( IdentifierName : TypeIdentifierName ) list* )
+  ( ( IdentifierName : TypeIdentifierName ) list+ (, ... IdentifierName ) opt )
+```
 
 As an example:
 
@@ -541,9 +554,10 @@ javascript builtin ArraySlice(
 
 Torque callables can specify implicit parameters using something similar to [Scala’s implicit parameters](https://docs.scala-lang.org/tour/implicit-parameters.html):
 
-<pre><code class="language-grammar">ImplicitParameters :
-  <b>( implicit</b> ( IdentifierName <b>:</b> TypeIdentifierName )<sub>list*</sub> <b>)</b>
-</code></pre>
+```grammar
+ImplicitParameters :
+  ( implicit ( IdentifierName : TypeIdentifierName ) list* )
+```
 
 Concretely: A `macro` can declare implicit parameters in addition to explicit ones:
 

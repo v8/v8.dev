@@ -78,25 +78,29 @@ Even though the interpretation of `/` and <code>}`</code> depends on their “co
 
 The lexical grammar uses several goal symbols to distinguish between the contexts where some input elements are permitted and some are not. For example, the goal symbol `InputElementDiv` is used in contexts where `/` is a division and `/=` is a division-assignment. The [`InputElementDiv`](https://tc39.es/ecma262/#prod-InputElementDiv) productions list the possible tokens which can be produced in this context:
 
-<pre><code class="language-grammar">InputElementDiv ::
+```grammar
+InputElementDiv ::
   WhiteSpace
   LineTerminator
   Comment
   CommonToken
   DivPunctuator
-  RightBracePunctuator</code></pre>
+  RightBracePunctuator
+```
 
 In this context, encountering `/` produces the `DivPunctuator` input element. Producing a `RegularExpressionLiteral` is not an option here.
 
 On the other hand, [`InputElementRegExp`](https://tc39.es/ecma262/#prod-InputElementRegExp) is the goal symbol for the contexts where `/` is the beginning of a RegExp:
 
-<pre><code class="language-grammar">InputElementRegExp ::
+```grammar
+InputElementRegExp ::
   WhiteSpace
   LineTerminator
   Comment
   CommonToken
   RightBracePunctuator
-  RegularExpressionLiteral</code></pre>
+  RegularExpressionLiteral
+```
 
 As we see from the productions, it’s possible that this produces the `RegularExpressionLiteral` input element, but producing `DivPunctuator` is not possible.
 
@@ -136,8 +140,10 @@ Understanding how `await` is allowed as an identifier requires understanding ECM
 
 Let’s look at how the productions for [`VariableStatement`](https://tc39.es/ecma262/#prod-VariableStatement) are defined. At the first glance, the grammar can look a bit scary:
 
-<pre><code class="language-grammar">VariableStatement<sub>[Yield, Await]</sub> :
-  <b>var</b> VariableDeclarationList<sub>[+In, ?Yield, ?Await]</sub> <b>;</b></code></pre>
+```grammar
+VariableStatement[Yield, Await] :
+  var VariableDeclarationList[+In, ?Yield, ?Await] ;
+```
 
 What do the subscripts (`[Yield, Await]`) and prefixes (`+` in `+In` and `?` in `?Async`) mean?
 
@@ -153,17 +159,19 @@ The third shorthand, `~Foo`, meaning “use the version without `_Foo`”, is no
 
 With this information, we can expand the productions like this:
 
-<pre><code class="language-grammar">VariableStatement :
-  <b>var</b> VariableDeclarationList_In <b>;</b>
+```grammar
+VariableStatement :
+  var VariableDeclarationList_In ;
 
 VariableStatement_Yield :
-  <b>var</b> VariableDeclarationList_In_Yield <b>;</b>
+  var VariableDeclarationList_In_Yield ;
 
 VariableStatement_Await :
-  <b>var</b> VariableDeclarationList_In_Await <b>;</b>
+  var VariableDeclarationList_In_Await ;
 
 VariableStatement_Yield_Await :
-  <b>var</b> VariableDeclarationList_In_Yield_Await <b>;</b></code></pre>
+  var VariableDeclarationList_In_Yield_Await ;
+```
 
 Ultimately, we need to find out two things:
 
@@ -174,22 +182,28 @@ Ultimately, we need to find out two things:
 
 Let’s tackle question 1 first. It’s somewhat easy to guess that non-async functions and async functions differ in whether we pick the parameter `_Await` for the function body or not. Reading the productions for async function declarations, we find [this](https://tc39.es/ecma262/#prod-AsyncFunctionBody):
 
-<pre><code class="language-grammar">AsyncFunctionBody :
-  FunctionBody<sub>[~Yield, +Await]</sub></code></pre>
+```grammar
+AsyncFunctionBody :
+  FunctionBody[~Yield, +Await]
+```
 
 Note that `AsyncFunctionBody` has no parameters — they get added to the `FunctionBody` on the right-hand side.
 
 If we expand this production, we get:
 
-<pre><code class="language-grammar">AsyncFunctionBody :
-  FunctionBody_Await</code></pre>
+```grammar
+AsyncFunctionBody :
+  FunctionBody_Await
+```
 
 In other words, async functions have `FunctionBody_Await`, meaning a function body where `await` is treated as a keyword.
 
 On the other hand, if we’re inside a non-async function, [the relevant production](https://tc39.es/ecma262/#prod-FunctionDeclaration) is:
 
-<pre><code class="language-grammar">FunctionDeclaration<sub>[Yield, Await, Default]</sub> :
-  <b>function</b> BindingIdentifier<sub>[?Yield, ?Await]</sub> <b>(</b> FormalParameters<sub>[~Yield, ~Await]</sub> <b>)</b> <b>{</b> FunctionBody<sub>[~Yield, ~Await]</sub> <b>}</b></code></pre>
+```grammar
+FunctionDeclaration[Yield, Await, Default] :
+  function BindingIdentifier[?Yield, ?Await] ( FormalParameters[~Yield, ~Await] ) { FunctionBody[~Yield, ~Await] }
+```
 
 (`FunctionDeclaration` has another production, but it’s not relevant for our code example.)
 
@@ -197,17 +211,19 @@ To avoid combinatorial expansion, let’s ignore the `Default` parameter which i
 
 The expanded form of the production is:
 
-<pre><code class="language-grammar">FunctionDeclaration :
-  <b>function</b> BindingIdentifier <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b>
+```grammar
+FunctionDeclaration :
+  function BindingIdentifier ( FormalParameters ) { FunctionBody }
 
 FunctionDeclaration_Yield :
-  <b>function</b> BindingIdentifier_Yield <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b>
+  function BindingIdentifier_Yield ( FormalParameters ) { FunctionBody }
 
 FunctionDeclaration_Await :
-  <b>function</b> BindingIdentifier_Await <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b>
+  function BindingIdentifier_Await ( FormalParameters ) { FunctionBody }
 
 FunctionDeclaration_Yield_Await :
-  <b>function</b> BindingIdentifier_Yield_Await <b>(</b> FormalParameters <b>)</b> <b>{</b> FunctionBody <b>}</b></code></pre>
+  function BindingIdentifier_Yield_Await ( FormalParameters ) { FunctionBody }
+```
 
 In this production we always get `FunctionBody` and `FormalParameters` (without `_Yield` and without `_Await`), since they are parameterized with `[~Yield, ~Await]` in the non-expanded production.
 
@@ -229,18 +245,24 @@ Thus, inside an async function, we’ll have a `VariableStatement_Await` and ins
 
 We can follow the productions further and keep track of the parameters. We already saw the productions for [`VariableStatement`](https://tc39.es/ecma262/#prod-VariableStatement):
 
-<pre><code class="language-grammar">VariableStatement<sub>[Yield, Await]</sub> :
-  <b>var</b> VariableDeclarationList<sub>[+In, ?Yield, ?Await]</sub> <b>;</b></code></pre>
+```grammar
+VariableStatement[Yield, Await] :
+  var VariableDeclarationList[+In, ?Yield, ?Await] ;
+```
 
 All productions for [`VariableDeclarationList`](https://tc39.es/ecma262/#prod-VariableDeclarationList) just carry the parameters on as is:
 
-<pre><code class="language-grammar">VariableDeclarationList<sub>[In, Yield, Await]</sub> :
-  VariableDeclaration<sub>[?In, ?Yield, ?Await]</sub></code></pre>
+```grammar
+VariableDeclarationList[In, Yield, Await] :
+  VariableDeclaration[?In, ?Yield, ?Await]
+```
 
 (Here we show only the [production](https://tc39.es/ecma262/#prod-VariableDeclaration) relevant to our example.)
 
-<pre><code class="language-grammar">VariableDeclaration<sub>[In, Yield, Await]</sub> :
-  BindingIdentifier<sub>[?Yield, ?Await]</sub> Initializer<sub>[?In, ?Yield, ?Await]</sub> <sub>opt</sub></code></pre>
+```grammar
+VariableDeclaration[In, Yield, Await] :
+  BindingIdentifier[?Yield, ?Await] Initializer[?In, ?Yield, ?Await] opt
+```
 
 The `opt` shorthand means that the right-hand side symbol is optional; there are in fact two productions, one with the optional symbol, and one without.
 
@@ -248,35 +270,41 @@ In the simple case relevant to our example, `VariableStatement` consists of the 
 
 To disallow or allow `await` as a `BindingIdentifier`, we hope to end up with something like this:
 
-<pre><code class="language-grammar">BindingIdentifier_Await :
+```grammar
+BindingIdentifier_Await :
   Identifier
-  <b>yield</b>
+  yield
 
 BindingIdentifier :
   Identifier
-  <b>yield</b>
-  <b>await</b></code></pre>
+  yield
+  await
+```
 
 This would disallow `await` as an identifier inside async functions and allow it as an identifier inside non-async functions.
 
 But the spec doesn’t define it like this, instead we find this [production](https://tc39.es/ecma262/#prod-BindingIdentifier):
 
-<pre><code class="language-grammar">BindingIdentifier<sub>[Yield, Await]</sub> :
+```grammar
+BindingIdentifier[Yield, Await] :
   Identifier
-  <b>yield</b>
-  <b>await</b></code></pre>
+  yield
+  await
+```
 
 Expanded, this means the following productions:
 
-<pre><code class="language-grammar">BindingIdentifier_Await :
+```grammar
+BindingIdentifier_Await :
   Identifier
-  <b>yield</b>
-  <b>await</b>
+  yield
+  await
 
 BindingIdentifier :
   Identifier
-  <b>yield</b>
-  <b>await</b></code></pre>
+  yield
+  await
+```
 
 (We’re omitting the productions for `BindingIdentifier_Yield` and `BindingIdentifier_Yield_Await` which are not needed in our example.)
 
@@ -290,7 +318,9 @@ Static semantics describe static rules — that is, rules that are checked befor
 
 In this case, the [static semantics for `BindingIdentifier`](https://tc39.es/ecma262/#sec-identifiers-static-semantics-early-errors) define the following syntax-directed rule:
 
-> <pre><code class="language-grammar">BindingIdentifier<sub>[Yield, Await]</sub> : <b>await</b></code></pre>
+> ```grammar
+> BindingIdentifier[Yield, Await] : await
+> ```
 >
 > It is a Syntax Error if this production has an <code><sub>[Await]</sub></code> parameter.
 
@@ -324,15 +354,19 @@ This kind of interference with ASI was deemed too confusing, so static semantics
 
 There’s also another related rule:
 
-> <pre><code class="language-grammar">BindingIdentifier : Identifier</code></pre>
+> ```grammar
+> BindingIdentifier : Identifier
+> ```
 >
 > It is a Syntax Error if this production has an <code><sub>[Await]</sub></code> parameter and `StringValue` of `Identifier` is `"await"`.
 
 This might be confusing at first. [`Identifier`](https://tc39.es/ecma262/#prod-Identifier) is defined like this:
 
 <!-- markdownlint-disable no-inline-html -->
-<pre><code class="language-grammar">Identifier :
-  IdentifierName <span style="font-style: normal">but not</span> ReservedWord</code></pre>
+```grammar
+Identifier :
+  IdentifierName but not ReservedWord
+```
 <!-- markdownlint-enable no-inline-html -->
 
 `await` is a `ReservedWord`, so how can an `Identifier` ever be `await`?

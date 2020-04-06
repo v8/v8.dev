@@ -445,12 +445,22 @@ video {
   }
 }
 
-.language-grammar {
+.language-grammar .production-name {
   font-style: italic;
 }
-
-.language-grammar b {
-  font-style: normal;
+.language-grammar .production-params,
+.language-grammar .keyword {
+  font-size: smaller;
+  vertical-align: sub;
+}
+.language-grammar .production-params {
+  padding-left: 2px;
+}
+.language-grammar .keyword {
+  margin-left: -1ch;
+}
+.language-grammar .literal {
+  font-weight: bold;
 }
 
 dark-mode-toggle {
