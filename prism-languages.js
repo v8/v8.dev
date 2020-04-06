@@ -111,6 +111,22 @@ const installPrismLanguages = (Prism) => {
       /\b0x[\da-f]{6}[\da-f]*\b/i,
     ]
   });
+
+  // Basic highlighter for ES spec and Torque grammar excerpts.
+  Prism.languages.grammar = {
+    // matches the `[...]` part in `ProductionName[...]`
+    'production-params': /(?<=[a-z])\[.*?\]/,
+    // matches `ProductionName`
+    'production-name': /\b[A-Z][A-Za-z_]*\b/,
+    // "but not" and "one of" are special human-readable words in
+    // the ES spec that shouldn't be formatted as literals
+    'skip': /but not|one of/,
+    // `opt` is an ES grammar keyword to be formatted as a subscript
+    // `list+` and `list*` are Torque grammar keywords
+    'keyword': /\bopt\b|\blist[+*]/,
+    // anything else - numbers, words, punctuation - is a literal
+    'literal': /\S+/,
+  };
 };
 
 module.exports = installPrismLanguages;
