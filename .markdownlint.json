@@ -1,12 +1,12 @@
 {
   "default": true,
-  "MD003": { "style": "atx" },
-  "MD004": { "style": "dash" },
-  "MD007": { "indent": 4 },
-  "MD013": false,
-  "MD025": { "front_matter_title": "" },
-  "MD026": { "punctuation": ".,;:!" },
-  "MD033": {
+  "heading-style": { "style": "atx" },
+  "ul-style": { "style": "dash" },
+  "ul-indent": { "indent": 4 },
+  "line-length": false,
+  "single-title": { "front_matter_title": "" },
+  "no-trailing-punctuation": { "punctuation": ".,;:!" },
+  "no-inline-html": {
     "allowed_elements": [
       "a",
       "abbr",
@@ -26,6 +26,6 @@
       "video"
     ]
   },
-  "MD040": false,
-  "MD045": false
+  "fenced-code-language": false,
+  "no-alt-text": false
 }
