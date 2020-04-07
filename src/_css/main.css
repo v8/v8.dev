@@ -325,9 +325,13 @@ figure {
   padding: 0;
   text-align: center;
 }
-figure img {
+figure img,
+figure video {
   display: block;
   margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 figure a {
   border-bottom: 0;
@@ -408,11 +412,6 @@ main .meta {
   border: 0;
   background: var(--tag-background);
   color: var(--tag-color);
-}
-img,
-video {
-  height: auto;
-  max-width: 100%;
 }
 @supports (aspect-ratio: attr(width) / 1) {
   /* https://drafts.csswg.org/css-sizing-4/#example-2476aa5b */
