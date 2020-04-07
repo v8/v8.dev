@@ -48,19 +48,12 @@ const updateTwitterTimeline = async () => {
   }
 };
 
-// Toggles the `dark` class based on the dark mode toggle's mode
-const root = document.documentElement;
-const updateThemeClass = () => {
-  root.classList.toggle('dark', darkModeToggle.mode === 'dark');
-  updateTwitterTimeline();
-};
-
-// Set or remove the `dark` class the first time.
-updateThemeClass();
+// Load the dark or the light Twitter timeline the first time.
+updateTwitterTimeline();
 
 // Listen for toggle changes (which includes `prefers-color-scheme` changes)
-// and toggle the `dark` class accordingly.
-darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
+// and, when necessary, update the Twitter timeline.
+darkModeToggle.addEventListener('colorschemechange', updateTwitterTimeline);
 
 // Navigation toggle.
 const navToggle = document.querySelector('#nav-toggle');

@@ -1,0 +1,40 @@
+/* Copyright 2018 Google Inc.
+**
+** Licensed under the Apache License, Version 2.0 (the “License”);
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+** <https://apache.org/licenses/LICENSE-2.0>.
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an “AS IS” BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+
+/* Dark mode */
+:root {
+  --html-color: var(--nearwhite);
+  --html-background: var(--black);
+  --main-color:var(--nearwhite);
+  --main-background: var(--darkestgray);
+  --footer-color: var(--nearwhite);
+  --footer-background: var(--darkgray);
+  --main-and-footer-link-color: var(--yellow);
+  --avatar-img-filter: grayscale(50%);
+  --icon-no-support-filter: brightness(0.5) grayscale(100%);
+  --note-color: var(--darkestgray);
+  --note-background: var(--yellow);
+  --tag-color: var(--nearwhite);
+  --tag-background: var(--darkgray);
+  --table-border: var(--lightgray);
+  --logo-hover-background: var(--darkgray);
+  --alt-table-row-background: #111;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+figure img[src*=".png"]:not(.no-darkening),
+figure img[src*=".svg"]:not(.no-darkening) {
+  filter: invert(0.862745) hue-rotate(180deg);
+}
