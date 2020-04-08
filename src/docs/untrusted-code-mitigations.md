@@ -16,7 +16,7 @@ In order to take advantage of the vulnerability, an attacker has to execute care
 
 Mitigations for this class of attack are available in V8 itself starting with [V8 v6.4.388.18](https://chromium.googlesource.com/v8/v8/+/e6eddfe4d1ed9d96b453d14b84ac19769388d8b1), so updating your embedded copy of V8 to [v6.4.388.18](https://chromium.googlesource.com/v8/v8/+/e6eddfe4d1ed9d96b453d14b84ac19769388d8b1) or later is advised. Older versions of V8, including versions of V8 that still use FullCodeGen and/or CrankShaft, do not have mitigations for SSCA.
 
-Starting in [V8 v6.4.388.18](https://chromium.googlesource.com/v8/v8/+/e6eddfe4d1ed9d96b453d14b84ac19769388d8b1), a new flag has been introduced to V8 to help provide protection against SSCA vulnerabilities. This flag, called `--untrusted-code-mitigations`, is enabled by default at runtime through a build-time GN flag called `v8_enable_untrusted_code_mitigations`.
+Starting in [V8 v6.4.388.18](https://chromium.googlesource.com/v8/v8/+/e6eddfe4d1ed9d96b453d14b84ac19769388d8b1), a new flag has been introduced to V8 to help provide protection against SSCA vulnerabilities. This flag, called `--untrusted-code-mitigations`, is enabled by default at runtime through a build-time GN flag called `v8_untrusted_code_mitigations`.
 
 These mitigations are enabled by the `--untrusted-code-mitigations` runtime flag:
 
