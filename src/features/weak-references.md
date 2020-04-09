@@ -96,7 +96,7 @@ function getImageCached(name) {
 }
 ```
 
-But there’s still a problem here: the `Map` still holds on to the `name` strings forever, because those are the keys in the cache. Ideally, those strings would be removed too. The `WeakRef` proposal has a solution for this as well! With the new `FinalizationGroup` API, we can register a callback to run when the garbage collector zaps a registered object. Such callbacks are known as _finalizers_.
+But there’s still a problem here: the `Map` still holds on to the `name` strings forever, because those are the keys in the cache. Ideally, those strings would be removed too. The `WeakRef` proposal has a solution for this as well! With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a registered object. Such callbacks are known as _finalizers_.
 
 :::note
 **Note:** The finalization callback does not run immediately after garbage-collecting the image object. It either runs at some point in the future, or not at all — the spec doesn’t guarantee that it runs! Keep this in mind when writing code.
@@ -107,12 +107,10 @@ Here, we register a callback to remove keys from the cache when the image object
 ```js
 const cache = new Map();
 
-const finalizationGroup = new FinalizationGroup((iterator) => {
-  for (const name of iterator) {
-    const ref = cache.get(name);
-    if (ref !== undefined && ref.deref() === undefined) {
-      cache.delete(name);
-    }
+const finalizationRegistry = new FinalizationRegistry((name) => {
+  const ref = cache.get(name);
+  if (ref !== undefined && ref.deref() === undefined) {
+    cache.delete(name);
   }
 });
 ```
@@ -126,12 +124,10 @@ Our final implementation looks like this:
 ```js
 const cache = new Map();
 
-const finalizationGroup = new FinalizationGroup((iterator) => {
-  for (const name of iterator) {
-    const ref = cache.get(name);
-    if (ref !== undefined && ref.deref() === undefined) {
-      cache.delete(name);
-    }
+const finalizationRegistry = new FinalizationRegistry((name) => {
+  const ref = cache.get(name);
+  if (ref !== undefined && ref.deref() === undefined) {
+    cache.delete(name);
   }
 });
 
@@ -144,7 +140,7 @@ function getImageCached(name) {
   const image = performExpensiveOperation(name); // 3
   const wr = new WeakRef(image); // 4
   cache.set(name, wr); // 5
-  finalizationGroup.register(image, name); // 6
+  finalizationRegistry.register(image, name); // 6
   return image; // 7
 }
 ```
