@@ -370,17 +370,17 @@ This optimization tries to store floating point values directly in the object’
 
 Imagine the following JavaScript code:
 
-```javascript
+```js
 function Point(x, y) {
   this.x = x;
   this.y = y;
 }
-let p = new Point(3.1, 5.3);
+const p = new Point(3.1, 5.3);
 ```
 
 Generally speaking, if we look at how the object p looks like in memory, we’ll see something like this:
 
-![Object p in memory](/_img/pointer-compression/heap-point-1.svg)
+![Object `p` in memory](/_img/pointer-compression/heap-point-1.svg)
 
 You can read more about hidden classes and properties and elements backing stores in [this article](https://v8.dev/blog/fast-properties).
 
@@ -390,13 +390,13 @@ On 64-bit architectures, double values are the same size as pointers. So, if we 
 
 If the assumption breaks for some field, say after executing this line:
 
-```javascript
-let q = new Point(2, “ab”);
+```js
+const q = new Point(2, 'ab');
 ```
 
 then number values for the y property must be stored boxed instead. Additionally, if there is speculatively-optimized code somewhere that relies on this assumption it must no longer be used and must be thrown away (deoptimized). The reason for such a “field type” generalization is to minimize the number of shapes of objects created from the same constructor function, which in turn is necessary for more stable performance.
 
-![Objects p and q in memory](/_img/pointer-compression/heap-point-3.svg)
+![Objects `p` and `q` in memory](/_img/pointer-compression/heap-point-3.svg)
 
 If applied, double field unboxing gives the following benefits:
 
