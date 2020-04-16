@@ -17,6 +17,7 @@ To give you a taste of the language, let’s write a V8 builtin that prints “H
 Begin by opening up the `test/torque/test-torque.tq` file and add the following code at the end (but before the last closing `}`):
 
 ```torque
+@export
 macro PrintHelloWorld() {
   Print('Hello world!');
 }
@@ -28,7 +29,7 @@ Next, open up `test/cctest/torque/test-torque.cc` and add the following test cas
 TEST(HelloWorld) {
   Isolate* isolate(CcTest::InitIsolateOnce());
   CodeAssemblerTester asm_tester(isolate, 0);
-  TestBuiltinsFromDSLAssembler m(asm_tester.state());
+  TestTorqueAssembler m(asm_tester.state());
   {
     m.PrintHelloWorld();
     m.Return(m.UndefinedConstant());
@@ -250,11 +251,12 @@ extern class JSProxy extends JSReceiver {
 
 `extern` signifies that this class is defined in C++, rather than defined only in Torque.
 
-On the Torque side, the field declarations in classes implicitly generate field getters and setters, e.g.:
+The field declarations in classes implicitly generate field getters and setters that can be used from CodeStubAssembler, e.g.:
 
-```torque
-operator '.target' macro LoadJSProxyTarget(JSProxy): JSReceiver|Null;
-operator '.target=' macro StoreJSProxyTarget(JSProxy, JSReceiver|Null);
+```cpp
+// In TorqueGeneratedExportedMacrosAssembler:
+TNode<HeapObject> LoadJSProxyTarget(TNode<JSProxy> p_o);
+void StoreJSProxyTarget(TNode<JSProxy> p_o, TNode<HeapObject> p_v);
 ```
 
 As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. Because the example above uses `@generateCppClass`, the hand-written definition of JSProxy must inherit from a generated class template, like this:
@@ -319,7 +321,7 @@ Unlike C++, Torque will not implicitly add padding between fields; instead, it w
 
 `const` means that a field cannot be altered at runtime (or at least not easily; Torque will fail compilation if you attempt to set it). This is a good idea for length fields, which should only be reset with great care because they would require freeing any released space and might cause data races with a marking thread.
 
-`weak` at the beginning of a field declaration means that the field is visited with some kind of custom weak object semantics. If the object may be a normal weak ref (with the second bit set), then `Weak<T>` should be used in the type instead. As an example, this field from `Map` can contain some strong and some weak types, and also requires custom weak visitation:
+`weak` at the beginning of a field declaration means that the field should be grouped with other `weak` fields, and affects the generation of constants such as `kEndOfStrongFieldsOffset` and `kStartOfWeakFieldsOffset` which can be used in custom `BodyDescriptor`s. We hope to remove this keyword once Torque is fully capable of generating all `BodyDescriptor`s. If the object stored in a field may be a weak reference (with the second bit set), then `Weak<T>` should be used in the type. As an example, this field from `Map` can contain some strong and some weak types, and is also marked for inclusion in the `weak` section:
 
 ```torque
   weak transitions_or_prototype_info: Map|Weak<Map>|TransitionArray|
@@ -338,7 +340,7 @@ extern class OrderedHashMap extends HashTable;
 
 #### Shapes
 
-Defining a `shape` looks just like defining a `class` except that it uses the keyword `shape` instead of `class`. A `shape` is a subtype of JSObject representing a point-in-time arrangement of properties on that object (in spec-ese, these are "data properties" rather than "internal slots"). It does not have its own instance type. An object with a particular shape may change and lose that shape at any time because the object might go into dictionary mode and move all of its properties out to a separate backing store.
+Defining a `shape` looks just like defining a `class` except that it uses the keyword `shape` instead of `class`. A `shape` is a subtype of `JSObject` representing a point-in-time arrangement of in-object properties (in spec-ese, these are "data properties" rather than "internal slots"). A `shape` does not have its own instance type. An object with a particular shape may change and lose that shape at any time because the object might go into dictionary mode and move all of its properties out to a separate backing store.
 
 #### Structs
 
@@ -393,6 +395,8 @@ extern class DescriptorArray extends HeapObject {
 ##### References and Slices
 
 `Reference<T>` and `Slice<T>` are special structs representing pointers to data held within heap objects. They both contain an object and an offset; `Slice<T>` also contains a length. Rather than constructing these structs directly, you can use special syntax: `&o.x` will create a `Reference` to the field `x` within the object `o`, or a `Slice` to the data if `x` is an indexed field. `Reference<T>` can be dereferenced with `*` or `->`, consistent with C++.
+
+`Reference<T>` should not used directly. Instead, it has two subtypes `MutableReference<T>` and `ConstReference<T>`, which can be referred to using syntactic sugar: `&T` and `const &T`.
 
 #### Bitfield structs
 
