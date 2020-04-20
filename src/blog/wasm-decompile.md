@@ -22,8 +22,7 @@ operations, rather than conveniently named classes and fields. Compilers like
 LLVM can do an impressive amount of transformations that make the generated code
 look nothing like the code that went in.
 
-Disassemble or.. decompile?
----------------------------
+## Disassemble or.. decompile?
 
 You could use tools like `wasm2wat` (part of the
 [WABT](https://github.com/WebAssembly/wabt) toolkit), to transform a `.wasm`
@@ -42,28 +41,28 @@ float dot(const vec3 *a, const vec3 *b) {
 }
 ```
 
-We use `clang dot.c -c -target wasm32 -O2` followed by `wasm2wat dot.o` to
+We use `clang dot.c -c -target wasm32 -O2` followed by `wasm2wat -f dot.o` to
 turn it into this `.wat`:
 
 ```lisp
 (func $dot (type 0) (param i32 i32) (result f32)
-  local.get 0
-  f32.load
-  local.get 1
-  f32.load
-  f32.mul
-  local.get 0
-  f32.load offset=4
-  local.get 1
-  f32.load offset=4
-  f32.mul
-  f32.add
-  local.get 0
-  f32.load offset=8
-  local.get 1
-  f32.load offset=8
-  f32.mul
-  f32.add))
+  (f32.add
+    (f32.add
+      (f32.mul
+        (f32.load
+          (local.get 0))
+        (f32.load
+          (local.get 1)))
+      (f32.mul
+        (f32.load offset=4
+          (local.get 0))
+        (f32.load offset=4
+          (local.get 1))))
+    (f32.mul
+      (f32.load offset=8
+        (local.get 0))
+      (f32.load offset=8
+        (local.get 1))))))
 ```
 
 That is a tiny bit of code, but already not great to read for many reasons.
@@ -89,8 +88,7 @@ struct declaration. It does not create named struct declarations since it
 doesn't necessarily know which uses of 3 floats represent the same
 concept.
 
-Decompile to what?
-------------------
+## Decompile to what?
 
 `wasm-decompile` produces output that tries to look like a "very average
 programming language" while still staying close to the Wasm it represents.
@@ -103,8 +101,7 @@ as a disassembler. Obviously these two goals are not always unifiable.
 This output is not meant to be an actual programming language and there is
 currently no way to compile it back into Wasm.
 
-Loads and stores
-----------------
+### Loads and stores
 
 As demonstrated above, `wasm-decompile` looks at all loads and stores
 over a particular pointer. If they form a continuous set of
@@ -130,8 +127,8 @@ output transforms them back into `base[index]:int`.
 
 Additionally it knows when absolute addresses refer to the data section.
 
-Control flow
-------------
+### Control flow
+
 Most familiar is Wasm's if-then construct, which translates to a familiar
 `if (cond) { A } else { B }` syntax, with the addition that in Wasm it
 can actually return a value, so it can also represent the ternary `cond ? A : B`
@@ -166,12 +163,12 @@ block {
 }
 ```
 
-This actually implements an if-then. Future versions of the de-compiler
+This actually implements an if-then. Future versions of the decompiler
 may translate these into actual if-then's when possible.
 
 Wasm's most surprising control construct is `br_table`, which implements
 something like a `switch`, except using nested `block`s, which tends to
-be hard to read. The de-compiler flattens these to make them slightly
+be hard to read. The decompiler flattens these to make them slightly
 easier to follow, for example:
 
 ```
@@ -187,26 +184,24 @@ label D:
 
 This is similar to `switch` on `a`, with `D` being the default case.
 
-Other fun features
-------------------
+### Other fun features
 
 The decompiler:
 
-* Can pull names from debug or linking information,
+- Can pull names from debug or linking information,
   or generate names itself. When using existing names, it has special
   code to simplify C++ name mangled symbols.
-* Already supports the multi-value proposal, which makes turning
+- Already supports the multi-value proposal, which makes turning
   things into expressions and statements a bit harder. Additional
   variables are used when multiple values are returned.
-* It can even generate names from the _contents_ of data sections.
-* Outputs nice declarations for all Wasm section types, not just
+- It can even generate names from the _contents_ of data sections.
+- Outputs nice declarations for all Wasm section types, not just
   code. For example, it tries to make data sections readable by
   outputting them as text when possible.
-* Supports operator precedence (common to most C-style languages)
+- Supports operator precedence (common to most C-style languages)
   to reduce the `()` on common expressions.
 
-Limitations
-------------
+### Limitations
 
 Decompiling Wasm is fundamentally harder than, say, JVM bytecode.
 The latter is un-optimized, so relatively faithful to the structure of the
@@ -217,8 +212,7 @@ of its original structure. The output code is very unlike what a
 programmer would write. That makes a decompiler for Wasm a bigger
 challenge to make useful, but that doesn't mean we shouldn't try!
 
-More
-----
+## More
 
 The best way to see more is of course to decompile your own Wasm project!
 
@@ -229,4 +223,3 @@ Its implementation is in the source files starting with `decompiler`
 (feel free to contribute a PR to make it better!). Some test cases that show
 further examples of differences between `.wat` and the decompiler are
 [here](https://github.com/WebAssembly/wabt/tree/master/test/decompile).
-
