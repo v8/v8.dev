@@ -1,6 +1,6 @@
 ---
 title: "What's in that .wasm? Introducing: wasm-decompile"
-author: 'Wouter van Oortmerssen'
+author: 'Wouter van Oortmerssen ([@wvo](https://twitter.com/wvo))'
 avatars:
   - 'wouter-van-oortmerssen'
 date: 2020-04-20 12:35:00
@@ -31,7 +31,7 @@ particularly readable representation.
 
 For example, a simple C function like a dot product:
 
-```C
+```c
 typedef struct { float x, y, z; } vec3;
 
 float dot(const vec3 *a, const vec3 *b) {
@@ -73,7 +73,7 @@ get incomprehensible fast.
 
 Instead of `wasm2wat`, run `wasm-decompile dot.o`, and you get:
 
-```C
+```c
 function dot(a:{ a:float, b:float, c:float },
              b:{ a:float, b:float, c:float }):float {
   return a.a * b.a + a.b * b.b + a.c * b.c
@@ -141,7 +141,7 @@ the while/for/switch constructs they may have come from, since this
 tends to work better with optimized output. For example, a typical
 loop in the `wasm-decompile` output may look like:
 
-```
+```c
 loop A {
   // body of the loop here.
   if (cond) continue A;
@@ -156,7 +156,7 @@ Wasm's `br_if`.
 Blocks are similar, but instead of branching backwards, they branch
 forwards:
 
-```
+```c
 block {
   if (cond) break;
   // body goes here.
@@ -171,7 +171,7 @@ something like a `switch`, except using nested `block`s, which tends to
 be hard to read. The decompiler flattens these to make them slightly
 easier to follow, for example:
 
-```
+```c
 br_table[A, B, C, ..D](a);
 label A:
 return 0;
