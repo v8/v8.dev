@@ -9,7 +9,6 @@ tags:
   - tooling
 description: 'WABT gains a new decompilation tool that can make it easier to
 read the contents of Wasm modules'
-tweet: '?'
 ---
 We have a growing number of compilers and other tools that generate or
 manipulate `.wasm` files, and sometimes you might want to have a look inside.
