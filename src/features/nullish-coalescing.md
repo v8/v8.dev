@@ -155,5 +155,5 @@ document.all ?? true; // => HTMLAllCollection[]
 <feature-support chrome="80 https://bugs.chromium.org/p/v8/issues/detail?id=9547"
                  firefox="72 https://bugzilla.mozilla.org/show_bug.cgi?id=1566141"
                  safari="13.1 https://webkit.org/blog/10247/new-webkit-features-in-safari-13-1/"
-                 nodejs="no"
+                 nodejs="14 https://medium.com/@nodejs/node-js-version-14-available-now-8170d384567e"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator"></feature-support>
