@@ -32,7 +32,7 @@ float dot(const vec3 *a, const vec3 *b) {
 
 We use `clang dot.c -c -target wasm32 -O2` followed by `wasm2wat -f dot.o` to turn it into this `.wat`:
 
-```lisp
+```wasm
 (func $dot (type 0) (param i32 i32) (result f32)
   (f32.add
     (f32.add
