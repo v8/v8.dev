@@ -22,7 +22,7 @@ try {
 }
 ```
 
-In ES2019, `catch` can now be [used without a parameter](https://tc39.es/proposal-optional-catch-binding/). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
+In ES2019, `catch` can now be [used without a binding](https://tc39.es/proposal-optional-catch-binding/). This is useful if you don’t have a need for the `exception` object in the code that handles the exception.
 
 ```js
 try {
