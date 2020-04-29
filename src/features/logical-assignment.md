@@ -1,5 +1,3 @@
-Logical assignment feature explainer
-
 ---
 title: 'Logical assignment'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
@@ -14,6 +12,8 @@ tweet: ''
 JavaScript supports a range of [compound assignment operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Assignment_Operators) that let programmers succinctly express a binary operation together with assignment. Currently, only mathematical or bitwise operations are supported.
 
 What has been missing is the ability to combine logical operations with assignment. Until now! JavaScript now supports logical assignment with the new operators `&&=`, `||=`, and `??=`.
+
+## Logical assignment operators
 
 Before we dive into the new operators, let’s have a refresher on the existing compound assignment operators. For instance, the meaning of `lhs += rhs` is roughly equivalent to `lhs = lhs + rhs`. This rough equivalence holds for all the existing operators `@=` where `@` stands in for a binary operator like `+`, or `|`. It is worth noting this is, strictly speaking, only correct when `lhs` is a variable. For more complex left-hand sides in expressions like `obj[computedPropertyName()] += rhs`, the left-hand side is only evaluated once.
 
@@ -50,6 +50,8 @@ x ?? y
 x ??= y;
 x ?? (x = y);
 ```
+
+## Short-circuit semantics
 
 Unlike their mathematical and bitwise counterparts, logical assignments follow the short-circuiting behavior of their respective logical operations. They _only_ perform an assignment if the logical operation would evaluate the right-hand side.
 
