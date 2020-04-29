@@ -7,8 +7,8 @@ date: 2020-04-27
 tags:
   - WebAssembly
   - tooling
-description: 'WABT gains a new decompilation tool that can make it easier to
-read the contents of Wasm modules.'
+description: 'WABT gains a new decompilation tool that can make it easier to read the contents of Wasm modules.'
+tweet: '1254829913561014272'
 ---
 We have a growing number of compilers and other tools that generate or manipulate `.wasm` files, and sometimes you might want to have a look inside. Maybe you’re a developer of such a tool, or more directly, you’re a programmer targeting Wasm, and wondering what the generated code looks like, for performance or other reasons.
 
