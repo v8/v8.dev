@@ -159,7 +159,7 @@ Similarly, `Let val be ! Foo()` is equivalent to:
 Using this knowledge, we can rewrite `Object.prototype.hasOwnProperty` like this:
 
 :::ecmascript-algorithm
-> **`Object.prototype.hasOwnProperty(P)`**
+> **`Object.prototype.hasOwnProperty(V)`**
 >
 > 1. Let `P` be `ToPropertyKey(V)`.
 > 2. If `P` is an abrupt completion, return `P`
