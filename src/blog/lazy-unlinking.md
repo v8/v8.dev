@@ -40,7 +40,7 @@ const f2 = g();
 f2(0);
 ```
 
-If the function `f1` is deoptimized (for example by invoking it with an object of different type {`x: 0}`) we need to make sure that the invalidated code will not be executed again by invoking `f2`.
+If the function `f1` is deoptimized (for example by invoking it with an object of different type `{x: 0}`) we need to make sure that the invalidated code will not be executed again by invoking `f2`.
 
 Thus, upon deoptimization, V8 used to iterate over all the optimized JavaScript functions, and would unlink those that pointed to the code object being deoptimized. This iteration in applications with many optimized JavaScript functions became a performance bottleneck. Moreover, other than slowing down deoptimization, V8 used to iterate over these lists upon stop-the-world cycles of garbage collection, making it even worse.
 
