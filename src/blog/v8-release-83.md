@@ -3,7 +3,7 @@ title: 'V8 release v8.3'
 author: 'Victor Gomes, safely working from home'
 avatars:
  - 'victor-gomes'
-data: 2020-04-30
+date: 2020-04-30
 tags:
  - release
 description: 'V8 v8.3 features faster ArrayBuffers, bigger Wasm memories and deprecated APIs.'
