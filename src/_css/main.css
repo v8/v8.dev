@@ -485,7 +485,7 @@ dark-mode-toggle {
     padding-right: 7em;
   }
   ol {
-    padding-inline-start: calc(2 * var(--offset));
+    padding-inline-start: calc(3 * var(--offset));
   }
   li pre {
     width: calc(100% + 4 * var(--offset));
