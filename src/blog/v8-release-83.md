@@ -10,13 +10,13 @@ description: 'V8 v8.3 features faster ArrayBuffers, bigger Wasm memories and dep
 tweet: ''
 ---
 
-Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8's Git master immediately before a Chrome Beta milestone. Today we're pleased to announce our newest branch, [V8 version 8.3](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/8.3), which is in beta until its release in coordination with Chrome 83 Stable in several weeks. V8 v8.3 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 8.3](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/8.3), which is in beta until its release in coordination with Chrome 83 Stable in several weeks. V8 v8.3 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## Performance
 
 ### Faster `ArrayBuffer` tracking in the garbage collector
 
-Backing stores of `ArrayBuffer`s are allocated outside V8's heap using  `ArrayBuffer::Allocator` provided by the embedder. These backing stores need to be released when their `ArrayBuffer` object is reclaimed by the garbage collector. V8 v8.3 has a new mechanism for tracking `ArrayBuffer`s and their backing stores that allows the garbage collector to iterate and free the backing store concurrently to the application. More details are available in [this design document](https://docs.google.com/document/d/1-ZrLdlFX1nXT3z-FAgLbKal1gI8Auiaya_My-a0UJ28/edit#heading=h.gfz6mi5p212e). This reduced total GC pause time in `ArrayBuffer` heavy workloads by 50%.
+Backing stores of `ArrayBuffer`s are allocated outside V8’s heap using  `ArrayBuffer::Allocator` provided by the embedder. These backing stores need to be released when their `ArrayBuffer` object is reclaimed by the garbage collector. V8 v8.3 has a new mechanism for tracking `ArrayBuffer`s and their backing stores that allows the garbage collector to iterate and free the backing store concurrently to the application. More details are available in [this design document](https://docs.google.com/document/d/1-ZrLdlFX1nXT3z-FAgLbKal1gI8Auiaya_My-a0UJ28/edit#heading=h.gfz6mi5p212e). This reduced total GC pause time in `ArrayBuffer` heavy workloads by 50%.
 
 ### Bigger Wasm memories
 
@@ -26,7 +26,7 @@ In accordance with an update to the [WebAssembly specification](https://webassem
 
 ### Stores to objects with typed arrays on the prototype chain
 
-According to the JavaScript specification, when storing a value to the specified key we need to lookup the prototype chain to see if the key already exists on the prototype. More often than not these keys don't exist on the prototype chain, and so V8 installs fast lookup handlers to avoid these prototype chain walks when it is safe to do so.
+According to the JavaScript specification, when storing a value to the specified key we need to lookup the prototype chain to see if the key already exists on the prototype. More often than not these keys don’t exist on the prototype chain, and so V8 installs fast lookup handlers to avoid these prototype chain walks when it is safe to do so.
 
 However, we recently identified a particular scenario where V8 incorrectly installed this fast lookup handler, leading to incorrect behaviour. When `TypedArray`s are on the prototype chain, all stores to keys which are OOB of the `TypedArray` should be ignored. For example, in the case below `v[2]` shouldn’t add a property to `v` and the subsequent reads should return undefined.
 
@@ -37,7 +37,7 @@ v[2] = 123;
 return v[2]; // Should return undefined
 ```
 
-V8's fast lookup handlers don't handle this case, and we would instead return `123` in the above example. V8 v8.3 fixes this issue by not using fast lookup handlers when `TypedArray`s are on the prototype chain. Given that this isn't a common case, we haven't seen any performance regression on our benchmarks.
+V8’s fast lookup handlers don’t handle this case, and we would instead return `123` in the above example. V8 v8.3 fixes this issue by not using fast lookup handlers when `TypedArray`s are on the prototype chain. Given that this isn’t a common case, we haven’t seen any performance regression on our benchmarks.
 
 ## V8 API
 
@@ -48,7 +48,7 @@ The following experimental WeakRefs-related APIs are deprecated:
 - `v8::FinalizationGroup`
 - `v8::Isolate::SetHostCleanupFinalizationGroupCallback`
 
-`FinalizationRegistry` (renamed from `FinalizationGroup`) is part of the [JavaScript weak references proposal](https://v8.dev/features/weak-references) and provides a way for JavaScript programmers to register finalizers. These APIs are for the embedder to schedule and run `FinalizationRegistry` cleanup tasks where the registered finalizers are invoked; they are deprecated because they are no longer needed. `FinalizationRegistry` cleanup tasks are now scheduled automatically by V8 using the foreground task runner provided by the embedder's `v8::Platform` and do not require any additional embedder code.
+`FinalizationRegistry` (renamed from `FinalizationGroup`) is part of the [JavaScript weak references proposal](https://v8.dev/features/weak-references) and provides a way for JavaScript programmers to register finalizers. These APIs are for the embedder to schedule and run `FinalizationRegistry` cleanup tasks where the registered finalizers are invoked; they are deprecated because they are no longer needed. `FinalizationRegistry` cleanup tasks are now scheduled automatically by V8 using the foreground task runner provided by the embedder’s `v8::Platform` and do not require any additional embedder code.
 
 ### Other API changes
 
