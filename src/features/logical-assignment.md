@@ -85,8 +85,8 @@ It may help to think about the symmetry with other compound assignment operators
 
 An experimental implementation of logical assignment is available in V8 v8.4 behind the `--harmony-logical-assignment` flag.
 
-<feature-support chrome="yes https://bugs.chromium.org/p/v8/issues/detail?id=10372"
-                 firefox="yes https://bugzilla.mozilla.org/show_bug.cgi?id=1629106"
-                 safari="yes https://bugs.webkit.org/show_bug.cgi?id=209716"
+<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=10372"
+                 firefox="partial https://bugzilla.mozilla.org/show_bug.cgi?id=1629106"
+                 safari="partial https://bugs.webkit.org/show_bug.cgi?id=209716"
                  nodejs="no"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-logical-assignment-operators"></feature-support>
