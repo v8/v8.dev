@@ -226,10 +226,52 @@ The first rule forbids `delete IdentifierReference` (for example, `delete foo`) 
 
 ### Other cover grammars
 
+In addition to `CPEAAPL`, the spec uses gover grammars for other ambiguous-looking constructs.
 
+`ObjectLiteral` is used as a cover grammar for `ObjectAssignmentPattern` which occurs inside arrow function parameter lists. This means `ObjectLiteral` allows constructs which cannot occur inside actual object literals.
 
-FIXME: other cover grammars
+```grammar
+ObjectLiteral :
+...
+{ PropertyDefinitionList }
 
+PropertyDefinition :
+...
+CoverInitializedName
+
+CoverInitializedName :
+IdentifierReference Initializer
+
+Initializer :
+= AssignmentExpression
+```
+
+```javascript
+let o = { a = 1 }; // syntax error
+
+// Arrow function with a destructuring parameter with a default value:
+let f = ({ a = 1 }) => { return a; };
+f({}); // returns 1
+f({a : 6}); // returns 6
+```
+Async arrow functions also look ambiguous with limited lookahead:
+
+```javascript
+let x = async(a,
+```
+
+Is this a call to a function called `async` or an async arrow function?
+
+```javascript
+let x1 = async(a, b);
+let x2 = async();
+function async() { }
+
+let x3 = async(a, b) => {};
+let x4 = async();
+```
+
+To this end, the grammar defines a cover grammar symbol `CoverCallExpressionAndAsyncArrowHead` which works similarly to `CPEAAPL`.
 
 ## Summary
 
