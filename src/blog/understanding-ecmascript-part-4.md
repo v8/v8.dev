@@ -3,13 +3,12 @@ title: 'Understanding the ECMAScript spec, part 4'
 author: '[Marja Hölttä](https://twitter.com/marjakh), speculative specification spectator'
 avatars:
   - marja-holtta
-date: 2020-05-01
+date: 2020-05-06
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
-tweet: '1245400717667577857'
+tweet: ''
 ---
-…where we dive deep in the syntax!
 
 ## Previous episodes
 
@@ -19,20 +18,19 @@ In [part 2](/blog/understanding-ecmascript-part-2), we examined a simple grammar
 
 In [part 3](/blog/understanding-ecmascript-part-3), we familiarized ourselves with the lexical grammar, the syntactic grammar, and the shorthands used for defining the syntactic grammar.
 
-## Meanwhile in other parts of the Web...
+## Meanwhile in other parts of the Web
 
-[Jason Orendorff](https://github.com/jorendorff) from Mozilla published [a great in-depth analysis of JS syntactic quirks](https://github.com/mozilla-spidermonkey/jsparagus/blob/master/js-quirks.md#readme). Even though the implelmentation differ, every JS engine faces the same problems with these quirks.
+[Jason Orendorff](https://github.com/jorendorff) from Mozilla published [a great in-depth analysis of JS syntactic quirks](https://github.com/mozilla-spidermonkey/jsparagus/blob/master/js-quirks.md#readme). Even though the implementation details differ, every JS engine faces the same problems with these quirks.
 
 ## Cover grammars
 
+In this episode, we take a deeper look into *cover grammars*. They are a way to specify grammar  rules for syntactic constructs where we don't know what we're looking at until we've seen the complete construct.
 
-FIXME: intro
-
-Again, we'll skip the subscripts for `[In, Yield, Await]` for brevity, as they aren't important for this blog post. See [part 2](/blog/understanding-ecmascript-part-2) for an explanation of their meaning and usage.
+Again, we'll skip the subscripts for `[In, Yield, Await]` for brevity, as they aren't important for this blog post. See [part 3](/blog/understanding-ecmascript-part-3) for an explanation of their meaning and usage.
 
 ## Parenthesized expression or an arrow parameter list?
 
-When parsing JavaScript, we need to decide which grammar production to follow based on finite lookahead.
+Typically, parsers decide which grammar production to follow based on finite lookahead.
 
 For example:
 ```javascript
@@ -42,7 +40,7 @@ let x = (a,
 Is this the start of an arrow function, like this?
 
 ```javascript
-let x = (a, b) => { a + b };
+let x = (a, b) => { return a + b };
 ```
 
 Or maybe it's a parenthesized expression:
@@ -58,7 +56,7 @@ If the productions were written like this:
 ```grammar
 AssignmentExpression :
 ...
-ConditionalExpression (leading eventually to PrimaryExpression)
+ConditionalExpression (eventually leading to PrimaryExpression)
 ArrowFunction
 
 PrimaryExpression :
@@ -69,15 +67,15 @@ ArrowFunction :
 ArrowParameterList => ConciseBody
 ```
 
-... we'd be in trouble! Imagine we had to parse a `AssignmentExpression` and the next token is `(`. How would we decide what to parse next? We could either parse an `ParenthesizedExpression` or an `ArrowParameterList`, but our guess could go wrong.
-
-FIXME: LR(1) maybe here
+We couldn't choose the correct production with limited lookahead. Imagine we had to parse a `AssignmentExpression` and the next token is `(`. How would we decide what to parse next? We could either parse an `ParenthesizedExpression` or an `ArrowParameterList`, but our guess could go wrong.
 
 ### The very permissive new symbol: CPEAAPL
 
+We'd like to specify the grammar in such a way that it's possible to parse JavaScript according to it with limited lookahead.
+
 The spec solves this problem by introducing the symbol `CoverParenthesizedExpressionAndArrowParameterList` (`CPEAAPL` for short). `CPEAAPL` is a symbol that is actually an `ParenthesizedExpression` or an `ArrowParameterList` behind the scenes, but we don't yet know which one.
 
-The [productions](https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList) for `CPEAAPL` are pretty permissive, allowing all constructs that can occur in `ParenthesizedExpression`s and in `ArrowParameterList`s:
+The [productions](https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList) for `CPEAAPL` are very permissive, allowing all constructs that can occur in `ParenthesizedExpression`s and in `ArrowParameterList`s:
 
 ```grammar
 CPEAAPL :
@@ -120,7 +118,7 @@ Now we can use the very permissive `CPEAAPL` in grammar productions:
 
 ```grammar
 AssignmentExpression :
-ConditionalExpression (will eventually lead to PrimaryExpression)
+ConditionalExpression (eventually leading to PrimaryExpression)
 ArrowFunction
 ...
 
@@ -141,21 +139,47 @@ Imagine we're again in the situation that we need to parse an `AssignmentExpress
 
 After we've parsed the `CPEAAPL`, we can decide whether the original `AssignmentExpression` is an `ArrowFunction` or a `ParenthesizedExpression` based on the token following the `CPEAAPL`.
 
+```javascript
+let x = (a, b) => { return a + b; };
+//      ^^^^^^
+//     CPEAAPL
+//             ^^
+//             The token following the CPEAAPL
+
+let x = (a, 3);
+//      ^^^^^^
+//     CPEAAPL
+//            ^
+//            The token following the CPEAAPL
+```
+
 ### Restricting CPEAAPLs
 
-As we saw before, the grammar productions for `CPEAAPL` are very permissive and allow constructs (such as `(1, ... a)`) which are never valid. Once we know whether we were parsing an `ArrowFunction` or `ParenthesizedExpression`, we need to disallow the corresponding illegal constructs.
+As we saw before, the grammar productions for `CPEAAPL` are very permissive and allow constructs (such as `(1, ...a)`) which are never valid. Once we know whether we were parsing an `ArrowFunction` or `ParenthesizedExpression`, we need to disallow the corresponding illegal constructs.
 
 The spec does this by adding the following restrictions:
 
 :::ecmascript-algorithm
-> When processing an instance of the production
+> [Static Semantics: Early Errors](https://tc39.es/ecma262/#sec-grouping-operator-static-semantics-early-errors)
+>
 > `PrimaryExpression : CPEAAPL`
-> the interpretation of the `CPEAAPL` is _refined_ by the following grammar
+>
+> It is a Syntax Error if `CPEAAPL` is not _covering_ a `ParenthesizedExpression`.
+
+:::ecmascript-algorithm
+> [Supplemental Syntax](https://tc39.es/ecma262/#sec-primary-expression)
+>
+> When processing an instance of the production
+>
+> `PrimaryExpression : CPEAAPL`
+>
+> the interpretation of the `CPEAAPL` is refined using the following grammar:
+>
 > `ParenthesizedExpression : ( Expression )`
 
-This means: if we arrived at the `CPEAAPL` from `PrimaryExpression`, it is actually an `ParenthesizedExpression` and this is its only valid production.
+This means: if we try to use a `CPEAAPL` as a `PrimaryExpression`, it is actually an `ParenthesizedExpression` and this is its only valid production.
 
-`Expression` can never be empty, so `( )` is not a valid `ParenthesizedExpression`. The comma separated lists like `(1, 2, 3)` are created by [the comma operator](https://tc39.es/ecma262/#sec-comma-operator) via the following productions:
+`Expression` can never be empty, so `( )` is not a valid `ParenthesizedExpression`. Comma separated lists like `(1, 2, 3)` are created by [the comma operator](https://tc39.es/ecma262/#sec-comma-operator):
 
 ```grammar
 Expression :
@@ -163,15 +187,52 @@ AssignmentExpression
 Expression , AssignmentExpression
 ```
 
-Similarly, if we were arrived at the `CPEAAPL` via `ArrowParameters`, the following restrictions apply:
+Similarly, if we try to use a `CPEAAPL` as an `ArrowParameters`, the following restrictions apply:
+
+:::ecmascript-algorithm
+> [Static Semantics: Early Errors](https://tc39.es/ecma262/#sec-arrow-function-definitions-static-semantics-early-errors)
+>
+> `ArrowParameters : CPEAAPL`
+>
+> It is a Syntax Error if `CPEAAPL` is not covering an `ArrowFormalParameters`.
+
+:::ecmascript-algorithm
+> [Supplemental Syntax](https://tc39.es/ecma262/#sec-arrow-function-definitions)
+>
+> When the production
+>
+> `ArrowParameters` : `CPEAAPL`
+>
+> is recognized the following grammar is used to refine the interpretation of `CPEAAPL`:
+>
+> `ArrowFormalParameters :`
+> `( UniqueFormalParameters )`
+
+### Other CPEAAPL restrictions
+
+There are also additional rules related to `CPEAAPL`s. For example:
+
+:::ecmascript-algorithm
+> [Static Semantics: Early Errors](https://tc39.es/ecma262/#sec-delete-operator-static-semantics-early-errors)
+>
+> `UnaryExpression: delete UnaryExpression`
+>
+> - It is a Syntax Error if the `UnaryExpression` is contained in strict mode code and the derived `UnaryExpression` is `PrimaryExpression : IdentifierReference`.
+> - It is a Syntax Error if the derived `UnaryExpression` is
+> `PrimaryExpression : CPEAAPL`
+> and `CPEAAPL` ultimately derives a phrase that, if used in place of `UnaryExpression`, would produce a  Syntax Error according to these rules. This rule is recursively applied.
+
+The first rule forbids `delete IdentifierReference` (for example, `delete foo`) in strict mode. The second rule forbids `CPEAAPL`s which would ultimately produce an `IdentifierReference`, such as `delete (foo)`, `delete ((foo))` and so on.
+
+### Other cover grammars
+
 
 
 FIXME: other cover grammars
 
-FIXME: explain the term "covering"
-
-FIXME: explain LR(1)
 
 ## Summary
 
-FIXME: summary
+In this episode we looked into how the spec defines the grammar in such a way that implementing a finite lookahead parser based on it is straightforward.
+
+In particular, we looked into how the spec uses a cover grammar for defining the productions for constructs for which we don't know in advance whether they're parenthesized expressions or arrow function parameters lists.
