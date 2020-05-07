@@ -24,7 +24,7 @@ In [part 3](/blog/understanding-ecmascript-part-3), we familiarized ourselves wi
 
 ## Cover grammars
 
-In this episode, we take a deeper look into *cover grammars*. They are a way to specify grammar  rules for syntactic constructs where we don't know what we're looking at until we've seen the complete construct.
+In this episode, we take a deeper look into *cover grammars*. They are a way to specify grammar rules for syntactic constructs where we don't know what we're looking at until we've seen the complete construct.
 
 Again, we'll skip the subscripts for `[In, Yield, Await]` for brevity, as they aren't important for this blog post. See [part 3](/blog/understanding-ecmascript-part-3) for an explanation of their meaning and usage.
 
@@ -43,7 +43,7 @@ Is this the start of an arrow function, like this?
 let x = (a, b) => { return a + b };
 ```
 
-Or maybe it's a parenthesized expression:
+Or maybe it's a parenthesized expression, like this?
 
 ```javascript
 let x = (a, 3);
@@ -164,7 +164,7 @@ The spec does this by adding the following restrictions:
 >
 > `PrimaryExpression : CPEAAPL`
 >
-> It is a Syntax Error if `CPEAAPL` is not _covering_ a `ParenthesizedExpression`.
+> It is a Syntax Error if `CPEAAPL` is not covering a `ParenthesizedExpression`.
 
 :::ecmascript-algorithm
 > [Supplemental Syntax](https://tc39.es/ecma262/#sec-primary-expression)
@@ -177,7 +177,7 @@ The spec does this by adding the following restrictions:
 >
 > `ParenthesizedExpression : ( Expression )`
 
-This means: if we try to use a `CPEAAPL` as a `PrimaryExpression`, it is actually an `ParenthesizedExpression` and this is its only valid production.
+This means: if `CPEAAPL` occurs in the place of `PrimaryExpression` in the syntax tree, it is actually an `ParenthesizedExpression` and this is its only valid production.
 
 `Expression` can never be empty, so `( )` is not a valid `ParenthesizedExpression`. Comma separated lists like `(1, 2, 3)` are created by [the comma operator](https://tc39.es/ecma262/#sec-comma-operator):
 
