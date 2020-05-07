@@ -115,9 +115,9 @@ removeLoadingIndicator();
 
 ## `Promise.any`
 
-<feature-support chrome="no"
-                 firefox="no"
-                 safari="no"
+<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=9808"
+                 firefox="partial https://bugzilla.mozilla.org/show_bug.cgi?id=1568903"
+                 safari="partial https://bugs.webkit.org/show_bug.cgi?id=202566"
                  nodejs="no"
                  babel="yes"></feature-support>
 

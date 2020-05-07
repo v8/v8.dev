@@ -191,14 +191,14 @@ class Cat extends Animal {
 
 <feature-support chrome="72 /blog/v8-release-72#public-class-fields"
                  firefox="partial https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/69#JavaScript"
-                 safari="no"
+                 safari="partial"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="no"></feature-support>
 
 ### Support for private class fields { #support-private-fields }
 
 <feature-support chrome="74 /blog/v8-release-74#private-class-fields"
-                 firefox="no"
+                 firefox="partial"
                  safari="no"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="no"></feature-support>

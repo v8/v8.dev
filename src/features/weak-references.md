@@ -159,8 +159,8 @@ For example, don’t place important logic in the code path of a finalizer. Ther
 
 ## `WeakRef` support { #support }
 
-<feature-support chrome="no"
-                 firefox="no"
+<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=8179"
+                 firefox="partial"
                  safari="no"
                  nodejs="no"
                  babel="no"></feature-support>

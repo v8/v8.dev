@@ -41,6 +41,6 @@ string.trim(); // ES5
 
 <feature-support chrome="66 /blog/v8-release-66#string-trimming"
                  firefox="61"
-                 safari="yes"
+                 safari="12"
                  nodejs="8"
                  babel="yes"></feature-support>
