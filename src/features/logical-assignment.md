@@ -3,7 +3,7 @@ title: 'Logical assignment'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
-date: 2020-05-20
+date: 2020-05-07
 tags:
   - ECMAScript
 description: 'JavaScript now supports compound assignment with logical operations.'
