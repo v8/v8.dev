@@ -24,13 +24,13 @@ In [part 3](/blog/understanding-ecmascript-part-3), we familiarized ourselves wi
 
 ## Cover grammars
 
-In this episode, we take a deeper look into *cover grammars*. They are a way to specify grammar rules for syntactic constructs where we don't know what we're looking at until we've seen the complete construct.
+In this episode, we take a deeper look into *cover grammars*. They are a way to specify grammar rules for syntactic constructs which look ambiguous at first.
 
 Again, we'll skip the subscripts for `[In, Yield, Await]` for brevity, as they aren't important for this blog post. See [part 3](/blog/understanding-ecmascript-part-3) for an explanation of their meaning and usage.
 
 ## Parenthesized expression or an arrow parameter list?
 
-Typically, parsers decide which grammar production to follow based on finite lookahead.
+Typically, parsers decide which grammar production to follow based on finite lookahead (a fixed amount of following tokens).
 
 For example:
 ```javascript
@@ -230,6 +230,8 @@ Initializer :
 = AssignmentExpression
 ```
 
+For example:
+
 ```javascript
 let o = { a = 1 }; // syntax error
 
@@ -238,6 +240,7 @@ let f = ({ a = 1 }) => { return a; };
 f({}); // returns 1
 f({a : 6}); // returns 6
 ```
+
 Async arrow functions also look ambiguous with limited lookahead:
 
 ```javascript
@@ -259,6 +262,6 @@ To this end, the grammar defines a cover grammar symbol `CoverCallExpressionAndA
 
 ## Summary
 
-In this episode we looked into how the spec defines the grammar in such a way that implementing a finite lookahead parser based on it is straightforward.
+In this episode we looked into how the spec defines a concise grammar for cases where we cannot identify the current syntactic construct based on a finite lookahead.
 
-In particular, we looked into how the spec uses a cover grammar for defining the productions for constructs for which we don't know in advance whether they're parenthesized expressions or arrow function parameters lists.
+In particular, we looked into how the spec uses a cover grammars for first parsing ambiguous-looking constructs permissively and restricting them with static semantic rules later.
