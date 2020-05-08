@@ -66,7 +66,7 @@ console.log((2 * 1024 * 1024 * 1024) >>> 2);
 
 Emscripten knows at compile time whether you may use 2GB or more memory (depending on the flags you use; see later for details). If your flags make 2GB+ addresses possible then the compiler will automatically rewrite all memory accesses to use `>>>` instead of `>>`, which includes not just `HEAP32` etc. accesses as in the examples above but also operations like `.subarray()` and `.copyWithin()`. In other words, the compiler will switch to use unsigned pointers instead of signed ones.
 
-This transformation increases code size a little bit - one extra character in each shift - which is why we don’t do it if you aren’t using 2GB+ addresses. While the difference is typically less than 1%, it’s just unnecessary, and easy to avoid - and lots of small optimizations add up!.
+This transformation increases code size a little bit - one extra character in each shift - which is why we don’t do it if you aren’t using 2GB+ addresses. While the difference is typically less than 1%, it’s just unnecessary, and easy to avoid - and lots of small optimizations add up!
 
 Other rare issues can arise in JavaScript support code. While normal memory accesses are handled automatically as described earlier, doing something like manually comparing a signed pointer to an unsigned one will (on address 2GB and above) return false. To find such issues we’ve audited Emscripten’s JavaScript and also run the test suite in a special mode where everything is placed at address 2GB or higher. (Note that if you write your own JavaScript support code you may have things to fix there as well, if you do manual things with pointers aside from normal memory accesses.)
 
@@ -86,6 +86,6 @@ Make sure to test on Chrome M83 (currently in Beta) or later. Please file issues
 
 Support for up to 4GB memory is another step in making the web as capable as native platforms, allowing 32-bit programs to be able to use just as much memory as they would normally. By itself this doesn’t enable a completely new class of application, but it does enable higher-end experiences, such as a very large level in a game or manipulating large content in a graphical editor.
 
-As mentioned earlier, support for 64-bit memory is also planned, which will allow accessing even more than 4GB. However, wasm64 will have the same downside as 64-bit does on native platforms, that pointers take twice as much memory. That’s why 4GB support in wasm32 is so important: We can access twice as much memory while code size remains as compact as wasm has always been!
+As mentioned earlier, support for 64-bit memory is also planned, which will allow accessing even more than 4GB. However, wasm64 will have the same downside as 64-bit does on native platforms, that pointers take twice as much memory. That’s why 4GB support in wasm32 is so important: We can access twice as much memory as before while code size remains as compact as wasm has always been!
 
 As always, test your code on multiple browsers, and also remember that 2-4GB is a lot of memory! If you need that much you should use it, but don’t do so unnecessarily since there just won’t be enough free memory on many users’ machines. We recommend that you start with an initial memory that is as small as possible, and grow if necessary; and if you allow growth, gracefully handle the case of a `malloc()` failure.
