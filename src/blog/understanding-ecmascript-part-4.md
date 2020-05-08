@@ -137,7 +137,7 @@ CPEAAPL
 
 Imagine we're again in the situation that we need to parse an `AssignmentExpression` and the next token is `(`. Now we can just decide to parse a `CPEAAPL` and figure out later what it actually is. It doesn't matter whether we're parsing an `ArrowFunction` or a `ParenthesizedExpression`, the next symbol to parse is `CPEAAPL` in any case!
 
-After we've parsed the `CPEAAPL`, we can decide whether the original `AssignmentExpression` is an `ArrowFunction` or a `ParenthesizedExpression` based on the token following the `CPEAAPL`.
+After we've parsed the `CPEAAPL`, we can decide whether the original `AssignmentExpression` is an `ArrowFunction` or a `ParenthesizedExpression` based on the token following the `CPEAAPL`, and parse the rest of the program.
 
 ```javascript
 let x = (a, b) => { return a + b; };
@@ -155,7 +155,7 @@ let x = (a, 3);
 
 ### Restricting CPEAAPLs
 
-As we saw before, the grammar productions for `CPEAAPL` are very permissive and allow constructs (such as `(1, ...a)`) which are never valid. Once we know whether we were parsing an `ArrowFunction` or `ParenthesizedExpression`, we need to disallow the corresponding illegal constructs.
+As we saw before, the grammar productions for `CPEAAPL` are very permissive and allow constructs (such as `(1, ...a)`) which are never valid. After we've done parsing the program according to the grammar rules, we need to disallow the corresponding illegal constructs.
 
 The spec does this by adding the following restrictions:
 
@@ -207,22 +207,6 @@ Similarly, if we try to use a `CPEAAPL` as an `ArrowParameters`, the following r
 >
 > `ArrowFormalParameters :`
 > `( UniqueFormalParameters )`
-
-### Other CPEAAPL restrictions
-
-There are also additional rules related to `CPEAAPL`s. For example:
-
-:::ecmascript-algorithm
-> [Static Semantics: Early Errors](https://tc39.es/ecma262/#sec-delete-operator-static-semantics-early-errors)
->
-> `UnaryExpression: delete UnaryExpression`
->
-> - It is a Syntax Error if the `UnaryExpression` is contained in strict mode code and the derived `UnaryExpression` is `PrimaryExpression : IdentifierReference`.
-> - It is a Syntax Error if the derived `UnaryExpression` is
-> `PrimaryExpression : CPEAAPL`
-> and `CPEAAPL` ultimately derives a phrase that, if used in place of `UnaryExpression`, would produce a  Syntax Error according to these rules. This rule is recursively applied.
-
-The first rule forbids `delete IdentifierReference` (for example, `delete foo`) in strict mode. The second rule forbids `CPEAAPL`s which would ultimately produce an `IdentifierReference`, such as `delete (foo)`, `delete ((foo))` and so on.
 
 ### Other cover grammars
 
