@@ -3,7 +3,7 @@ title: 'Understanding the ECMAScript spec, part 4'
 author: '[Marja Hölttä](https://twitter.com/marjakh), speculative specification spectator'
 avatars:
   - marja-holtta
-date: 2020-05-06
+date: 2020-05-08
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
@@ -55,16 +55,20 @@ If the productions were written like this:
 
 ```grammar
 AssignmentExpression :
-...
-ConditionalExpression (eventually leading to PrimaryExpression)
-ArrowFunction
+  ...
+  ConditionalExpression
+  ArrowFunction
+```
 
+`ConditionalExpression` eventually leads to `PrimaryExpression` via a long production chain.
+
+```grammar
 PrimaryExpression :
-...
-ParenthesizedExpression
+  ...
+  ParenthesizedExpression
 
 ArrowFunction :
-ArrowParameterList => ConciseBody
+  ArrowParameterList => ConciseBody
 ```
 
 We couldn't choose the correct production with limited lookahead. Imagine we had to parse a `AssignmentExpression` and the next token is `(`. How would we decide what to parse next? We could either parse an `ParenthesizedExpression` or an `ArrowParameterList`, but our guess could go wrong.
@@ -79,13 +83,13 @@ The [productions](https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndA
 
 ```grammar
 CPEAAPL :
-( Expression )
-( Expression , )
-( )
-(... BindingIdentifier )
-(... BindingPattern )
-( Expression , ... BindingIdentifier )
-( Expression , ... BindingPattern )
+  ( Expression )
+  ( Expression , )
+  ( )
+  ( ... BindingIdentifier )
+  ( ... BindingPattern )
+  ( Expression , ... BindingIdentifier )
+  ( Expression , ... BindingPattern )
 ```
 
 For example, the following expressions are valid `CPEAAPL`s:
@@ -118,24 +122,24 @@ Now we can use the very permissive `CPEAAPL` in grammar productions:
 
 ```grammar
 AssignmentExpression :
-ConditionalExpression (eventually leading to PrimaryExpression)
-ArrowFunction
-...
+  ConditionalExpression
+  ArrowFunction
+  ...
 
 ArrowFunction :
-ArrowParameters => ConciseBody
+  ArrowParameters => ConciseBody
 
 ArrowParameters :
-BindingIdentifier
-CPEAAPL
+  BindingIdentifier
+  CPEAAPL
 
 PrimaryExpression :
-...
-CPEAAPL
+  ...
+  CPEAAPL
 
 ```
 
-Imagine we're again in the situation that we need to parse an `AssignmentExpression` and the next token is `(`. Now we can just decide to parse a `CPEAAPL` and figure out later what it actually is. It doesn't matter whether we're parsing an `ArrowFunction` or a `ParenthesizedExpression`, the next symbol to parse is `CPEAAPL` in any case!
+Imagine we're again in the situation that we need to parse an `AssignmentExpression` and the next token is `(`. Now we can just decide to parse a `CPEAAPL` and figure out later what production to follow. It doesn't matter whether we're parsing an `ArrowFunction` or a `ParenthesizedExpression`, the next symbol to parse is `CPEAAPL` in any case!
 
 After we've parsed the `CPEAAPL`, we can decide whether the original `AssignmentExpression` is an `ArrowFunction` or a `ParenthesizedExpression` based on the token following the `CPEAAPL`, and parse the rest of the program.
 
@@ -183,8 +187,8 @@ This means: if a `CPEAAPL` occurs in the place of `PrimaryExpression` in the syn
 
 ```grammar
 Expression :
-AssignmentExpression
-Expression , AssignmentExpression
+  AssignmentExpression
+  Expression , AssignmentExpression
 ```
 
 Similarly, if a `CPEAAPL` occurs in the place of `ArrowParameters`, the following restrictions apply:
@@ -216,18 +220,18 @@ In addition to `CPEAAPL`, the spec uses gover grammars for other ambiguous-looki
 
 ```grammar
 ObjectLiteral :
-...
-{ PropertyDefinitionList }
+  ...
+  { PropertyDefinitionList }
 
 PropertyDefinition :
-...
-CoverInitializedName
+  ...
+  CoverInitializedName
 
 CoverInitializedName :
-IdentifierReference Initializer
+  IdentifierReference Initializer
 
 Initializer :
-= AssignmentExpression
+  = AssignmentExpression
 ```
 
 For example:
