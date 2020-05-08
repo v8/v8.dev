@@ -177,7 +177,7 @@ The spec does this by adding the following restrictions:
 >
 > `ParenthesizedExpression : ( Expression )`
 
-This means: if `CPEAAPL` occurs in the place of `PrimaryExpression` in the syntax tree, it is actually an `ParenthesizedExpression` and this is its only valid production.
+This means: if a `CPEAAPL` occurs in the place of `PrimaryExpression` in the syntax tree, it is actually an `ParenthesizedExpression` and this is its only valid production.
 
 `Expression` can never be empty, so `( )` is not a valid `ParenthesizedExpression`. Comma separated lists like `(1, 2, 3)` are created by [the comma operator](https://tc39.es/ecma262/#sec-comma-operator):
 
@@ -187,7 +187,7 @@ AssignmentExpression
 Expression , AssignmentExpression
 ```
 
-Similarly, if we try to use a `CPEAAPL` as an `ArrowParameters`, the following restrictions apply:
+Similarly, if a `CPEAAPL` occurs in the place of `ArrowParameters`, the following restrictions apply:
 
 :::ecmascript-algorithm
 > [Static Semantics: Early Errors](https://tc39.es/ecma262/#sec-arrow-function-definitions-static-semantics-early-errors)
