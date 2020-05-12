@@ -31,6 +31,6 @@ This feature is a small fix that was long overdue in JavaScript. It’s one less
 
 <feature-support chrome="72 /blog/v8-release-72#well-formed-json.stringify"
                  firefox="64"
-                 safari="yes"
+                 safari="12.1"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="no"></feature-support>
