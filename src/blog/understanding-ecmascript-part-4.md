@@ -24,15 +24,33 @@ In [part 3](/blog/understanding-ecmascript-part-3), we familiarized ourselves wi
 
 ## Cover grammars
 
-In this episode, we take a deeper look into *cover grammars*. They are a way to specify grammar rules for syntactic constructs which look ambiguous at first.
+In this episode, we take a deeper look into *cover grammars*. They are a way to specify the grammar for syntactic constructs which look ambiguous at first.
 
 Again, we'll skip the subscripts for `[In, Yield, Await]` for brevity, as they aren't important for this blog post. See [part 3](/blog/understanding-ecmascript-part-3) for an explanation of their meaning and usage.
 
-## Parenthesized expression or an arrow parameter list?
+## Finite lookaheads
 
-Typically, parsers decide which grammar production to follow based on finite lookahead (a fixed amount of following tokens).
+Typically, parsers decide which production to use based on a finite lookahead (a fixed amount of following tokens).
+
+In some cases, the next token determines the production to use unambiguously. [For example](https://tc39.es/ecma262/#prod-UpdateExpression):
+
+```grammar
+UpdateExpression :
+  LeftHandSideExpression
+  LeftHandSideExpression ++
+  LeftHandSideExpression --
+  ++ UnaryExpression
+  -- UnaryExpression
+```
+
+If we're parsing an `UpdateExpression` and the next token is `++` or `--`, we know the production to use right away. If the next token is neither, it's still not too bad: we can parse a `LeftHandSideExpression` starting from the position we're at, and figure out what to do after we've parsed it. If the token following the `LeftHandSideExpression` is `++`, the production to use is `UpdateExpression : LeftHandSideExpression ++`. The case for `--` is similar. And if the token following the `LeftHandSideExpression` is neither `++` nor `--`, we use the production `UpdateExpression : LeftHandSideExpression`.
+
+### Arrow function parameter list or a parenthesized expression?
+
+Distinguishing arrow function parameter lists from parenthesized expressions is more complicated.
 
 For example:
+
 ```javascript
 let x = (a,
 ```
@@ -51,31 +69,21 @@ let x = (a, 3);
 
 The parenthesized whatever-it-is can be arbitrarily long - we cannot know what it is based on a finite amount of tokens.
 
-If the productions were written like this:
+Let's imagine for a moment that we had the following straightforward productions:
 
 ```grammar
 AssignmentExpression :
   ...
-  ConditionalExpression
   ArrowFunction
-```
-
-`ConditionalExpression` eventually leads to `PrimaryExpression` via a long production chain.
-
-```grammar
-PrimaryExpression :
-  ...
   ParenthesizedExpression
 
 ArrowFunction :
   ArrowParameterList => ConciseBody
 ```
 
-We couldn't choose the correct production with limited lookahead. Imagine we had to parse a `AssignmentExpression` and the next token is `(`. How would we decide what to parse next? We could either parse an `ParenthesizedExpression` or an `ArrowParameterList`, but our guess could go wrong.
+Now we can't choose the production to use with a finite lookahead. If we had to parse a `AssignmentExpression` and the next token was `(`, how would we decide what to parse next? We could either parse an `ArrowParameterList` or a `ParenthesizedExpression`, but our guess could go wrong.
 
-### The very permissive new symbol: CPEAAPL
-
-We'd like to specify the grammar in such a way that it's possible to parse JavaScript according to it with limited lookahead.
+### The very permissive new symbol: `CPEAAPL`
 
 The spec solves this problem by introducing the symbol `CoverParenthesizedExpressionAndArrowParameterList` (`CPEAAPL` for short). `CPEAAPL` is a symbol that is actually an `ParenthesizedExpression` or an `ArrowParameterList` behind the scenes, but we don't yet know which one.
 
@@ -114,11 +122,11 @@ For example, the following expressions are valid `CPEAAPL`s:
 (1, )
 ```
 
-Trailing comma and the `...` can occur only in `ArrowParameterList`. Some constructs, like `b = 1` can occur in both, but they have different meanings: Inside `ParenthesizedExpression` it's an assignment, inside `ArrowParameterList` it's a parameter with a default value.
+Trailing comma and the `...` can occur only in `ArrowParameterList`. Some constructs, like `b = 1` can occur in both, but they have different meanings: Inside `ParenthesizedExpression` it's an assignment, inside `ArrowParameterList` it's a parameter with a default value. Numbers and other `PrimaryExpressions` which are not valid parameter names (or parameter destructuring patterns) can only occur in `ParenthesizedExpression`. But they all can occur inside a `CPEAAPL`.
 
-### Using CPEAAPL in grammar rules
+### Using `CPEAAPL` in productions
 
-Now we can use the very permissive `CPEAAPL` in grammar productions:
+Now we can use the very permissive `CPEAAPL` in [`AssignmentExpression` productions](https://tc39.es/ecma262/#prod-AssignmentExpression):
 
 ```grammar
 AssignmentExpression :
@@ -139,9 +147,27 @@ PrimaryExpression :
 
 ```
 
-Imagine we're again in the situation that we need to parse an `AssignmentExpression` and the next token is `(`. Now we can just decide to parse a `CPEAAPL` and figure out later what production to follow. It doesn't matter whether we're parsing an `ArrowFunction` or a `ParenthesizedExpression`, the next symbol to parse is `CPEAAPL` in any case!
+(`ConditionalExpression` leads to `PrimaryExpression` via a long production chain.)
 
-After we've parsed the `CPEAAPL`, we can decide whether the original `AssignmentExpression` is an `ArrowFunction` or a `ParenthesizedExpression` based on the token following the `CPEAAPL`, and parse the rest of the program.
+Imagine we're again in the situation that we need to parse an `AssignmentExpression` and the next token is `(`. Now we can parse a `CPEAAPL` and figure out later what production to use. It doesn't matter whether we're parsing an `ArrowFunction` or a `ConditionalExpression`, the next symbol to parse is `CPEAAPL` in any case!
+
+After we've parsed the `CPEAAPL`, we can decide which production to use for the original `AssignmentExpression` (the one containing the `CPEAAPL`). This decision is made based on the token following the `CPEAAPL`.
+
+If the token is `=>`, we use the production:
+
+```grammar
+AssignmentExpression :
+  ArrowFunction
+```
+
+If the token is something else, we use the production:
+
+```grammar
+AssignmentExpression :
+  ConditionalExpression
+```
+
+For example:
 
 ```javascript
 let x = (a, b) => { return a + b; };
@@ -157,9 +183,11 @@ let x = (a, 3);
 //            The token following the CPEAAPL
 ```
 
+At that point we can keep the `CPEAAPL` as is and continue parsing the rest of the program. For example, if the `CPEAAPL` is inside an `ArrowFunction`, we don't yet need to look at whether it's a valid arrow function parameter list or not - that can be done later. (Real-world parsers might choose to do the validity check right away, but from the spec point of view, we don't need to.)
+
 ### Restricting CPEAAPLs
 
-As we saw before, the grammar productions for `CPEAAPL` are very permissive and allow constructs (such as `(1, ...a)`) which are never valid. After we've done parsing the program according to the grammar rules, we need to disallow the corresponding illegal constructs.
+As we saw before, the grammar productions for `CPEAAPL` are very permissive and allow constructs (such as `(1, ...a)`) which are never valid. After we've done parsing the program according to the grammar, we need to disallow the corresponding illegal constructs.
 
 The spec does this by adding the following restrictions:
 
@@ -216,7 +244,7 @@ Similarly, if a `CPEAAPL` occurs in the place of `ArrowParameters`, the followin
 
 In addition to `CPEAAPL`, the spec uses gover grammars for other ambiguous-looking constructs.
 
-`ObjectLiteral` is used as a cover grammar for `ObjectAssignmentPattern` which occurs inside arrow function parameter lists. This means `ObjectLiteral` allows constructs which cannot occur inside actual object literals.
+`ObjectLiteral` is used as a cover grammar for `ObjectAssignmentPattern` which occurs inside arrow function parameter lists. This means that `ObjectLiteral` allows constructs which cannot occur inside actual object literals.
 
 ```grammar
 ObjectLiteral :
@@ -239,13 +267,14 @@ For example:
 ```javascript
 let o = { a = 1 }; // syntax error
 
-// Arrow function with a destructuring parameter with a default value:
+// Arrow function with a destructuring parameter with a default
+// value:
 let f = ({ a = 1 }) => { return a; };
 f({}); // returns 1
 f({a : 6}); // returns 6
 ```
 
-Async arrow functions also look ambiguous with limited lookahead:
+Async arrow functions also look ambiguous with a finite lookahead:
 
 ```javascript
 let x = async(a,
@@ -266,6 +295,6 @@ To this end, the grammar defines a cover grammar symbol `CoverCallExpressionAndA
 
 ## Summary
 
-In this episode we looked into how the spec defines a concise grammar for cases where we cannot identify the current syntactic construct based on a finite lookahead.
+In this episode we looked into how the spec defines cover grammars and uses them in cases where we cannot identify the current syntactic construct based on a finite lookahead.
 
-In particular, we looked into how the spec uses a cover grammars for first parsing ambiguous-looking constructs permissively and restricting them with static semantic rules later.
+In particular, we looked into distinguishing arrow function parameter lists from parenthesized expressions and how the spec uses a cover grammar for first parsing ambiguous-looking constructs permissively and restricting them with static semantic rules later.
