@@ -7,7 +7,7 @@ date: 2020-05-07
 tags:
   - ECMAScript
 description: 'JavaScript now supports compound assignment with logical operations.'
-tweet: ''
+tweet: '1258387483823345665'
 ---
 JavaScript supports a range of [compound assignment operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Assignment_Operators) that let programmers succinctly express a binary operation together with assignment. Currently, only mathematical or bitwise operations are supported.
 
