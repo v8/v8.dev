@@ -53,6 +53,8 @@ Make your changes to the Node.js checkout, and commit them. Then push the change
 **Note:** `<sync-date>` is the date we sync’ed with upstream Node.js. Choose the latest date.
 :::
 
+If your changes need to be eventually upstreamed, please add the tag `upstream` with the supported V8 version, e.g. `[upstream:v8.4.377]`. If your changes are temporary (it disables for example a test), please add the tag `temp` and the version of V8 in which the changes should be discarded, e.g., `[temp:v8.4.377]`.
+
 ```bash
 git push <your-user-name> make-changes
 ```
