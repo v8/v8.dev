@@ -126,7 +126,7 @@ Trailing comma and the `...` can occur only in `ArrowParameterList`. Some constr
 
 ### Using `CPEAAPL` in productions
 
-Now we can use the very permissive `CPEAAPL` in [`AssignmentExpression` productions](https://tc39.es/ecma262/#prod-AssignmentExpression):
+Now we can use the very permissive `CPEAAPL` in [`AssignmentExpression` productions](https://tc39.es/ecma262/#prod-AssignmentExpression). (Note: `ConditionalExpression` leads to `PrimaryExpression` via a long production chain which is not shown here.)
 
 ```grammar
 AssignmentExpression :
@@ -146,8 +146,6 @@ PrimaryExpression :
   CPEAAPL
 
 ```
-
-(`ConditionalExpression` leads to `PrimaryExpression` via a long production chain.)
 
 Imagine we're again in the situation that we need to parse an `AssignmentExpression` and the next token is `(`. Now we can parse a `CPEAAPL` and figure out later what production to use. It doesn't matter whether we're parsing an `ArrowFunction` or a `ConditionalExpression`, the next symbol to parse is `CPEAAPL` in any case!
 
