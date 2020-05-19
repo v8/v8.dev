@@ -43,7 +43,10 @@ UpdateExpression :
   -- UnaryExpression
 ```
 
-If we're parsing an `UpdateExpression` and the next token is `++` or `--`, we know the production to use right away. If the next token is neither, it's still not too bad: we can parse a `LeftHandSideExpression` starting from the position we're at, and figure out what to do after we've parsed it. If the token following the `LeftHandSideExpression` is `++`, the production to use is `UpdateExpression : LeftHandSideExpression ++`. The case for `--` is similar. And if the token following the `LeftHandSideExpression` is neither `++` nor `--`, we use the production `UpdateExpression : LeftHandSideExpression`.
+- If we're parsing an `UpdateExpression` and the next token is `++` or `--`, we know the production to use right away.
+- If the next token is neither, it's still not too bad: we can parse a `LeftHandSideExpression` starting from the position we're at, and figure out what to do after we've parsed it.
+- If the token following the `LeftHandSideExpression` is `++`, the production to use is `UpdateExpression : LeftHandSideExpression ++`. The case for `--` is similar.
+- And if the token following the `LeftHandSideExpression` is neither `++` nor `--`, we use the production `UpdateExpression : LeftHandSideExpression`.
 
 ### Arrow function parameter list or a parenthesized expression?
 
