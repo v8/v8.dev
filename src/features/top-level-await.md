@@ -109,7 +109,7 @@ Without top-level `await`, JavaScript developers often used async immediately-in
 
 ## Support for top-level `await` { #support }
 
-<feature-support chrome="no https://bugs.chromium.org/p/v8/issues/detail?id=9344"
+<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=9344"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1519100"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202484"
                  nodejs="no"
