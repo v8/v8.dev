@@ -103,7 +103,7 @@ The important piece of new functionality lies in that first item. `String.protot
 
 An experimental implementation of `String.prototype.replaceAll` is available in V8 v8.0 behind the `--harmony-string-replaceall` flag.
 
-<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=9801"
+<feature-support chrome="85 https://bugs.chromium.org/p/v8/issues/detail?id=9801"
                  firefox="77 https://bugzilla.mozilla.org/show_bug.cgi?id=1608168#c8"
                  safari="13.1 https://webkit.org/blog/10247/new-webkit-features-in-safari-13-1/"
                  nodejs="no"
