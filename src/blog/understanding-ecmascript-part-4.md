@@ -242,7 +242,7 @@ Similarly, if a `CPEAAPL` occurs in the place of `ArrowParameters`, the followin
 
 ### Other cover grammars
 
-In addition to `CPEAAPL`, the spec uses gover grammars for other ambiguous-looking constructs.
+In addition to `CPEAAPL`, the spec uses cover grammars for other ambiguous-looking constructs.
 
 `ObjectLiteral` is used as a cover grammar for `ObjectAssignmentPattern` which occurs inside arrow function parameter lists. This means that `ObjectLiteral` allows constructs which cannot occur inside actual object literals.
 
