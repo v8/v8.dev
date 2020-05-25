@@ -1,6 +1,6 @@
 ---
 title: 'Optional chaining'
-author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), breaker of optional chains'
+author: 'Maya Lekova ([@Zmayski](https://twitter.com/Zmayski)), breaker of optional chains'
 avatars:
   - 'maya-lekova'
 date: 2019-08-27

@@ -1,6 +1,6 @@
 ---
 title: 'RegExp match indices'
-author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), regularly expressing new features'
+author: 'Maya Lekova ([@Zmayski](https://twitter.com/Zmayski)), regularly expressing new features'
 avatars:
   - 'maya-lekova'
 date: 2019-12-17
