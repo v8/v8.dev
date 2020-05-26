@@ -1,6 +1,6 @@
 ---
 title: 'Faster async functions and promises'
-author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), always-awaiting anticipator, and Benedikt Meurer ([@bmeurer](https://twitter.com/bmeurer)), professional performance promiser'
+author: 'Maya Lekova ([@Zmayski](https://twitter.com/Zmayski)), always-awaiting anticipator, and Benedikt Meurer ([@bmeurer](https://twitter.com/bmeurer)), professional performance promiser'
 avatars:
   - 'maya-lekova'
   - 'benedikt-meurer'

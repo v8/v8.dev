@@ -1,6 +1,6 @@
 ---
 title: 'Optimizing ES2015 proxies in V8'
-author: 'Maya Lekova ([@MayaLekova](https://twitter.com/MayaLekova)), Optimizer of Proxies'
+author: 'Maya Lekova ([@Zmayski](https://twitter.com/Zmayski)), Optimizer of Proxies'
 avatars:
   - 'maya-lekova'
 date: 2017-10-05 13:33:37
