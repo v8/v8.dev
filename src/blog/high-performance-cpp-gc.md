@@ -5,10 +5,10 @@ avatars:
   - 'anton-bikineev'
   - 'omer-katz'
   - 'michael-lippautz'
-date: 2020-05-15
+date: 2020-05-26
 tags:
-  - memory
   - internals
+  - memory
   - cppgc
 description: 'This post describes the Oilpan C++ garbage collector, its usage in Blink, and how it optimizes sweeping, i.e., reclamation of unreachable memory.'
 ---
