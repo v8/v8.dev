@@ -8,13 +8,13 @@ Each test log provides a pre-filled command line for triggering an automated fla
 
 ```
 Trigger flake bisect on command line:
-echo '{"bisect_buildername": "V8 Linux64 - verify csa", "bisect_mastername": "client.v8", "build_config": "Release", "extra_args": [], "isolated_name": "bot_default", "swarming_dimensions": ["cpu:x86-64", "gpu:none", "os:Ubuntu-14.04", "pool:Chrome"], "test_name": "inspector/runtime/command-line-api-without-side-effects", "timeout_sec": 60, "to_revision": "7f51fdac5bc8bf28b30904e1601819b356187b43", "total_timeout_sec": 120, "variant": "nooptimization"}' | buildbucket.py put -b luci.v8.try -n v8_flako -p -
+bb add v8/try.triggered/v8_flako -p 'to_revision="deadbeef"' -p 'test_name="MyTest"' ...
 ```
 
 Before triggering flake bisects for the first time, users must log in with a google.com account:
 
 ```bash
-depot-tools-auth login https://cr-buildbucket.appspot.com
+bb auth-login
 ```
 
 Then execute the provided command, which returns a build URL running flake bisect ([example](https://ci.chromium.org/p/v8/builders/luci.v8.try/v8_flako/b8935497223724984544)).
