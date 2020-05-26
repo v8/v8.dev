@@ -7,7 +7,7 @@ date: 2020-05-19
 tags:
   - ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
-tweet: ''
+tweet: '1262815621756014594'
 ---
 
 ## Previous episodes
