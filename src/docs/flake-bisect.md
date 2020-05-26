@@ -14,7 +14,7 @@ echo '{"bisect_buildername": "V8 Linux64 - verify csa", "bisect_mastername": "cl
 Before triggering flake bisects for the first time, users must log in with a google.com account:
 
 ```bash
-depot-tools-auth login https://cr-buildbucket.appspot.com
+bb auth-login
 ```
 
 Then execute the provided command, which returns a build URL running flake bisect ([example](https://ci.chromium.org/p/v8/builders/luci.v8.try/v8_flako/b8935497223724984544)).
