@@ -11,6 +11,7 @@ tags:
   - memory
   - cppgc
 description: 'This post describes the Oilpan C++ garbage collector, its usage in Blink, and how it optimizes sweeping, i.e., reclamation of unreachable memory.'
+tweet: '1265304883638480899'
 ---
 
 In the past we have [already](https://v8.dev/blog/trash-talk) [been](https://v8.dev/blog/concurrent-marking) [writing](https://v8.dev/blog/tracing-js-dom) about garbage collection for JavaScript, the document object model (DOM), and how all of this is implemented and optimized in V8. Not everything in Chromium is JavaScript though, as most of the browser and its Blink rendering engine where V8 is embedded are written in C++. JavaScript can be used to interact with the DOM that is then processed by the rendering pipeline.
