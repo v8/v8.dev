@@ -10,7 +10,7 @@ The V8 Research Grant funds programming languages and software systems research 
 
 The V8 Research Grant is an unrestricted gift of 40,000 USD. As an unrestricted gift the grant does not stipulate intellectual property rights.
 
-To qualify for this grant the applicant:
+To qualify for this grant, the applicant:
 
 - must be a leader of a research group at an accredited university anywhere in the world,
 - must nominate one or more outstanding Ph.D. students to work on the proposed project,
