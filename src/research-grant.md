@@ -1,5 +1,5 @@
 ---
-permalink: /research-grant/
+permalink: /grant/
 title: Research Grant
 layout: layouts/base.njk
 description: 'The V8 Research Grant funds programming languages and software systems research based on V8, JavaScript, and WebAssembly.'
