@@ -152,4 +152,4 @@ Ongoing experimental support is available on a recent Chrome Canary as detailed 
  
 ## Future work
 
-The current SIMD proposal is in Phase 2, so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations.
+The current SIMD proposal is in [Phase 3](https://github.com/WebAssembly/meetings/blob/master/process/phases.md#3-implementation-phase-community--working-group), so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations.
