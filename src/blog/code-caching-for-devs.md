@@ -178,7 +178,13 @@ self.addEventListener('fetch', (event) => {
 });
 ```
 
-These caches can include cached JS resources. However, since we expect service worker caches to be predominantly used for PWAs, we have slightly different heuristics for them compared to the normal “automatic” caching in Chrome. Firstly, they immediately create a code cache whenever the JS resource is added to the cache, meaning that the code cache is available already on second load (rather than only on third load, as is the case in the normal cache). Secondly, we generate a “full” code cache for these scripts — we no longer compile functions lazily, but instead compile _everything_ and place it in the cache. This has the advantage of having fast and predictable performance, with no execution order dependencies, though at the cost of increased memory use. Note that this heuristic applies only to service worker caches, and not to other uses of the `Cache` API. Indeed, currently the `Cache` API does not perform code caching at all when used outside of service workers.
+These caches can include cached JS resources. However, we have slightly different heuristics for them since we can make different assumptions. Since the service worker cache follows quota-managed storage rules it is more likely to be persisted for longer and the benefit of caching will be greater.  In addition, we can infer further importance of resources when they are pre-cached before the load.
+
+The largest heuristic differences take place when the resource is added to the service worker cache during the service worker install event. The above example demonstrates such a use. In this case the code cache is immediately created when the resource is put into the service worker cache. In addition, we generate a "full" code cache for these scripts - we no longer compile functions lazily, but instead compile _everything_ and place it in the cache. This has the advantage of having fast and predictable performance, with no execution order dependencies, though at the cost of increased memory use.
+
+If a JS resource is stored via the Cache API outside of the service worker install event then code cache is *not* immediately generated. Instead, if a service worker responds with that response from the cache then the "normal" code cache will be generated open first load. This code cache will then be available for consumption on the second load; one load faster than with the typical code caching scenario. Resources may be stored in the Cache API outside the install event when "progressively" caching resources in the fetch event or if the Cache API is updated from the main window instead of the service worker.
+
+Note, the pre-cached "full" code cache assumes the page where the script will be run will use UTF-8 encoding. If the page ends up using a different encoding then the code cache will be discarded and replaced with a "normal" code cache.
 
 ## Tracing
 
