@@ -14,11 +14,6 @@
         "type": 301
       },
       {
-        "regex": "/api/(?P<version>v[0-9]+.*)",
-        "destination": "https://v8.github.io/api/:version",
-        "type": 301
-      },
-      {
         "source": "/api/:api*",
         "destination": "https://v8.github.io/api/head/:api",
         "type": 301
@@ -36,11 +31,6 @@
       {
         "source": "/bug",
         "destination": "https://bugs.chromium.org/p/v8/issues/entry",
-        "type": 301
-      },
-      {
-        "regex": "/bug/(?P<id>v[0-9]+)",
-        "destination": "https://bugs.chromium.org/p/v8/issues/detail?id=:id",
         "type": 301
       },
       {
@@ -66,16 +56,6 @@
       {
         "source": "/tools",
         "destination": "https://v8.github.io/tools/head/",
-        "type": 301
-      },
-      {
-        "regex": "/tools/(?P<version>v[0-9]+.*)",
-        "destination": "https://v8.github.io/tools/:version",
-        "type": 301
-      },
-      {
-        "source": "/tools/:tool*",
-        "destination": "https://v8.github.io/tools/head/:tool",
         "type": 301
       }
     ],
