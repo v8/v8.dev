@@ -9,6 +9,11 @@
         "type": 301
       },
       {
+        "source": "/research",
+        "destination": "/grant",
+        "type": 302
+      },
+      {
         "source": "/api/(?P<version>v[0-9]+.+)/:api*",
         "destination": "https://v8.github.io/api/:version/:api",
         "type": 301
