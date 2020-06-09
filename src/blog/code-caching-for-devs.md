@@ -186,6 +186,8 @@ If a JS resource is stored via the Cache API outside of the service worker insta
 
 Note, the pre-cached "full" code cache assumes the page where the script will be run will use UTF-8 encoding. If the page ends up using a different encoding then the code cache will be discarded and replaced with a "normal" code cache.
 
+In addition, the pre-cached "full" code cache assumes the page will load the script as a classic JS script.  If the page ends up loading it as an ES module instead then the code cache will be discarded and replaced with a "normal" code cache.
+
 ## Tracing
 
 None of the above suggestions is guaranteed to speed up your web app. Unfortunately, code caching information is not currently exposed in DevTools, so the most robust way to find out which of your web app’s scripts are code-cached is to use the slightly lower-level `chrome://tracing`.
