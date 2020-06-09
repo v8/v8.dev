@@ -144,7 +144,7 @@ Another interesting set of demos that makes use of SIMD for smooth experience, c
 
 ## SIMD Origin Trial
 
-The WebAssembly SIMD origin trial is available for experimentation in Chrome versions 84-86. Origin trials allow developers to experiment with a feature, and provide valuable feedback. Once an origin trial token has been registered, the trial users are opted into the feature for the duration of the trial period without having to update Chrome flags. 
+The WebAssembly SIMD origin trial is available for experimentation in Chrome versions 84-86. Origin trials allow developers to experiment with a feature, and provide valuable feedback. Once an origin trial token has been registered, the trial users are opted into the feature for the duration of the trial period without having to update Chrome flags.
 
 To try this out, read the [origin trial developer guide](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md), and [register for an origin trial token](https://developers.chrome.com/origintrials/#/view_trial/-4708513410415853567). More information about origin trials can be found in the [FAQ](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md#faq), please file a [bug](https://bugs.chromium.org/p/v8/issues/entry) if something isn't working as you expect. The origin trial is compatible with emscripten versions 1.39.15 onwards.
 
