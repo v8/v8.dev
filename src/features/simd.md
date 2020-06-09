@@ -149,7 +149,7 @@ The WebAssembly SIMD origin trial is available for experimentation in Chrome ver
 To try this out, read the [origin trial developer guide](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md), and [register for an origin trial token](https://developers.chrome.com/origintrials/#/view_trial/-4708513410415853567). More information about origin trials can be found in the [FAQ](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md#faq), please file a [bug](https://bugs.chromium.org/p/v8/issues/entry) if something isn't working as you expect. The origin trial is compatible with emscripten versions 1.39.15 onwards.
 
 Ongoing experimental support is available on a recent Chrome Canary as detailed [above](#using-webassembly-simd), with the use of latest-upstream Emscripten toolchain.
- 
+
 ## Future work
 
 The current SIMD proposal is in [Phase 3](https://github.com/WebAssembly/meetings/blob/master/process/phases.md#3-implementation-phase-community--working-group), so the future work here is to push the proposal forward in the standardization process. Fixed width SIMD gives significant performance gains over scalar, but it doesn’t effectively leverage wider width vector operations that are available in modern hardware. As the current proposal moves forward, some future facing work here is to determine the feasibility of extending the proposal with longer width operations.
