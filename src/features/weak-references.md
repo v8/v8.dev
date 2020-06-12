@@ -65,7 +65,7 @@ class MovingAvg {
     this.events = [];
     this.socket = socket;
     this.listener = (ev) => { this.events.push(ev); };
-    socket.addEventListener("message", this.listener);
+    socket.addEventListener('message', this.listener);
   }
 
   compute(n) {
@@ -111,11 +111,11 @@ class MovingAvg {
     this.events = [];
     this.socket = socket;
     this.listener = (ev) => { this.events.push(ev); };
-    socket.addEventListener("message", this.listener);
+    socket.addEventListener('message', this.listener);
   }
 
   dispose() {
-    this.socket.removeEventListener("message", this.listener);
+    this.socket.removeEventListener('message', this.listener);
   }
 
   // …
@@ -137,7 +137,7 @@ class MovingAvg {
   constructor(socket) {
     this.events = [];
     this.listener = (ev) => { this.events.push(ev); };
-    socket.addEventListener("message", makeWeakListener(this.listener));
+    socket.addEventListener('message', makeWeakListener(this.listener));
   }
 }
 ```
@@ -175,7 +175,7 @@ class MovingAvg {
   constructor(socket) {
     this.events = [];
     this.listener = (ev) => { this.events.push(ev); }; // 1
-    socket.addEventListener("message", makeWeakListener(this.listener, socket)); // 5
+    socket.addEventListener('message', makeWeakListener(this.listener, socket)); // 5
   }
 }
 ```
