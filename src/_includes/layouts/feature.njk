@@ -10,7 +10,7 @@ layout: layouts/base.njk
         · Updated <time datetime="{{ updated | htmlDateString }}" itemprop="dateModified">{{ updated | readableDate }}</time>
       {% endif %}
       {% if tags %}
-        · tagged with {% for tag in tags %}{% if not 'io' in tag and not 'Node.js' in tag %}
+        · Tagged with {% for tag in tags %}{% if not 'io' in tag and not 'Node.js' in tag %}
           <a href="/features/tags/{{ tag | slug }}" class="tag">{{ tag }}</a>
         {% endif %}{% endfor %}
       {% endif %}

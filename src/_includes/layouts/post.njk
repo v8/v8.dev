@@ -10,7 +10,7 @@ layout: layouts/base.njk
         · Updated <time datetime="{{ updated | htmlDateString }}" itemprop="dateModified">{{ updated | readableDate }}</time>
       {% endif %}
       {% if tags %}
-        · tagged with {% for tag in tags %}
+        · Tagged with {% for tag in tags %}
           <a href="/blog/tags/{{ tag | slug }}" class="tag">{{ tag }}</a>
         {% endfor %}
       {% endif %}
