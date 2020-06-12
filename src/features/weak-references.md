@@ -127,17 +127,17 @@ The downside to this approach is that it is manual memory management. `MovingAvg
 `WeakRef`s make it possible to solve the dilemma by creating a _weak reference_ to the actual event listener, and then wrapping that `WeakRef` in an outer event listener. This way, the garbage collector can clean up the actual event listener and the memory that it holds alive, like the `MovingAvg` instance and its `events` array.
 
 ```js
-function makeWeakListener(listener) {
+function addWeakListener(socket, listener) {
   const weakRef = new WeakRef(listener);
   const wrapper = (ev) => { weakRef.deref()?.(ev); };
-  return wrapper;
+  socket.addEventListener('message', wrapper);
 }
 
 class MovingAvg {
   constructor(socket) {
     this.events = [];
     this.listener = (ev) => { this.events.push(ev); };
-    socket.addEventListener('message', makeWeakListener(this.listener));
+    addWeakListener(socket, this.listener);
   }
 }
 ```
@@ -148,11 +148,11 @@ class MovingAvg {
 
 We first make the event listener and assign it to `this.listener`, so that it is strongly referenced by the `MovingAvg` instance. In other words, as long as the `MovingAvg` instance is alive, so is the event listener.
 
-Then, in `makeWeakListener`, we create a `WeakRef` whose _target_ is the actual event listener. Inside `wrapper`, we `deref` it. Because `WeakRef`s do not prevent garbage collection of their targets if the targets do not have other strong references, we must manually dereference them to get the target. If the target has been garbage-collected in the meantime, `deref` returns `undefined`. Otherwise, the original target is returned, which is the `listener` function we then call using [optional chaining](/features/optional-chaining).
+Then, in `addWeakListener`, we create a `WeakRef` whose _target_ is the actual event listener. Inside `wrapper`, we `deref` it. Because `WeakRef`s do not prevent garbage collection of their targets if the targets do not have other strong references, we must manually dereference them to get the target. If the target has been garbage-collected in the meantime, `deref` returns `undefined`. Otherwise, the original target is returned, which is the `listener` function we then call using [optional chaining](/features/optional-chaining).
 
 Since the event listener is wrapped in a `WeakRef`, the _only_ strong reference to it is the `listener` property on the `MovingAvg` instance. That is, we've successfully tied the lifetime of the event listener to the lifetime of the `MovingAvg` instance.
 
-But there's still a problem here: we've added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper returned by `makeWeakListener` is still leaking for the same reason that `listener` was leaking originally. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
+But there's still a problem here: we've added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper in `addWeakListener` is still leaking for the same reason that `listener` was leaking originally. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
 
 :::note
 **Note:** The finalization callback does not run immediately after garbage-collecting the event listener. It either runs at some point in the future, or not at all — the spec doesn’t guarantee that it runs! Keep this in mind when writing code.
@@ -164,18 +164,18 @@ We can register a callback with a `FinalizationRegistry` to remove `listenerWrap
 const gListenersRegistry = new FinalizationRegistry(
   ({ socket, wrapper }) => { socket.removeEventListener(socket, wrapper); }); // 6
 
-function makeWeakListener(listener, socket) {
+function addWeakListener(socket, listener) {
   const weakRef = new WeakRef(listener); // 2
   const wrapper = (ev) => { weakRef.deref()?.(ev); }; // 3
   gListenersRegistry.register(listener, { socket, wrapper }); // 4
-  return wrapper;
+  socket.addEventListener('message', wrapper); // 5
 }
 
 class MovingAvg {
   constructor(socket) {
     this.events = [];
     this.listener = (ev) => { this.events.push(ev); }; // 1
-    socket.addEventListener('message', makeWeakListener(this.listener, socket)); // 5
+    addWeakListener(socket, this.listener);
   }
 }
 ```
