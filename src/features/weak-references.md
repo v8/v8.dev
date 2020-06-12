@@ -1,10 +1,13 @@
 ---
 title: 'Weak references and finalizers'
-author: 'Sathya Gunasekaran ([@_gsathya](https://twitter.com/_gsathya)) and Mathias Bynens ([@mathias](https://twitter.com/mathias))'
+author: 'Sathya Gunasekaran ([@_gsathya](https://twitter.com/_gsathya)), Mathias Bynens ([@mathias](https://twitter.com/mathias)), Shu-yu Guo ([@_shu](https://twitter.com/_shu)), and Leszek Swirski ([@leszekswirski](https://twitter.com/leszekswirski))
 avatars:
 - 'sathya-gunasekaran'
 - 'mathias-bynens'
+- 'shu-yu-guo'
+- 'leszek-swirski'
 date: 2019-07-09
+updated: 2020-06-12
 tags:
   - ECMAScript
   - io19
