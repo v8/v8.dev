@@ -39,6 +39,7 @@ See the [staging of type reflection](https://crrev.com/c/1771791) as a reference
 - The feature has been staged for several weeks to get fuzzer coverage.
 - The feature proposal is [stage 4](https://github.com/WebAssembly/proposals).
 - All [spec tests](https://github.com/WebAssembly/spec/tree/master/test) pass.
+- The [Chromium DevTools checklist for new WebAssembly features](https://docs.google.com/document/d/1WbL-fGuLbbNr5-n_nRGo_ILqZFnh5ZjRSUcDTT3yI8s/preview) is satisfied.
 
 ## How to ship a WebAssembly Feature
 
