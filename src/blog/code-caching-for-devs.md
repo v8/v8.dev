@@ -4,7 +4,7 @@ author: '[Leszek Swirski](https://twitter.com/leszekswirski), cache smasher'
 avatars:
   - leszek-swirski
 date: 2019-04-08 13:33:37
-updated: 2020-06-09 13:33:37
+updated: 2020-06-16
 tags:
   - internals
 description: '(Byte)code caching reduces the start-up time of commonly visited websites by caching the result of JavaScript parsing + compilation.'
