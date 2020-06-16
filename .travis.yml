@@ -6,6 +6,6 @@ os:
 script:
   - npm run ci
   - |
-    if [ "${TRAVIS_BRANCH}" = 'master' -a "${TRAVIS_PULL_REQUEST}" = 'false' -a "${TRAVIS_OS_NAME}" = 'linux' ]; then
+    if [ "${TRAVIS_BRANCH}" = 'main' -a "${TRAVIS_PULL_REQUEST}" = 'false' -a "${TRAVIS_OS_NAME}" = 'linux' ]; then
       firebase deploy --token "${FIREBASE_TOKEN}" --message "Deploy @ ${TRAVIS_COMMIT}";
     fi
