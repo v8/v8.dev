@@ -8,7 +8,7 @@ description: 'The V8 Research Grant funds programming languages and software sys
 
 The V8 Research Grant funds programming languages and software systems research based on V8, JavaScript, and WebAssembly to foster collaboration between V8 and academia.
 
-The V8 Research Grant is an unrestricted gift of 40,000 USD. As an unrestricted gift the grant does not stipulate intellectual property rights.
+The V8 Research Grant is an unrestricted gift of up to 40,000 USD. As an unrestricted gift the grant does not stipulate intellectual property rights.
 
 To qualify for this grant, the applicant:
 
