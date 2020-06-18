@@ -70,7 +70,7 @@ class MovingAvg {
 
   compute(n) {
     // Compute the simple moving average for the last n events.
-    // ...
+    // …
   }
 }
 ```
@@ -94,14 +94,24 @@ class MovingAvgComponent {
 
   render() {
     // Do rendering.
-    // ...
+    // …
   }
 }
 ```
 
 We know that keeping all the server messages inside an instance `MovingAvg` uses a lot of memory, so we take care to null out `this.movingAvg` when monitoring is stopped to let the garbage collector reclaim memory.
 
-However, after checking in the memory panel in DevTools, we found out that memory was not being reclaimed at all! The seasoned web developer may have already spotted the bug: event listeners are strong references and must be explicitly removed. Thus, the listener in `MovingAvg` instances, by referencing `this`, keeps the whole instance alive as long as the event listener isn't removed.
+However, after checking in the memory panel in DevTools, we found out that memory was not being reclaimed at all! The seasoned web developer may have already spotted the bug: event listeners are strong references and must be explicitly removed.
+
+Let's make this explicit with reachability diagrams. After calling `start()`, our object graph looks like the following, where a solid arrow means a strong reference. Everything reachable via solid arrows from the `MovingAvgComponent` instance is not garbage-collectible.
+
+![](/_img/weakrefs/after-start.svg)
+
+After calling `stop()`, we've removed the strong reference from the `MovingAvgComponent` instance to the `MovingAvg` instance, but not via the socket's listener.
+
+![](/_img/weakrefs/after-stop.svg)
+
+Thus, the listener in `MovingAvg` instances, by referencing `this`, keeps the whole instance alive as long as the event listener isn't removed.
 
 Until now, the solution is to manually unregister the event listener via a `dispose` method.
 
@@ -122,7 +132,7 @@ class MovingAvg {
 }
 ```
 
-The downside to this approach is that it is manual memory management. `MovingAvgComponent`, and all other users of the `MovingAvg` class, must remember to call `dispose` or suffer memory leaks. The application behavior doesn't depend on the event listener of this diagnostic class, and the listener is expensive in terms of memory use but not in computation. What we really want is for the listener's lifetime to be logically tied to the `MovingAvg` instance, so that `MovingAvg` could be used like any other JavaScript object whose memory is automatically reclaimed by the garbage collector.
+The downside to this approach is that it is manual memory management. `MovingAvgComponent`, and all other users of the `MovingAvg` class, must remember to call `dispose` or suffer memory leaks. What's worse, manual memory management is cascading: users of `MovingAvgComponent` must remember to call `stop` or suffer memory leaks, so on and so forth. The application behavior doesn't depend on the event listener of this diagnostic class, and the listener is expensive in terms of memory use but not in computation. What we really want is for the listener's lifetime to be logically tied to the `MovingAvg` instance, so that `MovingAvg` could be used like any other JavaScript object whose memory is automatically reclaimed by the garbage collector.
 
 `WeakRef`s make it possible to solve the dilemma by creating a _weak reference_ to the actual event listener, and then wrapping that `WeakRef` in an outer event listener. This way, the garbage collector can clean up the actual event listener and the memory that it holds alive, like the `MovingAvg` instance and its `events` array.
 
@@ -143,7 +153,7 @@ class MovingAvg {
 ```
 
 :::note
-**Note:** `WeakRef`s to functions must be treated with caution. JavaScript functions are [closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)) and strongly reference the outer environments which contain the values of free variables referenced inside the functions. These outer environments may contain variables that _other_ closures reference as well. That is, when dealing with closures, their memory is often strongly referenced by other closures in subtle ways. Keep this in mind when writing code.
+**Note:** `WeakRef`s to functions must be treated with caution. JavaScript functions are [closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)) and strongly reference the outer environments which contain the values of free variables referenced inside the functions. These outer environments may contain variables that _other_ closures reference as well. That is, when dealing with closures, their memory is often strongly referenced by other closures in subtle ways. This is the reason `addWeakListener` is a separate function and `wrapper` is not local to the `MovingAvg` constructor. In V8, if `wrapper` were local to the `MovingAvg` constructor and shared the lexical scope with the listener that is wrapped in the `WeakRef`, the `MovingAvg` instance and all its properties become reachable via the shared environment from the wrapper listener, causing the instance to be uncollectible. Keep this in mind when writing code.
 :::
 
 We first make the event listener and assign it to `this.listener`, so that it is strongly referenced by the `MovingAvg` instance. In other words, as long as the `MovingAvg` instance is alive, so is the event listener.
@@ -152,17 +162,30 @@ Then, in `addWeakListener`, we create a `WeakRef` whose _target_ is the actual e
 
 Since the event listener is wrapped in a `WeakRef`, the _only_ strong reference to it is the `listener` property on the `MovingAvg` instance. That is, we've successfully tied the lifetime of the event listener to the lifetime of the `MovingAvg` instance.
 
-But there's still a problem here: we've added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper in `addWeakListener` is still leaking for the same reason that `listener` was leaking originally. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
+Returning to reachability diagrams, our object graph looks like the following after calling `start()` with the `WeakRef` implementation, where a dotted arrow means a weak reference.
+
+![](/_img/weakrefs/weak-after-start.svg)
+
+After calling `stop()`, we've removed the only strong reference to the listener:
+
+![](/_img/weakrefs/weak-after-stop.svg)
+
+Eventually, after a garbage collection occurs, the `MovingAvg` instance and the listener will be collected:
+
+![](/_img/weakrefs/weak-after-gc.svg)
+
+But there's still a problem here: we've added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper in `addWeakListener` is still leaking for the same reason that `listener` was leaking originally. Granted, this is a smaller leak since only the wrapper is leaking instead of the whole `MovingAvg` instance, but it is still a leak. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
 
 :::note
 **Note:** The finalization callback does not run immediately after garbage-collecting the event listener. It either runs at some point in the future, or not at all — the spec doesn’t guarantee that it runs! Keep this in mind when writing code.
 :::
 
-We can register a callback with a `FinalizationRegistry` to remove `listenerWrapper` from the socket when the inner event listener is garbage-collected. Our final implementation looks like this:
+We can register a callback with a `FinalizationRegistry` to remove `wrapper` from the socket when the inner event listener is garbage-collected. Our final implementation looks like this:
 
 ```js
-const gListenersRegistry = new FinalizationRegistry(
-  ({ socket, wrapper }) => { socket.removeEventListener(socket, wrapper); }); // 6
+const gListenersRegistry = new FinalizationRegistry(({ socket, wrapper }) => {
+  socket.removeEventListener('message', wrapper); // 6
+});
 
 function addWeakListener(socket, listener) {
   const weakRef = new WeakRef(listener); // 2
@@ -179,6 +202,10 @@ class MovingAvg {
   }
 }
 ```
+
+:::note
+**Note:** `gListenersRegistry` is a global variable to ensure the finalizers are executed. A `FinalizationRegistry` is not kept alive by objects that are registered on it. If a registry is itself garbage-collected, its finalizer may not run.
+:::
 
 We make an event listener and assign it to `this.listener` so that it is strongly referenced by the `MovingAvg` instance (1). We then wrap the event listener that does the work in a `WeakRef` to make it garbage-collectible, and to not leak its reference to the `MovingAvg` instance via `this` (2). We make a wrapper that `deref` the `WeakRef` to check if it is still alive, then call it if so (3). We register the inner listener on the `FinalizationRegistry`, passing a _holding value_ `{ socket, wrapper }` to the registration (4). We then add the returned wrapper as an event listener on `socket` (5). Sometime after the `MovingAvg` instance and the inner listener are garbage-collected, the finalizer may run, with the holding value passed to it. Inside the finalizer, we remove the wrapper as well, making all memory associated with the use of a `MovingAvg` instance garbage-collectible (6).
 
