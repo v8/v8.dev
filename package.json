@@ -41,7 +41,7 @@
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "dark-mode-toggle": "^0.6.0",
-    "firebase-tools": "^7.2.4",
+    "firebase-tools": "^8.4.3",
     "get-video-dimensions": "^1.0.0",
     "glob": "^7.1.4",
     "he": "^1.2.0",
