@@ -62,11 +62,6 @@
         "source": "/tools",
         "destination": "https://v8.github.io/tools/head/",
         "type": 301
-      },
-      {
-        "regex": "\\/tools\\/(v[0-9]+.*)",
-        "destination": "https://v8.github.io/tools/:1",
-        "type": 301
       }
     ],
     "headers": [
