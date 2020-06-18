@@ -7,7 +7,7 @@ avatars:
 - 'shu-yu-guo'
 - 'leszek-swirski'
 date: 2019-07-09
-updated: 2020-06-18
+updated: 2020-06-19
 tags:
   - ECMAScript
   - io19
