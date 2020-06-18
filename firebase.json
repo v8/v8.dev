@@ -64,8 +64,8 @@
         "type": 301
       },
       {
-        "regex": "/tools/(?P<version>v[0-9]+.*)",
-        "destination": "https://v8.github.io/tools/:version",
+        "regex": "/tools/(v[0-9]+.*)",
+        "destination": "https://v8.github.io/tools/:1",
         "type": 301
       }
     ],
