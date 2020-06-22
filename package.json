@@ -15,7 +15,7 @@
     "clean": "shx rm -rf -- dist",
     "build": "npm run clean && npm run css && npm run js && npm run json && npm run copy-img && npm run copy-js && npm run eleventy && npm run sw && npm run xml && npm run html",
     "watch": "npm run build && npx eleventy --watch",
-    "serve": "npx eleventy --serve",
+    "serve": "npm start",
     "debug": "DEBUG=* npx eleventy",
     "start": "superstatic --port=9001",
     "deploy": "firebase deploy",
