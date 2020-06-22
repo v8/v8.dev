@@ -40,7 +40,7 @@
     "@browser-logos/safari": "^1.0.7",
     "autoprefixer": "^9.8.2",
     "cssnano": "^4.1.10",
-    "dark-mode-toggle": "^0.6.0",
+    "dark-mode-toggle": "^0.7.1",
     "firebase-tools": "^8.4.3",
     "get-video-dimensions": "^1.0.0",
     "glob": "^7.1.6",
