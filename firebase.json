@@ -65,7 +65,7 @@
       },
       {
         "regex": "/tools/(?P<version>v[0-9]+.*)",
-        "destination": "https\://v8.github.io/tools/:version",
+        "destination": "//v8.github.io/tools/:version",
         "type": 301
       }
     ],
