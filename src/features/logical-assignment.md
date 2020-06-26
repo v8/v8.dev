@@ -77,6 +77,10 @@ function setDefaultMessageBuggy() {
 }
 ```
 
+:::note
+**Note:** Because the `innerHTML` property is [specified](https://w3c.github.io/DOM-Parsing/#dom-innerhtml-innerhtml) to return the empty string instead of `null` or `undefined`, `||=` must be used instead of `??=`. When writing code, keep in mind that many web APIs do not use `null` or `undefined` to mean empty or absent.
+:::
+
 In HTML, assigning to the `.innerHTML` property on an element is destructive. Inner children are deleted, and new children parsed from the newly assigned string are inserted. Even when the new string is the same as the old string, it causes both additional work and the inner elements to lose focus. For this practical reason of not causing unwanted side-effects, the semantics of logical assignment operators short-circuit the assignment.
 
 It may help to think about the symmetry with other compound assignment operators in the following way. Mathematical and bitwise operators are unconditional, and so the assignment is also unconditional. Logical operators are conditional, and so the assignment is also conditional.
