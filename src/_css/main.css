@@ -475,7 +475,7 @@ dark-mode-toggle {
 
 @media (max-width: 770px) {
   :root {
-    --offset: 10px;
+    --offset: 12px;
   }
   body {
     padding: 0;
