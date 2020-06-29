@@ -6,6 +6,7 @@ avatars:
 date: 2019-11-11
 tags:
   - ECMAScript
+  - ES2021
 description: 'JavaScript now has first-class support for global substring replacement through the new `String.prototype.replaceAll` API.'
 tweet: '1193917549060280320'
 ---
