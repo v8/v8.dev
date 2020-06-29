@@ -50,14 +50,14 @@ const ws = new WeakSet();
 ```
 
 :::note
-You can think of `WeakMap.prototype.set(ref, metaData)` as adding a property with the value `metaData` to the object `ref`: as long as you have a reference to the object, you can get the metadata. Once you no longer have a reference to the object, it can be garbage-collected, even if you still have a reference to the `WeakMap` to which it was added. Similarly, you can think of a `WeakSet` as a special case of `WeakMap` where all the values are booleans.
+**Note:** You can think of `WeakMap.prototype.set(ref, metaData)` as adding a property with the value `metaData` to the object `ref`: as long as you have a reference to the object, you can get the metadata. Once you no longer have a reference to the object, it can be garbage-collected, even if you still have a reference to the `WeakMap` to which it was added. Similarly, you can think of a `WeakSet` as a special case of `WeakMap` where all the values are booleans.
 
 A JavaScript `WeakMap` is not really _weak_: it actually refers _strongly_ to its contents as long as the key is alive. The `WeakMap` only refers weakly to its contents once the key is garbage-collected. A more accurate name for this kind of relationship is [_ephemeron_](https://en.wikipedia.org/wiki/Ephemeron).
 :::
 
 `WeakRef` is a more advanced API that provides _actual_ weak references, enabling a window into the lifetime of an object. Let’s walk through an example together.
 
-For the example, suppose we're working on a chat web application that uses web sockets to communicate with a server. Imagine a `MovingAvg` class that, for performance diagnostic purposes, keeps a set of events from a web socket in order to compute a simple moving average of the latency.
+For the example, suppose we’re working on a chat web application that uses web sockets to communicate with a server. Imagine a `MovingAvg` class that, for performance diagnostic purposes, keeps a set of events from a web socket in order to compute a simple moving average of the latency.
 
 ```js
 class MovingAvg {
@@ -103,11 +103,11 @@ We know that keeping all the server messages inside an instance `MovingAvg` uses
 
 However, after checking in the memory panel in DevTools, we found out that memory was not being reclaimed at all! The seasoned web developer may have already spotted the bug: event listeners are strong references and must be explicitly removed.
 
-Let's make this explicit with reachability diagrams. After calling `start()`, our object graph looks like the following, where a solid arrow means a strong reference. Everything reachable via solid arrows from the `MovingAvgComponent` instance is not garbage-collectible.
+Let’s make this explicit with reachability diagrams. After calling `start()`, our object graph looks like the following, where a solid arrow means a strong reference. Everything reachable via solid arrows from the `MovingAvgComponent` instance is not garbage-collectible.
 
 ![](/_img/weakrefs/after-start.svg)
 
-After calling `stop()`, we've removed the strong reference from the `MovingAvgComponent` instance to the `MovingAvg` instance, but not via the socket's listener.
+After calling `stop()`, we’ve removed the strong reference from the `MovingAvgComponent` instance to the `MovingAvg` instance, but not via the socket’s listener.
 
 ![](/_img/weakrefs/after-stop.svg)
 
@@ -132,7 +132,7 @@ class MovingAvg {
 }
 ```
 
-The downside to this approach is that it is manual memory management. `MovingAvgComponent`, and all other users of the `MovingAvg` class, must remember to call `dispose` or suffer memory leaks. What's worse, manual memory management is cascading: users of `MovingAvgComponent` must remember to call `stop` or suffer memory leaks, so on and so forth. The application behavior doesn't depend on the event listener of this diagnostic class, and the listener is expensive in terms of memory use but not in computation. What we really want is for the listener's lifetime to be logically tied to the `MovingAvg` instance, so that `MovingAvg` could be used like any other JavaScript object whose memory is automatically reclaimed by the garbage collector.
+The downside to this approach is that it is manual memory management. `MovingAvgComponent`, and all other users of the `MovingAvg` class, must remember to call `dispose` or suffer memory leaks. What’s worse, manual memory management is cascading: users of `MovingAvgComponent` must remember to call `stop` or suffer memory leaks, so on and so forth. The application behavior doesn’t depend on the event listener of this diagnostic class, and the listener is expensive in terms of memory use but not in computation. What we really want is for the listener’s lifetime to be logically tied to the `MovingAvg` instance, so that `MovingAvg` could be used like any other JavaScript object whose memory is automatically reclaimed by the garbage collector.
 
 `WeakRef`s make it possible to solve the dilemma by creating a _weak reference_ to the actual event listener, and then wrapping that `WeakRef` in an outer event listener. This way, the garbage collector can clean up the actual event listener and the memory that it holds alive, like the `MovingAvg` instance and its `events` array.
 
@@ -160,13 +160,13 @@ We first make the event listener and assign it to `this.listener`, so that it is
 
 Then, in `addWeakListener`, we create a `WeakRef` whose _target_ is the actual event listener. Inside `wrapper`, we `deref` it. Because `WeakRef`s do not prevent garbage collection of their targets if the targets do not have other strong references, we must manually dereference them to get the target. If the target has been garbage-collected in the meantime, `deref` returns `undefined`. Otherwise, the original target is returned, which is the `listener` function we then call using [optional chaining](/features/optional-chaining).
 
-Since the event listener is wrapped in a `WeakRef`, the _only_ strong reference to it is the `listener` property on the `MovingAvg` instance. That is, we've successfully tied the lifetime of the event listener to the lifetime of the `MovingAvg` instance.
+Since the event listener is wrapped in a `WeakRef`, the _only_ strong reference to it is the `listener` property on the `MovingAvg` instance. That is, we’ve successfully tied the lifetime of the event listener to the lifetime of the `MovingAvg` instance.
 
 Returning to reachability diagrams, our object graph looks like the following after calling `start()` with the `WeakRef` implementation, where a dotted arrow means a weak reference.
 
 ![](/_img/weakrefs/weak-after-start.svg)
 
-After calling `stop()`, we've removed the only strong reference to the listener:
+After calling `stop()`, we’ve removed the only strong reference to the listener:
 
 ![](/_img/weakrefs/weak-after-stop.svg)
 
@@ -174,7 +174,7 @@ Eventually, after a garbage collection occurs, the `MovingAvg` instance and the 
 
 ![](/_img/weakrefs/weak-after-gc.svg)
 
-But there's still a problem here: we've added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper in `addWeakListener` is still leaking for the same reason that `listener` was leaking originally. Granted, this is a smaller leak since only the wrapper is leaking instead of the whole `MovingAvg` instance, but it is still a leak. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
+But there’s still a problem here: we’ve added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper in `addWeakListener` is still leaking for the same reason that `listener` was leaking originally. Granted, this is a smaller leak since only the wrapper is leaking instead of the whole `MovingAvg` instance, but it is still a leak. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
 
 :::note
 **Note:** The finalization callback does not run immediately after garbage-collecting the event listener. It either runs at some point in the future, or not at all — the spec doesn’t guarantee that it runs! Keep this in mind when writing code.
