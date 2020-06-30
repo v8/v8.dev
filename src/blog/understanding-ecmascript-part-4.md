@@ -53,19 +53,19 @@ Distinguishing arrow function parameter lists from parenthesized expressions is 
 
 For example:
 
-```javascript
+```js
 let x = (a,
 ```
 
 Is this the start of an arrow function, like this?
 
-```javascript
+```js
 let x = (a, b) => { return a + b };
 ```
 
 Or maybe it's a parenthesized expression, like this?
 
-```javascript
+```js
 let x = (a, 3);
 ```
 
@@ -104,7 +104,7 @@ CPEAAPL :
 
 For example, the following expressions are valid `CPEAAPL`s:
 
-```javascript
+```js
 // Valid ParenthesizedExpression and ArrowParameterList:
 (a, b)
 (a, b = 1)
@@ -169,7 +169,7 @@ AssignmentExpression :
 
 For example:
 
-```javascript
+```js
 let x = (a, b) => { return a + b; };
 //      ^^^^^^
 //     CPEAAPL
@@ -264,7 +264,7 @@ Initializer :
 
 For example:
 
-```javascript
+```js
 let o = { a = 1 }; // syntax error
 
 // Arrow function with a destructuring parameter with a default
@@ -276,13 +276,13 @@ f({a : 6}); // returns 6
 
 Async arrow functions also look ambiguous with a finite lookahead:
 
-```javascript
+```js
 let x = async(a,
 ```
 
 Is this a call to a function called `async` or an async arrow function?
 
-```javascript
+```js
 let x1 = async(a, b);
 let x2 = async();
 function async() { }

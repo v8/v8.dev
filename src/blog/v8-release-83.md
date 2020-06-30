@@ -30,7 +30,7 @@ According to the JavaScript specification, when storing a value to the specified
 
 However, we recently identified a particular scenario where V8 incorrectly installed this fast lookup handler, leading to incorrect behaviour. When `TypedArray`s are on the prototype chain, all stores to keys which are OOB of the `TypedArray` should be ignored. For example, in the case below `v[2]` shouldn’t add a property to `v` and the subsequent reads should return undefined.
 
-```javascript
+```js
 v = {};
 v.__proto__ = new Int32Array(1);
 v[2] = 123;

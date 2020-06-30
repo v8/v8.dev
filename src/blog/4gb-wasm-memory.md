@@ -31,7 +31,7 @@ The first issue we had to solve was that V8 used [Smis](https://v8.dev/blog/poin
 
 A second challenge was dealing with JavaScript's special-casing for Array elements, compared to regular named properties, which is reflected in our implementation of objects. (This is a rather technical issue to do with the JavaScript spec, so don’t worry if you don’t follow all the details.) Consider this example:
 
-```javascript
+```js
 console.log(array[5_000_000_000]);
 ```
 
@@ -43,7 +43,7 @@ In other words, the rules for TypedArrays are quite different from normal Arrays
 
 On the toolchain side we had to do work as well, most of it on the JavaScript support code, not the compiled code in WebAssembly. The main issue was that Emscripten has always written memory accesses in this form:
 
-```javascript
+```js
 HEAP32[(ptr + offset) >> 2]
 ```
 
@@ -51,7 +51,7 @@ That reads 32 bits (4 bytes) as a signed integer from address `ptr + offset`. Ho
 
 The problem is that `>>` is a *signed* operation! If the address is at the 2GB mark or higher, it will overflow the input into a negative number:
 
-```javascript
+```js
 // Just below 2GB is ok, this prints 536870911
 console.log((2 * 1024 * 1024 * 1024 - 4) >> 2);
 // 2GB overflows and we get -536870912 :(
@@ -60,7 +60,7 @@ console.log((2 * 1024 * 1024 * 1024) >> 2);
 
 The solution is to do an *unsigned* shift, `>>>`:
 
-```javascript
+```js
 // This gives us 536870912, as we want!
 console.log((2 * 1024 * 1024 * 1024) >>> 2);
 ```
