@@ -54,8 +54,8 @@ const globalWeakRef = new WeakRef({
 
 (async function() {
   globalWeakRef.deref().callback();
-  // Logs “foo” to console. Weak ref guaranteed to be alive for the first turn
-  // of the event loop when it is created.
+  // Logs “foo” to console. globalWeakRef is guaranteed to be alive
+  // for the first turn of the event loop after it was created.
 
   await new Promise((resolve, reject) => {
     setTimeout(() => { resolve('foo'); }, 42);
