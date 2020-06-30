@@ -86,6 +86,24 @@ Finalizers are scheduled to run on the event loop and never interrupt synchronou
 
 These are advanced and powerful features, and with any luck, your program won’t need them. Please see our [explainer](https://v8.dev/features/weak-references) to learn more about them!
 
+### Private methods and accessors
+
+Private fields, which shipped in v7.4, are rounded out with support for private methods and accessors. Syntactically, the names of private methods and accessors start with `#`, just like private fields. The following is a brief taste of the syntax.
+
+```js
+class Component {
+  #privateMethod() {
+    console.log('I'm only callable inside Component!');
+  }
+  get #privateAccessor() { return 42; }
+  set #privateAccessor(x) { }
+}
+```
+
+Private methods and accessors have the same scoping rules and semantics as private fields. Please see our [explainer](https://v8.dev/features/class-fields) to learn more.
+
+Thanks to [Igalia](https://twitter.com/igalia) for contributing the implementation!
+
 ## V8 API
 
 Please use `git log branch-heads/8.3..branch-heads/8.4 include/v8.h` to get a list of the API changes.
