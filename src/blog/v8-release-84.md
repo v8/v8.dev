@@ -46,7 +46,10 @@ let globalRef = { callback: function() { console.log(“foo”); } };
 JavaScript programmers can now hold on to objects weakly via the `WeakRef` feature. Objects that are referenced by weak references do not prevent their being garbage collected if they are not also strongly referenced.
 
 ```javascript
-const globalWeakRef = new WeakRef({ callback: function() { console.log(“foo”); });
+const globalWeakRef = new WeakRef({
+  callback: function() { console.log('foo');
+});
+
 (async function() {
   globalWeakRef.deref().callback();
   // Logs “foo” to console. Weak ref guaranteed to be alive for the first turn
