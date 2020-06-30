@@ -39,7 +39,7 @@ JavaScript is a garbage collected language, which means memory occupied by objec
 
 ```javascript
 const globalRef = {
-  callback: function() { console.log('foo');
+  callback() { console.log('foo'); }
 };
 // As long as globalRef is reachable through the global scope,
 // neither it nor the function in its callback property will be collected.
@@ -49,7 +49,7 @@ JavaScript programmers can now hold on to objects weakly via the `WeakRef` featu
 
 ```javascript
 const globalWeakRef = new WeakRef({
-  callback: function() { console.log('foo');
+  callback() { console.log('foo'); }
 });
 
 (async function() {
