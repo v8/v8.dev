@@ -38,7 +38,9 @@ The SIMD proposal enables WebAssembly to take advantage of commonly available ha
 JavaScript is a garbage collected language, which means memory occupied by objects that are no longer reachable by the program may be automatically reclaimed when the garbage collector runs. With the exception of references in `WeakMap` and `WeakSet`, all references in JavaScript are strong and prevent the referenced object from being garbage collected. For instance,
 
 ```javascript
-let globalRef = { callback: function() { console.log(“foo”); } };
+const globalRef = {
+  callback: function() { console.log('foo');
+};
 // As long as globalRef is reachable through the global scope,
 // neither it nor the function in its callback property will be collected.
 ```
