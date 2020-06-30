@@ -72,7 +72,7 @@ The companion feature to `WeakRef`s is `FinalizationRegistry`, which lets progra
 
 ```javascript
 const registry = new FinalizationRegistry((heldValue) => {
-  console.log(holdings);
+  console.log(heldValue);
 });
 
 (function () {
