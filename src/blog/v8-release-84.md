@@ -6,7 +6,7 @@ avatars:
 date: 2020-06-30
 tags:
  - release
-description: 'V8 v8.4 with Webassembly improvements and Weak References in Javascript'
+description: 'V8 v8.4 with WebAssembly improvements and Weak References in Javascript'
 tweet: ''
 ---
 
