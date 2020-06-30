@@ -69,6 +69,7 @@ The companion feature to `WeakRef`s is `FinalizationRegistry`, which lets progra
 const registry = new FinalizationRegistry((heldValue) => {
   console.log(holdings);
 });
+
 (function () {
   let garbage = {};
   registry.register(garbage, 42);
