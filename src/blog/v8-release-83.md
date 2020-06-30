@@ -54,4 +54,4 @@ The following experimental WeakRefs-related APIs are deprecated:
 
 Please use `git log branch-heads/8.1..branch-heads/8.3 include/v8.h` to get a list of the API changes.
 
-Developers with an active V8 checkout can use `git checkout -b 8.1 -t branch-heads/8.3` to experiment with the new features in V8 v8.3. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an active V8 checkout can use `git checkout -b 8.3 -t branch-heads/8.3` to experiment with the new features in V8 v8.3. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
