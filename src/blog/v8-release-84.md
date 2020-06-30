@@ -83,6 +83,6 @@ These are advanced and powerful features, and with any luck, your program won’
 
 ### Other API changes
 
-Please use `git log branch-heads/8.3..branch-heads/8.34 include/v8.h` to get a list of the API changes.
+Please use `git log branch-heads/8.3..branch-heads/8.4 include/v8.h` to get a list of the API changes.
 
-Developers with an active V8 checkout can use `git checkout -b 8.13 -t branch-heads/8.4` to experiment with the new features in V8 v8.4. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an active V8 checkout can use `git checkout -b 8.4 -t branch-heads/8.4` to experiment with the new features in V8 v8.4. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
