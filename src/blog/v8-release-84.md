@@ -1,8 +1,8 @@
 ---
 title: 'V8 release v8.4'
-author: 'Camillo Bruni, '
+author: 'Camillo Bruni, enjoying some fresh booleans.'
 avatars:
- - 'camillobruni'
+ - 'camillo-bruni'
 date: 2020-06-30
 tags:
  - release
