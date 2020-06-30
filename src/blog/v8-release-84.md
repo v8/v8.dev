@@ -57,7 +57,7 @@ const globalWeakRef = new WeakRef({
   // Logs “foo” to console. Weak ref guaranteed to be alive for the first turn
   // of the event loop when it is created.
 
-  await (new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     setTimeout(() => { resolve('foo'); }, 42);
   });
   // Wait for a turn of the event loop.
