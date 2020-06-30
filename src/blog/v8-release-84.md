@@ -81,7 +81,7 @@ Finalizers are scheduled to run on the event loop and never interrupt synchronou
 
 These are advanced and powerful features, and with any luck, your program won’t need them. Please see our [explainer](https://v8.dev/features/weak-references) to learn more about them!
 
-## Other API changes
+## V8 API
 
 Please use `git log branch-heads/8.3..branch-heads/8.4 include/v8.h` to get a list of the API changes.
 
