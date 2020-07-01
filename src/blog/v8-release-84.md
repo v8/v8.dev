@@ -93,7 +93,7 @@ Private fields, which shipped in v7.4, are rounded out with support for private 
 ```js
 class Component {
   #privateMethod() {
-    console.log('I'm only callable inside Component!');
+    console.log("I'm only callable inside Component!");
   }
   get #privateAccessor() { return 42; }
   set #privateAccessor(x) { }
