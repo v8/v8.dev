@@ -177,7 +177,7 @@ Eventually, after a garbage collection occurs, the `MovingAvg` instance and the 
 But there’s still a problem here: we’ve added a level of indirection to `listener` by wrapping it a `WeakRef`, but the wrapper in `addWeakListener` is still leaking for the same reason that `listener` was leaking originally. Granted, this is a smaller leak since only the wrapper is leaking instead of the whole `MovingAvg` instance, but it is still a leak. The solution to this is the companion feature to `WeakRef`, `FinalizationRegistry`. With the new `FinalizationRegistry` API, we can register a callback to run when the garbage collector zaps a register object. Such callbacks are known as _finalizers_.
 
 :::note
-**Note:** The finalization callback does not run immediately after garbage-collecting the event listener, so don't use it for important logic or metrics. The timing of garbage collection and finalization callbacks is unspecifed. In fact, an engine that never garbage collected would be fully compliant. However, it's safe to assume that engines will garbage collect, and finalization callbacks will be called at _some point_. Keep this uncertainty in mind when writing code.
+**Note:** The finalization callback does not run immediately after garbage-collecting the event listener, so don't use it for important logic or metrics. The timing of garbage collection and finalization callbacks is unspecifed. In fact, an engine that never garbage collected would be fully compliant. However, it's safe to assume that engines _will_ garbage collect, and finalization callbacks will be called at some later time, unless the environment is discarded (such as the tab closing, or the worker terminating). Keep this uncertainty in mind when writing code.
 :::
 
 We can register a callback with a `FinalizationRegistry` to remove `wrapper` from the socket when the inner event listener is garbage-collected. Our final implementation looks like this:
@@ -216,6 +216,8 @@ With all this, our original implementation of `MovingAvgComponent` neither leaks
 After hearing about these new capabilities, it might be tempting to `WeakRef` All The Things™. However, that’s probably not a good idea. Some things are explicitly _not_ good use cases for `WeakRef`s and finalizers.
 
 In general, avoid writing code that depends on the garbage collector cleaning up a `WeakRef` or calling a finalizer at any predictable time — [it can’t be done](https://github.com/tc39/proposal-weakrefs#a-note-of-caution)! Moreover, whether an object is garbage-collectible at all may depend on implementation details, such as the representation of closures, that are both subtle and may differ across JavaScript engines and even between different versions of the same engine.
+
+For example, don’t place important logic in the code path of a finalizer. Finalizer callbacks may not happen immediately after garbage collection, and may not happen in the same order as actual garbage collection. They're useful to perform clean-up in response to garbage-collection, but you can't reliably use them to, say, record meaningful metrics about memory usage.
 
 `WeakRef`s and finalizers can help you save memory, and work best when used sparingly as a means of progressive enhancement. Since they’re power-user features, we expect most usage to happen within frameworks or libraries.
 
