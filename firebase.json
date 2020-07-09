@@ -59,8 +59,38 @@
         "type": 301
       },
       {
-        "source": "/tools",
-        "destination": "https://v8.github.io/tools/head/",
+        "source": "/tools/v8.0/:tool*",
+        "destination": "https://v8.github.io/tools/v8.0/:tool",
+        "type": 301
+      },
+      {
+        "source": "/tools/v8.1/:tool*",
+        "destination": "https://v8.github.io/tools/v8.1/:tool",
+        "type": 301
+      },
+      {
+        "source": "/tools/v8.2/:tool*",
+        "destination": "https://v8.github.io/tools/v8.2/:tool",
+        "type": 301
+      },
+      {
+        "source": "/tools/v8.3/:tool*",
+        "destination": "https://v8.github.io/tools/v8.3/:tool",
+        "type": 301
+      },
+      {
+        "source": "/tools/v8.4/:tool*",
+        "destination": "https://v8.github.io/tools/v8.4/:tool",
+        "type": 301
+      },
+      {
+        "source": "/tools/v8.5/:tool*",
+        "destination": "https://v8.github.io/tools/v8.5/:tool",
+        "type": 301
+      },
+      {
+        "source": "/tools/:tool*",
+        "destination": "https://v8.github.io/tools/head/:tool",
         "type": 301
       }
     ],
