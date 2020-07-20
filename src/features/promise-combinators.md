@@ -147,5 +147,5 @@ This code example checks which endpoint responds the fastest, and then logs it. 
 `Promise.any` rejections can represent multiple errors at once. To support this at the language-level, a new error type called `AggregateError` is introduced. In addition to its basic usage in the above example, `AggregateError` objects can also be programmatically constructed, just like the other error types:
 
 ```js
-const aggregateError = new AggregateError(errors, 'Stuff went wrong!');
+const aggregateError = new AggregateError([errorA, errorB, errorC], 'Stuff went wrong!');
 ```
