@@ -190,6 +190,6 @@ Now that V8 does not keep the linked-list of JavaScript functions in the context
 
 ## Acknowledgments
 
-Throughout my internship, I had lots of help from several people, who were always available to answer my many questions. Thus I would like to thank the following people: Benedikt Meurer, Jaroslav Sevcik, and Michael Starzinger for discussions on how the compiler and the deoptimizer work, Ulan Degenbaev for helping with the garbage collector whenever I broke it, and Mathias Bynens, Peter Marshall, Camillo Bruni, and Maya Lekova for proofreading this article.
+Throughout my internship, I had lots of help from several people, who were always available to answer my many questions. Thus I would like to thank the following people: Benedikt Meurer, Jaroslav Sevcik, and Michael Starzinger for discussions on how the compiler and the deoptimizer work, Ulan Degenbaev for helping with the garbage collector whenever I broke it, and Mathias Bynens, Peter Marshall, Camillo Bruni, and Maya Armyanova for proofreading this article.
 
 Finally, this article is my last contribution as a Google intern and I would like to take the opportunity to thank everyone in the V8 team, and especially my host, Benedikt Meurer, for hosting me and for giving me the opportunity to work on such an interesting project — I definitely learned a lot and enjoyed my time at Google!
