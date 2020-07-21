@@ -71,7 +71,7 @@ x ??= y;
 // Roughly equivalent to x ?? (x = y)
 ```
 
-Note that, unlike mathematical and bitwise compound assignment operators, logical assignment operators only conditionally perform the assignment. 
+Note that, unlike mathematical and bitwise compound assignment operators, logical assignment operators only conditionally perform the assignment.
 
 Please read our [explainer](https://v8.dev/features/logical-assignment) for a more in-depth explanation.
 
