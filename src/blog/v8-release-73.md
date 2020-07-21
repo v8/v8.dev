@@ -1,8 +1,8 @@
 ---
 title: 'V8 release v7.3'
-author: 'Clemens Hammacher, compiler wrangler'
+author: 'Clemens Backes, compiler wrangler'
 avatars:
-  - clemens-hammacher
+  - clemens-backes
 date: 2019-02-07 11:30:42
 tags:
   - release
