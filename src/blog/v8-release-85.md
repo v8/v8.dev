@@ -1,17 +1,18 @@
 ---
 title: 'V8 release v8.5'
-author: 'Sathya Gunasekaran'
+author: 'Zeynep Cankara, tracking some Maps'
 avatars:
+ - 'zeynep-cankara'
 date: 2020-07-21
 tags:
  - release
-description: 'V8 release v8.5'
+description: 'V8 release v8.5 features Promise.any, AggregateError and Support for JS BigInts'
 tweet:
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 8.5](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/8.5), which is in beta until its release in coordination with Chrome 85 Stable in several weeks. V8 v8.5 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
-JavaScript
-`Promise.any` and `AggregateError`
+## JavaScript
+### `Promise.any` and `AggregateError`
 `Promise.any` is a promise combinator that resolves the resulting promise as soon as one of the input promises is fulfilled.
 
 ```js
