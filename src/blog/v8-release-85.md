@@ -6,7 +6,7 @@ avatars:
 date: 2020-07-21
 tags:
  - release
-description: 'V8 release v8.5 features Promise.any, String#replaceAll, logical assignment operators, WebAssembly multi-value and BigInt support, and performance improvements'
+description: 'V8 release v8.5 features Promise.any, AggregateError, String.prototype.replaceAll, logical assignment operators, Liftoff shipped on all platforms, multi-value support shipped and support for JS BigInts'
 tweet:
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 8.5](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/8.5), which is in beta until its release in coordination with Chrome 85 Stable in several weeks. V8 v8.5 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
@@ -38,7 +38,7 @@ try {
 
 If all input promises are rejected, the resulting promise is rejected with an `AggregateError` object containing an `errors` property which holds an array of rejection values.
 
-Please see our explainer for more.
+Please see our [explainer](https://v8.dev/features/promise-combinators#promise.any) for more.
 
 ### `String.prototype.replaceAll`
 
@@ -56,7 +56,7 @@ queryString.replaceAll('+', ' ');
 // → 'q=query string parameters'
 ```
 
-Please see our explainer for more.
+Please see our [explainer](https://v8.dev/features/string-replaceall) for more.
 
 ### Logical assignment operators
 
