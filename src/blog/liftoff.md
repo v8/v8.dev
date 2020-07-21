@@ -1,8 +1,8 @@
 ---
 title: 'Liftoff: a new baseline compiler for WebAssembly in V8'
-author: 'Clemens Hammacher, WebAssembly compilation maestro'
+author: 'Clemens Backes, WebAssembly compilation maestro'
 avatars:
-  - 'clemens-hammacher'
+  - 'clemens-backes'
 date: 2018-08-20 15:45:12
 tags:
   - WebAssembly
