@@ -100,6 +100,22 @@ For consistency with the pre-existing APIs in the language, `String.prototype.re
 
 The important piece of new functionality lies in that first item. `String.prototype.replaceAll` enriches JavaScript with first-class support for global substring replacement, without the need for regular expressions or other workarounds.
 
+## A note on special replacement patterns { #special-patterns }
+
+Worth calling out: both `replace` and `replaceAll` support [special replacement patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter). Although these are most useful in combination with regular expressions, some of them (`$$`, `$&`, ``$` ``, and `$'`) also take effect when performing simple string replacement, which can be surprising:
+
+```js
+'xyz'.replaceAll('y', '$$');
+// → 'x$z' (not 'x$$z')
+```
+
+In case your replacement string contains one of these patterns, and you want to use them as-is, you can opt-out of the magical substitution behavior by using a replacer function that returns the string instead:
+
+```js
+'xyz'.replaceAll('y', () => '$$');
+// → 'x$$z'
+```
+
 ## `String.prototype.replaceAll` support { #support }
 
 <feature-support chrome="85 https://bugs.chromium.org/p/v8/issues/detail?id=9801"
