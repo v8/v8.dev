@@ -60,7 +60,7 @@
       },
       {
         "regex": "/tools/(?P<version>v[0-9]+.*)",
-        "destination": "//v8.github.io/tools/:version",
+        "destination": "https://v8.github.io/tools/:version",
         "type": 301
       },
       {
