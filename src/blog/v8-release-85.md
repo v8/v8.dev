@@ -129,7 +129,7 @@ Thereby WebAssembly functions with I64 parameters and return values can be calle
 From JavaScript, only BigInts can be passed as I64 parameter:
 
 ```javascript
-WebAssembly.instantiateStreaming(fetch(‘i64.wasm’))
+WebAssembly.instantiateStreaming(fetch('i64.wasm'))
   .then(({ module, instance })) => {
     instance.exports.add(12n, 30n); // result = 42n;
     instance.exports.add(12, 30); // throws TypeError, parameters are not of type BigInt.
