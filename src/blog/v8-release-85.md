@@ -135,3 +135,9 @@ WebAssembly.instantiateStreaming(fetch('i64.wasm'))
     instance.exports.add(12, 30); // throws TypeError, parameters are not of type BigInt.
   });
 ```
+
+## V8 API
+
+Please use `git log branch-heads/8.4..branch-heads/8.5 include/v8.h` to get a list of the API changes.
+
+Developers with an active V8 checkout can use `git checkout -b 8.5 -t branch-heads/8.5` to experiment with the new features in V8 v8.5. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
