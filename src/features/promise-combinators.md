@@ -136,8 +136,21 @@ try {
   // → e.g. 'b'
 } catch (error) {
   // All of the promises were rejected.
-  console.log(error);
+  console.assert(error instanceof AggregateError);
+  // Log the rejection values:
+  console.log(error.errors);
+  // → [
+  //     <TypeError: Failed to fetch /endpoint-a>,
+  //     <TypeError: Failed to fetch /endpoint-b>,
+  //     <TypeError: Failed to fetch /endpoint-c>
+  //   ]
 }
 ```
 
 This code example checks which endpoint responds the fastest, and then logs it. Only if _all_ of the requests fail do we end up in the `catch` block, where we can then handle the errors.
+
+`Promise.any` rejections can represent multiple errors at once. To support this at the language-level, a new error type called `AggregateError` is introduced. In addition to its basic usage in the above example, `AggregateError` objects can also be programmatically constructed, just like the other error types:
+
+```js
+const aggregateError = new AggregateError([errorA, errorB, errorC], 'Stuff went wrong!');
+```
