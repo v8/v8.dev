@@ -139,6 +139,11 @@ try {
   console.assert(error instanceof AggregateError);
   // Log the rejection values:
   console.log(error.errors);
+  // → [
+  //     <TypeError: Failed to fetch /endpoint-a>,
+  //     <TypeError: Failed to fetch /endpoint-b>,
+  //     <TypeError: Failed to fetch /endpoint-c>
+  //   ]
 }
 ```
 
