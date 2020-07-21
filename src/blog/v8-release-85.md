@@ -134,7 +134,7 @@ From JavaScript, only BigInts can be passed as I64 parameter:
 
 ```javascript
 WebAssembly.instantiateStreaming(fetch('i64.wasm'))
-  .then(({ module, instance })) => {
+  .then(({ module, instance }) => {
     instance.exports.add(12n, 30n); // result = 42n;
     instance.exports.add(12, 30); // throws TypeError, parameters are not of type BigInt.
   });
