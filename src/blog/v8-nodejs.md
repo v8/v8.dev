@@ -26,4 +26,4 @@ With async functions, you can drastically simplify asynchronous code by rewritin
 
 ## Want to try bleeding-edge Node.js?
 
-If you’re excited to test the newest V8 features in Node and don’t mind using bleeding edge, unstable software, you can try out our integration branch [here](https://github.com/v8/node/tree/vee-eight-lkgr). [V8 is continuously integrated into Node](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20node.js%20integration) before V8 hits Node master, so we can catch issues early. Be warned though, this is more experimental than Node master.
+If you’re excited to test the newest V8 features in Node and don’t mind using bleeding edge, unstable software, you can try out our integration branch [here](https://github.com/v8/node/tree/vee-eight-lkgr). [V8 is continuously integrated into Node](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20node.js%20integration) before V8 hits Node.js, so we can catch issues early. Be warned though, this is more experimental than Node.js tip-of-tree.
