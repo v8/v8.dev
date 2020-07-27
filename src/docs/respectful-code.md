@@ -26,7 +26,7 @@ Anything that a contributor would read while working on V8, including:
 
 ## How do I know if particular terminology is OK or not?
 
-Apply the principles above. If you have any questions, you can reach out to ???@google.com.
+Apply the principles above. If you have any questions, you can reach out to `v8-dev@googlegroups.com`.
 
 ## What are examples of terminology to be avoided?
 
