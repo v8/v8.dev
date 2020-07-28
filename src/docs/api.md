@@ -41,3 +41,5 @@ The embedder should be able to adjust their code to the new API while still usin
 - Changing function signatures is unsafe. Use the `V8_DEPRECATED` and `V8_DEPRECATE_SOON` macros as described above.
 
 We maintain a [document mentioning important API changes](https://docs.google.com/document/d/1g8JFi8T_oAE_7uAri7Njtig7fKaPDfotU6huOa1alds/edit) for each V8 version.
+
+There is also a regularly updated [doxygen api documentation](https://v8.dev/api).

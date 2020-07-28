@@ -64,8 +64,13 @@
         "type": 301
       },
       {
-        "regex": "/tools(?P<tool>/.*)",
-        "destination": "https://v8.github.io/tools/head:tool",
+        "source": "/tools)",
+        "destination": "https://v8.github.io/tools/",
+        "type": 301
+      },
+      {
+        "source": "/tools/:tool*)",
+        "destination": "https://v8.github.io/tools/head/:tool",
         "type": 301
       }
     ],
