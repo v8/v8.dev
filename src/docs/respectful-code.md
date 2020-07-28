@@ -32,6 +32,7 @@ Apply the principles above. If you have any questions, you can reach out to `v8-
 
 This list is NOT meant to be comprehensive. It contains a few examples that people have run into frequently.
 
+:::table-wrapper
 | Term      | Suggested alternatives                                        |
 | --------- | ------------------------------------------------------------- |
 | master    | primary, controller, leader, host                             |
