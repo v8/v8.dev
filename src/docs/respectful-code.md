@@ -47,5 +47,5 @@ This list is NOT meant to be comprehensive. It contains a few examples that peop
 
 This circumstance has come up a few times, particularly for code implementing specifications. In these circumstances, differing from the language in the specification may interfere with the ability to understand the implementation. For these circumstances, we suggest one of the following, in order of decreasing preference:
 
-1. If using alternate terminology doesn't interfere with understanding, use alternate terminology.
+1. If using alternate terminology doesn’t interfere with understanding, use alternate terminology.
 2. Failing that, do not propagate the terminology beyond the layer of code that is performing the interfacing. Where necessary, use alternative terminology at the API boundaries.
