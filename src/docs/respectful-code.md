@@ -43,6 +43,7 @@ This list is NOT meant to be comprehensive. It contains a few examples that peop
 | sane      | expected, appropriate, sensible, valid                        |
 | crazy     | unexpected, catastrophic, incoherent                          |
 | redline   | priority line, limit, soft limit                              |
+:::
 
 ## What if I am interfacing with something that violates this policy? { #violations }
 
