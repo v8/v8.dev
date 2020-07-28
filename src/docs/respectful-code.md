@@ -9,7 +9,7 @@ Inclusivity is central to V8’s culture, and our values include treating each o
 
 Terminology that is derogatory, hurtful, or perpetuates discrimination, either directly or indirectly, should be avoided.
 
-## What is in scope for this policy?
+## What is in scope for this policy? { #scope }
 
 Anything that a contributor would read while working on V8, including:
 
