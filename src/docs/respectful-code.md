@@ -19,16 +19,16 @@ Anything that a contributor would read while working on V8, including:
 - Documentation (both inside and outside of source files)
 - Commit messages
 
-## Principles
+## Principles { #principles }
 
 - Be respectful: derogatory language shouldn’t be necessary to describe how things work.
 - Respect culturally sensitive language: some words may carry significant historical or political meanings. Please be mindful of this and use alternatives.
 
-## How do I know if particular terminology is OK or not?
+## How do I know if particular terminology is OK or not? { #questions }
 
 Apply the principles above. If you have any questions, you can reach out to `v8-dev@googlegroups.com`.
 
-## What are examples of terminology to be avoided?
+## What are examples of terminology to be avoided? { #examples }
 
 This list is NOT meant to be comprehensive. It contains a few examples that people have run into frequently.
 
@@ -43,7 +43,7 @@ This list is NOT meant to be comprehensive. It contains a few examples that peop
 | crazy     | unexpected, catastrophic, incoherent                          |
 | redline   | priority line, limit, soft limit                              |
 
-## What if I am interfacing with something that violates this policy?
+## What if I am interfacing with something that violates this policy? { #violations }
 
 This circumstance has come up a few times, particularly for code implementing specifications. In these circumstances, differing from the language in the specification may interfere with the ability to understand the implementation. For these circumstances, we suggest one of the following, in order of decreasing preference:
 
