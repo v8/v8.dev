@@ -21,8 +21,8 @@ Anything that a contributor would read while working on V8, including:
 
 ## Principles
 
-- Be respectful: Derogatory language shouldn’t be necessary to describe how things work.
-- Respect culturally sensitive language: Some words may carry significant historical or political meanings. Please be mindful of this and use alternatives.
+- Be respectful: derogatory language shouldn’t be necessary to describe how things work.
+- Respect culturally sensitive language: some words may carry significant historical or political meanings. Please be mindful of this and use alternatives.
 
 ## How do I know if particular terminology is OK or not?
 
