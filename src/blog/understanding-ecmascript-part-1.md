@@ -6,9 +6,13 @@ avatars:
 date: 2020-02-03 13:33:37
 tags:
   - ECMAScript
+  - Understanding ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
 tweet: '1224363301146189824'
 ---
+
+[All episodes](/blog/tags/understanding-ecmascript)
+
 In this article, we take a simple function in the spec and try to understand the notation. Let’s go!
 
 ## Preface
@@ -229,9 +233,13 @@ Asserts in the spec assert invariant conditions of the algorithms. They are adde
 
 ## Moving on
 
-We have built the understanding needed for reading the spec for simple methods like `Object.prototype.hasOwnProperty` and abstract operations like `HasOwnProperty`. They still delegate to other abstract operations, but based on this blog post we should be able to figure out what they do. We’ll encounter Property Descriptors, which is just another specification type.
+The abstract operations delegate to other abstract operations (see picture below), but based on this blog post we should be able to figure out what they do. We’ll encounter Property Descriptors, which is just another specification type.
 
 ![Function call graph starting from `Object.prototype.hasOwnProperty`](/_img/understanding-ecmascript-part-1/call-graph.svg)
+
+## Summary
+
+We read through a simple method — `Object.prototype.hasOwnProperty` — and **abstract operations** it invokes. We familiarized ourselves with the shorthands `?` and `!` related to error handling. We encountered **language types**, **specification types**, **internal slots**, and **internal methods**.
 
 ## Useful links
 
