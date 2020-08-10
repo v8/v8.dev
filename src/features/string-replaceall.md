@@ -6,6 +6,7 @@ avatars:
 date: 2019-11-11
 tags:
   - ECMAScript
+  - ES2021
 description: 'JavaScript now has first-class support for global substring replacement through the new `String.prototype.replaceAll` API.'
 tweet: '1193917549060280320'
 ---
@@ -98,6 +99,22 @@ For consistency with the pre-existing APIs in the language, `String.prototype.re
 1. If `searchValue` is a non-global RegExp, then `String#replace` replaces only a single match, similar to how it behaves for strings. `String#replaceAll` on the other hand throws an exception in this case, since this is probably a mistake: if you really want to “replace all” matches, you’d use a global regular expression; if you only want to replace a single match, you can use `String#replace`.
 
 The important piece of new functionality lies in that first item. `String.prototype.replaceAll` enriches JavaScript with first-class support for global substring replacement, without the need for regular expressions or other workarounds.
+
+## A note on special replacement patterns { #special-patterns }
+
+Worth calling out: both `replace` and `replaceAll` support [special replacement patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter). Although these are most useful in combination with regular expressions, some of them (`$$`, `$&`, ``$` ``, and `$'`) also take effect when performing simple string replacement, which can be surprising:
+
+```js
+'xyz'.replaceAll('y', '$$');
+// → 'x$z' (not 'x$$z')
+```
+
+In case your replacement string contains one of these patterns, and you want to use them as-is, you can opt-out of the magical substitution behavior by using a replacer function that returns the string instead:
+
+```js
+'xyz'.replaceAll('y', () => '$$');
+// → 'x$$z'
+```
 
 ## `String.prototype.replaceAll` support { #support }
 

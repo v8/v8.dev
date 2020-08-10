@@ -77,16 +77,18 @@ function setDefaultMessageBuggy() {
 }
 ```
 
+:::note
+**Note:** Because the `innerHTML` property is [specified](https://w3c.github.io/DOM-Parsing/#dom-innerhtml-innerhtml) to return the empty string instead of `null` or `undefined`, `||=` must be used instead of `??=`. When writing code, keep in mind that many web APIs do not use `null` or `undefined` to mean empty or absent.
+:::
+
 In HTML, assigning to the `.innerHTML` property on an element is destructive. Inner children are deleted, and new children parsed from the newly assigned string are inserted. Even when the new string is the same as the old string, it causes both additional work and the inner elements to lose focus. For this practical reason of not causing unwanted side-effects, the semantics of logical assignment operators short-circuit the assignment.
 
 It may help to think about the symmetry with other compound assignment operators in the following way. Mathematical and bitwise operators are unconditional, and so the assignment is also unconditional. Logical operators are conditional, and so the assignment is also conditional.
 
 ## Logical assignment support { #support }
 
-An experimental implementation of logical assignment is available in V8 v8.4 behind the `--harmony-logical-assignment` flag.
-
-<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=10372"
-                 firefox="partial https://bugzilla.mozilla.org/show_bug.cgi?id=1629106"
-                 safari="partial https://bugs.webkit.org/show_bug.cgi?id=209716"
+<feature-support chrome="85"
+                 firefox="79 https://bugzilla.mozilla.org/show_bug.cgi?id=1629106"
+                 safari="partial https://webkit.org/blog/10428/release-notes-for-safari-technology-preview-105/"
                  nodejs="no"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-logical-assignment-operators"></feature-support>

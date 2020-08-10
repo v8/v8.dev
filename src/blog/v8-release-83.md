@@ -30,7 +30,7 @@ According to the JavaScript specification, when storing a value to the specified
 
 However, we recently identified a particular scenario where V8 incorrectly installed this fast lookup handler, leading to incorrect behaviour. When `TypedArray`s are on the prototype chain, all stores to keys which are OOB of the `TypedArray` should be ignored. For example, in the case below `v[2]` shouldn’t add a property to `v` and the subsequent reads should return undefined.
 
-```javascript
+```js
 v = {};
 v.__proto__ = new Int32Array(1);
 v[2] = 123;
@@ -54,4 +54,4 @@ The following experimental WeakRefs-related APIs are deprecated:
 
 Please use `git log branch-heads/8.1..branch-heads/8.3 include/v8.h` to get a list of the API changes.
 
-Developers with an active V8 checkout can use `git checkout -b 8.1 -t branch-heads/8.3` to experiment with the new features in V8 v8.3. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.
+Developers with an active V8 checkout can use `git checkout -b 8.3 -t branch-heads/8.3` to experiment with the new features in V8 v8.3. Alternatively you can [subscribe to Chrome’s Beta channel](https://www.google.com/chrome/browser/beta.html) and try the new features out yourself soon.

@@ -14,8 +14,8 @@ Here’s an example of a config file `traceconfig.json`:
 
 ```json
 {
- "record_mode": "record-continuously",
- "included_categories": ["v8", "disabled-by-default-v8.runtime_stats"]
+  "record_mode": "record-continuously",
+  "included_categories": ["v8", "disabled-by-default-v8.runtime_stats"]
 }
 ```
 

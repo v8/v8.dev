@@ -26,7 +26,7 @@ const such_many = 2n ** 222n;
 
 For details about the new functionality and how it could be used, refer to [our in-depth article on BigInt](/features/bigint). We are looking forward to seeing the awesome things you’ll build with them!
 
-[^1]: _Now_ if you run Chrome Beta, Dev, or Canary, or a [preview Node.js version](https://github.com/v8/node/tree/vee-eight-lkgr), otherwise _soon_ (Chrome 67, Node.js master probably around the same time).
+[^1]: _Now_ if you run Chrome Beta, Dev, or Canary, or a [preview Node.js version](https://github.com/v8/node/tree/vee-eight-lkgr), otherwise _soon_ (Chrome 67, Node.js tip-of-tree probably around the same time).
 
 [^2]: Arbitrary up to an implementation-defined limit. Sorry, we haven’t yet figured out how to squeeze an infinite amount of data into your computer’s finite amount of memory.
 

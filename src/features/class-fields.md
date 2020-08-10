@@ -205,7 +205,7 @@ class Cat extends Animal {
 
 ### Support for private methods and accessors { #support-private-methods }
 
-<feature-support chrome="no"
+<feature-support chrome="84 /blog/v8-release-84#private-methods-and-accessors"
                  firefox="no"
                  safari="no"
                  nodejs="no"

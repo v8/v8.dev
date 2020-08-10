@@ -133,7 +133,7 @@ git cl try --revision=1234
     git cl try
     ```
 
-1. Wait for the try bots to build and you get an email with the result. Note: There are issues with some of the slaves at the moment. Sending try jobs from codereview is recommended.
+1. Wait for the try bots to build and you get an email with the result. Note: There are issues with some of the replicas at the moment. Sending try jobs from codereview is recommended.
 
 ### Useful arguments
 

@@ -25,6 +25,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Cross-compiling for iOS](/docs/cross-compile-ios)
     - [GUI and IDE setup](/docs/ide-setup)
 - [Contributing](/docs/contribute)
+    - [Respectful code](/docs/respectful-code)
     - [V8’s public API and its stability](/docs/api)
     - [Becoming a V8 committer](/docs/become-committer)
     - [Committer’s responsibility](/docs/committer-responsibility)

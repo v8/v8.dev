@@ -2,6 +2,7 @@
 title: 'Fast, parallel applications with WebAssembly SIMD'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52))'
 date: 2020-01-30
+updated: 2020-06-09
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
