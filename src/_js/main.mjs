@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '/_js/dark-mode-toggle.mjs';
-
 const darkModeToggle = document.querySelector('dark-mode-toggle');
 
 // Only load the Twitter script when we need it.
