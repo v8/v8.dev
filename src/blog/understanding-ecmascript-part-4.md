@@ -6,17 +6,12 @@ avatars:
 date: 2020-05-19
 tags:
   - ECMAScript
+  - Understanding ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
 tweet: '1262815621756014594'
 ---
 
-## Previous episodes
-
-In [part 1](/blog/understanding-ecmascript-part-1), we read through a simple method — `Object.prototype.hasOwnProperty` — and the **abstract operations** it invokes. We familiarized ourselves with the shorthands `?` and `!` related to error handling. We encountered **language types**, **specification types**, **internal slots**, and **internal methods**.
-
-In [part 2](/blog/understanding-ecmascript-part-2), we examined a simple grammar production and how its runtime semantics are defined. In [the extra content](/blog/extra/understanding-ecmascript-part-2-extra), we also followed a long grammar production chain from `AssignmentExpression` to `MemberExpression`.
-
-In [part 3](/blog/understanding-ecmascript-part-3), we familiarized ourselves with the lexical grammar, the syntactic grammar, and the shorthands used for defining the syntactic grammar.
+[All episodes](/blog/tags/understanding-ecmascript)
 
 ## Meanwhile in other parts of the Web
 

@@ -6,18 +6,14 @@ avatars:
 date: 2020-04-01
 tags:
   - ECMAScript
+  - Understanding ECMAScript
 description: 'Tutorial on reading the ECMAScript specification'
 tweet: '1245400717667577857'
 ---
-…where we dive deep in the syntax!
 
-## Previous episodes
+[All episodes](/blog/tags/understanding-ecmascript)
 
-In [part 1](/blog/understanding-ecmascript-part-1), we read through a simple method — `Object.prototype.hasOwnProperty` — and the **abstract operations** it invokes. We familiarized ourselves with the shorthands `?` and `!` related to error handling. We encountered **language types**, **specification types**, **internal slots**, and **internal methods**.
-
-In [part 2](/blog/understanding-ecmascript-part-2), we examined a simple grammar production and how its runtime semantics are defined. In [the extra content](/blog/extra/understanding-ecmascript-part-2-extra), we also followed a long grammar production chain from `AssignmentExpression` to `MemberExpression`. In this episode, we’ll go deeper in the definition of the ECMAScript language and its syntax.
-
-If you’re not familiar with [context-free grammars](https://en.wikipedia.org/wiki/Context-free_grammar), now is a good time to check out the basics, since the spec uses context-free grammars to define the language.
+In this episode, we’ll go deeper in the definition of the ECMAScript language and its syntax. If you’re not familiar with [context-free grammars](https://en.wikipedia.org/wiki/Context-free_grammar), now is a good time to check out the basics, since the spec uses context-free grammars to define the language.
 
 ## ECMAScript grammars
 
