@@ -40,15 +40,16 @@ In the following steps, invoke `perf` as `<path_to_kernel_checkout>/tip/tools/pe
 To use V8’s integration with Linux perf you need to build it with the appropriate GN build flag activated. You can set `enable_profiling = true` in an existing GN build configuration.
 
 ```bash
-echo 'enable_profiling = true' >> out.gn/x64.release/args.gn
-ninja -C out.gn/x64.release
+echo 'enable_profiling = true' >> out/x64.release/args.gn
+ninja -C out/x64.release
 ```
 
 Alternatively, you create a new clean build configuration with only the single build flag set to enable `perf` support:
 
 ```bash
 cd <path_to_your_v8_checkout>
-gn gen out/x64.release --args='is_debug=false target_cpu="x64" enable_profiling=true'
+gn gen out/x64.release \
+    --args='is_debug=false target_cpu="x64" enable_profiling=true'
 ninja -C out/x64.release
 ```
 
