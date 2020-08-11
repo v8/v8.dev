@@ -14,13 +14,13 @@
         "type": 302
       },
       {
-        "source": "/api",
-        "destination": "https://v8.github.io/api/head/",
+        "regex": "/api/(?P<version_api>v[0-9]+.*)",
+        "destination": "https://v8.github.io/api/:version_api",
         "type": 301
       },
       {
-        "source": "/api/:api*",
-        "destination": "https://v8.github.io/api/head/:api",
+        "regex": "/api(?P<api>/.*)",
+        "destination": "https://v8.github.io/api/head:api",
         "type": 301
       },
       {
@@ -59,8 +59,18 @@
         "type": 301
       },
       {
-        "regex": "/tools/(?P<version>v[0-9]+.*)",
-        "destination": "https://v8.github.io/tools/:version",
+        "regex": "/tools/(?P<version_tool>v[0-9]+.*)",
+        "destination": "https://v8.github.io/tools/:version_tool",
+        "type": 301
+      },
+      {
+        "source": "/tools",
+        "destination": "https://v8.github.io/tools/head",
+        "type": 301
+      },
+      {
+        "source": "/tools/versions",
+        "destination": "https://v8.github.io/tools/",
         "type": 301
       },
       {
