@@ -64,7 +64,7 @@
         "type": 301
       },
       {
-        "source": "/tools)",
+        "source": "/tools",
         "destination": "https://v8.github.io/tools/head",
         "type": 301
       },
