@@ -215,9 +215,13 @@ With all this, our original implementation of `MovingAvgComponent` neither leaks
 
 After hearing about these new capabilities, it might be tempting to `WeakRef` All The Things™. However, that’s probably not a good idea. Some things are explicitly _not_ good use cases for `WeakRef`s and finalizers.
 
-In general, avoid writing code that depends on the garbage collector cleaning up a `WeakRef` or calling a finalizer at any predictable time — [it can’t be done](https://github.com/tc39/proposal-weakrefs#a-note-of-caution)! Moreover, whether an object is garbage-collectible at all may depend on implementation details, such as the representation of closures, that are both subtle and may differ across JavaScript engines and even between different versions of the same engine.
+In general, avoid writing code that depends on the garbage collector cleaning up a `WeakRef` or calling a finalizer at any predictable time — [it can’t be done](https://github.com/tc39/proposal-weakrefs#a-note-of-caution)! Moreover, whether an object is garbage-collectible at all may depend on implementation details, such as the representation of closures, that are both subtle and may differ across JavaScript engines and even between different versions of the same engine. Specifically, finalizer callbacks:
 
-For example, don’t place important logic in the code path of a finalizer. Finalizer callbacks may not happen immediately after garbage collection, and may not happen in the same order as actual garbage collection. They're useful to perform clean-up in response to garbage-collection, but you can't reliably use them to, say, record meaningful metrics about memory usage.
+- Might not happen immediately after garbage collection.
+- Might not happen in the same order as actual garbage collection.
+- Might not happen at all, e.g. if the browser window is closed.
+
+So, don’t place important logic in the code path of a finalizer. They're useful to perform clean-up in response to garbage-collection, but you can't reliably use them to, say, record meaningful metrics about memory usage. For that use case, see [`measureMemory`](https://web.dev/monitor-total-page-memory-usage/).
 
 `WeakRef`s and finalizers can help you save memory, and work best when used sparingly as a means of progressive enhancement. Since they’re power-user features, we expect most usage to happen within frameworks or libraries.
 
