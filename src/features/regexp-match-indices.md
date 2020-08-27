@@ -2,7 +2,7 @@
 title: 'RegExp match indices'
 author: 'Maya Armyanova ([@Zmayski](https://twitter.com/Zmayski)), regularly expressing new features'
 avatars:
-  - 'maya-lekova'
+  - 'maya-armyanova'
 date: 2019-12-17
 tags:
   - ECMAScript
