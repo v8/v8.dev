@@ -38,7 +38,7 @@ try {
 
 If all input promises are rejected, the resulting promise is rejected with an `AggregateError` object containing an `errors` property which holds an array of rejection values.
 
-Please see our [explainer](https://v8.dev/features/promise-combinators#promise.any) for more.
+Please see [our explainer](https://v8.dev/features/promise-combinators#promise.any) for more.
 
 ### `String.prototype.replaceAll`
 
@@ -56,7 +56,7 @@ queryString.replaceAll('+', ' ');
 // → 'q=query string parameters'
 ```
 
-Please see our [explainer](https://v8.dev/features/string-replaceall) for more.
+Please see [our explainer](https://v8.dev/features/string-replaceall) for more.
 
 ### Logical assignment operators
 
@@ -73,7 +73,7 @@ x ??= y;
 
 Note that, unlike mathematical and bitwise compound assignment operators, logical assignment operators only conditionally perform the assignment.
 
-Please read our [explainer](https://v8.dev/features/logical-assignment) for a more in-depth explanation.
+Please read [our explainer](https://v8.dev/features/logical-assignment) for a more in-depth explanation.
 
 ## WebAssembly
 
