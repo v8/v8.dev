@@ -82,10 +82,33 @@
     "headers": [
       {
         "source": "/sw.js",
-        "headers": [{
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }]
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          },
+          {
+            "key": "Content-Type",
+            "value": "text/javascript;charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31557600"
+          }
+        ]
+      },
+      {
+        "source": "/_js/*.@(js|mjs)",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/javascript;charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31557600"
+          }
+        ]
       },
       {
         "source": "/*.atom",
@@ -102,7 +125,7 @@
         }]
       },
       {
-        "source": "**/*.@(mjs|js|css)",
+        "source": "/_css/*.css",
         "headers": [{
           "key": "Cache-Control",
           "value": "max-age=31557600"
