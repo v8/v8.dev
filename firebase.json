@@ -88,13 +88,6 @@
         }]
       },
       {
-        "source": "**/*.@(js|mjs)",
-        "headers": [{
-          "key": "Content-Type",
-          "value": "text/javascript;charset=utf-8"
-        }]
-      },
-      {
         "source": "/*.atom",
         "headers": [{
           "key": "Content-Type",
