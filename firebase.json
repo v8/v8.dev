@@ -112,31 +112,39 @@
       },
       {
         "source": "/*.atom",
-        "headers": [{
-          "key": "Content-Type",
-          "value": "application/atom+xml;charset=utf-8"
-        }]
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/atom+xml;charset=utf-8"
+          }
+        ]
       },
       {
         "source": "/sitemap.xml",
-        "headers": [{
-          "key": "Content-Type",
-          "value": "application/xml;charset=utf-8"
-        }]
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/xml;charset=utf-8"
+          }
+        ]
       },
       {
         "source": "/_css/*.css",
-        "headers": [{
-          "key": "Cache-Control",
-          "value": "max-age=31557600"
-        }]
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31557600"
+          }
+        ]
       },
       {
         "source": "**/*.@(jpg|gif|png|svg|ico|webmanifest)",
-        "headers": [{
-          "key": "Cache-Control",
-          "value": "max-age=31557600"
-        }]
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31557600"
+          }
+        ]
       }
     ],
     "trailingSlash": false,
