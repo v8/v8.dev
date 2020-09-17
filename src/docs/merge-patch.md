@@ -83,7 +83,7 @@ Note that this option only works if the patch applies cleanly on the release bra
 
 1. Send out to review, or add a "TBR=..." or "Tbr: ..." line if the CL is unmodified.
 
-### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8/g/branches/console)
+### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8)
 
 If one of the builders is not green after handling your patch, revert the merge immediately. A bot (`AutoTagBot`) takes care of the correct versioning after a 10-minute wait.
 
