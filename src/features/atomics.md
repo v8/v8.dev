@@ -95,7 +95,7 @@ class AsyncLock {
     }
 
     unlock() {
-      ...
+      …
     }
 
     executeLocked(f) {
