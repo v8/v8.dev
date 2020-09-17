@@ -91,7 +91,7 @@ class AsyncLock {
     }
 
     lock() {
-      ...
+      …
     }
 
     unlock() {
