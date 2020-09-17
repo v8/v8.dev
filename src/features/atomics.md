@@ -99,7 +99,7 @@ class AsyncLock {
     }
 
     executeLocked(f) {
-      ...
+      …
     }
 }
 ```
