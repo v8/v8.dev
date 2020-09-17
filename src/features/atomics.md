@@ -1,19 +1,19 @@
 ---
-title: 'Atomics.wait, Atomics.notify, Atomics.waitAsync'
+title: '`Atomics.wait`, `Atomics.notify`, `Atomics.waitAsync`'
 author: '[Marja Hölttä](https://twitter.com/marjakh), a non-blocking blogger'
 avatars:
   - marja-holtta
-date: 2020-09-14
+date: 2020-09-16
 tags:
   - ECMAScript
   - ES2020
-description: 'Using Atomics to implement a mutex with synchronous and asynchronous modes.'
+description: 'Atomics.wait and Atomics.notify are low-level synchronization primitives useful for implementing e.g., mutexes. Atomics.wait is only usable on worker threads. V8 version 8.7 now supports a non-blocking version, Atomics.waitAsync, which is also usable on the main thread.'
 tweet: ''
 ---
 
 [`Atomics.wait`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/wait) and [`Atomics.notify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/notify) are low-level synchronization primitives useful for implementing mutexes and other means of synchronization. However, since `Atomics.wait` is blocking, it’s not possible to call it on the main thread (trying to do so will throw a `TypeError`).
 
-Starting from Chrome 87, V8 supports a non-blocking version, [`Atomics.waitAsync`](https://github.com/tc39/proposal-atomics-wait-async/blob/master/PROPOSAL.md), which is also usable on the main thread.
+Starting from version 8.7, V8 supports a non-blocking version, [`Atomics.waitAsync`](https://github.com/tc39/proposal-atomics-wait-async/blob/master/PROPOSAL.md), which is also usable on the main thread.
 
 In this post, we explain how to use these low-level APIs to implement a mutex that works both synchronously (for worker threads) and asynchronously (for worker threads or the main thread).
 
