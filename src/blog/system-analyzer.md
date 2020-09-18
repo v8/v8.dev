@@ -17,7 +17,7 @@ The V8 System Analyzer tool Indicium is a unified web interface to trace, debug 
 
 V8 already has a tracing infrastructure for [ICs](https://mathiasbynens.be/notes/shapes-ics) and [Maps](https://v8.dev/blog/fast-properties) which can process and analyse IC events using the [IC Explorer](https://v8.dev/tools//ic-explorer.html) and Map events using [Map Processor](https://v8.dev/tools/map-processor.html). Previous tools didn't allow us to analyze maps and ICs holistically and this is now possible with system analyzer .
 
-![V8’s System Analyzer Indicium](../_img/system-analyzer/indicium-logo.png)
+![V8’s System Analyzer Indicium](/_img/system-analyzer/indicium-logo.png)
 
 ## Case Study
 
@@ -102,7 +102,7 @@ So what is special about the following program? Once we run the program we notic
 
 Snippet 1 runs approximately 3 times faster than snippet 2. The only difference being that we use negative values for `x` and `y` properties while instantiation of `Point` objects in snippet 2.
 
-![Performance analysis on snippets.](../_img/system-analyzer/performance-graph.png)
+![Performance analysis on snippets.](/_img/system-analyzer/performance-graph.png)
 
 To analyse this performance difference we can use various logging options that come with V8. This is where the system analyzer shines. It can visualise multiple types of log events on a timeline and lets us explore the magic that is hidden within V8.
 
@@ -113,9 +113,9 @@ Before diving more into the case study, let’s get familiar with the panels of 
 - an IC panel to get statistics about the IC events,
 - a Source panel to display Map/IC file positions on a script.
 
-![System Analyzer Overview](../_img/system-analyzer/system-analyzer-overview.png)
+![System Analyzer Overview](/_img/system-analyzer/system-analyzer-overview.png)
 
-![Group IC events by function name to get in depth information about the IC events associated with the `dotProduct`.](../_img/system-analyzer/case1_1.png)
+![Group IC events by function name to get in depth information about the IC events associated with the `dotProduct`.](/_img/system-analyzer/case1_1.png)
 
 We are analyzing how the function `dotProduct` might be causing this performance difference. So we group IC events by functionName to get more in depth information about IC events associated with the `dotProduct`function.
 
@@ -125,13 +125,13 @@ Our hope is to get a better understanding of why we are tracking more Maps even 
 
 Since we wanted to know why we are creating multiple Map shapes for the same type of objects we toggle the info button about IC state to get more information about the Map addresses going from uninitialised to monomorphic.
 
-![The map transition tree associated with the monomorphic IC state.](../_img/system-analyzer/case1_2.png)
+![The map transition tree associated with the monomorphic IC state.](/_img/system-analyzer/case1_2.png)
 
-![The map transition tree associated with the polymorphic IC state.](../_img/system-analyzer/case1_3.png)
+![The map transition tree associated with the polymorphic IC state.](/_img/system-analyzer/case1_3.png)
 
 For the monomorphic IC state we can visualise the transition tree and see that we are only dynamically adding two properties `x`and `y` but when it comes to polymorphic IC state, we have a new Map containing three properties `isNegative`, `x` and `y`.
 
-![The Map panel communicates the file position information to highlight file positions on the Source panel.](../_img/system-analyzer/case1_4.png)
+![The Map panel communicates the file position information to highlight file positions on the Source panel.](/_img/system-analyzer/case1_4.png)
 
 We click on the file position section of the Map panel to see where the specific `isNegative` property is added in the source code.
 
@@ -157,9 +157,9 @@ class Point {
 
 If we execute the script again with the modified `Point` class, the first thing we realise on the console is that execution of the two snippets we defined at the beginning of the case study now are pretty similar in performance to each other.
 
-![Performance analysis on snippets.](../_img/system-analyzer/performance-graph.png)
+![Performance analysis on snippets.](/_img/system-analyzer/performance-graph.png)
 
-![The map transition tree of the modified Point object.](../_img/system-analyzer/case2_1.png)
+![The map transition tree of the modified Point object.](/_img/system-analyzer/case2_1.png)
 
 Then we group IC events by `dotProduct` key. Thus, we can see that the polymorphic IC state is avoided and we are not creating multiple maps for the same type of objects which utilises the use of ICs throughout the `dotProduct` function calls.
 
@@ -180,34 +180,34 @@ Let's now have an in-depth look at the different panels that are present in the 
 
 The Timeline panel allows selection in time which enables visualization of IC/map states across discrete points in time or a selected range in time. It supports filtering features such as zoom in/out to the log events for selected time ranges. The number of timeline views can easily be extended following the proposed Timeline interface.
 
-![Timeline panel overview](../_img/system-analyzer/timeline-panel.png)
+![Timeline panel overview](/_img/system-analyzer/timeline-panel.png)
 
-![Timeline panel overview (Cont.)](../_img/system-analyzer/timeline-panel2.png)
+![Timeline panel overview (Cont.)](/_img/system-analyzer/timeline-panel2.png)
 
 Map Panel
 The Map panel visualizes the transition trees of selected map log events. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched through using the provided interface. From the Stats sub-panel which is above the Map transitions sub-panel we can see the statistics about the properties causing map transitions and types of loaded map log events.
 
-![Map panel overview](../_img/system-analyzer/map-panel.png)
+![Map panel overview](/_img/system-analyzer/map-panel.png)
 
-![Stats panel overview](../_img/system-analyzer/stats-panel.png)
+![Stats panel overview](/_img/system-analyzer/stats-panel.png)
 
 ### IC Panel
 
-The IC panel displays statistics about IC events falling within a specific time range which are filtered through the Timeline panel. Additionally, the IC panel allows grouping IC events based on various options (type, category, map, file position...). From the grouping options, map and file position grouping option interacts with map and source code panels respectively to display the transition trees of maps and highlight the file positions associated with the IC events.
+The IC panel displays statistics about IC events falling within a specific time range which are filtered through the Timeline panel. Additionally, the IC panel allows grouping IC events based on various options (type, category, map, file position.). From the grouping options, map and file position grouping option interacts with map and source code panels respectively to display the transition trees of maps and highlight the file positions associated with the IC events.
 
-![IC panel Overview](../_img/system-analyzer/ic-panel.png)
+![IC panel Overview](/_img/system-analyzer/ic-panel.png)
 
-![IC panel overview (Cont.)](../_img/system-analyzer/ic-panel2.png)
+![IC panel overview (Cont.)](/_img/system-analyzer/ic-panel2.png)
 
-![IC panel Overview (Cont.)](../_img/system-analyzer/ic-panel3.png)
+![IC panel Overview (Cont.)](/_img/system-analyzer/ic-panel3.png)
 
-![IC panel overview (Cont.)](../_img/system-analyzer/ic-panel4.png)
+![IC panel overview (Cont.)](/_img/system-analyzer/ic-panel4.png)
 
 ### Source Panel
 
 The Source panel displays the loaded scripts with clickable markers to emit custom events which selects both Map and IC log events across the custom panels. Selection of a loaded script can be done from the drill down bar. Selecting a file position from Map panel and IC panel highlights the selected file position on the source code panel.
 
-![Source panel Overview](../_img/system-analyzer/source-panel.png)
+![Source panel Overview](/_img/system-analyzer/source-panel.png)
 
 ### Acknowledgements
 
