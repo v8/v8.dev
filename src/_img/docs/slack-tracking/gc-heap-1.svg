@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="600" height="60" style='overflow: visible; margin: 5px;'
+     xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="10" height="30" stroke="black" fill="red" stroke-width="2"/>
+  <rect x="20" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="30" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="40" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="50" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="60" y="10" width="10" height="30" stroke="black" fill="red" stroke-width="2"/>
+  <rect x="70" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="80" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="90" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="100" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="110" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="120" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <rect x="130" y="10" width="10" height="30" stroke="black" fill="red" stroke-width="2"/>
+  <rect x="140" y="10" width="10" height="30" stroke="black" fill="transparent" stroke-width="2"/>
+  <circle cx="160" cy="25" r="5"/>
+  <circle cx="180" cy="25" r="5"/>
+  <circle cx="200" cy="25" r="5"/>
+</svg>
+
