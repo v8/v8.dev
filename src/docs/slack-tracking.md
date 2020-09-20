@@ -199,6 +199,30 @@ We can deal with this if we cleverly initialize those unused properties with a *
   <img src="/_img/docs/slack-tracking/gc-heap-4.svg" loading="lazy">
 </figure>
 
+Here it's expressed in the code, `factory.cc`, method `Factory::InitializeJSObjectBody()`:
+
+```cpp
+void Factory::InitializeJSObjectBody(Handle<JSObject> obj, Handle<Map> map,
+                                     int start_offset) {
+
+  // <lines removed>
+
+  bool in_progress = map->IsInobjectSlackTrackingInProgress();
+  Object filler;
+  if (in_progress) {
+    filler = *one_pointer_filler_map();
+  } else {
+    filler = *undefined_value();
+  }
+  obj->InitializeBody(*map, start_offset, *undefined_value(), filler);
+  if (in_progress) {
+    map->FindRootMap(isolate()).InobjectSlackTrackingStep(isolate());
+  }
+
+  // <lines removed>
+}
+```
+
 And so this is slack tracking in action. For each class you create, you can expect it to take up more memory for a while, but on the 7th instantiation we "call it good" and expose the leftover space for the GC to see. These one-word objects have no owners, that is, nobody points to them, so when a collection occurs they will be freed up and living objects may be compacted to save space.
 
 The diagram below reflects that slack tracking is **finished** for this root map. Note that the instance size is now 20 (5 words: the map, the properties and elements arrays, and 2 more slots). Slack tracking respects the whole chain from the root map. That is, if a descendent of the root map ends up using all 10 of those initial extra properties, then the root map will keep them, marking them as unused:
@@ -216,8 +240,7 @@ Now that slack tracking is finished, what happens if we add another property to 
 m1.country = "Switzerland";
 ```
 
-Well, it will have to go into the properties backing store. We'll end up
-with the following object layout:
+Well, it will have to go into the properties backing store. We'll end up with the following object layout:
 
 |word|what|
 |----|----|
@@ -238,8 +261,7 @@ and the properties backing store will look like this:
 |five|undefined|
 |six|undefined|
 
-We have those extra `undefined` values there in case you decide to add more properties.
-We kind of think you might, based on your behavior so far!
+We have those extra `undefined` values there in case you decide to add more properties.  We kind of think you might, based on your behavior so far!
 
 ## Optional properties
 
@@ -298,14 +320,13 @@ let m2 = foo("Matterhorn", 4478, 1040, true);
 foo("Zugspitze", 2962);
 ```
 
-That should be enough to compile and run optimized code. We do something in TurboFan (the optimizing compiler) called **Create Lowering**, where we inline the allocation of objects. That means the native code we produce will emit instructions to ask the GC for the instance size of the object to allocate, and then carefully initialize those fields. But this code would be invalid if slack tracking were to stop at some later point.
+That should be enough to compile and run optimized code. We do something in TurboFan (the optimizing compiler) called [**Create Lowering**](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-create-lowering.h;l=32;drc=ee9e7e404e5a3f75a3ca0489aaf80490f625ca27), where we inline the allocation of objects. That means the native code we produce will emit instructions to ask the GC for the instance size of the object to allocate, and then carefully initialize those fields. But this code would be invalid if slack tracking were to stop at some later point.
 
 To avoid this problem what we do is just say sorry, we are ending slack tracking early. This makes sense because normally, we wouldn't compile an optimized function until thousands of objects have been created. So slack tracking *should* be finished. If it's not, too bad! The object must not be that important anyway if less than 7 of them have been created by this point. Normally, remember, we are only optimizing after the program ran for a long time.
 
 ### But wait, it's not that easy
 
-We can compile optimized code on the main thread, in which case we can get away with prematurely ending slack tracking with some calls to change the root map. However, we do as much compilation as possible on a background thread. From this thread it would be dangerous to touch the initial map because it might be changing on the
-main thread. So our technique is like this:
+We can compile optimized code on the main thread, in which case we can get away with prematurely ending slack tracking with some calls to change the root map. However, we do as much compilation as possible on a background thread. From this thread it would be dangerous to touch the initial map because it might be changing on the main thread. So our technique is like this:
 
  1. **Guess** that the instance size will be what it would be if you did stop slack tracking right now. Remember this size.
  2. When the compilation is almost done, we return to the main thread where we can safely force completion of slack tracking if it wasn't already done.
