@@ -52,11 +52,11 @@ WebAssembly modules that use SIMD instructions will have faster startup too, and
 
 ```js
 function clampZero(f32array) {
-    for (let i = 0; i < f32array.length; ++i) {
-        if (f32array[i] < 0) {
-            f32array[i] = 0;
-        }
+  for (let i = 0; i < f32array.length; ++i) {
+    if (f32array[i] < 0) {
+      f32array[i] = 0;
     }
+  }
 }
 ```
 
