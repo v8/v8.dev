@@ -13,8 +13,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](h
 
 ## Respectful code
 
-The v8.6 version makes the V8 code base [more respectful](https://v8.dev/docs/respectful-code). The team joined a Chromium-wide effort to follow Google’s commitments to racial equity by replacing some insensitive terms in the project. This is still an ongoing effort and any external contributor is welcome to give a hand! You can see the list of still available tasks [here](
-https://docs.google.com/document/d/1sugp6FhO-AKMb7q2Y7itNN_GBQYyQzj7BR3owNSA01s/edit#heading=h.p7fgw2nemm84).
+The v8.6 version makes the V8 code base [more respectful](https://v8.dev/docs/respectful-code). The team joined a Chromium-wide effort to follow Google’s commitments to racial equity by replacing some insensitive terms in the project. This is still an ongoing effort and any external contributor is welcome to give a hand! You can see the list of still available tasks [here](https://docs.google.com/document/d/1rK7NQK64c53-qbEG-N5xz7uY_QUVI45sUxinbyikCYM/edit).
 
 ## JavaScript
 
