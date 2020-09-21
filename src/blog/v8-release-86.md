@@ -44,7 +44,7 @@ But, a lot of the time, you just want to print a simple, small integer (a “Smi
 
 ### SIMD on Liftoff
 
-Liftoff is the baseline compiler for WebAssembly, and as of V8 v8.5 is [shipped on all platforms](https://v8.dev/features/simd). The SIMD proposal enables WebAssembly to take advantage of commonly available hardware vector instructions to accelerate compute-intensive workloads. It is currently in an [Origin Trial](https://v8.dev/blog/v8-release-84#simd-origin-trial), which allows developers to experiment with a feature before it is standardized.
+Liftoff is the baseline compiler for WebAssembly, and as of V8 v8.5 is shipped on all platforms. The [SIMD proposal](https://v8.dev/features/simd) enables WebAssembly to take advantage of commonly available hardware vector instructions to accelerate compute-intensive workloads. It is currently in an [Origin Trial](https://v8.dev/blog/v8-release-84#simd-origin-trial), which allows developers to experiment with a feature before it is standardized.
 
 Up until now, SIMD was implemented only in TurboFan, V8's top tier compiler. This is necessary to get maximum performance out of the SIMD instructions. Now that SIMD is implemented in Liftoff as well, you'll be able to debug your SIMD code in Liftoff, with much [better performance than the WebAssembly interpreter](https://v8.dev/blog/v8-release-84#better-debugging).
 
