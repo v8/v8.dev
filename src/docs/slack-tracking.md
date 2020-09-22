@@ -265,7 +265,7 @@ We have those extra `undefined` values there in case you decide to add more prop
 
 ## Optional properties
 
-It may happen that you add properties in some cases only. Suppose if height is 4000 meters or more, you want to keep track of two additional properties, `prominance` and `isClimbed`:
+It may happen that you add properties in some cases only. Suppose if height is 4000 meters or more, you want to keep track of two additional properties, `prominence` and `isClimbed`:
 
 ```javascript
 function Peak(name, height, prominence, isClimbed) {
@@ -330,7 +330,7 @@ We can compile optimized code on the main thread, in which case we can get away 
 
  1. **Guess** that the instance size will be what it would be if you did stop slack tracking right now. Remember this size.
  2. When the compilation is almost done, we return to the main thread where we can safely force completion of slack tracking if it wasn't already done.
- 3. Check: is the instance size what we predicted? If so, **we are good!** If not, throw away the code object and head to the bar to drown our sorrows.
+ 3. Check: is the instance size what we predicted? If so, **we are good!** If not, throw away the code object and try again later.
 
 If you'd like to see this in code have a look at the class [`InitialMapInstanceSizePredictionDependency`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/compilation-dependencies.cc;l=344;drc=1105b135731ea1c5d346e41ba3dc28ecf257598c) and how it is used in file `js-create-lowering.cc` to create the code that allocates a `Peak`. You'll see that the `PrepareInstall()` method is called on the main thread, which forces completion of slack tracking. Then method `Install()` checks if our guess on the instance size held up.
 
