@@ -1,13 +1,13 @@
 ---
 title: 'V8 release v8.6'
-author: '[Ingvar Stepanyan](https://twitter.com/RReverser), a keyboard fuzzer'
+author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), a keyboard fuzzer'
 avatars:
  - 'ingvar-stepanyan'
 date: 2020-09-21
 tags:
  - release
 description: 'V8 release v8.6 brings respectful code, performance improvements, and normative changes.'
-tweet:
+tweet: '1308062287731789825'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 8.6](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/8.6), which is in beta until its release in coordination with Chrome 86 Stable in several weeks. V8 v8.6 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
@@ -35,9 +35,9 @@ But, a lot of the time, you just want to print a simple, small integer (a “Smi
 
 ### Small normative changes
 
-- Anonymous classes now have a `.name` property whose value is the empty string `""`. [Spec change](https://github.com/tc39/ecma262/pull/1490).
+- Anonymous classes now have a `.name` property whose value is the empty string `''`. [Spec change](https://github.com/tc39/ecma262/pull/1490).
 - The `\8` and `\9` escape sequences are now illegal in template string literals in [sloppy mode](https://developer.mozilla.org/en-US/docs/Glossary/Sloppy_mode) and in all string literals in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode). [Spec change](https://github.com/tc39/ecma262/pull/2054).
-- The built-in `Reflect` object now has a `Symbol.toStringTag` property whose value is `"Reflect"`. [Spec change](https://github.com/tc39/ecma262/pull/2057).
+- The built-in `Reflect` object now has a `Symbol.toStringTag` property whose value is `'Reflect'`. [Spec change](https://github.com/tc39/ecma262/pull/2057).
 
 ## WebAssembly
 
@@ -59,7 +59,7 @@ function clampZero(f32array) {
 }
 ```
 
-Let's compare two different implementations of this function, using Liftoff and TurboFan:
+Let’s compare two different implementations of this function, using Liftoff and TurboFan:
 
 1. A scalar implementation, with the loop unrolled 4 times.
 2. A SIMD implementation, using the `i32x4.max_s` instruction.
