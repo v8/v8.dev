@@ -24,17 +24,19 @@ You might think the engine has all it needs to perform well -- you've told it th
 
 Finally, and most importantly, the runtime environment must be very fast, otherwise we're just philosophizing.
 
-Now, V8 can store properties in a property backing store attached to the main object. Unlike properties that live directly in the object, this backing store can grow indefinitely. Just create a new array, copy the data over, add the new property and link it in to the object. However the fastest access to a property will come by avoiding that indirection and looking at a fixed offset from the start of the object. This diagram shows the situation:
+Now, V8 could simply store properties in a backing store attached to the main object. Unlike properties that live directly in the object, this backing store can grow indefinitely through copying and replacing the pointer. However the fastest access to a property will come by avoiding that indirection and looking at a fixed offset from the start of the object. Below, I show the layout of a plain ol' JavaScript object in the V8 heap with two in-object properties. The first three words are standard in every object (a pointer to the Map, to the properties backing store, and to the elements backing store). You can see that the object can't "grow" because it's hard up against the next object in the heap:
 
 <figure>
   <img src="/_img/docs/slack-tracking/property-layout.svg" loading="lazy">
 </figure>
 
-Because of the performance provided by in-object properties, V8 is willing to give you extra space in each object. Eventually, you'll settle down, stop adding new properties, and use the structure you've laid out for computation.
+(*I left out the details of the property backing store because the only thing important about it for the moment is that it can be replaced at any time with a larger one. However, it too is an object on the V8 heap and has a Map pointer like all objects that reside there.*)
 
-We have a magic number in the system for this: 7. After 7 runs of a particular constructor function, V8 figures you won't throw in any new properties that are important to access quickly.
+So anyway, because of the performance provided by in-object properties, V8 is willing to give you extra space in each object, and **slack tracking** is the way it's done. Eventually, you'll settle down, stop adding new properties, and get down to the business of mining bitcoin or whatever.
 
-Look what happens if I print `m1` with `%DebugPrint()` (this handy function exposes the hidden class structure. You can use it by running `d8` with flag `--allow-natives-syntax`:
+How much "time" does V8 give you? Cleverly, it considers the number of times you've constructed a particular object. In fact, there is a counter in the Map, and it's initialized with one of the more mystical magic numbers in the system: **seven**.
+
+We can have a look at what happens if I print `m1` with `%DebugPrint()` (*this handy function exposes the hidden class structure. You can use it by running `d8` with flag `--allow-natives-syntax`*):
 
 ```
 > %DebugPrint(m1);
@@ -80,7 +82,7 @@ Pointer size is 4 in this 32-bit binary, so we've got those 3 initial words that
 
 How do we slim down? Well, we use the construction counter field in the map. We reach zero and then decide we are done with slack tracking. However, if you construct more objects, you won't see the counter above decreasing. Why?
 
-Again, it's this interesting "blindness" of JavaScript about what will happen next. I think of the Map (hiddden class) displayed above as "the" Map for a `Peak` object, but V8 doesn't have that luxury. The Map above is only a leaf in a chain of descendents from the **initial map** at the start of the function.
+Well, it's because the Map displayed above is not "the" Map for a `Peak` object. It's only a leaf Map in a chain of Maps descending from the **initial map** we begin with at the start of the function.
 
 It's the construction counter in the **initial map** that we use to control slack tracking.
 
@@ -100,7 +102,8 @@ DebugPrint: 0x31c12561: [Function] in OldSpace
 ...
 ... (etc)
 ...
-d8> %DebugPrintPtr(0x46f07295)                          // %DebugPrintPtr allows you to print the initial map
+d8> // %DebugPrintPtr allows you to print the initial map
+d8> %DebugPrintPtr(0x46f07295)
 DebugPrint: 0x46f07295: [Map]
  - type: JS_OBJECT_TYPE
  - instance size: 52
@@ -112,17 +115,18 @@ DebugPrint: 0x46f07295: [Map]
  - prototype_validity cell: 0x47f0232d <Cell value= 1>
  - instance descriptors (own) #0: 0x28c02135 <DescriptorArray[0]>
  - transitions #1: 0x46f0735d <Map(HOLEY_ELEMENTS)>
-     0x28c046f9: [String] in ReadOnlySpace: #name: (transition to (const data field, attrs: [WEC]) @ Any)
-         -> 0x46f0735d <Map(HOLEY_ELEMENTS)>
+     0x28c046f9: [String] in ReadOnlySpace: #name:
+         (transition to (const data field, attrs: [WEC]) @ Any) ->
+             0x46f0735d <Map(HOLEY_ELEMENTS)>
  - prototype: 0x5cc09c7d <Object map = 0x46f07335>
  - constructor: 0x21e92561 <JSFunction Peak (sfi = 0x21e92495)>
  - dependent code: 0x28c0212d <Other heap object (WEAK_FIXED_ARRAY_TYPE)>
  - construction counter: 5
 ```
 
-See how the construction counter is decremented to 5. The initial map, also called the root map, has no back pointer. If you'd like to find the initial map from the two property map we showed above, you can follow it's back pointer with the help of `%DebugPrintPtr()` until you reach a map with `undefined` in the back pointer slot. That will be this map above.
+See how the construction counter is decremented to 5? The **initial map** has no back pointer. If you'd like to find the **initial map** from the two property map we showed above, you can follow it's back pointer with the help of `%DebugPrintPtr()` until you reach a map with `undefined` in the back pointer slot. That will be this map above.
 
-A tree grows from the root map, with a branch for each property added from that point. The current structure looks like this:
+Now, a map tree grows from the initial map, with a branch for each property added from that point. The current structure looks like this:
 
 <figure>
   <img src="/_img/docs/slack-tracking/root-map-1.svg" loading="lazy">
@@ -131,7 +135,7 @@ A tree grows from the root map, with a branch for each property added from that 
   </figcaption>
 </figure>
 
-These transitions based on property names are how the "blind mole" of JavaScript builds it's hidden classes behind you. This root map is also stored in the function 'Peak', so when it's used as a constructor, that map can be used to set up the `this` object.
+These transitions based on property names are how the "[blind mole](https://www.google.com/search?q=blind+mole&tbm=isch)" of JavaScript builds it's hidden classes behind you. This initial map is also stored in the function `Peak`, so when it's used as a constructor, that map can be used to set up the `this` object.
 
 ```javascript
 m1 = new Peak("Matterhorn", 4478);
@@ -151,8 +155,10 @@ DebugPrint: 0x5cd08751: [JS_OBJECT_TYPE]
  - prototype: 0x5cd086cd <Object map = 0x4b387335>
  - elements: 0x586421a1 <FixedArray[0]> [HOLEY_ELEMENTS]
  - properties: 0x586421a1 <FixedArray[0]> {
-    0x586446f9: [String] in ReadOnlySpace: #name: 0x51112439 <String[10]: #Matterhorn> (const data field 0)
-    0x51112415: [String] in OldSpace: #height: 4478 (const data field 1)
+    0x586446f9: [String] in ReadOnlySpace: #name:
+        0x51112439 <String[10]: #Matterhorn> (const data field 0)
+    0x51112415: [String] in OldSpace: #height:
+        4478 (const data field 1)
  }
 0x4b387385: [Map]
  - type: JS_OBJECT_TYPE
@@ -233,7 +239,7 @@ void Factory::InitializeJSObjectBody(Handle<JSObject> obj, Handle<Map> map,
 
 And so this is slack tracking in action. For each class you create, you can expect it to take up more memory for a while, but on the 7th instantiation we "call it good" and expose the leftover space for the GC to see. These one-word objects have no owners, that is, nobody points to them, so when a collection occurs they will be freed up and living objects may be compacted to save space.
 
-The diagram below reflects that slack tracking is **finished** for this root map. Note that the instance size is now 20 (5 words: the map, the properties and elements arrays, and 2 more slots). Slack tracking respects the whole chain from the root map. That is, if a descendent of the root map ends up using all 10 of those initial extra properties, then the root map will keep them, marking them as unused:
+The diagram below reflects that slack tracking is **finished** for this initial map. Note that the instance size is now 20 (5 words: the map, the properties and elements arrays, and 2 more slots). Slack tracking respects the whole chain from the initial map. That is, if a descendent of the initial map ends up using all 10 of those initial extra properties, then the initial map will keep them, marking them as unused:
 
 <figure>
   <img src="/_img/docs/slack-tracking/root-map-2.svg" loading="lazy">
@@ -250,9 +256,9 @@ m1.country = "Switzerland";
 
 Well, it will have to go into the properties backing store. We'll end up with the following object layout:
 
-|word|what|
+|word|value|
 |----|----|
-|one |map |
+|one |map|
 |two |pointer to a properties backing store|
 |three|pointer to elements (empty array)|
 |four|pointer to string "Matterhorn"|
@@ -260,7 +266,7 @@ Well, it will have to go into the properties backing store. We'll end up with th
 
 and the properties backing store will look like this:
 
-|word|what|
+|word|value|
 |----|----|
 |one|map|
 |two|length (3)|
@@ -298,11 +304,7 @@ let m6 = new Peak("Zinalrothorn", 4221, 490, true);
 let m7 = new Peak("Eiger", 3970);
 ```
 
-In this case, objects m1, m3, m5 and m7 will have one map, and objects m2, m4 and m6 will have a
-map further down the chain of descendents from the initial map because of the additional properties.
-When slack tracking is finished for this map family, there will be **4** in-object properties
-instead of **2** like before, because slack tracking makes sure to keep sufficient room for the maximum
-number of in-object properties used by any descendents in the tree of maps below the root map.
+In this case, objects m1, m3, m5 and m7 will have one map, and objects m2, m4 and m6 will have a map further down the chain of descendents from the initial map because of the additional properties.  When slack tracking is finished for this map family, there will be **4** in-object properties instead of **2** like before, because slack tracking makes sure to keep sufficient room for the maximum number of in-object properties used by any descendents in the tree of maps below the initial map.
 
 Below shows the map family after running the code above, and of course, slack tracking is complete:
 
@@ -313,9 +315,9 @@ Below shows the map family after running the code above, and of course, slack tr
   </figcaption>
 </figure>
 
-## Optimized code
+## How about optimized code?
 
-How about if we compile optimized code before slack tracking is finished? We'll use a handy native syntax command `%OptimizeFunctionOnNextCall()` to force a optimized compile to go forward before we finished slack tracking (*be sure to add the flag `--no-lazy-feedback-allocation` when using this function, to make sure that your function gets a feedback vector right away*):
+Let's compile some optimized code before slack tracking is finished. We'll use a handy native syntax command `%OptimizeFunctionOnNextCall()` to force a optimized compile to happen before we finished slack tracking (*be sure to add the flag `--no-lazy-feedback-allocation` when using this function, to make sure that your function gets a feedback vector right away*):
 
 ```javascript
 function foo(a1, a2, a3, a4) {
@@ -328,19 +330,19 @@ let m2 = foo("Matterhorn", 4478, 1040, true);
 foo("Zugspitze", 2962);
 ```
 
-That should be enough to compile and run optimized code. We do something in TurboFan (the optimizing compiler) called [**Create Lowering**](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-create-lowering.h;l=32;drc=ee9e7e404e5a3f75a3ca0489aaf80490f625ca27), where we inline the allocation of objects. That means the native code we produce will emit instructions to ask the GC for the instance size of the object to allocate, and then carefully initialize those fields. But this code would be invalid if slack tracking were to stop at some later point.
+That should be enough to compile and run optimized code. We do something in TurboFan (the optimizing compiler) called [**Create Lowering**](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/js-create-lowering.h;l=32;drc=ee9e7e404e5a3f75a3ca0489aaf80490f625ca27), where we inline the allocation of objects. That means the native code we produce will emit instructions to ask the GC for the instance size of the object to allocate, and then carefully initialize those fields. However, this code would be invalid if slack tracking were to stop at some later point. What can we do about that?
 
-To avoid this problem what we do is just say sorry, we are ending slack tracking early. This makes sense because normally, we wouldn't compile an optimized function until thousands of objects have been created. So slack tracking *should* be finished. If it's not, too bad! The object must not be that important anyway if less than 7 of them have been created by this point. Normally, remember, we are only optimizing after the program ran for a long time.
+Easy-peasy! We just end slack tracking early for this map family. This makes sense because normally, we wouldn't compile an optimized function until thousands of objects have been created. So slack tracking *should* be finished. If it's not, too bad! The object must not be that important anyway if less than 7 of them have been created by this point (*Normally, remember, we are only optimizing after the program ran for a long time*).
 
-### But wait, it's not that easy
+### Compiling on a background thread
 
-We can compile optimized code on the main thread, in which case we can get away with prematurely ending slack tracking with some calls to change the root map. However, we do as much compilation as possible on a background thread. From this thread it would be dangerous to touch the initial map because it might be changing on the main thread. So our technique is like this:
+We can compile optimized code on the main thread, in which case we can get away with prematurely ending slack tracking with some calls to change the initial map because the world has been stopped. However, we do as much compilation as possible on a background thread. From this thread it would be dangerous to touch the initial map because it *might be changing on the main thread where JavaScript is running.* So our technique goes like this:
 
  1. **Guess** that the instance size will be what it would be if you did stop slack tracking right now. Remember this size.
  2. When the compilation is almost done, we return to the main thread where we can safely force completion of slack tracking if it wasn't already done.
  3. Check: is the instance size what we predicted? If so, **we are good!** If not, throw away the code object and try again later.
 
-If you'd like to see this in code have a look at the class [`InitialMapInstanceSizePredictionDependency`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/compilation-dependencies.cc;l=344;drc=1105b135731ea1c5d346e41ba3dc28ecf257598c) and how it is used in file `js-create-lowering.cc` to create the code that allocates a `Peak`. You'll see that the `PrepareInstall()` method is called on the main thread, which forces completion of slack tracking. Then method `Install()` checks if our guess on the instance size held up.
+If you'd like to see this in code, have a look at the class [`InitialMapInstanceSizePredictionDependency`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/compilation-dependencies.cc;l=344;drc=1105b135731ea1c5d346e41ba3dc28ecf257598c) and how it's used in file `js-create-lowering.cc` to create inline allocations. You'll see that the `PrepareInstall()` method is called on the main thread, which forces completion of slack tracking. Then method `Install()` checks if our guess on the instance size held up.
 
 Here is the optimized code with the inlined allocation. First you see communication with the GC, checking to see if we can just bump a pointer forward by the instance size and take that (this is called bump-pointer allocation). Then, we start filling in fields of the new object:
 
@@ -348,7 +350,7 @@ Here is the optimized code with the inlined allocation. First you see communicat
 ...
 43  mov ecx,[ebx+0x5dfa4]
 49  lea edi,[ecx+0x1c]
-4c  cmp [ebx+0x5dfa8],edi       ;; hey GC, can we have 0x1c bytes pleez?
+4c  cmp [ebx+0x5dfa8],edi       ;; hey GC, can we have 28 (0x1c) bytes please?
 52  jna 0x36ec4a5a  <+0x11a>
 
 58  lea edi,[ecx+0x1c]
