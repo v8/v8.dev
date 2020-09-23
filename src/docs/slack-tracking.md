@@ -22,7 +22,15 @@ You might think the engine has all it needs to perform well -- you've told it th
 - The program does indeed have an organizational structure -- we build "hidden classes" into the objects we see the programmer uses because we believe they will be useful (maybe we should call this the Principle of Intelligent Design, heh!).
 - Programs have an initialization state, when everthing is new and it's hard to tell what's important. Later, the important classes and functions can be identified through their steady use -- our feedback regime and compiler pipeline grow out of this idea.
 
-Finally, and most importantly, the runtime environment must be very fast, otherwise we're just philosophizing. V8 could just store each new property in a dictionary hanging off the main object, but it would be harder to provide fast access to them in this case. Indeed, V8 will do this if you go hog wild adding properties like crazy, beginning to wonder perhaps, if there is little intelligent design behind what it sees. But for the moment, and especially for those "early moments" in the life of the program, V8 is willing to give you more space in each object. Eventually, you'll settle down and use the structure you've laid out for computation.
+Finally, and most importantly, the runtime environment must be very fast, otherwise we're just philosophizing.
+
+Now, V8 can store properties in a property backing store attached to the main object. Unlike properties that live directly in the object, this backing store can grow indefinitely. Just create a new array, copy the data over, add the new property and link it in to the object. However the fastest access to a property will come by avoiding that indirection and looking at a fixed offset from the start of the object. This diagram shows the situation:
+
+<figure>
+  <img src="/_img/docs/slack-tracking/property-layout.svg" loading="lazy">
+</figure>
+
+Because of the performance provided by in-object properties, V8 is willing to give you extra space in each object. Eventually, you'll settle down, stop adding new properties, and use the structure you've laid out for computation.
 
 We have a magic number in the system for this: 7. After 7 runs of a particular constructor function, V8 figures you won't throw in any new properties that are important to access quickly.
 
