@@ -3,7 +3,7 @@ title: '`Atomics.wait`, `Atomics.notify`, `Atomics.waitAsync`'
 author: '[Marja Hölttä](https://twitter.com/marjakh), a non-blocking blogger'
 avatars:
   - marja-holtta
-date: 2020-09-16
+date: 2020-09-24
 tags:
   - ECMAScript
   - ES2020
