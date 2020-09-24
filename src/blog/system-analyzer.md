@@ -7,26 +7,25 @@ date:
 tags:
   - tools
   - system-analyzer
-description: 'Indicium: V8 runtime tracer tool to analyze Map/IC events.'
+description: 'Indicium: V8 system analyzer tool to analyze Map/IC events.'
 ---
-# Indicium: V8 runtime tracer tool
+# Indicium: V8 system analyzer
 
-Past three months have been an awesome learning experience for me as I joined the V8 team (Google London) as an intern. I have been working on V8’s system analyzer tool [*Indicium*](https://v8.dev/tools/system-analyzer).
+Past three months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been  working on a new system analyzer tool called [*Indicium*](https://v8.dev/tools/system-analyzer).
 
-The V8 System Analyzer tool Indicium is a unified web interface to trace, debug and analyse patterns of how Inline Caches (ICs) and Maps are created and modified in real-world applications.
+This system analyzer is a unified web interface to trace, debug and analyse patterns of how Inline Caches (ICs) and Maps are created and modified in real-world applications.
 
 V8 already has a tracing infrastructure for [ICs](https://mathiasbynens.be/notes/shapes-ics) and [Maps](https://v8.dev/blog/fast-properties) which can process and analyse IC events using the [IC Explorer](https://v8.dev/tools//ic-explorer.html) and Map events using [Map Processor](https://v8.dev/tools/map-processor.html). Previous tools didn't allow us to analyze maps and ICs holistically and this is now possible with system analyzer .
 
-![V8’s System Analyzer Indicium](/_img/system-analyzer/indicium-logo.png)
+![Indicium](/_img/system-analyzer/indicium-logo.png)
 
 ## Case Study
 
-Let’s go through an example to demonstrate how we can use the Indicium to analyse Map and IC log events holistically in V8.
+Let’s go through an example to demonstrate how we can use the Indicium to analyse Map and IC log events in V8.
 
 ```javascript
 class Point {
  constructor(x, y) {
-   // Cause a different Map by conditionally adding properties.
    if (x < 0 || y < 0) {
      this.isNegative = true;
    }
@@ -63,19 +62,15 @@ for (let i = 0; i < 10e6; i++) {
 console.log(performance.now() - start);
 ```
 
-Here we have a `Point` class that stores two coordinates and an additional boolean based on the values of the co-ordinates. The `Point` class has a `dotProduct` method which returns the dot product between the passed object and the receiver.
+Here, we have a `Point` class that stores two coordinates and an additional boolean based on the values of the co-ordinates. The `Point` class has a `dotProduct` method which returns the dot product between the passed object and the receiver.
 
-To make explaining the program easier, let’s break the program into two parts.
+To make explaining the program easier, let’s break the program into two snippets (ignoring the warmup phase):
 
+### *snippet 1*
 ```javascript
 let a = new Point(1, 1);
 let b = new Point(2, 2);
 let dotProduct;
-
-// warmup
-for (let i = 0; i < 10e5; i++) {
-  dotProduct = a.dotProduct(b);
-}
 
 start = performance.now();
 for (let i = 0; i < 10e6; i++) {
@@ -84,7 +79,7 @@ for (let i = 0; i < 10e6; i++) {
 console.log(performance.now() - start);
 ```
 
-### *snippets 1*
+### *snippet 2*
 
 ```javascript
 a = new Point(-1, -1);
@@ -96,15 +91,13 @@ for (let i = 0; i < 10e6; i++) {
 console.log(performance.now() - start);
 ```
 
-### *snippets 2*
+Once we run the program we notice a performance regression. Even though we are measuring the performance of two similar snippets; accessing the properties `x` and `y` of `Point` object instances by calling the `dotProduct` function in a for-loop.
 
-So what is special about the following program? Once we run the program we notice a performance regression. Even though we are measuring the performance of two similar snippets; accessing the properties `x` and `y` of `Point` object instances consecutively via calling the `dotProduct` function in a for-loop.
+Snippet 1 runs approximately 3 times faster than snippet 2. The only difference being that we use negative values for `x` and `y` properties in the `Point` object in snippet 2.
 
-Snippet 1 runs approximately 3 times faster than snippet 2. The only difference being that we use negative values for `x` and `y` properties while instantiation of `Point` objects in snippet 2.
+![Performance analysis of snippets.](/_img/system-analyzer/initial-program-performance.png)
 
-![Performance analysis on snippets.](/_img/system-analyzer/performance-graph.png)
-
-To analyse this performance difference we can use various logging options that come with V8. This is where the system analyzer shines. It can visualise multiple types of log events on a timeline and lets us explore the magic that is hidden within V8.
+To analyse this performance difference we can use various logging options that come with V8. This is where the system analyzer shines. It can display log events and link them together with map events letting us explore the magic that is hidden within V8.
 
 Before diving more into the case study, let’s get familiar with the panels of the system analyzer tool. The tool has four main panels:
 
@@ -133,18 +126,18 @@ For the monomorphic IC state we can visualise the transition tree and see that w
 
 ![The Map panel communicates the file position information to highlight file positions on the Source panel.](/_img/system-analyzer/case1_4.png)
 
-We click on the file position section of the Map panel to see where the specific `isNegative` property is added in the source code.
+We click on the file position section of the Map panel to see where this `isNegative` property is added in the source code.
 
 So now the question being *how can we address the function deoptimization problem by using the insight we generated from the tool*?
 
-The minimal solution is to always initialise the `isNegative` property. As a common advice we say that all instance properties should be initialised in the constructor.
+The minimal solution would be to always initialise the `isNegative` property. As a common advice we say that all instance properties should be initialised in the constructor.
 
-The updated `Point` class to prevent creation of unnecessary maps could have been as follows:
+Now, the updated `Point` class looks like this:
 
 ```javascript
 class Point {
  constructor(x, y) {
-    this.isNegative = x < 0 || y < 0;
+   this.isNegative = x < 0 || y < 0;
    this.x = x;
    this.y = y;
  }
@@ -155,22 +148,13 @@ class Point {
 }
 ```
 
-If we execute the script again with the modified `Point` class, the first thing we realise on the console is that execution of the two snippets we defined at the beginning of the case study now are pretty similar in performance to each other.
+If we execute the script again with the modified `Point` class, we see on the that execution of the two snippets we defined at the beginning of the case study perform very similarly.
 
-![Performance analysis on snippets.](/_img/system-analyzer/performance-graph.png)
+![Performance analysis of snippets.](/_img/system-analyzer/final-program-performance.png)
 
 ![The map transition tree of the modified Point object.](/_img/system-analyzer/case2_1.png)
 
-Then we group IC events by `dotProduct` key. Thus, we can see that the polymorphic IC state is avoided and we are not creating multiple maps for the same type of objects which utilises the use of ICs throughout the `dotProduct` function calls.
-
-From the following case study we learnt that:
-
-- We can make use of the tool System Analyzer Indicium to analyse V8 Maps and ICs holistically.
-- Changing the order of dynamic property additions to the same type of JavaScript objects cause function deoptimizations.
-- We can prevent function deoptimizations by dynamically adding properties to the same order for the same type of objects.
-- We can verify we avoided the function deoptimization by investigating the number of maps a specific type of object has.
-- Utilising IC use helps us to get significant performance improvements.
-- By looking at the IC states we can make sure we make use of the ICs in the best possible way by calling a function only with the same type of object containing the same map which allows V8 to optimise fast property access.
+Then we group IC events by `dotProduct` key. And now, we see that the polymorphic IC state is avoided as we are not creating multiple maps for the same type of objects.
 
 ## The System Analyzer
 
