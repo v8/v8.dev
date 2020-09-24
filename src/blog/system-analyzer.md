@@ -67,6 +67,7 @@ Here, we have a `Point` class that stores two coordinates and an additional bool
 To make explaining the program easier, let’s break the program into two snippets (ignoring the warmup phase):
 
 ### *snippet 1*
+
 ```javascript
 let a = new Point(1, 1);
 let b = new Point(2, 2);
