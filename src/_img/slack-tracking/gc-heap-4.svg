@@ -42,7 +42,7 @@
        fill="transparent"/>
   <path stroke="black" d="M 165 20 Q 170 -10 175 20" stroke-width="3" marker-end="url(#red-arrowhead)" 
        fill="transparent"/>
-  <path stroke="black" d="M 175 20 Q 180 -10 195 20" stroke-width="3" marker-end="url(#red-arrowhead)" 
+  <path stroke="black" d="M 175 20 Q 180 -10 185 20" stroke-width="3" marker-end="url(#red-arrowhead)" 
        fill="transparent"/>
   <path stroke="black" d="M 185 20 Q 190 -10 195 20" stroke-width="3" marker-end="url(#red-arrowhead)" 
        fill="transparent"/>

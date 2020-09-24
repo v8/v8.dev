@@ -1,6 +1,12 @@
 ---
 title: 'Slack Tracking in V8'
+author: "Michael Stanton ([@alpencoder](https://twitter.com/alpencoder)), renowned master of *slack*"
 description: "A detailed look into the V8 slack tracking mechanism."
+avatars:
+ - 'michael-stanton'
+date: 2020-09-24 14:00:00
+tags:
+ - internals
 ---
 
 Slack tracking is a way to give new objects an initial size that is **larger than what they may actually use,** so they can have new properties added quickly. And then, after some period of time, to **magically return that unused space to the system.** Neat, huh?
@@ -27,7 +33,7 @@ Finally, and most importantly, the runtime environment must be very fast, otherw
 Now, V8 could simply store properties in a backing store attached to the main object. Unlike properties that live directly in the object, this backing store can grow indefinitely through copying and replacing the pointer. However the fastest access to a property will come by avoiding that indirection and looking at a fixed offset from the start of the object. Below, I show the layout of a plain ol' JavaScript object in the V8 heap with two in-object properties. The first three words are standard in every object (a pointer to the map, to the properties backing store, and to the elements backing store). You can see that the object can't "grow" because it's hard up against the next object in the heap:
 
 <figure>
-  <img src="/_img/docs/slack-tracking/property-layout.svg" loading="lazy">
+  <img src="/_img/slack-tracking/property-layout.svg" loading="lazy">
 </figure>
 
 (*I left out the details of the property backing store because the only thing important about it for the moment is that it can be replaced at any time with a larger one. However, it too is an object on the V8 heap and has a map pointer like all objects that reside there.*)
@@ -175,7 +181,7 @@ See how the construction counter is decremented to 5? If you'd like to find the 
 Now, a map tree grows from the initial map, with a branch for each property added from that point. We call these branches transitions. In the above printout of the initial map, do you see the transition to the next map with the label "name?" The whole map tree thus far looks like this:
 
 <figure>
-  <img src="/_img/docs/slack-tracking/root-map-1.svg" loading="lazy">
+  <img src="/_img/slack-tracking/root-map-1.svg" loading="lazy">
   <figcaption>
   <i>(X, Y, Z) means (instance size, number of in-object properties, number of unused properties)</i>
   </figcaption>
@@ -238,7 +244,7 @@ You'll wonder how this happened. After all, if this object is laid out in memory
 If you wonder why I'm worried about leaving these words laying around, there is some background you need to know about the garbage collector. Objects are laid out one after the other, and the V8 garbage collector keeps track of things in that memory by walking over it again and again. Starting at the first word in memory, it expects to find a pointer to a map. It reads the instance size from the map and then knows how far to step forward to the next valid object. For some classes it has to additionally compute a length, but that's all there is to it.
 
 <figure>
-  <img src="/_img/docs/slack-tracking/gc-heap-1.svg" width="600" height="100" loading="lazy">
+  <img src="/_img/slack-tracking/gc-heap-1.svg" width="600" height="100" loading="lazy">
 </figure>
 
 In the diagram above, the red boxes are the **maps**, and the white boxes the words that fill out the instance size of the object. The garbage collector can "walk" the heap by hopping from map to map.
@@ -246,17 +252,17 @@ In the diagram above, the red boxes are the **maps**, and the white boxes the wo
 So what happens if the map suddenly changes it's instance size? Now when the GC (garbage collector) walks the heap it will find itself looking at a word that it didn't see before. In the case of our `Peak` class, we change from taking up 13 words to only 5 (I colored the "unused property" words yellow):
 
 <figure>
-  <img src="/_img/docs/slack-tracking/gc-heap-2.svg" loading="lazy">
+  <img src="/_img/slack-tracking/gc-heap-2.svg" loading="lazy">
 </figure>
 
 <figure>
-  <img src="/_img/docs/slack-tracking/gc-heap-3.svg" loading="lazy">
+  <img src="/_img/slack-tracking/gc-heap-3.svg" loading="lazy">
 </figure>
 
 We can deal with this if we cleverly initialize those unused properties with a **"filler" map of instance size 4**. This way, the GC will lightly walk over them once they are exposed to the traversal.
 
 <figure>
-  <img src="/_img/docs/slack-tracking/gc-heap-4.svg" loading="lazy">
+  <img src="/_img/slack-tracking/gc-heap-4.svg" loading="lazy">
 </figure>
 
 Here it's expressed in the code, `factory.cc`, method `Factory::InitializeJSObjectBody()`:
@@ -288,7 +294,7 @@ And so this is slack tracking in action. For each class you create, you can expe
 The diagram below reflects that slack tracking is **finished** for this initial map. Note that the instance size is now 20 (5 words: the map, the properties and elements arrays, and 2 more slots). Slack tracking respects the whole chain from the initial map. That is, if a descendent of the initial map ends up using all 10 of those initial extra properties, then the initial map will keep them, marking them as unused:
 
 <figure>
-  <img src="/_img/docs/slack-tracking/root-map-2.svg" loading="lazy">
+  <img src="/_img/slack-tracking/root-map-2.svg" loading="lazy">
   <figcaption>
   <i>(X, Y, Z) means (instance size, number of in-object properties, number of unused properties)</i>
   </figcaption>
@@ -355,7 +361,7 @@ In this case, objects m1, m3, m5 and m7 will have one map, and objects m2, m4 an
 Below shows the map family after running the code above, and of course, slack tracking is complete:
 
 <figure>
-  <img src="/_img/docs/slack-tracking/root-map-3.svg" loading="lazy">
+  <img src="/_img/slack-tracking/root-map-3.svg" loading="lazy">
   <figcaption>
   <i>(X, Y, Z) means (instance size, number of in-object properties, number of unused properties)</i>
   </figcaption>
@@ -452,4 +458,4 @@ BTW, to see all this you should have a debug build and pass a few flags. I put t
 ./d8 --allow-natives-syntax --trace-opt --code-comments --print-opt-code mycode.js
 ```
 
-I hope this has been a fun exploration. There are many more interesting things in the world of maps to look into -- enjoy playing around with it!
+I hope this has been a fun exploration. I'd like to say a very special thanks to Igor Sheludko and Maya Armyanova for (patiently!) reviewing this post.
