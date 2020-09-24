@@ -11,7 +11,7 @@ description: 'Atomics.wait and Atomics.notify are low-level synchronization prim
 tweet: '1309118447377358848'
 ---
 
-[`Atomics.wait`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/wait) and [`Atomics.notify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/notify) are low-level synchronization primitives useful for implementing mutexes and other means of synchronization. However, since `Atomics.wait` is blocking, it’s not possible to call it on the main thread (trying to do so will throw a `TypeError`).
+[`Atomics.wait`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/wait) and [`Atomics.notify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/notify) are low-level synchronization primitives useful for implementing mutexes and other means of synchronization. However, since `Atomics.wait` is blocking, it’s not possible to call it on the main thread (trying to do so throws a `TypeError`).
 
 Starting from version 8.7, V8 supports a non-blocking version, [`Atomics.waitAsync`](https://github.com/tc39/proposal-atomics-wait-async/blob/master/PROPOSAL.md), which is also usable on the main thread.
 
@@ -24,7 +24,7 @@ In this post, we explain how to use these low-level APIs to implement a mutex th
 - `expectedValue`: a value we expect to be present in the memory location described by `(buffer, index)`
 - `timeout`: a timeout in milliseconds (optional, defaults to `Infinity`)
 
-The return value of `Atomics.wait` is a string. If the memory location doesn’t contain the expected value, `Atomics.wait` returns immediately with the value `"not-equal"`. Otherwise, the thread is blocked until another thread calls `Atomics.notify` with the same memory location or the timeout is reached. In the former case, `Atomics.wait` returns the value `"ok"`, in the latter case, `Atomics.wait` returns the value `"timed-out"`.
+The return value of `Atomics.wait` is a string. If the memory location doesn’t contain the expected value, `Atomics.wait` returns immediately with the value `'not-equal'`. Otherwise, the thread is blocked until another thread calls `Atomics.notify` with the same memory location or the timeout is reached. In the former case, `Atomics.wait` returns the value `'ok'`, in the latter case, `Atomics.wait` returns the value `'timed-out'`.
 
 `Atomics.notify` takes the following parameters:
 
@@ -36,30 +36,30 @@ It notifies the given amount of waiters, in FIFO order, waiting on the memory lo
 
 In contrast to `Atomics.wait`, `Atomics.waitAsync` always returns immediately. The return value is one of the following:
 
-- `{ async: false, value: "not-equal" }` (if the memory location didn’t contain the expected value)
-- `{ async: false, value: "timed-out" }` (only for immediate timeout 0)
+- `{ async: false, value: 'not-equal' }` (if the memory location didn’t contain the expected value)
+- `{ async: false, value: 'timed-out' }` (only for immediate timeout 0)
 - `{ async: true, value: promise }`
 
-The promise may later be resolved with a string value `"ok"` (if `Atomics.notify` was called with the same memory location) or `"timed-out"` (if the timeout was reached). The promise is never rejected.
+The promise may later be resolved with a string value `'ok'` (if `Atomics.notify` was called with the same memory location) or `'timed-out'` (if the timeout was reached). The promise is never rejected.
 
 The following example demonstrates the basic usage of `Atomics.waitAsync`:
 
 ```js
-let sab = new SharedArrayBuffer(16);
-let i32a = new Int32Array(sab);
-let result = Atomics.waitAsync(i32a, 0, 0, 1000);
-//                                   |  |  ^ timeout (opt)
-//                                   |  ^ expected value
-//                                   ^ index
+const sab = new SharedArrayBuffer(16);
+const i32a = new Int32Array(sab);
+const result = Atomics.waitAsync(i32a, 0, 0, 1000);
+//                                     |  |  ^ timeout (opt)
+//                                     |  ^ expected value
+//                                     ^ index
 
-if (result.value === "not-equal") {
+if (result.value === 'not-equal') {
   // The value in the SharedArrayBuffer was not the expected one.
 } else {
   result.value instanceof Promise; // true
   result.value.then(
     (value) => {
-      if (value == "ok") { /* notified */ }
-      else { /* value is "timed-out" */ }
+      if (value == 'ok') { /* notified */ }
+      else { /* value is 'timed-out' */ }
     });
 }
 
@@ -67,7 +67,7 @@ if (result.value === "not-equal") {
 Atomics.notify(i32a, 0);
 ```
 
-Next, we'll show how to implement a mutex which can be used both synchronously and asynchronously. Implementing the synchronous version of the mutex has been previously discussed e.g., [in this blog post](https://blogtitle.github.io/using-javascript-sharedarraybuffers-and-atomics/).
+Next, we’ll show how to implement a mutex which can be used both synchronously and asynchronously. Implementing the synchronous version of the mutex has been previously discussed e.g., [in this blog post](https://blogtitle.github.io/using-javascript-sharedarraybuffers-and-atomics/).
 
 In the example, we don’t use the timeout parameter in `Atomics.wait` and `Atomics.waitAsync`. The parameter can be used for implementing condition variables with a timeout.
 
@@ -81,33 +81,33 @@ Let’s see how each of those can be implemented. The class definition includes 
 
 ```js
 class AsyncLock {
-    static INDEX = 0;
-    static UNLOCKED = 0;
-    static LOCKED = 1;
+  static INDEX = 0;
+  static UNLOCKED = 0;
+  static LOCKED = 1;
 
-    constructor(sab) {
-      this.sab = sab;
-      this.i32a = new Int32Array(sab);
-    }
+  constructor(sab) {
+    this.sab = sab;
+    this.i32a = new Int32Array(sab);
+  }
 
-    lock() {
-      …
-    }
+  lock() {
+    /* … */
+  }
 
-    unlock() {
-      …
-    }
+  unlock() {
+    /* … */
+  }
 
-    executeLocked(f) {
-      …
-    }
+  executeLocked(f) {
+    /* … */
+  }
 }
 ```
 
-Here `i32a[0]` contains either the value `LOCKED` or `UNLOCKED`. It's also the wait location for `Atomics.wait`and `Atomics.waitAsync`. The `AsyncLock` class ensures the following invariants:
+Here `i32a[0]` contains either the value `LOCKED` or `UNLOCKED`. It’s also the wait location for `Atomics.wait`and `Atomics.waitAsync`. The `AsyncLock` class ensures the following invariants:
 
 1. If `i32a[0] == LOCKED`, and a thread starts to wait (either via `Atomics.wait` or `Atomics.waitAsync`) on `i32a[0]`, it will eventually be notified.
-2. After getting notified, the thread tries to grab the lock. If it gets the lock, it will notify again when releasing it.
+1. After getting notified, the thread tries to grab the lock. If it gets the lock, it will notify again when releasing it.
 
 ## Sync lock and unlock
 
@@ -140,7 +140,7 @@ unlock() {
                       /* old value >>> */  AsyncLock.LOCKED,
                       /* new value >>> */  AsyncLock.UNLOCKED);
   if (oldValue != AsyncLock.LOCKED) {
-    throw new Error("Tried to unlock while not holding the mutex");
+    throw new Error('Tried to unlock while not holding the mutex');
   }
   Atomics.notify(this.i32a, AsyncLock.INDEX, 1);
 }
