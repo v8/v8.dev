@@ -116,7 +116,7 @@ Next we show the blocking `lock` method which can only be called from a worker t
 ```js
 lock() {
   while (true) {
-    const oldValue = Atomics.compareExchange(self.i32a, AsyncLock.INDEX,
+    const oldValue = Atomics.compareExchange(this.i32a, AsyncLock.INDEX,
                        /* old value >>> */  AsyncLock.UNLOCKED,
                        /* new value >>> */  AsyncLock.LOCKED);
     if (oldValue == AsyncLock.UNLOCKED) {
