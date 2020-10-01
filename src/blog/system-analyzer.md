@@ -8,6 +8,7 @@ tags:
   - tools
   - system-analyzer
 description: 'Indicium: V8 system analyzer tool to analyze Map/IC events.'
+tweet: '1311689392608731140'
 ---
 # Indicium: V8 system analyzer
 
