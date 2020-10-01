@@ -47,19 +47,19 @@ for (let i = 0; i < 10e5; i++) {
   dotProduct = a.dotProduct(b);
 }
 
-start = performance.now();
+console.time("snippet1");
 for (let i = 0; i < 10e6; i++) {
   dotProduct = a.dotProduct(b);
 }
-console.log(performance.now() - start);
+console.timeEnd("snippet1");
 
 a = new Point(-1, -1);
 b = new Point(-2, -2);
-start = performance.now();
+console.time("snippet2");
 for (let i = 0; i < 10e6; i++) {
   dotProduct = a.dotProduct(b);
 }
-console.log(performance.now() - start);
+console.timeEnd("snippet2");
 ```
 
 Here, we have a `Point` class that stores two coordinates and an additional boolean based on the values of the co-ordinates. The `Point` class has a `dotProduct` method which returns the dot product between the passed object and the receiver.
@@ -168,9 +168,7 @@ The Timeline panel allows selection in time which enables visualization of IC/ma
 ### Map Panel
 
 The Map panel has two sub panels:
-
 1. Map details
-
 2. Map transitions
 
 The Map panel visualizes the transition trees of selected maps. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched for using the provided interface. From the Stats sub-panel, which is above the Map transitions sub-panel, we can see the statistics about the properties causing map transitions and types of map events.
