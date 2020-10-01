@@ -1,6 +1,6 @@
 ---
 title: 'Indicium: V8 runtime tracer tool'
-author: 'Zeynep Cankara ([@zcankara](https://twitter.com/zeynepcankara))'
+author: 'Zeynep Cankara ([@ZeynepCankara](https://twitter.com/ZeynepCankara))'
 avatars:
   - 'zeynep-cankara'
 date: 2020-10-01 11:56:00
