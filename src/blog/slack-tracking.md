@@ -12,7 +12,7 @@ Slack tracking is a way to give new objects an initial size that is **larger tha
 
 It’s especially useful because JavaScript doesn’t have static classes. The system can never see “at a glance” how many properties you have. The engine experiences them one by one. So when you read:
 
-```javascript
+```js
 function Peak(name, height) {
   this.name = name;
   this.height = height;
@@ -91,7 +91,7 @@ int JSFunction::CalculateExpectedNofProperties(Isolate* isolate,
 
 Let’s have a look at our object `m1` from before:
 
-```javascript
+```js
 function Peak(name, height) {
   this.name = name;
   this.height = height;
@@ -137,7 +137,7 @@ Note the instance size of the object is 52. Object layout in V8 is like so:
 | 1    | pointer to the properties array                      |
 | 2    | pointer to the elements array                        |
 | 3    | in-object field 1 (pointer to string `"Matterhorn"`) |
-| 4    | in-object field 2 (integer value 4478)               |
+| 4    | in-object field 2 (integer value `4478`)             |
 | 5    | unused in-object field 3                             |
 | …    | …                                                    |
 | 12   | unused in-object field 10                            |
@@ -193,7 +193,7 @@ Now, a map tree grows from the initial map, with a branch for each property adde
 
 These transitions based on property names are how the [“blind mole”](https://www.google.com/search?q=blind+mole&tbm=isch)" of JavaScript builds its maps behind you. This initial map is also stored in the function `Peak`, so when it’s used as a constructor, that map can be used to set up the `this` object.
 
-```javascript
+```js
 const m1 = new Peak('Matterhorn', 4478);
 const m2 = new Peak('Mont Blanc', 4810);
 const m3 = new Peak('Zinalrothorn', 4221);
@@ -293,7 +293,7 @@ The diagram below reflects that slack tracking is **finished** for this initial 
 
 Now that slack tracking is finished, what happens if we add another property to one of these `Peak` objects?
 
-```javascript
+```js
 m1.country = 'Switzerland';
 ```
 
@@ -324,7 +324,7 @@ We have those extra `undefined` values there in case you decide to add more prop
 
 It may happen that you add properties in some cases only. Suppose if height is 4000 meters or more, you want to keep track of two additional properties, `prominence` and `isClimbed`:
 
-```javascript
+```js
 function Peak(name, height, prominence, isClimbed) {
   this.name = name;
   this.height = height;
@@ -337,7 +337,7 @@ function Peak(name, height, prominence, isClimbed) {
 
 You add a few of these different variants:
 
-```javascript
+```js
 const m1 = new Peak('Wendelstein', 1838);
 const m2 = new Peak('Matterhorn', 4478, 1040, true);
 const m3 = new Peak('Zugspitze', 2962);
@@ -357,7 +357,7 @@ Below shows the map family after running the code above, and of course, slack tr
 
 Let’s compile some optimized code before slack tracking is finished. We’ll use a couple native syntax commands to force a optimized compile to happen before we finished slack tracking:
 
-```javascript
+```js
 function foo(a1, a2, a3, a4) {
   return new Peak(a1, a2, a3, a4);
 }
