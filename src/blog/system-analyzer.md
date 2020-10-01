@@ -11,7 +11,7 @@ description: 'Indicium: V8 system analyzer tool to analyze Map/IC events.'
 ---
 # Indicium: V8 system analyzer
 
-The past three  months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been  working on a new tool called [*Indicium*](https://v8.dev/tools/system-analyzer).
+The past three  months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been working on a new tool called [*Indicium*](https://v8.dev/tools/system-analyzer).
 
 This system analyzer is a unified web interface to trace, debug and analyse patterns of how Inline Caches (ICs) and Maps are created and modified in real-world applications.
 
@@ -25,17 +25,17 @@ Let’s go through an example to demonstrate how we can use the Indicium to anal
 
 ```javascript
 class Point {
- constructor(x, y) {
-   if (x < 0 || y < 0) {
-     this.isNegative = true;
-   }
-   this.x = x;
-   this.y = y;
- }
+  constructor(x, y) {
+    if (x < 0 || y < 0) {
+      this.isNegative = true;
+    }
+    this.x = x;
+    this.y = y;
+  }
 
- dotProduct(other) {
-   return this.x * other.x + this.y * other.y;
- }
+  dotProduct(other) {
+    return this.x * other.x + this.y * other.y;
+  }
 }
 
 let a = new Point(1, 1);
