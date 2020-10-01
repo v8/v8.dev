@@ -201,6 +201,6 @@ The Source panel displays the loaded scripts with clickable markers to emit cust
 
 ### Acknowledgements
 
-I would like to thank everyone in the V8 and Mobile Android Engineering teams, especially to my host Sathya and co-host Camillo for supporting me throughout my internship and giving me the opportunity to work on such a cool project.
+I would like to thank everyone in the V8 and Web on Android teams, especially to my host Sathya and co-host Camillo for supporting me throughout my internship and giving me the opportunity to work on such a cool project.
 
 I had an amazing summer interning at Google!
