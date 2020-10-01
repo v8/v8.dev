@@ -3,7 +3,7 @@ title: 'Indicium: V8 runtime tracer tool'
 author: 'Zeynep Cankara ([@zcankara](https://twitter.com/zeynepcankara))'
 avatars:
   - 'zeynep-cankara'
-date:
+date: 2020-10-01 11:56:00
 tags:
   - tools
   - system-analyzer
