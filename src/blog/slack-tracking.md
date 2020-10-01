@@ -440,7 +440,7 @@ f2  mov eax,ecx                 ;; get ready to return this great Peak object!
 
 BTW, to see all this you should have a debug build and pass a few flags. I put the code into a file and called:
 
-```sh
+```bash
 ./d8 --allow-natives-syntax --trace-opt --code-comments --print-opt-code mycode.js
 ```
 
