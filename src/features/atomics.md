@@ -7,10 +7,9 @@ date: 2020-09-24
 tags:
   - ECMAScript
   - ES2020
-description: 'Atomics.wait and Atomics.notify are low-level synchronization primitives useful for implementing e.g., mutexes. Atomics.wait is only usable on worker threads. V8 version 8.7 now supports a non-blocking version, Atomics.waitAsync, which is also usable on the main thread.'
+description: 'Atomics.wait and Atomics.notify are low-level synchronization primitives useful for implementing e.g. mutexes. Atomics.wait is only usable on worker threads. V8 version 8.7 now supports a non-blocking version, Atomics.waitAsync, which is also usable on the main thread.'
 tweet: '1309118447377358848'
 ---
-
 [`Atomics.wait`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/wait) and [`Atomics.notify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/notify) are low-level synchronization primitives useful for implementing mutexes and other means of synchronization. However, since `Atomics.wait` is blocking, it’s not possible to call it on the main thread (trying to do so throws a `TypeError`).
 
 Starting from version 8.7, V8 supports a non-blocking version, [`Atomics.waitAsync`](https://github.com/tc39/proposal-atomics-wait-async/blob/master/PROPOSAL.md), which is also usable on the main thread.
@@ -67,15 +66,15 @@ if (result.value === 'not-equal') {
 Atomics.notify(i32a, 0);
 ```
 
-Next, we’ll show how to implement a mutex which can be used both synchronously and asynchronously. Implementing the synchronous version of the mutex has been previously discussed e.g., [in this blog post](https://blogtitle.github.io/using-javascript-sharedarraybuffers-and-atomics/).
+Next, we’ll show how to implement a mutex which can be used both synchronously and asynchronously. Implementing the synchronous version of the mutex has been previously discussed, e.g. [in this blog post](https://blogtitle.github.io/using-javascript-sharedarraybuffers-and-atomics/).
 
 In the example, we don’t use the timeout parameter in `Atomics.wait` and `Atomics.waitAsync`. The parameter can be used for implementing condition variables with a timeout.
 
 Our mutex class, `AsyncLock`, operates on a `SharedArrayBuffer` and implements the following methods:
 
-- `lock` - blocks the thread until we're able to lock the mutex (usable only on a worker thread)
-- `unlock` - unlocks the mutex (counterpart of `lock`)
-- `executeLocked(callback)` - non-blocking lock, can be used by the main thread; schedules `callback` to be executed once we manage to get the lock
+- `lock` — blocks the thread until we're able to lock the mutex (usable only on a worker thread)
+- `unlock` — unlocks the mutex (counterpart of `lock`)
+- `executeLocked(callback)` — non-blocking lock, can be used by the main thread; schedules `callback` to be executed once we manage to get the lock
 
 Let’s see how each of those can be implemented. The class definition includes constants and a constructor which takes the `SharedArrayBuffer` as a parameter.
 
@@ -117,8 +116,8 @@ Next we show the blocking `lock` method which can only be called from a worker t
 lock() {
   while (true) {
     const oldValue = Atomics.compareExchange(this.i32a, AsyncLock.INDEX,
-                       /* old value >>> */  AsyncLock.UNLOCKED,
-                       /* new value >>> */  AsyncLock.LOCKED);
+                        /* old value >>> */  AsyncLock.UNLOCKED,
+                        /* new value >>> */  AsyncLock.LOCKED);
     if (oldValue == AsyncLock.UNLOCKED) {
       return;
     }
@@ -146,14 +145,14 @@ unlock() {
 }
 ```
 
-The straightforward case goes as follows: the lock is free and thread T1 acquires it by changing the lock state with `Atomics.compareExchange`. Thread T2 tries to acquire the lock by calling `Atomics.compareExchange`, but it doesn’t succeed in changing the lock state. T2 then calls `Atomics.wait`, which blocks the thread. At some point T1 releases the lock and calls `Atomics.notify`. That makes the `Atomics.wait` call in T2 return `"ok"`, waking up T2. T2 then tries to acquire the lock again, and this time succeeds.
+The straightforward case goes as follows: the lock is free and thread T1 acquires it by changing the lock state with `Atomics.compareExchange`. Thread T2 tries to acquire the lock by calling `Atomics.compareExchange`, but it doesn’t succeed in changing the lock state. T2 then calls `Atomics.wait`, which blocks the thread. At some point T1 releases the lock and calls `Atomics.notify`. That makes the `Atomics.wait` call in T2 return `'ok'`, waking up T2. T2 then tries to acquire the lock again, and this time succeeds.
 
-There are also 2 possible corner cases - these demonstrate the reason for `Atomics.wait` and `Atomics.waitAsync` checking for a specific value at the index:
+There are also 2 possible corner cases — these demonstrate the reason for `Atomics.wait` and `Atomics.waitAsync` checking for a specific value at the index:
 
-- T1 is holding the lock and T2 tries to get it. First, T2 tries to change the lock state with `Atomics.compareExchange`, but doesn't succeed. But then T1 releases the lock before T2 manages to call `Atomics.wait`. When T2 calls `Atomics.wait`, it will return immediately with the return value `"not-equal"`. In that case, T2 will continue with the next loop iteration, trying to acquire the lock again.
-- T1 is holding the lock and T2 is waiting for it with `Atomics.wait`. T1 releases the lock - T2 wakes up (the `Atomics.wait` call returns) and tries to do `Atomics.compareExchange` to acquire the lock, but another thread T3 was faster and got the lock already. So the call to `Atomics.compareExchange` fails to get the lock, and T2 calls `Atomics.wait` again, blocking until T3 releases the lock.
+- T1 is holding the lock and T2 tries to get it. First, T2 tries to change the lock state with `Atomics.compareExchange`, but doesn’t succeed. But then T1 releases the lock before T2 manages to call `Atomics.wait`. When T2 calls `Atomics.wait`, it returns immediately with the value `'not-equal'`. In that case, T2 continues with the next loop iteration, trying to acquire the lock again.
+- T1 is holding the lock and T2 is waiting for it with `Atomics.wait`. T1 releases the lock — T2 wakes up (the `Atomics.wait` call returns) and tries to do `Atomics.compareExchange` to acquire the lock, but another thread T3 was faster and got the lock already. So the call to `Atomics.compareExchange` fails to get the lock, and T2 calls `Atomics.wait` again, blocking until T3 releases the lock.
 
-Because of the latter corner case, the mutex isn’t "fair". It’s possible that T2 has been waiting for the lock to be released, but T3 comes and gets it immediately. A more realistic lock implementation may use several states to differentiate between "locked" and "locked with contention".
+Because of the latter corner case, the mutex isn’t “fair”. It’s possible that T2 has been waiting for the lock to be released, but T3 comes and gets it immediately. A more realistic lock implementation may use several states to differentiate between “locked” and “locked with contention”.
 
 ## Async lock
 
@@ -186,9 +185,9 @@ executeLocked(f) {
 
 The inner function `tryGetLock` tries to first get the lock with `Atomics.compareExchange`, as before. If that successfully changes the lock state, it can execute the callback, unlock the lock, and return.
 
-If `Atomics.compareExchange` fails to get the lock, we need to try again when the lock is probably free. We can’t block and wait for the lock to become free - instead, we schedule the new try using `Atomics.waitAsync` and the Promise it returns.
+If `Atomics.compareExchange` fails to get the lock, we need to try again when the lock is probably free. We can’t block and wait for the lock to become free — instead, we schedule the new try using `Atomics.waitAsync` and the Promise it returns.
 
-If we successfully started `Atomics.waitAsync`, the returned Promise will resolve when the lock-holding thread does `Atomics.notify`. Then the thread that was waiting for the lock will try to get the lock again, like before.
+If we successfully started `Atomics.waitAsync`, the returned Promise resolves when the lock-holding thread does `Atomics.notify`. Then the thread that was waiting for the lock tries to get the lock again, like before.
 
 The same corner cases (the lock getting released between the `Atomics.compareExchange` call and the `Atomics.waitAsync` call, as well as the lock getting acquired again between the Promise resolving and the `Atomics.compareExchange` call) are possible in the asynchronous version too, so the code has to handle them in a robust way.
 
