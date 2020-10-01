@@ -111,9 +111,9 @@ Before diving more into the case study, let’s get familiar with the panels of 
 
 ![Group IC events by function name to get in depth information about the IC events associated with the `dotProduct`.](/_img/system-analyzer/case1_1.png)
 
-We are analyzing how the function `dotProduct` might be causing this performance difference. So we group IC events by functionName to get more in depth information about IC events associated with the `dotProduct`function.
+We are analyzing how the function `dotProduct` might be causing this performance difference. So we group IC events by functionName to get more in depth information about IC events associated with the `dotProduct` function.
 
-First thing we notice is that we have two different IC state transitions recorded by the IC events in this function. One going from uninitialised to monomorphic and the other one going from monomorphic to polymorphic. As mentioned in the previously linked [blog post](https://mathiasbynens.be/notes/shapes-ics), polymorphic IC state indicates that now we are tracking more than one Map associated with `Point` objects.
+The first thing we notice is that we have two different IC state transitions recorded by the IC events in this function. One going from uninitialised to monomorphic and the other one going from monomorphic to polymorphic. As mentioned in the previously linked [blog post](https://mathiasbynens.be/notes/shapes-ics), polymorphic IC state indicates that now we are tracking more than one Map associated with `Point` objects.
 
 We want to know why we are creating multiple Map shapes for the same type of objects we toggle the info button about IC state to get more information about the Map addresses going from uninitialised to monomorphic.
 
