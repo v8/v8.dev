@@ -11,11 +11,11 @@ description: 'Indicium: V8 system analyzer tool to analyze Map/IC events.'
 ---
 # Indicium: V8 system analyzer
 
-Past three months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been  working on a new system analyzer tool called [*Indicium*](https://v8.dev/tools/system-analyzer).
+The past three  months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been  working on a new tool called [*Indicium*](https://v8.dev/tools/system-analyzer).
 
 This system analyzer is a unified web interface to trace, debug and analyse patterns of how Inline Caches (ICs) and Maps are created and modified in real-world applications.
 
-V8 already has a tracing infrastructure for [ICs](https://mathiasbynens.be/notes/shapes-ics) and [Maps](https://v8.dev/blog/fast-properties) which can process and analyse IC events using the [IC Explorer](https://v8.dev/tools//ic-explorer.html) and Map events using [Map Processor](https://v8.dev/tools/map-processor.html). Previous tools didn't allow us to analyze maps and ICs holistically and this is now possible with system analyzer .
+V8 already has a tracing infrastructure for [ICs](https://mathiasbynens.be/notes/shapes-ics) and [Maps](https://v8.dev/blog/fast-properties) which can process and analyse IC events using the [IC Explorer](https://v8.dev/tools//ic-explorer.html) and Map events using [Map Processor](https://v8.dev/tools/map-processor.html). However, previous tools didn't allow us to analyze maps and ICs holistically and this is now possible with system analyzer .
 
 ![Indicium](/_img/system-analyzer/indicium-logo.png)
 
@@ -113,9 +113,9 @@ Before diving more into the case study, let’s get familiar with the panels of 
 
 We are analyzing how the function `dotProduct` might be causing this performance difference. So we group IC events by functionName to get more in depth information about IC events associated with the `dotProduct` function.
 
-The first thing we notice is that we have two different IC state transitions recorded by the IC events in this function. One going from uninitialised to monomorphic and the other one going from monomorphic to polymorphic. As mentioned in the previously linked [blog post](https://mathiasbynens.be/notes/shapes-ics), polymorphic IC state indicates that now we are tracking more than one Map associated with `Point` objects.
+The first thing we notice is that we have two different IC state transitions recorded by the IC events in this function. One going from uninitialised to monomorphic and the other one going from monomorphic to polymorphic. Polymorphic IC state indicates that now we are tracking more than one Map associated with `Point` objects and this polymorphic state is worse as we have to perform additional checks.
 
-We want to know why we are creating multiple Map shapes for the same type of objects we toggle the info button about IC state to get more information about the Map addresses going from uninitialised to monomorphic.
+We want to know why we are creating multiple Map shapes for the same type of objects. To do so, we toggle the info button about IC state to get more information about the Map addresses going from uninitialised to monomorphic.
 
 ![The map transition tree associated with the monomorphic IC state.](/_img/system-analyzer/case1_2.png)
 
@@ -125,11 +125,11 @@ For the monomorphic IC state we can visualise the transition tree and see that w
 
 ![The Map panel communicates the file position information to highlight file positions on the Source panel.](/_img/system-analyzer/case1_4.png)
 
-We click on the file position section of the Map panel to see where this `isNegative` property is added in the source code.
+We click on the file position section of the Map panel to see where this `isNegative` property is added in the source code and can use this insight to address the performance regression.
 
 So now the question being *how can we address the performance regression by using the insight we generated from the tool*?
 
-The minimal solution would be to always initialise the `isNegative` property. As a common advice we say that all instance properties should be initialised in the constructor.
+The minimal solution would be to always initialise the `isNegative` property. In general, it is sound advice that all instance properties should be initialised in the constructor.
 
 Now, the updated `Point` class looks like this:
 
@@ -147,13 +147,11 @@ class Point {
 }
 ```
 
-If we execute the script again with the modified `Point` class, we see on the that execution of the two snippets we defined at the beginning of the case study perform very similarly.
+If we execute the script again with the modified `Point` class, we see that the execution of the two snippets defined at the beginning of the case study perform very similarly.
 
-![Performance analysis of snippets.](/_img/system-analyzer/final-program-performance.png)
+In an updated trace, we see that the polymorphic IC state is avoided as we are not creating multiple maps for the same type of objects.
 
 ![The map transition tree of the modified Point object.](/_img/system-analyzer/case2_1.png)
-
-Then we group IC events by `dotProduct` key in the IC panel. And now, we see that the polymorphic IC state is avoided as we are not creating multiple maps for the same type of objects.
 
 ## The System Analyzer
 
@@ -175,7 +173,7 @@ The Map panel has two sub panels:
 
 2. Map transitions
 
-The Map panel visualizes the transition trees of selected maps. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched through using the provided interface. From the Stats sub-panel, which is above the Map transitions sub-panel, we can see the statistics about the properties causing map transitions and types of map events.
+The Map panel visualizes the transition trees of selected maps. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched for using the provided interface. From the Stats sub-panel, which is above the Map transitions sub-panel, we can see the statistics about the properties causing map transitions and types of map events.
 
 ![Map panel overview](/_img/system-analyzer/map-panel.png)
 
