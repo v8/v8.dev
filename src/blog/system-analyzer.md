@@ -135,15 +135,15 @@ Now, the updated `Point` class looks like this:
 
 ```javascript
 class Point {
- constructor(x, y) {
-   this.isNegative = x < 0 || y < 0;
-   this.x = x;
-   this.y = y;
- }
+  constructor(x, y) {
+    this.isNegative = x < 0 || y < 0;
+    this.x = x;
+    this.y = y;
+  }
 
- dotProduct(other) {
-   return this.x * other.x + this.y * other.y;
- }
+  dotProduct(other) {
+    return this.x * other.x + this.y * other.y;
+  }
 }
 ```
 
