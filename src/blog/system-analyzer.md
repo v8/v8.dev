@@ -115,9 +115,7 @@ We are analyzing how the function `dotProduct` might be causing this performance
 
 First thing we notice is that we have two different IC state transitions recorded by the IC events in this function. One going from uninitialised to monomorphic and the other one going from monomorphic to polymorphic. As mentioned in the previously linked [blog post](https://mathiasbynens.be/notes/shapes-ics), polymorphic IC state indicates that now we are tracking more than one Map associated with `Point` objects.
 
-Our hope is to get a better understanding of why we are tracking more Maps even though we have the same type of object for both snippets.
-
-Since we wanted to know why we are creating multiple Map shapes for the same type of objects we toggle the info button about IC state to get more information about the Map addresses going from uninitialised to monomorphic.
+We want to know why we are creating multiple Map shapes for the same type of objects we toggle the info button about IC state to get more information about the Map addresses going from uninitialised to monomorphic.
 
 ![The map transition tree associated with the monomorphic IC state.](/_img/system-analyzer/case1_2.png)
 
@@ -129,7 +127,7 @@ For the monomorphic IC state we can visualise the transition tree and see that w
 
 We click on the file position section of the Map panel to see where this `isNegative` property is added in the source code.
 
-So now the question being *how can we address the function deoptimization problem by using the insight we generated from the tool*?
+So now the question being *how can we address the performance regression by using the insight we generated from the tool*?
 
 The minimal solution would be to always initialise the `isNegative` property. As a common advice we say that all instance properties should be initialised in the constructor.
 
@@ -155,7 +153,7 @@ If we execute the script again with the modified `Point` class, we see on the th
 
 ![The map transition tree of the modified Point object.](/_img/system-analyzer/case2_1.png)
 
-Then we group IC events by `dotProduct` key. And now, we see that the polymorphic IC state is avoided as we are not creating multiple maps for the same type of objects.
+Then we group IC events by `dotProduct` key in the IC panel. And now, we see that the polymorphic IC state is avoided as we are not creating multiple maps for the same type of objects.
 
 ## The System Analyzer
 
@@ -163,14 +161,19 @@ Let's now have an in-depth look at the different panels that are present in the 
 
 ### Timeline Panel
 
-The Timeline panel allows selection in time which enables visualization of IC/map states across discrete points in time or a selected range in time. It supports filtering features such as zoom in/out to the log events for selected time ranges. The number of timeline views can easily be extended following the proposed Timeline interface.
+The Timeline panel allows selection in time which enables visualization of IC/map states across discrete points in time or a selected range in time. It supports filtering features such as zoom in/out to the log events for selected time ranges. 
 
 ![Timeline panel overview](/_img/system-analyzer/timeline-panel.png)
 
 ![Timeline panel overview (Cont.)](/_img/system-analyzer/timeline-panel2.png)
 
-Map Panel
-The Map panel visualizes the transition trees of selected map log events. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched through using the provided interface. From the Stats sub-panel which is above the Map transitions sub-panel we can see the statistics about the properties causing map transitions and types of loaded map log events.
+### Map Panel
+
+The Map panel has two sub panels:
+1. Map details
+2. Map transitions
+
+The Map panel visualizes the transition trees of selected maps. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched through using the provided interface. From the Stats sub-panel, which is above the Map transitions sub-panel, we can see the statistics about the properties causing map transitions and types of map events.
 
 ![Map panel overview](/_img/system-analyzer/map-panel.png)
 
@@ -197,7 +200,5 @@ The Source panel displays the loaded scripts with clickable markers to emit cust
 ### Acknowledgements
 
 I would like to thank everyone in the V8 and Mobile Android Engineering teams, especially to my host Sathya and co-host Camillo for supporting me throughout my internship and giving me the opportunity to work on such a cool project. Also, special thanks to Mythri and Ross for providing mentorship and helping me to feel more connected with the team. I know things were different this summer but I learnt a lot which made the experience really valuable to me.
-
-I would like to thank Camillo and Sathya for proofreading this blog article.
 
 I had an amazing summer interning at Google!
