@@ -47,19 +47,19 @@ for (let i = 0; i < 10e5; i++) {
   dotProduct = a.dotProduct(b);
 }
 
-console.time("snippet1");
+console.time('snippet1');
 for (let i = 0; i < 10e6; i++) {
   dotProduct = a.dotProduct(b);
 }
-console.timeEnd("snippet1");
+console.timeEnd('snippet1');
 
 a = new Point(-1, -1);
 b = new Point(-2, -2);
-console.time("snippet2");
+console.time('snippet2');
 for (let i = 0; i < 10e6; i++) {
   dotProduct = a.dotProduct(b);
 }
-console.timeEnd("snippet2");
+console.timeEnd('snippet2');
 ```
 
 Here, we have a `Point` class that stores two coordinates and an additional boolean based on the values of the co-ordinates. The `Point` class has a `dotProduct` method which returns the dot product between the passed object and the receiver.
@@ -73,11 +73,11 @@ let a = new Point(1, 1);
 let b = new Point(2, 2);
 let dotProduct;
 
-start = performance.now();
+console.time('snippet1');
 for (let i = 0; i < 10e6; i++) {
   dotProduct = a.dotProduct(b);
 }
-console.log(performance.now() - start);
+console.timeEnd('snippet1');
 ```
 
 ### *snippet 2*
@@ -85,11 +85,11 @@ console.log(performance.now() - start);
 ```javascript
 a = new Point(-1, -1);
 b = new Point(-2, -2);
-start = performance.now();
+console.time('snippet2');
 for (let i = 0; i < 10e6; i++) {
   dotProduct = a.dotProduct(b);
 }
-console.log(performance.now() - start);
+console.timeEnd('snippet2');
 ```
 
 Once we run the program we notice a performance regression. Even though we are measuring the performance of two similar snippets; accessing the properties `x` and `y` of `Point` object instances by calling the `dotProduct` function in a for-loop.
@@ -168,6 +168,7 @@ The Timeline panel allows selection in time which enables visualization of IC/ma
 ### Map Panel
 
 The Map panel has two sub panels:
+
 1. Map details
 2. Map transitions
 
