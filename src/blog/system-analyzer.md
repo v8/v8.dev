@@ -161,7 +161,7 @@ Let's now have an in-depth look at the different panels that are present in the 
 
 ### Timeline Panel
 
-The Timeline panel allows selection in time which enables visualization of IC/map states across discrete points in time or a selected range in time. It supports filtering features such as zoom in/out to the log events for selected time ranges. 
+The Timeline panel allows selection in time which enables visualization of IC/map states across discrete points in time or a selected range in time. It supports filtering features such as zoom in/out to the log events for selected time ranges.
 
 ![Timeline panel overview](/_img/system-analyzer/timeline-panel.png)
 
@@ -170,7 +170,9 @@ The Timeline panel allows selection in time which enables visualization of IC/ma
 ### Map Panel
 
 The Map panel has two sub panels:
+
 1. Map details
+
 2. Map transitions
 
 The Map panel visualizes the transition trees of selected maps. The metadata of the selected map displayed through the map details sub-panel. A specific transition tree associated with a map address can be searched through using the provided interface. From the Stats sub-panel, which is above the Map transitions sub-panel, we can see the statistics about the properties causing map transitions and types of map events.
