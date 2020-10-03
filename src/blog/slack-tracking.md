@@ -18,7 +18,7 @@ function Peak(name, height) {
   this.height = height;
 }
 
-const m1 = new Peak('Matterhorn', 3648);
+const m1 = new Peak('Matterhorn', 4478);
 ```
 
 You might think the engine has all it needs to perform well — you’ve told it the object has two properties, after all. However, V8 really has no idea what will come next. This object `m1` could be passed to another function that adds 10 more properties to it. Slack tracking comes out of this need to be responsive to whatever comes next in an environment without static compilation to infer overall structure. It’s like many other mechanisms in V8, whose basis is only things you can generally say about execution, like:
@@ -97,7 +97,7 @@ function Peak(name, height) {
   this.height = height;
 }
 
-const m1 = new Peak('Matterhorn', 3648);
+const m1 = new Peak('Matterhorn', 4478);
 ```
 
 By the calculation in `JSFunction::CalculateExpectedNofProperties` and our `Peak()` function, we should have 2 in-object properties, and thanks to slack tracking, another 8 extra. We can print `m1` with `%DebugPrint()` (_this handy function exposes the map structure. You can use it by running `d8` with the flag `--allow-natives-syntax`_):
