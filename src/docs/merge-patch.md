@@ -66,6 +66,7 @@ In case you are a V8 committer, feel free to use `TBR` to land the merge if 1) i
 ### Option 2: Using [gerrit](https://chromium-review.googlesource.com/)
 
 Note that this option only works if the patch applies cleanly on the release branch.
+This is the prefered way to merge a V8 patch to a chromium branch. [Follow this guide](https://docs.google.com/document/d/13JzmZBggRwJk36mM5tLFJNrqJxIXD9drqnd8-fJ4tXU/edit#) to do so
 
 1. Open the CL you want to back-merge.
 1. Select "Cherry pick" from the extended menu (three vertical dots in the upper right corner).
