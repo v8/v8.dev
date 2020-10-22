@@ -72,7 +72,7 @@
         "source": "/tools/:tool",
         "destination": "https://v8.github.io/tools/:tool",
         "type": 301
-      },
+      }
     ],
     "headers": [
       {
