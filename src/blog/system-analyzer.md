@@ -12,11 +12,11 @@ tweet: '1311689392608731140'
 ---
 # Indicium: V8 system analyzer
 
-The past three months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been working on a new tool called [*Indicium*](https://v8.dev/tools/system-analyzer).
+The past three months have been an awesome learning experience for me as I've joined the V8 team (Google London) as an intern, and have been working on a new tool called [*Indicium*](https://v8.dev/tools/head/system-analyzer).
 
 This system analyzer is a unified web interface to trace, debug and analyse patterns of how Inline Caches (ICs) and Maps are created and modified in real-world applications.
 
-V8 already has a tracing infrastructure for [ICs](https://mathiasbynens.be/notes/shapes-ics) and [Maps](https://v8.dev/blog/fast-properties) which can process and analyse IC events using the [IC Explorer](https://v8.dev/tools//ic-explorer.html) and Map events using [Map Processor](https://v8.dev/tools/map-processor.html). However, previous tools didn't allow us to analyze maps and ICs holistically and this is now possible with system analyzer.
+V8 already has a tracing infrastructure for [ICs](https://mathiasbynens.be/notes/shapes-ics) and [Maps](https://v8.dev/blog/fast-properties) which can process and analyse IC events using the [IC Explorer](https://v8.dev/tools/v8.7/ic-explorer.html) and Map events using [Map Processor](https://v8.dev/tools/v8.7/map-processor.html). However, previous tools didn't allow us to analyze maps and ICs holistically and this is now possible with system analyzer.
 
 ![Indicium](/_img/system-analyzer/indicium-logo.png)
 
