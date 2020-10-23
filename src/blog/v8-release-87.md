@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v8.7'
-author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), a V8 flag bearer.'
+author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), a V8 flag bearer'
 avatars:
  - 'ingvar-stepanyan'
 date: 2020-10-23
