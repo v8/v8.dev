@@ -7,7 +7,7 @@ date: 2020-10-23
 tags:
  - release
 description: 'V8 release v8.7 brings new API for native calls, Atomics.waitAsync, bug fixes and performance improvements.'
-tweet: ''
+tweet: '1319654229863182338'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 8.7](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/8.7), which is in beta until its release in coordination with Chrome 87 Stable in several weeks. V8 v8.7 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
