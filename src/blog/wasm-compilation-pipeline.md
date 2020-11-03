@@ -3,30 +3,30 @@ title: 'WebAssembly Compilation Pipeline'
 author: 'Andreas Haas, compiler of modules'
 avatars:
   - andreas-haas
-date: 2020-11-05
+date: 2020-11-03
 tags:
   - WebAssembly
   - internals
 description: 'This article explains V8’s WebAssembly compilers and when they compile WebAssembly code.'
-tweet: 'XXXXXXXXXX'
+tweet: ''
 ---
 WebAssembly is a binary format that allows you to run code from programming languages other than JavaScript to run on the web efficiently and securely. In this blog post we dive into the WebAssembly compilation pipeline in V8 and explain how we use the different compilers to provide good performance.
 
 ## Liftoff
 
-V8 first compiles a WebAssembly module with it’s baseline compiler, [Liftoff] (/blog/liftoff). Liftoff is a [one-pass compiler] (https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, 10s of megabytes per second. Once Liftoff compilation is finished, the compiled WebAssembly module is returned to JavaScript.
+V8 first compiles a WebAssembly module with it’s baseline compiler, [Liftoff](/blog/liftoff). Liftoff is a [one-pass compiler](https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, 10s of megabytes per second. Once Liftoff compilation is finished, the compiled WebAssembly module is returned to JavaScript.
 
 ## TurboFan
 
 Liftoff emits decently fast machine code in a very short period of time. However, because it emits code for each WebAssembly instruction independently, there is very little room for optimizations, like improving register allocations, loop unrolling or function inlining.
 
-This is why, as soon as Liftoff compilation is finished, V8 immediately starts to compile the whole WebAssembly module again with [TurboFan] (/blog/turbofan-jit), the optimizing compiler in V8 for both WebAssembly and JavaScript. TurboFan is a [multi-pass compiler] (https://en.wikipedia.org/wiki/Multi-pass_compiler), which means that it builds multiple internal representations of the compiled code before emitting machine code. These additional internal representations allow optimizations and better register allocations, resulting in significantly faster code.
+This is why, as soon as Liftoff compilation is finished, V8 immediately starts to compile the whole WebAssembly module again with [TurboFan](/docs/turbofan), the optimizing compiler in V8 for both WebAssembly and JavaScript. TurboFan is a [multi-pass compiler](https://en.wikipedia.org/wiki/Multi-pass_compiler), which means that it builds multiple internal representations of the compiled code before emitting machine code. These additional internal representations allow optimizations and better register allocations, resulting in significantly faster code.
 
 TurboFan compiles the WebAssembly module function by function. As soon as one function finishes, it immediately replaces the function compiled by Liftoff. Any new calls to that function will then use the new, optimized code produced by TurboFan, not the Liftoff code. Note though that we don’t do on-stack-replacement. This means that if TurboFan finishes optimizing a function that was already invoked when only the Liftoff version was available, it will finish its execution using the Liftoff version.
 
 ## Code Caching
 
-If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, the module is not compiled but loaded from cache. More information about code caching is available [here] (/blog/wasm-code-caching).
+If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, the module is not compiled but loaded from cache. More information about code caching is available [here](/blog/wasm-code-caching).
 
 ## Debugging
 
@@ -41,17 +41,17 @@ To make things a bit more confusing, within DevTools all code will get recompile
 For experimentation, V8 and Chrome can be configured to compile WebAssembly code only with Liftoff or only with TurboFan. It is even possible to experiment with lazy compilation, where functions only get compiled when they get called for the first time. The following flags enable these experimental modes:
 
 - Liftoff only:
-  - In V8, set the `--liftoff --no-wasm-tier-up` flags.
-  - In Chrome, disable [WebAssembly tiering] (chrome://flags/#enable-webassembly-tiering) and enable [WebAssembly baseline compiler] (chrome://flags/#enable-webassembly-baseline).
+    - In V8, set the `--liftoff --no-wasm-tier-up` flags.
+    - In Chrome, disable [WebAssembly tiering](chrome://flags/#enable-webassembly-tiering) and enable [WebAssembly baseline compiler](chrome://flags/#enable-webassembly-baseline).
 
 - TurboFan only:
-  - In V8, set the `--no-liftoff --no-wasm-tier-up` flags.
-  - In Chrome, disable [WebAssembly tiering] (chrome://flags/#enable-webassembly-tiering) and disable [WebAssembly baseline compiler] (chrome://flags/#enable-webassembly-baseline).
+    - In V8, set the `--no-liftoff --no-wasm-tier-up` flags.
+    - In Chrome, disable [WebAssembly tiering](chrome://flags/#enable-webassembly-tiering) and disable [WebAssembly baseline compiler](chrome://flags/#enable-webassembly-baseline).
 
 - Lazy compilation:
-  - Lazy compilation is a compilation mode where a function is only compiled when it is called for the first time. Similar to the production configuration the function is first compiled with Liftoff. After Liftoff compilation finishes, the function gets recompiled with TurboFan.
-  - In V8, set the --wasm-lazy-compilation flag.
-  - In Chrome, enable WebAssembly lazy compilation (chrome://flags/#enable-webassembly-lazy-compilation).
+    - Lazy compilation is a compilation mode where a function is only compiled when it is called for the first time. Similar to the production configuration the function is first compiled with Liftoff. After Liftoff compilation finishes, the function gets recompiled with TurboFan.
+    - In V8, set the --wasm-lazy-compilation flag.
+    - In Chrome, enable WebAssembly lazy compilation (chrome://flags/#enable-webassembly-lazy-compilation).
 
 ## Compile time
 
