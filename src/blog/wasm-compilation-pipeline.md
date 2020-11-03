@@ -1,6 +1,6 @@
 ---
 title: 'WebAssembly Compilation Pipeline'
-author: 'Andreas Haas, handler of traps'
+author: 'Andreas Haas, compiler of modules'
 avatars:
   - andreas-haas
 date: 2020-11-05
