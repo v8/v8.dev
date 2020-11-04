@@ -34,7 +34,7 @@ As mentioned earlier, TurboFan applies many optimizations, many of which involve
 
 ## Profiling
 
-To make things a bit more confusing, within DevTools all code will get recompiled with TurboFan again when the Performance tab is opened. Opening the performance tab is a signal that the developer wants to do performance profiling. Profiling the Liftoff code is not representative as it is only used while TurboFan isn’t finished and can be significantly slower than TurboFan’s output, which will be running for the vast majority of time.
+To make things a bit more confusing, within DevTools all code will get recompiled with TurboFan again when the Performance tab is opened and the `Record` button in clicked. The `Record button starts performance profiling. Profiling the Liftoff code is not representative as it is only used while TurboFan isn’t finished and can be significantly slower than TurboFan’s output, which will be running for the vast majority of time.
 
 ## Flags for experimentation
 
