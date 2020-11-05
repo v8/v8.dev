@@ -1,15 +1,8 @@
 ---
 title: 'WebAssembly Compilation Pipeline'
-author: 'Andreas Haas, compiler of modules'
-avatars:
-  - andreas-haas
-date: 2020-11-03
-tags:
-  - WebAssembly
-  - internals
 description: 'This article explains V8’s WebAssembly compilers and when they compile WebAssembly code.'
-tweet: ''
 ---
+
 WebAssembly is a binary format that allows you to run code from programming languages other than JavaScript to run on the web efficiently and securely. In this document we dive into the WebAssembly compilation pipeline in V8 and explain how we use the different compilers to provide good performance.
 
 ## Liftoff
