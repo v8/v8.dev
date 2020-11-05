@@ -7,27 +7,27 @@ WebAssembly is a binary format that allows you to run code from programming lang
 
 ## Liftoff
 
-V8 first compiles a WebAssembly module with it’s baseline compiler, [Liftoff](/blog/liftoff). Liftoff is a [one-pass compiler](https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, 10s of megabytes per second. Once Liftoff compilation is finished, the compiled WebAssembly module is returned to JavaScript.
+V8 first compiles a WebAssembly module with its baseline compiler, [Liftoff](/blog/liftoff). Liftoff is a [one-pass compiler](https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, 10s of megabytes per second. Once Liftoff compilation is finished, the compiled WebAssembly module is returned to JavaScript.
 
 ## TurboFan
 
-Liftoff emits decently fast machine code in a very short period of time. However, because it emits code for each WebAssembly instruction independently, there is very little room for optimizations, like improving register allocations, loop unrolling or function inlining.
+Liftoff emits decently fast machine code in a very short period of time. However, because it emits code for each WebAssembly instruction independently, there is very little room for optimizations, like improving register allocations or common compiler optimizations like redundant load elimination, strength reduction, or function inlining.
 
-This is why, as soon as Liftoff compilation is finished, V8 immediately starts to compile the whole WebAssembly module again with [TurboFan](/docs/turbofan), the optimizing compiler in V8 for both WebAssembly and JavaScript. TurboFan is a [multi-pass compiler](https://en.wikipedia.org/wiki/Multi-pass_compiler), which means that it builds multiple internal representations of the compiled code before emitting machine code. These additional internal representations allow optimizations and better register allocations, resulting in significantly faster code.
+This is why, as soon as Liftoff compilation is finished, V8 immediately starts to "tier up" the module by recompiling all functions with [TurboFan](/docs/turbofan), the optimizing compiler in V8 for both WebAssembly and JavaScript. TurboFan is a [multi-pass compiler](https://en.wikipedia.org/wiki/Multi-pass_compiler), which means that it builds multiple internal representations of the compiled code before emitting machine code. These additional internal representations allow optimizations and better register allocations, resulting in significantly faster code.
 
 TurboFan compiles the WebAssembly module function by function. As soon as one function finishes, it immediately replaces the function compiled by Liftoff. Any new calls to that function will then use the new, optimized code produced by TurboFan, not the Liftoff code. Note though that we don’t do on-stack-replacement. This means that if TurboFan finishes optimizing a function that was already invoked when only the Liftoff version was available, it will finish its execution using the Liftoff version.
 
 ## Code caching
 
-If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, the module is not compiled but loaded from cache. More information about code caching is available [here](/blog/wasm-code-caching).
+If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, the module is not compiled but loaded from cache. More information about code caching is available [in a separate blog post](/blog/wasm-code-caching).
 
 ## Debugging
 
-As mentioned earlier, TurboFan applies many optimizations, many of which involve re-ordering code, eliminating variables or even skipping whole sections of code. This means that if you want to set a breakpoint at a specific instruction, it might not be clear where program execution should actually stop. In other words, TurboFan code is not well suited for debugging. Therefore, when debugging is started by opening DevTools, all TurboFan code is replaced by Liftoff code again, as each WebAssembly instruction maps to exactly one section of machine code and all local and global variables are in-tact.
+As mentioned earlier, TurboFan applies optimizations, many of which involve re-ordering code, eliminating variables or even skipping whole sections of code. This means that if you want to set a breakpoint at a specific instruction, it might not be clear where program execution should actually stop. In other words, TurboFan code is not well suited for debugging. Therefore, when debugging is started by opening DevTools, all TurboFan code is replaced by Liftoff code again ("tiered down"), as each WebAssembly instruction maps to exactly one section of machine code and all local and global variables are intact.
 
 ## Profiling
 
-To make things a bit more confusing, within DevTools all code will get recompiled with TurboFan again when the Performance tab is opened and the "Record" button in clicked. The "Record" button starts performance profiling. Profiling the Liftoff code is not representative as it is only used while TurboFan isn’t finished and can be significantly slower than TurboFan’s output, which will be running for the vast majority of time.
+To make things a bit more confusing, within DevTools all code will get tiered up (recompiled with TurboFan) again when the Performance tab is opened and the "Record" button in clicked. The "Record" button starts performance profiling. Profiling the Liftoff code would not be representative as it is only used while TurboFan isn’t finished and can be significantly slower than TurboFan’s output, which will be running for the vast majority of time.
 
 ## Flags for experimentation
 
@@ -42,8 +42,8 @@ For experimentation, V8 and Chrome can be configured to compile WebAssembly code
     - In Chrome, disable [WebAssembly tiering](chrome://flags/#enable-webassembly-tiering) and disable [WebAssembly baseline compiler](chrome://flags/#enable-webassembly-baseline).
 
 - Lazy compilation:
-    - Lazy compilation is a compilation mode where a function is only compiled when it is called for the first time. Similar to the production configuration the function is first compiled with Liftoff. After Liftoff compilation finishes, the function gets recompiled with TurboFan.
-    - In V8, set the --wasm-lazy-compilation flag.
+    - Lazy compilation is a compilation mode where a function is only compiled when it is called for the first time. Similar to the production configuration the function is first compiled with Liftoff (blocking execution). After Liftoff compilation finishes, the function gets recompiled with TurboFan in the background.
+    - In V8, set the `--wasm-lazy-compilation` flag.
     - In Chrome, enable WebAssembly lazy compilation (chrome://flags/#enable-webassembly-lazy-compilation).
 
 ## Compile time
@@ -52,6 +52,6 @@ There are different ways to measure the compilation time of Liftoff and TurboFan
 
 ![The trace for WebAssembly compilation in [Google Earth](https://earth.google.com/web)](/_img/wasm-compilation-pipeline/trace.svg)
 
-The compilation can also be measured in more detail in [chrome://tracing/] by enabling the `v8.wasm` category. Liftoff compilation is then the time spent from starting the compilation until the `wasm.BaselineFinished` event, TurboFan compilation ends at the `wasm.TopTierFinished` event. Compilation itself starts at the `wasm.StartStreamingCompilation` event for `WebAssembly.compileStreaming()`, at the `wasm.SyncCompile` event for `new WebAssembly.Module()`, and at the `wasm.AsyncCompile` event for `WebAssembly.compile()`, respectively. Liftoff compilation is indicated with `wasm.BaselineCompilation` events, TurboFan compilation with `wasm.TopTierCompilation`. The figure above shows the trace recorded for Google Earth, with the key events being highlighted.
+The compilation can also be measured in more detail in <chrome://tracing/> by enabling the `v8.wasm` category. Liftoff compilation is then the time spent from starting the compilation until the `wasm.BaselineFinished` event, TurboFan compilation ends at the `wasm.TopTierFinished` event. Compilation itself starts at the `wasm.StartStreamingCompilation` event for `WebAssembly.compileStreaming()`, at the `wasm.SyncCompile` event for `new WebAssembly.Module()`, and at the `wasm.AsyncCompile` event for `WebAssembly.compile()`, respectively. Liftoff compilation is indicated with `wasm.BaselineCompilation` events, TurboFan compilation with `wasm.TopTierCompilation`. The figure above shows the trace recorded for Google Earth, with the key events being highlighted.
 
 More detailed tracing data is available with the `v8.wasm.detailed` category, which, among other information, provides the compilation time of single functions.
