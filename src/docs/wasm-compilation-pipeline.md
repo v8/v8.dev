@@ -1,5 +1,5 @@
 ---
-title: 'WebAssembly Compilation Pipeline'
+title: 'WebAssembly compilation pipeline'
 description: 'This article explains V8’s WebAssembly compilers and when they compile WebAssembly code.'
 ---
 
@@ -17,7 +17,7 @@ This is why, as soon as Liftoff compilation is finished, V8 immediately starts t
 
 TurboFan compiles the WebAssembly module function by function. As soon as one function finishes, it immediately replaces the function compiled by Liftoff. Any new calls to that function will then use the new, optimized code produced by TurboFan, not the Liftoff code. Note though that we don’t do on-stack-replacement. This means that if TurboFan finishes optimizing a function that was already invoked when only the Liftoff version was available, it will finish its execution using the Liftoff version.
 
-## Code Caching
+## Code caching
 
 If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, the module is not compiled but loaded from cache. More information about code caching is available [here](/blog/wasm-code-caching).
 
