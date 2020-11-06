@@ -3,7 +3,7 @@ title: 'WebAssembly compilation pipeline'
 description: 'This article explains V8’s WebAssembly compilers and when they compile WebAssembly code.'
 ---
 
-WebAssembly is a binary format that allows you to run code from programming languages other than JavaScript to run on the web efficiently and securely. In this document we dive into the WebAssembly compilation pipeline in V8 and explain how we use the different compilers to provide good performance.
+WebAssembly is a binary format that allows you to run code from programming languages other than JavaScript on the web efficiently and securely. In this document we dive into the WebAssembly compilation pipeline in V8 and explain how we use the different compilers to provide good performance.
 
 ## Liftoff
 
@@ -44,7 +44,7 @@ For experimentation, V8 and Chrome can be configured to compile WebAssembly code
 - Lazy compilation:
     - Lazy compilation is a compilation mode where a function is only compiled when it is called for the first time. Similar to the production configuration the function is first compiled with Liftoff (blocking execution). After Liftoff compilation finishes, the function gets recompiled with TurboFan in the background.
     - In V8, set the `--wasm-lazy-compilation` flag.
-    - In Chrome, enable WebAssembly lazy compilation (chrome://flags/#enable-webassembly-lazy-compilation).
+    - In Chrome, enable [WebAssembly lazy compilation](chrome://flags/#enable-webassembly-lazy-compilation).
 
 ## Compile time
 
@@ -52,6 +52,6 @@ There are different ways to measure the compilation time of Liftoff and TurboFan
 
 ![The trace for WebAssembly compilation in [Google Earth](https://earth.google.com/web)](/_img/wasm-compilation-pipeline/trace.svg)
 
-The compilation can also be measured in more detail in <chrome://tracing/> by enabling the `v8.wasm` category. Liftoff compilation is then the time spent from starting the compilation until the `wasm.BaselineFinished` event, TurboFan compilation ends at the `wasm.TopTierFinished` event. Compilation itself starts at the `wasm.StartStreamingCompilation` event for `WebAssembly.compileStreaming()`, at the `wasm.SyncCompile` event for `new WebAssembly.Module()`, and at the `wasm.AsyncCompile` event for `WebAssembly.compile()`, respectively. Liftoff compilation is indicated with `wasm.BaselineCompilation` events, TurboFan compilation with `wasm.TopTierCompilation`. The figure above shows the trace recorded for Google Earth, with the key events being highlighted.
+The compilation can also be measured in more detail in `chrome://tracing/` by enabling the `v8.wasm` category. Liftoff compilation is then the time spent from starting the compilation until the `wasm.BaselineFinished` event, TurboFan compilation ends at the `wasm.TopTierFinished` event. Compilation itself starts at the `wasm.StartStreamingCompilation` event for `WebAssembly.compileStreaming()`, at the `wasm.SyncCompile` event for `new WebAssembly.Module()`, and at the `wasm.AsyncCompile` event for `WebAssembly.compile()`, respectively. Liftoff compilation is indicated with `wasm.BaselineCompilation` events, TurboFan compilation with `wasm.TopTierCompilation`. The figure above shows the trace recorded for Google Earth, with the key events being highlighted.
 
 More detailed tracing data is available with the `v8.wasm.detailed` category, which, among other information, provides the compilation time of single functions.
