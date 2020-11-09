@@ -69,7 +69,7 @@
         "type": 301
       },
       {
-        "source": "/tools/:tool",
+        "source": "/tools/:tool*",
         "destination": "https://v8.github.io/tools/:tool",
         "type": 301
       }
