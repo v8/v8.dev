@@ -35,16 +35,16 @@ For experimentation, V8 and Chrome can be configured to compile WebAssembly code
 
 - Liftoff only:
     - In V8, set the `--liftoff --no-wasm-tier-up` flags.
-    - In Chrome, disable [WebAssembly tiering](chrome://flags/#enable-webassembly-tiering) and enable [WebAssembly baseline compiler](chrome://flags/#enable-webassembly-baseline).
+    - In Chrome, disable WebAssembly tiering (`chrome://flags/#enable-webassembly-tiering`) and enable WebAssembly baseline compiler (`chrome://flags/#enable-webassembly-baseline`).
 
 - TurboFan only:
     - In V8, set the `--no-liftoff --no-wasm-tier-up` flags.
-    - In Chrome, disable [WebAssembly tiering](chrome://flags/#enable-webassembly-tiering) and disable [WebAssembly baseline compiler](chrome://flags/#enable-webassembly-baseline).
+    - In Chrome, disable WebAssembly tiering (`chrome://flags/#enable-webassembly-tiering`) and disable WebAssembly baseline compiler (`chrome://flags/#enable-webassembly-baseline`).
 
 - Lazy compilation:
     - Lazy compilation is a compilation mode where a function is only compiled when it is called for the first time. Similar to the production configuration the function is first compiled with Liftoff (blocking execution). After Liftoff compilation finishes, the function gets recompiled with TurboFan in the background.
     - In V8, set the `--wasm-lazy-compilation` flag.
-    - In Chrome, enable [WebAssembly lazy compilation](chrome://flags/#enable-webassembly-lazy-compilation).
+    - In Chrome, enable WebAssembly lazy compilation (`chrome://flags/#enable-webassembly-lazy-compilation`).
 
 ## Compile time
 
