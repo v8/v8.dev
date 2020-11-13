@@ -8,10 +8,9 @@ tags:
   - WebAssembly
   - ECMAScript
 description: 'BigInts make it easy to pass 64-bit integers between JavaScript and WebAssembly. This post explains what that means and why it’s useful, which includes making things simpler for developers, letting code run more quickly, and also speeding up build times.'
-tweet: 'TODO'
+tweet: ''
 ---
-The
-[JS-BigInt-Integration](https://github.com/WebAssembly/JS-BigInt-integration) feature makes it easy to pass 64-bit integers between JavaScript and WebAssembly. This post explains what that means and why it’s useful, which includes making things simpler for developers, letting code run more quickly, and also speeding up build times.
+The [JS-BigInt-Integration](https://github.com/WebAssembly/JS-BigInt-integration) feature makes it easy to pass 64-bit integers between JavaScript and WebAssembly. This post explains what that means and why it’s useful, which includes making things simpler for developers, letting code run more quickly, and also speeding up build times.
 
 ## 64-bit integers
 
@@ -46,7 +45,7 @@ Legalization would turn that into this:
     ..))
 ```
 
-Legalization is normally done on the tools side, before it reaches the VM that runs it. For example, the [Binaryen](https://github.com/WebAssembly/binaryen) toolchain library has a pass called [LegalizeJSInterface](https://github.com/WebAssembly/binaryen/blob/fd7e53fe0ae99bd27179cb35d537e4ce5ec1fe11/src/passes/LegalizeJSInterface.cpp) that does that transformation, which is run automatically in [Emscripten](https://emscripten.org/) when it is needed.
+Legalization is done on the tools side, before it reaches the VM that runs it. For example, the [Binaryen](https://github.com/WebAssembly/binaryen) toolchain library has a pass called [LegalizeJSInterface](https://github.com/WebAssembly/binaryen/blob/fd7e53fe0ae99bd27179cb35d537e4ce5ec1fe11/src/passes/LegalizeJSInterface.cpp) that does that transformation, which is run automatically in [Emscripten](https://emscripten.org/) when it is needed.
 
 ## Downsides of legalization
 
