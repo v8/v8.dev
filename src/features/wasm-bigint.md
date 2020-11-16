@@ -128,7 +128,7 @@ Perfect, exactly what we wanted!
 
 And not only is this simpler, but it’s faster. As mentioned earlier, in practice it’s rare that `i64` conversions happen on a hot path, but when it does the slowdown can be noticeable. If we turn the above example into a benchmark, running many calls of `send_i64_to_js`, then the BigInt version is 18% faster.
 
-Another benefit is that when using BigInt integration the toolchain can avoid performing legalization on the Wasm, which makes building faster. In Emscripten, legalization happens after the LLVM linker (`wasm-ld`) runs, and so if we can avoid legalization we may be able to avoid making any changes to the Wasm file at all. You can get that speedup if you build with `-s WASM_BIGINT`, and do not provide any other flags that require changes to be made. For example, `-O0 -s WASM_BIGINT`, or `-O1 -s WASM_BIGINT`, will work (but at higher optimization levels [the Binaryen optimizer will run](https://emscripten.org/docs/optimizing/Optimizing-Code.html#link-times)).
+Another benefit from BigInt integration is that the toolchain can avoid legalization. If Emscripten does not need to legalize then it may not have any work to do on the Wasm that LLVM emits, which speeds up build times. You can get that speedup if you build with `-s WASM_BIGINT` and do not provide any other flags that require changes to be made. For example, `-O0 -s WASM_BIGINT` will work (but optimized builds [will run the Binaryen optimizer](https://emscripten.org/docs/optimizing/Optimizing-Code.html#link-times) which is important for size).
 
 ## Conclusion
 
