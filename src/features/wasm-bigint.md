@@ -14,10 +14,10 @@ The [JS-BigInt-Integration](https://github.com/WebAssembly/JS-BigInt-integration
 
 ## 64-bit integers
 
-JavaScript Numbers are doubles, that is, 64-bit floating-point values. Such a value can contain any 32-bit integer with full precision, but not all 64-bit ones. WebAssembly, on the other hand, has full support for 64-bit integers, the `i64` type. A problem occurs when connecting the two: If a Wasm function returns an i64, for example, then the VM will throw an exception if you call it from JavaScript, something like this:
+JavaScript Numbers are doubles, that is, 64-bit floating-point values. Such a value can contain any 32-bit integer with full precision, but not all 64-bit ones. WebAssembly, on the other hand, has full support for 64-bit integers, the `i64` type. A problem occurs when connecting the two: If a Wasm function returns an i64, for example, then the VM throws an exception if you call it from JavaScript, something like this:
 
 ```
-TypeError: wasm function signature contains illegal type
+TypeError: Wasm function signature contains illegal type
 ```
 
 As the error says, `i64` is not a legal type for JavaScript.
@@ -109,7 +109,7 @@ As you can see, it’s possible to live with legalization. But it can be kind of
 
 ## The solution: JavaScript BigInts
 
-JavaScript has [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) values now, which represent integers of arbitrary size, so they can represent 64-bit integers properly. It is natural to want to use those to represent `i64`s from Wasm. That’s exactly what the JS-BigInt-Integration feature does!
+JavaScript has [BigInt](/features/bigint) values now, which represent integers of arbitrary size, so they can represent 64-bit integers properly. It is natural to want to use those to represent `i64`s from Wasm. That’s exactly what the JS-BigInt-Integration feature does!
 
 Emscripten has support for Wasm BigInt integration, which we can use to compile the original example (without any hacks for legalization), by just adding `-s WASM_BIGINT`:
 
@@ -128,7 +128,7 @@ Perfect, exactly what we wanted!
 
 And not only is this simpler, but it’s faster. As mentioned earlier, in practice it’s rare that `i64` conversions happen on a hot path, but when it does the slowdown can be noticeable. If we turn the above example into a benchmark, running many calls of `send_i64_to_js`, then the BigInt version is 18% faster.
 
-Another benefit from BigInt integration is that the toolchain can avoid legalization. If Emscripten does not need to legalize then it may not have any work to do on the Wasm that LLVM emits, which speeds up build times. You can get that speedup if you build with `-s WASM_BIGINT` and do not provide any other flags that require changes to be made. For example, `-O0 -s WASM_BIGINT` will work (but optimized builds [will run the Binaryen optimizer](https://emscripten.org/docs/optimizing/Optimizing-Code.html#link-times) which is important for size).
+Another benefit from BigInt integration is that the toolchain can avoid legalization. If Emscripten does not need to legalize then it may not have any work to do on the Wasm that LLVM emits, which speeds up build times. You can get that speedup if you build with `-s WASM_BIGINT` and do not provide any other flags that require changes to be made. For example, `-O0 -s WASM_BIGINT` works (but optimized builds [run the Binaryen optimizer](https://emscripten.org/docs/optimizing/Optimizing-Code.html#link-times) which is important for size).
 
 ## Conclusion
 
