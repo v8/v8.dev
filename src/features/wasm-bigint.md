@@ -1,5 +1,5 @@
 ---
-title: 'WebAssembly Integration with JavaScript BigInt'
+title: 'WebAssembly integration with JavaScript BigInt'
 author: 'Alon Zakai'
 avatars:
   - 'alon-zakai'
