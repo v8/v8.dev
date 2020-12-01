@@ -125,7 +125,6 @@ let ip = 0;
 // pc 0 and follow epsilon transitions.
 let pcs = followEpsilons([0]);
 
-
 while (true) {
   // We're done if we've found a match ...
   if (pcs === "ACCEPT") return true;
