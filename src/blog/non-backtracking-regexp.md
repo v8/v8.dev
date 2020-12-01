@@ -88,7 +88,7 @@ while (true) {
         ++pc;
       } else if (stack.length > 0) {
         // Wrong input character, but we can backtrack.
-        let back = stack.pop();
+        const back = stack.pop();
         ip = back.ip;
         pc = back.pc;
       } else {
