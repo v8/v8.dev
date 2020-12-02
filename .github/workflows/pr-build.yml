@@ -1,0 +1,18 @@
+name: Build PR
+
+on: [pull_request]
+
+jobs:
+  deploy_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: preview
+          path: |
+            firebase.json
+            dist

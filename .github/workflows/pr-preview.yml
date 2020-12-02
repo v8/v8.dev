@@ -1,18 +1,19 @@
-name: Preview
+name: Preview PR
 
-on: [pull_request_target]
+on:
+  workflow_run:
+    workflows: ["Build PR"]
+    types:
+      - completed
 
 jobs:
   deploy_preview:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
         with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
-      - run: npm install
-      - run: npm run lint
-      - run: npm run build
+          name: preview
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
