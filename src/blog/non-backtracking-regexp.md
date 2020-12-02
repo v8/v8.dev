@@ -9,14 +9,14 @@ description: 'V8 now has an additional RegExp engine that serves as fallback and
 ---
 
 
-Starting with v8.8, V8 ships with a new additional non-backtracking RegExp engine which guarantees execution in linear time with respect to the size of the subject string. The new engine takes over if the existing [Irregexp engine](https://blog.chromium.org/2009/02/irregexp-google-chromes-new-regexp.html) backtracks excessively, but does not support all patterns and flags. If `/(a*)*b/.exec("a".repeat(100))` terminates on your version of V8, then it was executed by the new engine.
+Starting with v8.8, V8 ships with a new additional non-backtracking RegExp engine which guarantees execution in linear time with respect to the size of the subject string. The new engine takes over if the existing [Irregexp engine](https://blog.chromium.org/2009/02/irregexp-google-chromes-new-regexp.html) backtracks excessively, but does not support all patterns and flags. If `/(a*)*b/.exec('a'.repeat(100))` terminates on your version of V8, then it was executed by the new engine.
 
-![Runtime of `/(a*)*b/.exec("a".repeat(n))` for n ≤ 100](/_img/non-backtracking-regexp/runtime-plot.svg)
+![Runtime of `/(a*)*b/.exec('a'.repeat(n))` for n ≤ 100](/_img/non-backtracking-regexp/runtime-plot.svg)
 
 Here’s how you can configure the new RegExp engine:
 
 - `--no-enable-experimental-regexp_engine-on-excessive-backtracks` disables the fallback mechanism.
-- `--regexp-backtracks-before-fallback N` (default N = 50,000) specifies how many backtracks are considered "excessive", i.e. when the fallback kicks in.
+- `--regexp-backtracks-before-fallback N` (default N = 50,000) specifies how many backtracks are considered 'excessive', i.e. when the fallback kicks in.
 - `--enable-experimental-regexp-engine` turns on recognition of the non-standard `l` (“linear”) flag for RegExps, as in e.g. `/(a*)*b/l`. RegExps constructed with this flag are always eagerly executed with the new engine; Irregexp is not involved at all. If the new RegExp engine can’t handle the pattern of an `l`-RegExp, then an exception is thrown at construction. We hope that this feature can at some point be used for hardening of apps that run RegExps on untrusted input. For now it remains experimental because Irregexp is orders of magnitude faster than the new engine on most common patterns.
 
 The fallback mechanism does not apply to all patterns. For the fallback mechanism to kick in, the RegExp must
@@ -28,15 +28,15 @@ The fallback mechanism does not apply to all patterns. For the fallback mechanis
 
 ## Background: Catastrophic backtracking
 
-RegExp matching in V8 is handled by the Irregexp engine. Irregexp jit-compiles RegExps to specialized native code (or [bytecode](blog/regexp-tier-up)) and is thus extremely fast for most patterns. For some patterns, however, Irregexp's runtime can blow up exponentially in the size of the input string. The example above, `/(a*)*b/.exec("a".repeat(100))`, does not finish within our lifetimes if executed by Irregexp.
+RegExp matching in V8 is handled by the Irregexp engine. Irregexp jit-compiles RegExps to specialized native code (or [bytecode](blog/regexp-tier-up)) and is thus extremely fast for most patterns. For some patterns, however, Irregexp's runtime can blow up exponentially in the size of the input string. The example above, `/(a*)*b/.exec('a'.repeat(100))`, does not finish within our lifetimes if executed by Irregexp.
 
-So what's going on here? Irregexp is a *backtracking* engine. When faced with a choice of how a match can continue, Irregexp explores the first alternative in its entirety, and then backtracks if necessary to explore the second alternative. Consider for instance matching the pattern `/abc|[az][by][0-9]/` against the subject string `"ab3"`. Here Irregexp tries to match `/abc/` first and fails after the second character. It then backtracks by two characters and successfully matches the second alternative `/[az][by][0-9]/`. In patterns with quantifiers such as `/(abc)*xyz/`, Irregexp has to choose after a match of the body whether to match the body again or to continue with the remaining pattern.
+So what's going on here? Irregexp is a *backtracking* engine. When faced with a choice of how a match can continue, Irregexp explores the first alternative in its entirety, and then backtracks if necessary to explore the second alternative. Consider for instance matching the pattern `/abc|[az][by][0-9]/` against the subject string `'ab3'`. Here Irregexp tries to match `/abc/` first and fails after the second character. It then backtracks by two characters and successfully matches the second alternative `/[az][by][0-9]/`. In patterns with quantifiers such as `/(abc)*xyz/`, Irregexp has to choose after a match of the body whether to match the body again or to continue with the remaining pattern.
 
-Let's try to understand what's going on when matching `/(a*)*b/` against a smaller subject string, say "aaa". This pattern contains nested quantifiers, so we're asking Irregexp to match a *sequence of sequences* of "a", and then match "b". Clearly there is no match because the subject string does not contain "b". However, `/(a*)*/` matches, and it does so in exponentially many different ways:
+Let's try to understand what's going on when matching `/(a*)*b/` against a smaller subject string, say `'aaa'`. This pattern contains nested quantifiers, so we're asking Irregexp to match a *sequence of sequences* of 'a', and then match 'b'. Clearly there is no match because the subject string does not contain 'b'. However, `/(a*)*/` matches, and it does so in exponentially many different ways:
 
 ```javascript
-"aaa"           "aa", "a"           "aa", ""
-"a", "aa"       "a", "a", "a"       "a", "a", ""
+'aaa'           'aa', 'a'           'aa', ''
+'a', 'aa'       'a', 'a', 'a'       'a', 'a', ''
 ...
 ```
 
@@ -62,13 +62,13 @@ Let’s revisit the backtracking algorithm that Irregexp is based upon and descr
 
 ```javascript
 const code = [
-  {opcode: "FORK", forkPc: 4},
-  {opcode: "CONSUME", char: “1”},
-  {opcode: "CONSUME", char: “2”},
-  {opcode: "JMP", jmpPc: 6},
-  {opcode: "CONSUME", char: “a”},
-  {opcode: "CONSUME", char: “b”},
-  {opcode: "ACCEPT"}
+  {opcode: 'FORK', forkPc: 4},
+  {opcode: 'CONSUME', char: '1'},
+  {opcode: 'CONSUME', char: '2'},
+  {opcode: 'JMP', jmpPc: 6},
+  {opcode: 'CONSUME', char: 'a'},
+  {opcode: 'CONSUME', char: 'b'},
+  {opcode: 'ACCEPT'}
 ];
 ```
 
@@ -81,7 +81,7 @@ const stack = []; // Backtrack stack.
 while (true) {
   const inst = code[pc];
   switch (inst.opcode) {
-    case "CONSUME":
+    case 'CONSUME':
       if (ip < input.length && input[ip] === inst.char) {
         // Input matches what we expect: Continue.
         ++ip;
@@ -96,15 +96,15 @@ while (true) {
         return false;
       }
       break;
-    case "FORK":
+    case 'FORK':
       // Save alternative for backtracking later.
       stack.push({ip: ip, pc: inst.forkPc});
       ++pc;
       break;
-    case "JMP":
+    case 'JMP':
       pc = inst.jmpPc;
       break;
-    case "ACCEPT":
+    case 'ACCEPT':
       return true;
   }
 }
@@ -121,13 +121,13 @@ A simple implementation in JavaScript looks something like this:
 ```javascript
 // Input position.
 let ip = 0;
-// List of current pc values, or "ACCEPT" if we've found a match. We start at
+// List of current pc values, or 'ACCEPT' if we've found a match. We start at
 // pc 0 and follow epsilon transitions.
 let pcs = followEpsilons([0]);
 
 while (true) {
   // We're done if we've found a match ...
-  if (pcs === "ACCEPT") return true;
+  if (pcs === 'ACCEPT') return true;
   // ... or if we've exhausted the input string.
   if (ip >= input.length) return false;
 
@@ -159,17 +159,17 @@ function followEpsilons(pcs) {
 
     const inst = code[pc];
     switch (inst.opcode) {
-      case "CONSUME":
+      case 'CONSUME':
         result.push(pc);
         break;
-      case "FORK":
+      case 'FORK':
         pcs.push(pc + 1, inst.forkPc);
         break;
-      case "JMP":
+      case 'JMP':
         pcs.push(inst.jmpPc);
         break;
-      case "ACCEPT":
-        return "ACCEPT";
+      case 'ACCEPT':
+        return 'ACCEPT';
     }
   }
 
