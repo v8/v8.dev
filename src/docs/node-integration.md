@@ -41,7 +41,7 @@ Add your both your fork and V8’s fork as remotes to the existing checkout:
 
 ```bash
 git remote add v8 http://github.com/v8/node
-git remote add <your-user-name> http://github.com//<your-user-name>/node
+git remote add <your-user-name> http://github.com/<your-user-name>/node
 git fetch
 git checkout node-ci-<sync-date>
 git checkout -b make-changes
