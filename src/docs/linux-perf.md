@@ -74,7 +74,6 @@ perf record --call-graph -k mono out/x64.release/d8 \
 
 [`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone.
 
-
 ## Running `chrome` with perf flags
 
 1. You can use the same V8 flags to profile chrome itself. Follow the instructions above for the correct V8 flags and add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#preparing-your-checkout) to your chrome build.
@@ -93,7 +92,6 @@ perf record --call-graph -k mono out/x64.release/d8 \
     ```
 
 1. Navigate to your website and then continue with the next section on how to evaluate the perf output.
-
 
 ## Evaluating perf output
 
