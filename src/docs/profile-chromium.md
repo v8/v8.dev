@@ -18,18 +18,18 @@ Chromium is a complex application, unlike V8 shells. Below is the list of Chromi
 Here is how to run Chromium in order to get a CPU profile from the start of the process:
 
 ```bash
-./Chromium --no-sandbox --js-flags='--logfile=%t.log --prof'
+./Chromium --no-sandbox --js-flags='--prof'
 ```
 
 Please note that you wouldn’t see profiles in Developer Tools, because all the data is being logged to a file, not to Developer Tools.
 
 ### Flags description
 
-`--no-sandbox` turns off the renderer sandbox, which is a must for this exercise.
+`--no-sandbox` turns off the renderer sandbox so chrome can write to the log file.
 
 `--js-flags` contains the flags passed to V8:
 
-- `--logfile=%t.log` specifies a name pattern for log files. `%t` gets expanded into the current time in milliseconds, so each process gets its own log file. You can use prefixes and suffixes if you want, like this: `prefix-%t-suffix.log`.
+- `--logfile=%t.log` specifies a name pattern for log files. `%t` gets expanded into the current time in milliseconds, so each process gets its own log file. You can use prefixes and suffixes if you want, like this: `prefix-%t-suffix.log`. By derfault every isolate gets a separate log file.
 - `--prof` tells V8 to write statistical profiling information into the log file.
 
 ## Android
