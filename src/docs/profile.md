@@ -56,7 +56,7 @@ Preprocess the log with `--preprocess` (to resolve C++ symbols, etc).
 $V8_PATH/tools/linux-tick-processor --preprocess > v8.json
 ```
 
-Open [`tools/profview/index.html`](https://github.com/v8/v8/blob/master/tools/profview/index.html) in your browser and select the `v8.json` file there.
+Open [`tools/profview/index.html`](https://v8.dev/tools/head/profview) in your browser and select the `v8.json` file there.
 
 ## Example output
 
@@ -106,43 +106,6 @@ Statistical profiling result from benchmarks\v8.log, (4192 ticks, 0 unaccounted,
     181  100.0%          LazyCompile: RSADoPrivate crypto.js:1628
     ...
 ```
-
-## Timeline plot
-
-The timeline plot visualizes where V8 is spending time. This can be used to find bottlenecks and spot things that are unexpected (for example, too much time spent in the garbage collector). Data for the plot are gathered by both sampling and instrumentation. Linux with gnuplot 4.6 is required.
-
-To create a timeline plot, run V8 as described above, with the option `--log-timer-events` additional to `--prof`:
-
-```bash
-out/ia32.release/d8 --prof --log-timer-events script.js
-```
-
-The output is then passed to a plot script, similar to the tick-processor:
-
-```bash
-tools/plot-timer-events v8.log
-```
-
-This creates `timer-events.png` in the working directory, which can be opened with most image viewers.
-
-## Options
-
-Since recording log output comes with a certain performance overhead, the script attempts to correct this using a distortion factor. If not specified, it tries to find out automatically. You can however also specify the distortion factor manually.
-
-```bash
-tools/plot-timer-events --distortion=4500 v8.log
-```
-
-You can also manually specify a certain range for which to create the plot or statistical profile, expressed in milliseconds:
-
-```bash
-tools/plot-timer-events --distortion=4500 --range=1000,2000 v8.log
-tools/linux-tick-processor --distortion=4500 --range=1000,2000 v8.log
-```
-
-## HTML version
-
-Both statistical profile and timeline plot are available [in the browser UI](https://chromium.googlesource.com/v8/v8.git/+/master/tools/profviz/profviz.html). However, the statistical profile lacks C++ symbol resolution and the JavaScript port of gnuplot performs an order of magnitude slower than the native one.
 
 ## Profiling web applications
 
