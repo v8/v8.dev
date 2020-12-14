@@ -55,7 +55,7 @@ ninja -C out/x64.release
 
 ## Running `d8` with perf flags
 
-Once you have the right kernel, perf tool and build of V8, you can add the `--perf-prof` to the V8 command-line to record performance samples in JIT code. Additionally, you need to disable write protection for code memory via `--nowrite-protect-code-memory`. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
+Once you have the right kernel, perf tool and build of V8, you can start using linux perf:
 
 ```bash
 cd <path_to_your_v8_checkout>
@@ -65,6 +65,31 @@ echo '(function f() {
 perf record -k mono out/x64.release/d8 \
     --perf-prof --no-write-protect-code-memory test.js
 ```
+
+### Flags description
+[`--perf-prof`](https://source.chromium.org/search?q=FLAG_perf_prof) is used to the V8 command-line to record performance samples in JIT code. 
+
+[`--nowrite-protect-code-memory`](https://source.chromium.org/search?q=FLAG_nowrite_protect_code_memory) is requried to disable write protection for code memory. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
+
+[`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone.
+
+
+## Running `chrome` with perf flags
+1. You can use the same V8 flags to profile chrome itself. Follow the instructions above for the correct V8 flags and add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#preparing-your-checkout) to your chrome build.
+
+2. Once your build is ready, you can profile a website with both, full symbols for C++ and JS code.
+```
+out/x64.release/chrome --user-data-dir=`mktemp -d` --no-sandbox --incognito \
+    --js-flags='--perf-prof --no-write-protect-code-memory --interpreted-frames-native-stack'
+```
+
+3. After starting up chrome, find the renderer process id using the Task Manager and use it to start profiling:
+```
+ perf record -g -p $RENDERER_PID -k 1 -o perf.data
+```
+
+4. Navigate to your website and then continue with the next section on how to evaluate the perf output.
+
 
 ## Evaluating perf output
 
@@ -78,4 +103,10 @@ Finally you can use the Linux `perf` tool to explore the performance bottlenecks
 
 ```bash
 perf report -i perf.data.jitted
+```
+
+You can also convert `perf.data.jitted` file with (perf_to_profile)[https://github.com/google/perf_data_converter] to work with (pprof)[https://github.com/google/pprof] to generate more visualizations:
+```
+~/Documents/perf_data_converter/bazel-bin/src/perf_to_profile -j -i perf.data.jitted -o out.prof;
+pprof -http out.prof;
 ```
