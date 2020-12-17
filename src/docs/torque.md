@@ -135,7 +135,7 @@ namespace array {
 
 Torque is strongly typed. Its type system is the basis for many of the security and correctness guarantees it provides.
 
-However, with a few notable exceptions discussed later, Torque doesn’t actually inherently know very much about the core types that are used to write most Torque code. In order to enable better interoperability between Torque and hand-written `CodeStubAssembler` code, Torque’s type system rigorously specifies the relationship between Torque types, but it is much less rigorous in specifying how many types themselves actually work. Instead, many types are just loosely coupled with `CodeStubAssembler` and C++ types through explicit type mappings and rely on the C++ compiler to enforce the rigor of that mapping. This is especially true for abstract types.
+For many basic types, Torque doesn’t actually inherently know very much about them. Instead, many types are just loosely coupled with `CodeStubAssembler` and C++ types through explicit type mappings and rely on the C++ compiler to enforce the rigor of that mapping. Such types are realized as abstract types.
 
 #### Abstract types
 
@@ -310,7 +310,7 @@ In fact, Torque requires length fields used for indexed data to be `const`.
 `weak` at the beginning of a field declaration means that the field is a custom weak reference, as opposed to the `MaybeObject` tagging mechanism for weak fields.
 In addition `weak` affects generation of constants such as `kEndOfStrongFieldsOffset` and `kStartOfWeakFieldsOffset`, which is a legacy feature used in some custom  `BodyDescriptor`s and currently also still requires grouping fields marked as `weak` together. We hope to remove this keyword once Torque is fully capable of generating all `BodyDescriptor`s.
 
-If the object stored in a field may be a `MaybeObject`-style weak reference (with the second bit set), then `Weak<T>` should be used in the type and the `weak` keyword should **not** be used. There are still some exceptions to this rule, like this field from `Map`, which can contain some strong and some weak types, and is also marked for inclusion in the `weak` section:
+If the object stored in a field may be a `MaybeObject`-style weak reference (with the second bit set), then `Weak<T>` should be used in the type and the `weak` keyword should **not** be used. There are still some exceptions to this rule, like this field from `Map`, which can contain some strong and some weak types, and is also marked as `weak` for inclusion in the weak section:
 
 ```torque
   weak transitions_or_prototype_info: Map|Weak<Map>|TransitionArray|
