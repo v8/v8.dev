@@ -9,7 +9,7 @@ This page serves as a brief introduction to building V8 for iOS targets.
 - A macOS (OS X) host machine with Xcode installed.
 - A 64-bit target iOS device (legacy 32-bit iOS devices are unsupported).
 - V8 v7.5 or newer.
-- jitless is a hard requirememnt for iOS (as of Dec. 2020). Therefore please use the flags '--expose_gc --jitless'
+- jitless is a hard requirement for iOS (as of Dec. 2020). Therefore please use the flags '--expose_gc --jitless'
 
 ## Initial setup
 
