@@ -7,8 +7,6 @@ tags:
  - RegExp
 description: 'V8 now has an additional RegExp engine that serves as a fallback and prevents many instances of catastrophic backtracking.'
 ---
-
-
 Starting with v8.8, V8 ships with a new additional non-backtracking RegExp engine which guarantees execution in linear time with respect to the size of the subject string. The new engine takes over if the existing [Irregexp engine](https://blog.chromium.org/2009/02/irregexp-google-chromes-new-regexp.html) backtracks excessively, but does not support all patterns and flags. If `/(a*)*b/.exec('a'.repeat(100))` terminates on your version of V8, then it was executed by the new engine.
 
 ![Runtime of `/(a*)*b/.exec('a'.repeat(n))` for n ≤ 100](/_img/non-backtracking-regexp/runtime-plot.svg)
