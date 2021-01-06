@@ -5,7 +5,7 @@ date: 2020-11-26
 tags:
  - internals
  - RegExp
-description: 'V8 now has an additional RegExp engine that serves as fallback and prevents many instances of catastrophic backtracking.'
+description: 'V8 now has an additional RegExp engine that serves as a fallback and prevents many instances of catastrophic backtracking.'
 ---
 
 
@@ -37,7 +37,7 @@ Let's try to understand what's going on when matching `/(a*)*b/` against a small
 ```javascript
 'aaa'           'aa', 'a'           'aa', ''
 'a', 'aa'       'a', 'a', 'a'       'a', 'a', ''
-...
+…
 ```
 
 A priori, Irregexp cannot rule out that the failure to match the final `/b/` is due to choosing the wrong way of matching `/(a*)*/`, so it has to try all variants. This problem is known as “exponential” or “catastrophic” backtracking.
@@ -47,11 +47,11 @@ A priori, Irregexp cannot rule out that the failure to match the final `/b/` is 
 To understand an alternative algorithm that is immune to catastrophic backtracking, we have to take a quick detour via [automata](https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton). Every regular expression is equivalent to an automaton. For example, the RegExp `/(a*)*b/` above corresponds to the following automaton:
 
 ![Automaton corresponding to `/(a*)*b/`](/_img/non-backtracking-regexp/example-automaton.svg)
-  
+
 Note that the automaton is not uniquely determined by the pattern; the one you see above is the automaton you will get by a mechanical translation process, and it’s the one that’s used inside the V8’s new RegExp engine for `/(a*)*/`.
 The unlabeled edges are epsilon transitions: They don’t consume input. Epsilon transitions are necessary to keep the size of the automaton at around the size of the pattern. Naively eliminating epsilon transitions can result in quadratic increase of the number of transitions.
 Epsilon transitions also allow constructing the automaton corresponding to a RegExp from the following four basic kinds of states:
-  
+
 ![RegExp bytecode instructions](/_img/non-backtracking-regexp/state-types.svg)
 
 Here we only classify the transitions *out* of the state, while the transitions into the state are still allowed to be arbitrary. Automata built from only these kinds of states can be represented as *bytecode programs*, with every state corresponding to an instruction. For example, a state with two epsilon transitions is represented as a `FORK` instruction.
@@ -126,9 +126,9 @@ let ip = 0;
 let pcs = followEpsilons([0]);
 
 while (true) {
-  // We're done if we've found a match ...
+  // We're done if we've found a match …
   if (pcs === 'ACCEPT') return true;
-  // ... or if we've exhausted the input string.
+  // … or if we've exhausted the input string.
   if (ip >= input.length) return false;
 
   // Continue only with the pcs that CONSUME the correct character.
@@ -181,4 +181,4 @@ Because of the elimination of duplicates via the `visitedPcs` set, we know that 
 
 The non-backtracking algorithm can be extended to support most features of JavaScript RegExps, for example word boundaries or the calculation of (sub)match boundaries. Unfortunately, backreferences, lookahead and lookbehind cannot be supported without major changes that alter asymptotic worst-case complexity.
 
-V8’s new RegExp engine is based on this algorithm and its implementation in the [re2](https://github.com/google/re2) and [rust regex](https://github.com/rust-lang/regex) libraries. The algorithm is discussed in much more depth than here in an excellent [series of blog posts](https://swtch.com/~rsc/regexp/) by Russ Cox, who is also the original author of the re2 library.
+V8’s new RegExp engine is based on this algorithm and its implementation in the [re2](https://github.com/google/re2) and [Rust regex](https://github.com/rust-lang/regex) libraries. The algorithm is discussed in much more depth than here in an excellent [series of blog posts](https://swtch.com/~rsc/regexp/) by Russ Cox, who is also the original author of the re2 library.
