@@ -17,7 +17,7 @@ Here’s how you can configure the new RegExp engine:
 - `--regexp-backtracks-before-fallback N` (default N = 50,000) specifies how many backtracks are considered 'excessive', i.e. when the fallback kicks in.
 - `--enable-experimental-regexp-engine` turns on recognition of the non-standard `l` (“linear”) flag for RegExps, as in e.g. `/(a*)*b/l`. RegExps constructed with this flag are always eagerly executed with the new engine; Irregexp is not involved at all. If the new RegExp engine can’t handle the pattern of an `l`-RegExp, then an exception is thrown at construction. We hope that this feature can at some point be used for hardening of apps that run RegExps on untrusted input. For now it remains experimental because Irregexp is orders of magnitude faster than the new engine on most common patterns.
 
-The fallback mechanism does not apply to all patterns. For the fallback mechanism to kick in, the RegExp must
+The fallback mechanism does not apply to all patterns. For the fallback mechanism to kick in, the RegExp must:
 
 - not contain backreferences,
 - not contain lookaheads or lookbehinds,
