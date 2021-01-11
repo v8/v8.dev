@@ -7,13 +7,13 @@ tags:
  - RegExp
 description: 'V8 now has an additional RegExp engine that serves as a fallback and prevents many instances of catastrophic backtracking.'
 ---
-Starting with v8.8, V8 ships with a new additional non-backtracking RegExp engine which guarantees execution in linear time with respect to the size of the subject string. The new engine takes over if the existing [Irregexp engine](https://blog.chromium.org/2009/02/irregexp-google-chromes-new-regexp.html) backtracks excessively, but does not support all patterns and flags. If `/(a*)*b/.exec('a'.repeat(100))` terminates on your version of V8, then it was executed by the new engine.
+Starting with v8.8, V8 ships with a new experimental non-backtracking RegExp engine (in addition to the existing [Irregexp engine](https://blog.chromium.org/2009/02/irregexp-google-chromes-new-regexp.html)) which guarantees execution in linear time with respect to the size of the subject string. The experimental engine is available behind feature flags mentioned below.
 
 ![Runtime of `/(a*)*b/.exec('a'.repeat(n))` for n ≤ 100](/_img/non-backtracking-regexp/runtime-plot.svg)
 
 Here’s how you can configure the new RegExp engine:
 
-- `--no-enable-experimental-regexp_engine-on-excessive-backtracks` disables the fallback mechanism.
+- `--enable-experimental-regexp_engine-on-excessive-backtracks` enables the fallback to the non-backtracking engine on excessive backtracks.
 - `--regexp-backtracks-before-fallback N` (default N = 50,000) specifies how many backtracks are considered 'excessive', i.e. when the fallback kicks in.
 - `--enable-experimental-regexp-engine` turns on recognition of the non-standard `l` (“linear”) flag for RegExps, as in e.g. `/(a*)*b/l`. RegExps constructed with this flag are always eagerly executed with the new engine; Irregexp is not involved at all. If the new RegExp engine can’t handle the pattern of an `l`-RegExp, then an exception is thrown at construction. We hope that this feature can at some point be used for hardening of apps that run RegExps on untrusted input. For now it remains experimental because Irregexp is orders of magnitude faster than the new engine on most common patterns.
 
