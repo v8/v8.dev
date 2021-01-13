@@ -107,7 +107,7 @@ Object.fromEntries(map);
 // stringify to the same value of '[object Object]'.
 ```
 
-Before using `Object.fromEntries` or any other techique to convert a map into a object, make sure the map’s keys produce unique `toString` results.
+Before using `Object.fromEntries` or any other technique to convert a map into a object, make sure the map’s keys produce unique `toString` results.
 
 ## `Object.fromEntries` support { #support }
 

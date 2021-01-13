@@ -199,7 +199,7 @@ When mapping union types to CSA, the most specific common supertype of all the t
 
 #### Class types
 
-Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
+Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accessing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
 
 ```grammar
 ClassDeclaration :
@@ -259,7 +259,7 @@ TNode<HeapObject> LoadJSProxyTarget(TNode<JSProxy> p_o);
 void StoreJSProxyTarget(TNode<JSProxy> p_o, TNode<HeapObject> p_v);
 ```
 
-As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. Because the example above uses `@generateCppClass`, the hand-written definition of JSProxy must inherit from a generated class template, like this:
+As described above, the fields defined in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. Because the example above uses `@generateCppClass`, the hand-written definition of JSProxy must inherit from a generated class template, like this:
 
 ```cpp
 // In js-proxy.h:
@@ -632,7 +632,7 @@ Like `builtin`s and `runtime`s, `intrinsic`s cannot have labels.
 
 ### Explicit parameters
 
-Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses V8’s internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
+Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optionally support rest parameters if the builtin uses V8’s internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
 
 ```grammar
 ExplicitParameters :
