@@ -77,7 +77,7 @@ git cl upload
 
 ## Committing
 
-You can use the CQ checkbox on codereview for committing (preferred). See also the [chromium instructions](https://www.chromium.org/developers/testing/commit-queue) for CQ flags and troubleshooting.
+You can use the CQ checkbox on codereview for committing (preferred). See also the [chromium instructions](https://chromium.googlesource.com/chromium/src/+/master/docs/infra/cq.md) for CQ flags and troubleshooting.
 
 If you need more trybots than the default, add the following to your commit message on Gerrit (e.g. for adding a nosnap bot):
 
