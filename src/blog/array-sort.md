@@ -302,7 +302,7 @@ Keep in mind that in these cases the JIT compiler can do a lot of work, since so
 
 ![](/_img/array-sort/micro-bench-basic.svg)
 
-The next chart shows the impact of Timsort when processing arrays that are already sorted completely, or have sub-sequences that are already sorted one-way or another. The chart uses Quicksort as a baseline and shows the speedup of Timsort (up to 17× in the case of “DownDown” where the array consists of two reverse-sorted sequences). As can be seen, expect in the case of random data, Timsort performs better in all other cases, even though we are sorting `PACKED_SMI_ELEMENTS`, where Quicksort outperformed Timsort in the microbenchmark above.
+The next chart shows the impact of Timsort when processing arrays that are already sorted completely, or have sub-sequences that are already sorted one-way or another. The chart uses Quicksort as a baseline and shows the speedup of Timsort (up to 17× in the case of “DownDown” where the array consists of two reverse-sorted sequences). As can be seen, except in the case of random data, Timsort performs better in all other cases, even though we are sorting `PACKED_SMI_ELEMENTS`, where Quicksort outperformed Timsort in the microbenchmark above.
 
 ![](/_img/array-sort/micro-bench-presorted.svg)
 
