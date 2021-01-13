@@ -133,15 +133,6 @@
         ]
       },
       {
-        "source": "**/*.avif",
-        "headers": [
-          {
-            "key": "Content-Type",
-            "value": "image/avif"
-          }
-        ]
-      },
-      {
         "source": "**/*.@(jpg|gif|png|webp|avif|svg|ico|webmanifest)",
         "headers": [
           {
