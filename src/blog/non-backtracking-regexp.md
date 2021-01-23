@@ -27,7 +27,7 @@ The fallback mechanism does not apply to all patterns. For the fallback mechanis
 
 ## Background: catastrophic backtracking
 
-RegExp matching in V8 is handled by the Irregexp engine. Irregexp jit-compiles RegExps to specialized native code (or [bytecode](blog/regexp-tier-up)) and is thus extremely fast for most patterns. For some patterns, however, Irregexp’s runtime can blow up exponentially in the size of the input string. The example above, `/(a*)*b/.exec('a'.repeat(100))`, does not finish within our lifetimes if executed by Irregexp.
+RegExp matching in V8 is handled by the Irregexp engine. Irregexp jit-compiles RegExps to specialized native code (or [bytecode](/blog/regexp-tier-up)) and is thus extremely fast for most patterns. For some patterns, however, Irregexp’s runtime can blow up exponentially in the size of the input string. The example above, `/(a*)*b/.exec('a'.repeat(100))`, does not finish within our lifetimes if executed by Irregexp.
 
 So what’s going on here? Irregexp is a *backtracking* engine. When faced with a choice of how a match can continue, Irregexp explores the first alternative in its entirety, and then backtracks if necessary to explore the second alternative. Consider for instance matching the pattern `/abc|[az][by][0-9]/` against the subject string `'ab3'`. Here Irregexp tries to match `/abc/` first and fails after the second character. It then backtracks by two characters and successfully matches the second alternative `/[az][by][0-9]/`. In patterns with quantifiers such as `/(abc)*xyz/`, Irregexp has to choose after a match of the body whether to match the body again or to continue with the remaining pattern.
 
