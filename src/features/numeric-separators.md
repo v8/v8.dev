@@ -6,6 +6,7 @@ avatars:
 date: 2019-05-28
 tags:
   - ECMAScript
+  - ES2021
   - io19
 description: 'JavaScript now supports underscores as separators in numeric literals, increasing readability and maintainability of source code.'
 tweet: '1129073383931559936'

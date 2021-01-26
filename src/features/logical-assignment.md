@@ -6,6 +6,7 @@ avatars:
 date: 2020-05-07
 tags:
   - ECMAScript
+  - ES2021
 description: 'JavaScript now supports compound assignment with logical operations.'
 tweet: '1258387483823345665'
 ---

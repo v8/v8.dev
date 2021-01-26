@@ -10,6 +10,7 @@ date: 2019-07-09
 updated: 2020-06-19
 tags:
   - ECMAScript
+  - ES2021
   - io19
 description: 'Weak references and finalizers are coming to JavaScript! This article explains the new functionality.'
 tweet: '1148603966848151553'
