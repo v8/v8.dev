@@ -91,7 +91,7 @@ const copyLinkToClipboard = () => {
           heading.innerHTML += '&nbsp;<small>(📋 Copied.)</small>';
           setTimeout(() => {
             heading.innerHTML = temp;
-          }, 2000);
+          }, 2_000);
         } catch (err) {
           console.warn(err.name, err.message);
         }
