@@ -15,7 +15,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](h
 
 ### Top-level `await`
 
-[Top-level await](https://github.com/tc39/proposal-top-level-await) is available in the [Blink rendering engine](https://www.chromium.org/blink) 89, a primary embedder of V8.
+[Top-level `await`](https://v8.dev/features/top-level-await) is available in the [Blink rendering engine](https://www.chromium.org/blink) 89, a primary embedder of V8.
 
 In standalone V8, top-level `await` remains behind the `--harmony-top-level-await` flag.
 
