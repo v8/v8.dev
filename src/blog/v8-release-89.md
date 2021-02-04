@@ -3,7 +3,7 @@ title: 'V8 release v8.9'
 author: 'Ingvar Stepanyan, awaiting a call'
 avatars:
  - 'ingvar-stepanyan'
-date: 2021-02-03
+date: 2021-02-04
 tags:
  - release
 description: 'V8 release v8.9 brings performance improvements to calls with argument size mismatch.'
