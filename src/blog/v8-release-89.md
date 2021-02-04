@@ -13,11 +13,11 @@ Every six weeks, we create a new branch of V8 as part of our [release process](h
 
 ## JavaScript
 
-### Top-level await
+### Top-level `await`
 
 [Top-level await](https://github.com/tc39/proposal-top-level-await) is available in the [Blink rendering engine](https://www.chromium.org/blink) 89, a primary embedder of V8.
 
-In standalone V8, top-level await remains behind the `--harmony-top-level-await` flag.
+In standalone V8, top-level `await` remains behind the `--harmony-top-level-await` flag.
 
 Please see [our explainer](https://v8.dev/features/top-level-await) for more details.
 
@@ -29,7 +29,7 @@ JavaScript allows calling a function with a different number of arguments than t
 
 In the under-application case, the remaining parameters get assigned to the `undefined` value. In the over-application case, the remaining arguments can be either accessed by using the rest parameter and the `Function.prototype.arguments` property, or they are simply superfluous and ignored. Many web and Node.js frameworks nowadays use this JS feature to accept optional parameters and create a more flexible API.
 
-Until recently, V8 had a special machinery to deal with arguments size mismatch: the arguments adaptor frame. Unfortunately, argument adaption comes at a performance cost and is commonly needed in modern front-end and middleware frameworks. It turns out that with a clever design (like reversing the order of the arguments in the stack), we can remove this extra frame, simplify V8 codebase and get rid of almost the entire overhead.
+Until recently, V8 had a special machinery to deal with arguments size mismatch: the arguments adaptor frame. Unfortunately, argument adaption comes at a performance cost and is commonly needed in modern front-end and middleware frameworks. It turns out that with a clever design (like reversing the order of the arguments in the stack), we can remove this extra frame, simplify the V8 codebase, and get rid of the overhead almost entirely.
 
 ![Performance impact of removing the arguments adaptor frame, as measured through a micro-benchmark.](/_img/v8-release-89/perf.svg)
 
