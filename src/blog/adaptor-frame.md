@@ -13,7 +13,7 @@ JavaScript allows calling a function with a different number of arguments than t
 
 In the under-application case, the remaining parameters get assigned the undefined value. In the over-application case, the remaining arguments can be accessed by using the rest parameter and the `Function.prototype.arguments` property, or they are simply superfluous and they can be ignored. Many Web/NodeJS frameworks nowadays use this JS feature to accept optional parameters and create a more flexible API.
 
-Until recently, V8 had a special machinery to deal with arguments size mismatch: the arguments adaptor frame. Unfortunately, argument adaption comes at a performance cost, but is commonly needed in modern front-end and middleware frameworks. It turns out that, with a clever trick, we can remove this extra frame, simplify the V8 codebase and get rid of almost the entire overhead. 
+Until recently, V8 had a special machinery to deal with arguments size mismatch: the arguments adaptor frame. Unfortunately, argument adaption comes at a performance cost, but is commonly needed in modern front-end and middleware frameworks. It turns out that, with a clever trick, we can remove this extra frame, simplify the V8 codebase and get rid of almost the entire overhead.
 
 We can calculate the performance impact of removing the arguments adaptor frame through a micro-benchmark.
 
@@ -26,17 +26,19 @@ console.log(`${Date.now() - startTime} ms.`);
 
 ![Performance impact of removing the arguments adaptor frame, as measured through a micro-benchmark.](/_img/v8-release-89/perf.svg)
 
-The graph shows that there is no overhead anymore when running on [JIT-less mode](https://v8.dev/blog/jitless) (Ignition) with a 11.2% performance improvement. When using [TurboFan](https://v8.dev/docs/turbofan), we get up to 40% speedup. 
+The graph shows that there is no overhead anymore when running on [JIT-less mode](https://v8.dev/blog/jitless) (Ignition) with a 11.2% performance improvement. When using [TurboFan](https://v8.dev/docs/turbofan), we get up to 40% speedup.
 
 This microbenchmark was naturally designed to maximise the impact of the arguments adaptor frame. We have however seen a considerable improvement in many benchmarks, such as in [our internal JSTests/Array benchmark](https://chromium.googlesource.com/v8/v8/+/b7aa85fe00c521a704ca83cc8789354e86482a60/test/js-perf-test/JSTests.json) (7%) and in [Octane2](https://github.com/chromium/octane) (4.6% in Richards and 6.1% in EarleyBoyer).
 
-## TL;DR: Reverse the arguments!
+## TL;DR: Reverse the arguments
+
 The whole point of this project was to remove the arguments adaptor frame, which offers a consistent interface to the callee when accessing its arguments in the stack. In order to do that, we needed to reverse the arguments in the stack and added a new slot in the callee frame containing the actual argument count. The figure below shows the example of a typical frame before and after the change.
 
 ![](/_img/adaptor-frame/frame-diff.svg)
 
 ## Making JavaScript calls faster
-To appreciate what we have done to make calls faster, let’s see how V8 performs a call and how the arguments adaptor frame works. 
+
+To appreciate what we have done to make calls faster, let’s see how V8 performs a call and how the arguments adaptor frame works.
 
 What happens inside V8 when we invoke a function call in JS? Let’s suppose the following JS script:
 
@@ -48,6 +50,7 @@ add42(3);
 ![](/_img/adaptor-frame/flow.svg)
 
 ## Ignition
+
 V8 is a multi-tier VM. Its first tier is called [Ignition](https://v8.dev/docs/ignition), it is a bytecode stack machine with an accumulator register. V8 starts by compiling the code to [Ignition bytecodes](https://medium.com/dailyjs/understanding-v8s-bytecode-317d46c94775). The above call is compiled to the following:
 
 ```
@@ -84,9 +87,9 @@ Without going into too much detail of what happens next, we can see a snapshot o
 
 ![](/_img/adaptor-frame/normal-frame.svg)
 
-We see that we have a fixed number of slots in the frame: the return address, the previous frame pointer, the context, the current function object we’re executing, the bytecode array of this function and the offset of the current bytecode we’re executing. Finally, we have a list of registers dedicated to this function (you can think of them as function locals). The `add42` function doesn’t actually have any registers, but the caller has a similar frame with 3 registers. 
+We see that we have a fixed number of slots in the frame: the return address, the previous frame pointer, the context, the current function object we’re executing, the bytecode array of this function and the offset of the current bytecode we’re executing. Finally, we have a list of registers dedicated to this function (you can think of them as function locals). The `add42` function doesn’t actually have any registers, but the caller has a similar frame with 3 registers.
 
-As expected add42 is a simple function: 
+As expected add42 is a simple function:
 
 ```
 25 02             Ldar a0          ;; Load the first argument to the accumulator
@@ -103,7 +106,6 @@ Note however to be able to access the arguments, the function must know how many
 The bytecode handler of `Return` will finish by calling the builtin `LeaveInterpreterFrame`. This builtin essentially reads the function object to get the parameter count from the frame, pops the current frame, recovers the frame pointer, saves the return address in a scratch register, pops the arguments according to the parameter count and jumps to the address in the scratch registers.
 
 All this flow is great! But what happens when we call a function with fewer or more arguments than its parameter count? The clever argument/register access will fail and how do we clean up the arguments at the end of the call?
-
 
 ## Arguments adaptor frame
 
@@ -162,6 +164,7 @@ TL;DR: the arguments adaptor machinery is not only complex, but costly.
 Can we do better? Can we remove the adaptor frame? It turns out that we can indeed.
 
 Let’s review our requirements:
+
 1. We need to be able to access the arguments and registers seamlessly like before. No checks can be done when accessing them. That would be too expensive.
 2. We need to be able to construct the rest parameter and the arguments object from the stack.
 3. We need to be able to easily clean up an unknown number of arguments when returning from a call.
@@ -303,4 +306,3 @@ retl
 # Conclusion
 
 The arguments adaptor frame was an ad-hoc solution to calls with a mismatch number of arguments and formal parameters. It was a straightforward solution, but it came with high performance cost and added complexity to the codebase. The performance cost is nowadays exacerbated by many Web frameworks using this feature to create a more flexible API. The simple idea of reversing the arguments in the stack allowed a significant reduction in implementation complexity and removed almost the entire overhead for such calls.
-
