@@ -6,9 +6,13 @@ The V8 source code can be browsed online with [Chromium Code Search](https://cs.
 
 This project’s Git repository may be accessed using many other client programs and plug-ins. See your client’s documentation for more information.
 
+## Visual Studio Code and clangd
+
+For instructions how to set up VSCode for V8, see this [document](https://docs.google.com/document/d/1BpdCFecUGuJU5wN6xFkHQJEykyVSlGN8B9o3Kz2Oes8/). This is currently (2021) the recommended setup.
+
 ## Eclipse
 
-For instructions how to set up Eclipse for V8, see this [document](https://docs.google.com/document/d/1q3JkYNJhib3ni9QvNKIY_uarVxeVDiDi6teE5MbVIGQ/).
+For instructions how to set up Eclipse for V8, see this [document](https://docs.google.com/document/d/1q3JkYNJhib3ni9QvNKIY_uarVxeVDiDi6teE5MbVIGQ/). Note: as of 2020, indexing V8 with Eclipse does not work well.
 
 ## Visual Studio Code and cquery
 
