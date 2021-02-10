@@ -102,7 +102,8 @@ As mentioned above, [the new JavaScript feature](https://github.com/tc39/proposa
 
 ```js
 function getVariablePosition(source) {
-  const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/;
+  // Notice the `d` flag, which enables `match.indices`
+  const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/d;
   const match = re.exec(source);
   if (!match) return undefined;
   return match.indices[2];
@@ -119,7 +120,7 @@ The `indices` object also contains a `groups` property, which can be indexed by 
 
 ```js
 function getVariablePosition(source) {
-  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_$][0-9a-zA-Z_$]*)/;
+  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_$][0-9a-zA-Z_$]*)/d;
   const match = re.exec(source);
   if (!match) return -1;
   return match.indices.groups.id;
@@ -129,7 +130,7 @@ getVariablePosition('let foo');
 
 ## Support for RegExp match indices
 
-<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=9548"
+<feature-support chrome="90 https://bugs.chromium.org/p/v8/issues/detail?id=9548"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1519483"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202475"
                  nodejs="no"
