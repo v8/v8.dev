@@ -102,6 +102,7 @@ As mentioned above, [the new JavaScript feature](https://github.com/tc39/proposa
 
 ```js
 function getVariablePosition(source) {
+  // Notice the `d` flag, which enables `match.indices`
   const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/d;
   const match = re.exec(source);
   if (!match) return undefined;
