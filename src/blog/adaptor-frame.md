@@ -85,7 +85,7 @@ If the callable is a function object, it tailcalls to the builtin [`CallFunction
 
 The execution then tailcalls to the builtin [`InvokeFunctionCode`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/x64/macro-assembler-x64.cc;drc=a723767935dec385818d1134ea729a4c3a3ddcfb;l=2781), which will in the absence of arguments mismatch just call whatever is being pointed by the field `Code` in the callee object. This could either be an optimized function or the builtin [`InterpreterEntryTrampoline`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=1037).
 
-If we assume we’re calling a function that hasn’t been optimized yet, the Ignition trampoline will set up an `IntepreterFrame`. You can see a brief summary of the frame types in V8 here.
+If we assume we’re calling a function that hasn’t been optimized yet, the Ignition trampoline will set up an `IntepreterFrame`. You can see a brief summary of the frame types in V8 [here](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/frame-constants.h;drc=574ac5d62686c3de8d782dc798337ce1355dc066;l=14).
 
 Without going into too much detail of what happens next, we can see a snapshot of the interpreter frame during the callee execution.
 
