@@ -6,7 +6,7 @@ avatars:
 date: 2021-02-09
 tags:
   - internals
-description: 'TODO: some catchy description'
+description: 'Faster JavaScript calls by removing the arguments adaptor frame'
 ---
 
 JavaScript allows calling a function with a different number of arguments than the expected number of parameters, i.e., one can pass fewer or more arguments than the declared formal parameters. The former case is called under-application and the latter is called over-application.
@@ -18,10 +18,12 @@ Until recently, V8 had a special machinery to deal with arguments size mismatch:
 We can calculate the performance impact of removing the arguments adaptor frame through a micro-benchmark.
 
 ```js
-var startTime = Date.now();
+console.time();
 function f(x, y, z) {}
-for (let i = 0; i <  N; i++) { f(1, 2, 3, 4, 5); }
-console.log(`${Date.now() - startTime} ms.`);
+for (let i = 0; i <  N; i++) {
+  f(1, 2, 3, 4, 5);
+}
+console.timeEnd();
 ```
 
 ![Performance impact of removing the arguments adaptor frame, as measured through a micro-benchmark.](/_img/v8-release-89/perf.svg)
@@ -34,7 +36,7 @@ This microbenchmark was naturally designed to maximise the impact of the argumen
 
 The whole point of this project was to remove the arguments adaptor frame, which offers a consistent interface to the callee when accessing its arguments in the stack. In order to do that, we needed to reverse the arguments in the stack and added a new slot in the callee frame containing the actual argument count. The figure below shows the example of a typical frame before and after the change.
 
-![](/_img/adaptor-frame/frame-diff.svg)
+![A typical JavaScript stack frame before and after removing the arguments adaptor frame.](/_img/adaptor-frame/frame-diff.svg)
 
 ## Making JavaScript calls faster
 
@@ -43,11 +45,13 @@ To appreciate what we have done to make calls faster, let’s see how V8 perform
 What happens inside V8 when we invoke a function call in JS? Let’s suppose the following JS script:
 
 ```js
-function add42(x) { return x + 42; }
+function add42(x) {
+  return x + 42;
+}
 add42(3);
 ```
 
-![](/_img/adaptor-frame/flow.svg)
+![Flow of execution inside V8 during a function call.](/_img/adaptor-frame/flow.svg)
 
 ## Ignition
 
@@ -73,7 +77,7 @@ The handler of this bytecode is quite simple. It is written in [`CodeStubAssembl
 
 The builtin essentially pops the return address to a temporary register, pushes all the arguments (including the receiver) and pushes back the return address. At this point, we do not know if the callee is a callable object nor how many arguments the callee is expecting, i.e., its formal parameter count.
 
-![](/_img/adaptor-frame/normal-push.svg)
+![State of the frame after the execution of `InterpreterPushArgsThenCall` builtin.](/_img/adaptor-frame/normal-push.svg)
 
 Eventually the execution tailcalls to the builtin [`Call`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=2256). There, it checks if the target is a proper function, a constructor or any callable object. It also reads the `shared function info` structure to get its formal parameter count.
 
@@ -85,7 +89,7 @@ If we assume we’re calling a function that hasn’t been optimized yet, the Ig
 
 Without going into too much detail of what happens next, we can see a snapshot of the interpreter frame during the callee execution.
 
-![](/_img/adaptor-frame/normal-frame.svg)
+![The `InterpreterFrame` for the call `add42(3)`.](/_img/adaptor-frame/normal-frame.svg)
 
 We see that we have a fixed number of slots in the frame: the return address, the previous frame pointer, the context, the current function object we’re executing, the bytecode array of this function and the offset of the current bytecode we’re executing. Finally, we have a list of registers dedicated to this function (you can think of them as function locals). The `add42` function doesn’t actually have any registers, but the caller has a similar frame with 3 registers.
 
@@ -120,7 +124,7 @@ The JS developers between us will know that in the first case, `x` will be assig
 
 If we follow the same steps as before, we will first call the builtin `InterpreterPushArgsThenCall`. It will push the arguments to the stack like so:
 
-![](/_img/adaptor-frame/adaptor-push.svg)
+![State of the frames after the execution of `InterpreterPushArgsThenCall` builtin.](/_img/adaptor-frame/adaptor-push.svg)
 
 Continuing the same procedure as before, we check if the callee is a function object, get its parameter count and patch the receiver to the global proxy. Eventually we reach `InvokeFunctionCode`.
 
@@ -128,7 +132,7 @@ Here instead of jumping to the `Code` in the callee object. We check that we hav
 
 In this builtin, we build an extra frame, the infamous arguments adaptor frame. Instead of explaining what happens inside the builtin, I will just present you the state of the frame before the builtin calls the callee object’s `Code`. Note that this is a proper `x64 call` (not a `jmp`) and after the execution of the callee we will return to the `ArgumentsAdaptorTrampoline`. This is a contrast with `InvokeFunctionCode` that tailcalls.
 
-![](/_img/adaptor-frame/adaptor-frames.svg)
+![Stack frames with arguments adaptation.](/_img/adaptor-frame/adaptor-frames.svg)
 
 You can see that we create another frame that copies all the arguments necessary in order to have precisely the parameter count of arguments on top of the callee frame. It creates an interface to the callee function, so that the latter does not need to know the number of arguments. The callee will always be able to access its parameters with the same calculation as before, that is, `[ai] = 2 + parameter_count - i - 1`.
 
@@ -137,7 +141,10 @@ V8 has special builtins that understand the adaptor frame whenever it needs to a
 As you can see, we solve the argument/register access issue, but we create a lot of complexity. Every builtin that needs to access all the arguments will need to understand and check the existence of the adaptor frame. Not only that, we need to be careful to not access stale and old data. Consider the following changes to `add42`:
 
 ```js
-function add42(x) { x += 42; return x; }
+function add42(x) {
+  x += 42;
+  return x;
+}
 ```
 
 The bytecode array now is:
@@ -153,7 +160,7 @@ As you can see, we now modify `a0`. So, in the case of a call `add42(1, 2, 3)` t
 
 Returning from the function is simple, albeit slow. Remember what `LeaveInterpreterFrame` does? It basically pops the callee frame and the arguments up to the parameter count number. So when we return to the arguments adaptor stub, the stack looks like so:
 
-![](/_img/adaptor-frame/adaptor-frames-cleanup.svg)
+![State of the frames after the execution of the callee `add42`.](/_img/adaptor-frame/adaptor-frames-cleanup.svg)
 
 We just need to pop the number of arguments, pop the adaptor frame, pop all the arguments according to the actual arguments count and return to the caller execution.
 
@@ -196,13 +203,13 @@ This is a clean solution for our requirement number `1` and number `4`. What abo
 
 If we run our example in V8 v8.9 we will see the following stack after `InterpreterArgsThenPush` (note that the arguments are now reversed):
 
-![](/_img/adaptor-frame/no-adaptor-push.svg)
+![State of the frames after the execution of `InterpreterPushArgsThenCall` builtin.](/_img/adaptor-frame/no-adaptor-push.svg)
 
 All the execution follows a similar path until we reach InvokeFunctionCode. Here we massage the arguments in case of under-application, pushing as many undefined objects as needed. Note that we do not change anything in case of over-application. Finally we pass the number of arguments to callee’s `Code` through a register. In the case of `x64`, we use the register `rax`.
 
 If the callee hasn’t been optimized yet, we reach `InterpreterEntryTrampoline`, which builds the following stack frame.
 
-![](/_img/adaptor-frame/no-adaptor-frames.svg)
+![Stack frames without arguments adaptors.](/_img/adaptor-frame/no-adaptor-frames.svg)
 
 The callee frame has an extra slot containing the number of arguments that can be used for constructing the rest parameter or the arguments object and to clean the arguments in the stack before returning to the caller.
 
