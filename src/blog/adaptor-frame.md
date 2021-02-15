@@ -73,17 +73,17 @@ Before we dive into the bytecode handler, note how registers are encoded in the 
 
 There are many bytecode call handlers in Ignition. You can see a list of them [here](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/interpreter/bytecodes.h;drc=3965dcd5cb1141c90f32706ac7c965dc5c1c55b3;l=184). They vary slightly from each other. There are bytecodes optimized for calls with an `undefined` receiver, for property calls, for calls with a fixed number of parameters or for generic calls. Here we analyze `CallNoFeedback` which is a generic call in which we don’t accumulate feedback from the execution.
 
-The handler of this bytecode is quite simple. It is written in [`CodeStubAssembler`](https://v8.dev/docs/csa-builtins), you can check it out [here](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/interpreter/interpreter-generator.cc;drc=6cdb24a4ce9d4151035c1f133833137d2e2881d1;l=1467). Essentially, it tailcalls to an architecture-dependent builtin [`InterpreterPushArgsThenCall`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=1277).
+The handler of this bytecode is quite simple. It is written in [`CodeStubAssembler`](https://v8.dev/docs/csa-builtins), you can check it out [here](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/interpreter/interpreter-generator.cc;drc=6cdb24a4ce9d4151035c1f133833137d2e2881d1;l=1467). Essentially, it tailcalls to an architecture-dependent built-in [`InterpreterPushArgsThenCall`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=1277).
 
-The builtin essentially pops the return address to a temporary register, pushes all the arguments (including the receiver) and pushes back the return address. At this point, we do not know if the callee is a callable object nor how many arguments the callee is expecting, i.e., its formal parameter count.
+The built-in essentially pops the return address to a temporary register, pushes all the arguments (including the receiver) and pushes back the return address. At this point, we do not know if the callee is a callable object nor how many arguments the callee is expecting, i.e., its formal parameter count.
 
-![State of the frame after the execution of `InterpreterPushArgsThenCall` builtin.](/_img/adaptor-frame/normal-push.svg)
+![State of the frame after the execution of `InterpreterPushArgsThenCall` built-in.](/_img/adaptor-frame/normal-push.svg)
 
-Eventually the execution tailcalls to the builtin [`Call`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=2256). There, it checks if the target is a proper function, a constructor or any callable object. It also reads the `shared function info` structure to get its formal parameter count.
+Eventually the execution tailcalls to the built-in [`Call`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=2256). There, it checks if the target is a proper function, a constructor or any callable object. It also reads the `shared function info` structure to get its formal parameter count.
 
-If the callee is a function object, it tailcalls to the builtin [`CallFunction`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=2038), where a bunch of checks happen, including if we have an `undefined` object as receiver. If we have an `undefined` or `null` object as receiver, we should patch it to refer to the global proxy object, according to the [ECMA specification](https://262.ecma-international.org/11.0/#sec-ordinarycallbindthis).
+If the callee is a function object, it tailcalls to the built-in [`CallFunction`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=2038), where a bunch of checks happen, including if we have an `undefined` object as receiver. If we have an `undefined` or `null` object as receiver, we should patch it to refer to the global proxy object, according to the [ECMA specification](https://262.ecma-international.org/11.0/#sec-ordinarycallbindthis).
 
-The execution then tailcalls to the builtin [`InvokeFunctionCode`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/x64/macro-assembler-x64.cc;drc=a723767935dec385818d1134ea729a4c3a3ddcfb;l=2781), which will in the absence of arguments mismatch just call whatever is being pointed by the field `Code` in the callee object. This could either be an optimized function or the builtin [`InterpreterEntryTrampoline`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=1037).
+The execution then tailcalls to the built-in [`InvokeFunctionCode`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/codegen/x64/macro-assembler-x64.cc;drc=a723767935dec385818d1134ea729a4c3a3ddcfb;l=2781), which will in the absence of arguments mismatch just call whatever is being pointed by the field `Code` in the callee object. This could either be an optimized function or the built-in [`InterpreterEntryTrampoline`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/x64/builtins-x64.cc;drc=8665f09771c6b8220d6020fe9b1ad60a4b0b6591;l=1037).
 
 If we assume we’re calling a function that hasn’t been optimized yet, the Ignition trampoline will set up an `IntepreterFrame`. You can see a brief summary of the frame types in V8 [here](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/execution/frame-constants.h;drc=574ac5d62686c3de8d782dc798337ce1355dc066;l=14).
 
@@ -107,7 +107,7 @@ We’re now able to understand why we encode registers and arguments this way. T
 
 Note however to be able to access the arguments, the function must know how many arguments are in the stack! The index `2` points to the last argument regardless of how many arguments there are!
 
-The bytecode handler of `Return` will finish by calling the builtin `LeaveInterpreterFrame`. This builtin essentially reads the function object to get the parameter count from the frame, pops the current frame, recovers the frame pointer, saves the return address in a scratch register, pops the arguments according to the parameter count and jumps to the address in the scratch registers.
+The bytecode handler of `Return` will finish by calling the built-in `LeaveInterpreterFrame`. This built-in essentially reads the function object to get the parameter count from the frame, pops the current frame, recovers the frame pointer, saves the return address in a scratch register, pops the arguments according to the parameter count and jumps to the address in the scratch registers.
 
 All this flow is great! But what happens when we call a function with fewer or more arguments than its parameter count? The clever argument/register access will fail and how do we clean up the arguments at the end of the call?
 
@@ -122,23 +122,23 @@ add42(1, 2, 3);
 
 The JS developers between us will know that in the first case, `x` will be assigned `undefined` and the function will return `undefined + 42 = NaN`. In the second case, `x` will be assigned `1` and the function will return `43`, the remaining arguments will be ignored. Note that the caller does not know if that will happen. Even if the caller checks the parameter count, the callee could use the rest parameter or the arguments object to access all the other arguments. Actually, the arguments object can even be accessed outside `add42` in sloppy mode.
 
-If we follow the same steps as before, we will first call the builtin `InterpreterPushArgsThenCall`. It will push the arguments to the stack like so:
+If we follow the same steps as before, we will first call the built-in `InterpreterPushArgsThenCall`. It will push the arguments to the stack like so:
 
-![State of the frames after the execution of `InterpreterPushArgsThenCall` builtin.](/_img/adaptor-frame/adaptor-push.svg)
+![State of the frames after the execution of `InterpreterPushArgsThenCall` built-in.](/_img/adaptor-frame/adaptor-push.svg)
 
 Continuing the same procedure as before, we check if the callee is a function object, get its parameter count and patch the receiver to the global proxy. Eventually we reach `InvokeFunctionCode`.
 
 Here instead of jumping to the `Code` in the callee object. We check that we have a mismatch between argument size and parameter count and jump to `ArgumentsAdaptorTrampoline`.
 
-In this builtin, we build an extra frame, the infamous arguments adaptor frame. Instead of explaining what happens inside the builtin, I will just present you the state of the frame before the builtin calls the callee’s `Code`. Note that this is a proper `x64 call` (not a `jmp`) and after the execution of the callee we will return to the `ArgumentsAdaptorTrampoline`. This is a contrast with `InvokeFunctionCode` that tailcalls.
+In this built-in, we build an extra frame, the infamous arguments adaptor frame. Instead of explaining what happens inside the built-in, I will just present you the state of the frame before the built-in calls the callee’s `Code`. Note that this is a proper `x64 call` (not a `jmp`) and after the execution of the callee we will return to the `ArgumentsAdaptorTrampoline`. This is a contrast with `InvokeFunctionCode` that tailcalls.
 
 ![Stack frames with arguments adaptation.](/_img/adaptor-frame/adaptor-frames.svg)
 
 You can see that we create another frame that copies all the arguments necessary in order to have precisely the parameter count of arguments on top of the callee frame. It creates an interface to the callee function, so that the latter does not need to know the number of arguments. The callee will always be able to access its parameters with the same calculation as before, that is, `[ai] = 2 + parameter_count - i - 1`.
 
-V8 has special builtins that understand the adaptor frame whenever it needs to access the remaining arguments through the rest parameter or the arguments object. They will always need to check the adaptor frame type on top of the callee’s frame and then act accordingly.
+V8 has special built-ins that understand the adaptor frame whenever it needs to access the remaining arguments through the rest parameter or the arguments object. They will always need to check the adaptor frame type on top of the callee’s frame and then act accordingly.
 
-As you can see, we solve the argument/register access issue, but we create a lot of complexity. Every builtin that needs to access all the arguments will need to understand and check the existence of the adaptor frame. Not only that, we need to be careful to not access stale and old data. Consider the following changes to `add42`:
+As you can see, we solve the argument/register access issue, but we create a lot of complexity. Every built-in that needs to access all the arguments will need to understand and check the existence of the adaptor frame. Not only that, we need to be careful to not access stale and old data. Consider the following changes to `add42`:
 
 ```js
 function add42(x) {
@@ -203,7 +203,7 @@ This is a clean solution for our requirement number `1` and number `4`. What abo
 
 If we run our example in V8 v8.9 we will see the following stack after `InterpreterArgsThenPush` (note that the arguments are now reversed):
 
-![State of the frames after the execution of `InterpreterPushArgsThenCall` builtin.](/_img/adaptor-frame/no-adaptor-push.svg)
+![State of the frames after the execution of `InterpreterPushArgsThenCall` built-in.](/_img/adaptor-frame/no-adaptor-push.svg)
 
 All the execution follows a similar path until we reach InvokeFunctionCode. Here we massage the arguments in case of under-application, pushing as many undefined objects as needed. Note that we do not change anything in case of over-application. Finally we pass the number of arguments to callee’s `Code` through a register. In the case of `x64`, we use the register `rax`.
 
@@ -242,7 +242,7 @@ movl rcx,[rdi+0x17]        ;; Load function object {Code} field in rcx
 call rcx                   ;; Finally, call the code object!
 ```
 
-Although written in assembler, this code snippet should not be difficult to read if you follow my comments. Essentially, when compiling the call, TF needs to do all the work that was done in `InterpreterPushArgsThenCall`, `Call`, `CallFunction` and `InvokeFunctionCall` builtins. Hopefully it has more static information to do that and emit less computer instructions.
+Although written in assembler, this code snippet should not be difficult to read if you follow my comments. Essentially, when compiling the call, TF needs to do all the work that was done in `InterpreterPushArgsThenCall`, `Call`, `CallFunction` and `InvokeFunctionCall` built-ins. Hopefully it has more static information to do that and emit less computer instructions.
 
 ### TurboFan with the arguments adaptor frame
 
