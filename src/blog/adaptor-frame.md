@@ -130,7 +130,7 @@ Continuing the same procedure as before, we check if the callee is a function ob
 
 Here instead of jumping to the `Code` in the callee object. We check that we have a mismatch between argument size and parameter count and jump to `ArgumentsAdaptorTrampoline`.
 
-In this builtin, we build an extra frame, the infamous arguments adaptor frame. Instead of explaining what happens inside the builtin, I will just present you the state of the frame before the builtin calls the callee object’s `Code`. Note that this is a proper `x64 call` (not a `jmp`) and after the execution of the callee we will return to the `ArgumentsAdaptorTrampoline`. This is a contrast with `InvokeFunctionCode` that tailcalls.
+In this builtin, we build an extra frame, the infamous arguments adaptor frame. Instead of explaining what happens inside the builtin, I will just present you the state of the frame before the builtin calls the callee’s `Code`. Note that this is a proper `x64 call` (not a `jmp`) and after the execution of the callee we will return to the `ArgumentsAdaptorTrampoline`. This is a contrast with `InvokeFunctionCode` that tailcalls.
 
 ![Stack frames with arguments adaptation.](/_img/adaptor-frame/adaptor-frames.svg)
 
