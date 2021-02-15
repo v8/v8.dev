@@ -12,7 +12,7 @@ tweet: '1361337569057865735'
 
 JavaScript allows calling a function with a different number of arguments than the expected number of parameters, i.e., one can pass fewer or more arguments than the declared formal parameters. The former case is called under-application and the latter is called over-application.
 
-In the under-application case, the remaining parameters get assigned the undefined value. In the over-application case, the remaining arguments can be accessed by using the rest parameter and the `Function.prototype.arguments` property, or they are simply superfluous and they can be ignored. Many Web/NodeJS frameworks nowadays use this JS feature to accept optional parameters and create a more flexible API.
+In the under-application case, the remaining parameters get assigned the undefined value. In the over-application case, the remaining arguments can be accessed by using the rest parameter and the `arguments` property, or they are simply superfluous and they can be ignored. Many Web/NodeJS frameworks nowadays use this JS feature to accept optional parameters and create a more flexible API.
 
 Until recently, V8 had a special machinery to deal with arguments size mismatch: the arguments adaptor frame. Unfortunately, argument adaption comes at a performance cost, but is commonly needed in modern front-end and middleware frameworks. It turns out that, with a clever trick, we can remove this extra frame, simplify the V8 codebase and get rid of almost the entire overhead.
 
