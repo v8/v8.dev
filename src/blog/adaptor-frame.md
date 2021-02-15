@@ -3,7 +3,7 @@ title: 'Faster JavaScript calls'
 author: 'Victor Gomes, the frame shredder'
 avatars:
   - 'victor-gomes'
-date: 2021-02-09
+date: 2021-02-15
 tags:
   - internals
 description: 'Faster JavaScript calls by removing the arguments adaptor frame'
