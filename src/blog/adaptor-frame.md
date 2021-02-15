@@ -301,9 +301,9 @@ movq rsp,rbp               ;; Pop out callee frame
 pop rbp
 cmpq rcx,0x0               ;; Compare arguments count with formal parameter count
 jg 0x35ac000840c6  <+0x86>
-# If arguments count is smaller (or equal) than the formal parameter count:
+;; If arguments count is smaller (or equal) than the formal parameter count:
 ret 0x8                    ;; Return as usual (parameter count is statically known)
-# If we have more arguments in the stack than formal parameters:
+;; If we have more arguments in the stack than formal parameters:
 pop r10                    ;; Save the return address
 leaq rsp,[rsp+rcx*8+0x8]   ;; Pop all arguments according to rcx
 push r10                   ;; Recover the return address
