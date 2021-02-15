@@ -7,6 +7,7 @@ date: 2021-02-15
 tags:
   - internals
 description: 'Faster JavaScript calls by removing the arguments adaptor frame'
+tweet: '1361337569057865735'
 ---
 
 JavaScript allows calling a function with a different number of arguments than the expected number of parameters, i.e., one can pass fewer or more arguments than the declared formal parameters. The former case is called under-application and the latter is called over-application.
