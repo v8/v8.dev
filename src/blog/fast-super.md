@@ -51,7 +51,7 @@ The reality of [JavaScript's prototypal inheritance](https://developer.mozilla.o
 
 We need to distinguish carefully between the `__proto__` and `prototype` properties - they don't mean the same thing! To make it more confusing, the object `b.__proto__` is often referred to as "`b`'s prototype".
 
-`b.__proto__` is the object from which `b` inherits properties. `B.prototype` is the object which will be the `__proto__` of objects created with `new B()`, such as `b`.
+`b.__proto__` is the object from which `b` inherits properties. `B.prototype` is the object which will be the `__proto__` of objects created with `new B()`, that is `b.__proto__ === B.prototype`.
 
 In turn, `B.prototype` has its own `__proto__` property that equals to `A.prototype`. Together, this forms what's called a prototype chain:
 
