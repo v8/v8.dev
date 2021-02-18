@@ -102,7 +102,10 @@ The optimized code got even more optimal when we moved the home object out of th
 `super` inside object literal methods works just like inside class methods, and is optimized similarly.
 
 ```javascript
-const myproto = { __proto__: { 'x': 100 }, m() { return super.x; } };
+const myproto = {
+  __proto__: { 'x': 100 },
+  m() { return super.x; }
+};
 const o = { __proto__: myproto };
 o.m(); // returns 100
 ```
