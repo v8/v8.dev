@@ -35,6 +35,8 @@ Until recently, V8 had a special machinery to deal with arguments size mismatch:
 
 The graph shows that there is no overhead anymore when running on [JIT-less mode](https://v8.dev/blog/jitless) (Ignition) with a 11.2% performance improvement. When using TurboFan, we get up to 40% speedup. The overhead compared to the no mismatch case is due to a small optimization in the [function epilogue](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/compiler/backend/x64/code-generator-x64.cc;l=4905;drc=5056f555010448570f7722708aafa4e55e1ad052). For more details, see [the design document](https://docs.google.com/document/d/15SQV4xOhD3K0omGJKM-Nn8QEaskH7Ir1VYJb9_5SjuM/edit).
 
+If you want to learn more about the details behind those improvements, check out the [dedicated blog post](https://v8.dev/blog/adaptor-frame).
+
 ## V8 API
 
 Please use `git log branch-heads/8.8..branch-heads/8.9 include/v8.h` to get a list of the API changes.
