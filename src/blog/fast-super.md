@@ -123,10 +123,14 @@ class Base {
 }
 
 const myClass = createMixin(
+  createMixin(
     createMixin(
-        createMixin(
-            createMixin(
-                createMixin(Base)))));
+      createMixin(
+        createMixin(Base)
+      )
+    )
+  )
+);
 (new myClass()).m();
 ```
 
