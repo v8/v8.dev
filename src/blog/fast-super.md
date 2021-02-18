@@ -3,7 +3,7 @@ title: 'Super fast `super` property access'
 author: '[Marja Hölttä](https://twitter.com/marjakh), super optimizer'
 avatars:
   - marja-holtta
-date: 2021-02-19
+date: 2021-02-18
 tags:
   - JavaScript
 description: 'Faster super property access in V8 v9.0'
