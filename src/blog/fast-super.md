@@ -53,7 +53,17 @@ We need to distinguish carefully between the `__proto__` and `prototype` propert
 
 `b.__proto__` is the object from which `b` inherits properties. `B.prototype` is the object which will be the `__proto__` of objects created with `new B()`, such as `b`.
 
-`b` has `B.prototype` and `A.prototype` in its prototype chain (that is, the chain of `__proto__` properties), so it can access all properties defined in those objects. The method `m` is a property of `B.prototype`, `B.prototype.m`, and this is why `b.m()` works.
+In turn, `B.prototype` has its own `__proto__` property that equals to `A.prototype`. Together, this forms what's called a prototype chain:
+
+```
+b ->
+ b.__proto__ === B.prototype ->
+  B.prototype.__proto__ === A.prototype ->
+   A.prototype.__proto__ === Object.prototype ->
+    Object.prototype.__proto__ === null
+```
+
+Through this chain, `b` can access all properties defined in any of those objects. The method `m` is a property of `B.prototype` — `B.prototype.m` — and this is why `b.m()` works.
 
 Now we can define `super.x` inside `m` as a property lookup where we start looking for the property `x` in the *home object's* `__proto__` and walk up the prototype chain until we find it.
 
