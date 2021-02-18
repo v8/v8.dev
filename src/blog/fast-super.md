@@ -7,7 +7,7 @@ date: 2021-02-19
 tags:
   - JavaScript
 description: 'Faster super property access in V8 v9.0'
-tweet: ''
+tweet: '1362465295848333316'
 ---
 
 The [`super` keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) can be used for accessing properties and functions on an object’s parent.
