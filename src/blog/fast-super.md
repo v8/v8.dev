@@ -10,7 +10,7 @@ description: 'Faster super property access in V8 v9.0'
 tweet: ''
 ---
 
-The [super keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) can be used for accessing properties and functions on an object’s parent.
+The [`super` keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) can be used for accessing properties and functions on an object’s parent.
 
 Previously, accessing a super property (like `super.x`) was implemented via a runtime call. Starting from V8 v9.0, we reuse the [inline cache (IC) system](https://mathiasbynens.be/notes/shapes-ics) in non-optimized code and generate the proper optimized code for super property access, without having to jump to the runtime.
 
