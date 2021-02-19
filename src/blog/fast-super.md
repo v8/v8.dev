@@ -77,7 +77,7 @@ B.prototype.m.call(some_other_object); // still returns 100
 
 If the property has a getter though, the receiver will be passed to the getter as the `this` value.
 
-To summarize: In a super property access, `super.x`, the lookup start object is the `__proto__` of the home object and the receiver is the receiver of the method where the super property access occurs.
+To summarize: in a super property access, `super.x`, the lookup start object is the `__proto__` of the home object and the receiver is the receiver of the method where the super property access occurs.
 
 In a normal property access, `o.x`, we start looking for the property `x` in `o` and walk up the prototype chain. We’ll also use `o` as the receiver if `x` happens to have a getter - the lookup start object and the receiver are the same object (`o`).
 
