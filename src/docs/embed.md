@@ -48,7 +48,7 @@ Follow the steps below to run the example yourself:
 1. Compile `hello-world.cc`, linking to the static library created in the build process. For example, on 64bit Linux using the GNU compiler:
 
     ```bash
-    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -lv8_monolith -Lout.gn/x64.release.sample/obj/ -pthread -std=c++0x -DV8_COMPRESS_POINTERS
+    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -lv8_monolith -Lout.gn/x64.release.sample/obj/ -pthread -std=c++14 -DV8_COMPRESS_POINTERS
     ```
 
 1. For more complex code, V8 fails without an ICU data file. Copy this file to where your binary is stored:
