@@ -5,7 +5,7 @@ avatars:
   - 'ingvar-stepanyan'
 date: 2021-03-04
 description: 'Speeding up V8’s release cycle'
-tweet: ''
+tweet: '1367546733643919370'
 ---
 In order to ship new features and bug fixes faster to its users, Chrome is [speeding up its release cycle](https://developer.chrome.com/blog/faster-release-cycle/).
 
