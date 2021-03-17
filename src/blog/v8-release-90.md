@@ -18,8 +18,8 @@ Every six weeks, we create a new branch of V8 as part of our [release process](h
 Starting in v9.0, developers may opt into getting an array of the start and end positions of matched capture groups in regular expression matches. This array is available via the `.indices` property on match objects when the regular expression has the `/d` flag.
 
 ```javascript
-let re = /(a)(b)/d;        // Note the /d flag.
-let m = re.exec("ab");
+const re = /(a)(b)/d;        // Note the /d flag.
+const m = re.exec('ab');
 console.log(m.indices[0]); // Index 0 is the whole match.
 // → [0, 2]
 console.log(m.indices[1]); // Index 1 is the 1st capture group.
@@ -42,7 +42,7 @@ Please see [the dedicated blog post](https://v8.dev/blog/fast-super) for more de
 
 A [grammar ambiguity](https://github.com/tc39/ecma262/issues/2034) was recently discovered and [fixed](https://chromium-review.googlesource.com/c/v8/v8/+/2683221) in V8 v9.0.
 
-The token sequence `for ( async of` no longer parses starting in V8 v9.0.
+The token sequence `for ( async of` now no longer parses.
 
 ## WebAssembly
 
@@ -98,7 +98,7 @@ On this simplified microbenchmark, we see the following improvements:
 
 The feature is still experimental and can be enabled through the `--turbo-inline-js-wasm-calls` flag.
 
-For more details, see the [design document](https://docs.google.com/document/d/1mXxYnYN77tK-R1JOVo6tFG3jNpMzfueQN1Zp5h3r9aM/edit?ts=60103730).
+For more details, see the [design document](https://docs.google.com/document/d/1mXxYnYN77tK-R1JOVo6tFG3jNpMzfueQN1Zp5h3r9aM/edit).
 
 ## V8 API
 
