@@ -7,7 +7,7 @@ date: 2021-03-17
 tags:
  - release
 description: 'V8 release v9.0 brings support for RegExp match indices and various performance improvements.'
-tweet: ''
+tweet: '1372227274712494084'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 9.0](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/9.0), which is in beta until its release in coordination with Chrome 90 Stable in several weeks. V8 v9.0 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
