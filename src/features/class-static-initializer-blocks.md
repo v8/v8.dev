@@ -59,7 +59,7 @@ y;
 
 ## Multiple blocks
 
-A class may have more than one static initializer block. These blocks will be evaluated in textual order. Additionally, if there are any static fields, all static elements will be evaluated in textual order. 
+A class may have more than one static initializer block. These blocks will be evaluated in textual order. Additionally, if there are any static fields, all static elements will be evaluated in textual order.
 
 ```js
 class C {
