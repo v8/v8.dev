@@ -25,9 +25,8 @@ class MyPRNG {
 
   getRandom() { ... }
 
-  static entropy_pool;
+  static entropy_pool = [];
   static {
-    this.entropy_pool = [];
     for (let i = 0; i < 512; i++) {
       this.entropy_pool.push(ProbeEntropySource());
     }
