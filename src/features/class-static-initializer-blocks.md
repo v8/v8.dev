@@ -3,7 +3,7 @@ title: 'Class static initializer blocks'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
-date: 2021-03-16
+date: 2021-03-19
 tags:
   - ECMAScript
 description: 'JavaScript classes get dedicated syntax for static initialization.'
