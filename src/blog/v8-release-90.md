@@ -66,7 +66,7 @@ and say we call that from JavaScript to add some vectors (represented as typed a
 const addNumbers = instance.exports.addNumbers;
 
 function vectorSum(len, v1, v2) {
-  let result = new Float64Array(len);
+  const result = new Float64Array(len);
   for (let i = 0; i < len; i++) {
     result[i] = addNumbers(v1[i], v2[i]);
   }
@@ -74,21 +74,21 @@ function vectorSum(len, v1, v2) {
 }
 
 const N = 100_000_000;
-let v1 = new Float64Array(N);
-let v2 = new Float64Array(N);
+const v1 = new Float64Array(N);
+const v2 = new Float64Array(N);
 for (let i = 0; i < N; i++) {
   v1[i] = Math.random();
   v2[i] = Math.random();
 }
 
-// Warmup
+// Warm up.
 for (let i = 0; i < 5; i++) {
   vectorSum(N, v1, v2);
 }
 
-// Measure
+// Measure.
 console.time();
-let result = vectorSum(N, v1, v2);
+const result = vectorSum(N, v1, v2);
 console.timeEnd();
 ```
 
