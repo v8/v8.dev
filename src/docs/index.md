@@ -66,7 +66,7 @@ V8 enables any C++ application to expose its own objects and functions to JavaSc
     - [Writing Torque built-ins](/docs/torque-builtins)
     - [Writing CSA built-ins](/docs/csa-builtins)
     - [Adding a new WebAssembly opcode](/docs/webassembly-opcode)
-    - [Slack Tracking - what is it?](/docs/slack-tracking)
+    - [Slack Tracking - what is it?](/blog/slack-tracking)
     - [WebAssembly compilation pipeline](/docs/wasm-compilation-pipeline)
 - Writing optimizable JavaScript
     - [Using V8’s sample-based profiler](/docs/profile)
