@@ -14,13 +14,7 @@ The new class static initializer block syntax lets developers gather code that s
 class MyPRNG {
   seed;
   constructor(seed) {
-    if (seed == undefined) {
-      if (MyPRNG.entropy_pool.length === 0) {
-        throw new Error("Entropy pool exhausted");
-      }
-      seed = MyPRNG.entropy_pool.pop();
-    }
-    this.seed = seed;
+    this.seed = seed ?? MyPRNG.getSeed();
   }
 
   getRandom() { ... }
