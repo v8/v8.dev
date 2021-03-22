@@ -20,7 +20,7 @@ In the example above, `function` is a reserved word and cannot be used as a vari
 
 ```js
 function displayError(text, message) {
-  const re = /\b(continue|function|break|for|if)\b/;
+  const re = /\b(continue|function|break|for|if)\b/d;
   const match = text.match(re);
   // Index `1` corresponds to the first capture group.
   const [start, end] = match.indices[1];
@@ -40,7 +40,7 @@ displayError(code, 'Invalid variable name');
 **Note:** For simplicity, the above example contains only a few of the JavaScript [reserved words](https://mathiasbynens.be/notes/reserved-keywords).
 :::
 
-In short, the new `indices` array stores the start and end positions of each matched capture group. This new array is available for all builtins producing regular expression match objects, including `RegExp#exec`, `String#match`, and [`String#matchAll`](https://v8.dev/features/string-matchall).
+In short, the new `indices` array stores the start and end positions of each matched capture group. This new array is available when the source regular expression uses the `/d` flag for all builtins producing regular expression match objects, including `RegExp#exec`, `String#match`, and [`String#matchAll`](https://v8.dev/features/string-matchall).
 
 Read on if you’re interested in how it works in more detail.
 
