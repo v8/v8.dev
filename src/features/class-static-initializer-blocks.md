@@ -13,7 +13,7 @@ The new class static initializer block syntax lets developers gather code that s
 ```js
 class MyPRNG {
   constructor(seed) {
-    if (seed == undefined) {
+    if (seed === undefined) {
       if (MyPRNG.entropyPool.length === 0) {
         throw new Error("Entropy pool exhausted");
       }
@@ -27,7 +27,7 @@ class MyPRNG {
   static entropyPool = [];
   static {
     for (let i = 0; i < 512; i++) {
-      this.entropyPool.push(ProbeEntropySource());
+      this.entropyPool.push(probeEntropySource());
     }
   }
 }
