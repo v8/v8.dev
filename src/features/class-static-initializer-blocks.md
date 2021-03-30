@@ -3,7 +3,7 @@ title: 'Class static initializer blocks'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
-date: 2021-03-19
+date: 2021-03-30
 tags:
   - ECMAScript
 description: 'JavaScript classes get dedicated syntax for static initialization.'
@@ -14,7 +14,7 @@ The new class static initializer block syntax lets developers gather code that s
 class MyPRNG {
   seed;
   constructor(seed) {
-    if (seed == undefined) {
+    if (seed === undefined) {
       if (MyPRNG.entropy_pool.length === 0) {
         throw new Error("Entropy pool exhausted");
       }
