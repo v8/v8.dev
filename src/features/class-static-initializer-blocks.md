@@ -7,22 +7,23 @@ date: 2021-03-30
 tags:
   - ECMAScript
 description: 'JavaScript classes get dedicated syntax for static initialization.'
+tweet: '1376925666780798989'
 ---
-The new class static initializer block syntax lets developers gather code that should run once for a given class definition and put them in a single place. Consider the following example where a pseudo random number generator uses a static block to initialize an entropy pool once, when the `class MyPRNG` definition is evaluated.
+The new class static initializer block syntax lets developers gather code that should run once for a given class definition and put them in a single place. Consider the following example where a pseudo-random number generator uses a static block to initialize an entropy pool once, when the `class MyPRNG` definition is evaluated.
 
 ```js
 class MyPRNG {
   constructor(seed) {
     if (seed === undefined) {
       if (MyPRNG.entropyPool.length === 0) {
-        throw new Error("Entropy pool exhausted");
+        throw new Error('Entropy pool exhausted');
       }
       seed = MyPRNG.entropyPool.pop();
     }
     this.seed = seed;
   }
 
-  getRandom() { ... }
+  getRandom() { … }
 
   static entropyPool = [];
   static {
@@ -35,7 +36,7 @@ class MyPRNG {
 
 ## Scope
 
-Each static initializer block is its own `var` and `let`/`const` scope. Like in static field initializers, the `this` value in static blocks is the class constructor itself. Similarly, `super.property` inside a static block refers to the super class's static property.
+Each static initializer block is its own `var` and `let`/`const` scope. Like in static field initializers, the `this` value in static blocks is the class constructor itself. Similarly, `super.property` inside a static block refers to the super class’s static property.
 
 ```js
 var y = 'outer y';
@@ -58,7 +59,7 @@ y;
 
 ## Multiple blocks
 
-A class may have more than one static initializer block. These blocks will be evaluated in textual order. Additionally, if there are any static fields, all static elements will be evaluated in textual order.
+A class may have more than one static initializer block. These blocks are evaluated in textual order. Additionally, if there are any static fields, all static elements are evaluated in textual order.
 
 ```js
 class C {
@@ -79,7 +80,7 @@ class C {
 
 ## Access to private fields
 
-Since a class static initializer block is always nested inside a class, it has access to that class's private fields.
+Since a class static initializer block is always nested inside a class, it has access to that class’s private fields.
 
 ```js
 let getDPrivateField;
@@ -96,7 +97,7 @@ getDPrivateField(new D('private'));
 // → private
 ```
 
-That's about it. Happy object orienting!
+That’s about it. Happy object orienting!
 
 ## Class static initializer block support { #support }
 
