@@ -105,4 +105,4 @@ That’s about it. Happy object orienting!
                  firefox="no"
                  safari="no"
                  nodejs="no"
-                 babel="no"></feature-support>
+                 babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-static-block"></feature-support>
