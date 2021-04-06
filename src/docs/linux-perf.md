@@ -88,7 +88,7 @@ perf record -g -k mono out/x64.release/d8 \
 1. After starting up chrome, find the renderer process id using the Task Manager and use it to start profiling:
 
     ```
-    perf record --call-graph -p $RENDERER_PID -k 1 -o perf.data
+    perf record -g -p $RENDERER_PID -k 1 -o perf.data
     ```
 
 1. Navigate to your website and then continue with the next section on how to evaluate the perf output.
