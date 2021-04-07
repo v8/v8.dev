@@ -1,5 +1,5 @@
 ---
-title: 'Class static initializer blocks'
+title: 'Class static initialization blocks'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
@@ -9,7 +9,7 @@ tags:
 description: 'JavaScript classes get dedicated syntax for static initialization.'
 tweet: '1376925666780798989'
 ---
-The new class static initializer block syntax lets developers gather code that should run once for a given class definition and put them in a single place. Consider the following example where a pseudo-random number generator uses a static block to initialize an entropy pool once, when the `class MyPRNG` definition is evaluated.
+The new class static initialization block syntax lets developers gather code that should run once for a given class definition and put them in a single place. Consider the following example where a pseudo-random number generator uses a static block to initialize an entropy pool once, when the `class MyPRNG` definition is evaluated.
 
 ```js
 class MyPRNG {
@@ -36,7 +36,7 @@ class MyPRNG {
 
 ## Scope
 
-Each static initializer block is its own `var` and `let`/`const` scope. Like in static field initializers, the `this` value in static blocks is the class constructor itself. Similarly, `super.property` inside a static block refers to the super class’s static property.
+Each static initialization block is its own `var` and `let`/`const` scope. Like in static field initializers, the `this` value in static blocks is the class constructor itself. Similarly, `super.property` inside a static block refers to the super class’s static property.
 
 ```js
 var y = 'outer y';
@@ -59,7 +59,7 @@ y;
 
 ## Multiple blocks
 
-A class may have more than one static initializer block. These blocks are evaluated in textual order. Additionally, if there are any static fields, all static elements are evaluated in textual order.
+A class may have more than one static initialization block. These blocks are evaluated in textual order. Additionally, if there are any static fields, all static elements are evaluated in textual order.
 
 ```js
 class C {
@@ -80,7 +80,7 @@ class C {
 
 ## Access to private fields
 
-Since a class static initializer block is always nested inside a class, it has access to that class’s private fields.
+Since a class static initialization block is always nested inside a class, it has access to that class’s private fields.
 
 ```js
 let getDPrivateField;
@@ -99,7 +99,7 @@ getDPrivateField(new D('private'));
 
 That’s about it. Happy object orienting!
 
-## Class static initializer block support { #support }
+## Class static initialization block support { #support }
 
 <feature-support chrome="91 https://bugs.chromium.org/p/v8/issues/detail?id=11375"
                  firefox="no"
