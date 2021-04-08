@@ -175,13 +175,6 @@ or
 RUSTFLAGS="-C target-feature=+simd128" cargo build
 ```
 
-Alternatively, you can specify this feature in `.cargo/config` file in your project directory like this:
-
-```ini
-[target.wasm32-unknown-unknown]
-rustflags = ["-C", "target-feature=+simd128"]
-```
-
 Like in Clang / Emscripten, LLVM’s autovectorizers are enabled by default for optimized code when `simd128` feature is enabled.
 
 For example, Rust equivalent of the `multiply_arrays` example above
