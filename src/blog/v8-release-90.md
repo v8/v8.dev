@@ -18,7 +18,7 @@ Every six weeks, we create a new branch of V8 as part of our [release process](h
 Starting in v9.0, developers may opt into getting an array of the start and end positions of matched capture groups in regular expression matches. This array is available via the `.indices` property on match objects when the regular expression has the `/d` flag.
 
 ```javascript
-const re = /(a)(b)/d;        // Note the /d flag.
+const re = /(a)(b)/d;      // Note the /d flag.
 const m = re.exec('ab');
 console.log(m.indices[0]); // Index 0 is the whole match.
 // → [0, 2]
