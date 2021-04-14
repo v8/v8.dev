@@ -41,7 +41,7 @@ class B {
 A.test(new B()); // false; it's not the same #foo
 ```
 
-Since private names are only available inside the class which defines them, the test must also occur inside the class, for example in a method like`static test` above.
+Since private names are only available inside the class which defines them, the test must also occur inside the class, for example in a method like `static test` above.
 
 Subclass instances inherit private fields from the parent class:
 
