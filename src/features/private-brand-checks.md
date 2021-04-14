@@ -21,7 +21,7 @@ const o3 = Object.create(o1);
 console.log('foo' in o3); // true
 ```
 
-The private brand checks feature extends the `in` operator to support [private class fields](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields):
+The private brand checks feature extends the `in` operator to support [private class fields](https://v8.dev/features/class-fields#private-class-fields):
 
 ```javascript
 class A {
@@ -97,22 +97,24 @@ class E {
 But beware - the existence of one private field does not guarantee that the object has all the private fields declared in a class! The following example shows a half-constructed object which has only one of the two private fields declared in its class:
 
 ```javascript
-let half_constructed;
+let halfConstructed;
 class F {
   m() {
     console.log(#x in this); // true
     console.log(#y in this); // false
   }
   #x = 0;
-  #y = (() => { half_constructed = this; throw 'error';})();
+  #y = (() => {
+    halfConstructed = this;
+    throw 'error';
+  })();
 }
 
 try {
   new F();
-} catch {
-}
+} catch {}
 
-half_constructed.m();
+halfConstructed.m();
 ```
 
 ## Private brand check support { #support }
