@@ -62,7 +62,7 @@ cd <path_to_your_v8_checkout>
 echo '(function f() {
     var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s;
   })();' > test.js
-perf record --call-graph -k mono out/x64.release/d8 \
+perf record -g -k mono out/x64.release/d8 \
     --perf-prof --no-write-protect-code-memory test.js
 ```
 
@@ -88,7 +88,7 @@ perf record --call-graph -k mono out/x64.release/d8 \
 1. After starting up chrome, find the renderer process id using the Task Manager and use it to start profiling:
 
     ```
-    perf record --call-graph -p $RENDERER_PID -k 1 -o perf.data
+    perf record -g -k mono -p $RENDERER_PID -o perf.data
     ```
 
 1. Navigate to your website and then continue with the next section on how to evaluate the perf output.
