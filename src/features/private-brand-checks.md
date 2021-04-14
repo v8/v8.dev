@@ -60,8 +60,8 @@ A.test(o.__proto__); // true
 
 const o2 = {};
 Object.setProrotypeOf(o2, a);
-A.test(o2); // false
-A.test(o.__proto__); // true
+A.test(o2); // false, private field is inherited and not owned
+A.test(o2.__proto__); // true
 ```
 
 Accessing a non-existing private field throws an error - unlike for normal properties, where accessing a non-existent property returns `undefined` but doesn't throw. Before the private brand checks, the developers have been forced to use a `try`-`catch` for implementing fall-back behavior for cases where an object doesn't have the needed private field:
