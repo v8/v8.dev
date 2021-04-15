@@ -222,7 +222,7 @@ Some interesting demos come from the [MediaPipe project](https://github.com/goog
 
 As per their description, MediaPipe is a framework for building multimodal (eg. video, audio, any time series data) applied ML pipelines. And they have a [Web version](https://developers.googleblog.com/2020/01/mediapipe-on-web.html), too!
 
-One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a CPU-only (non-GPU) build of a hand-tracking system. [Without SIMD](https://storage.googleapis.com/aim-bucket/users/tmullen/demos_10_2019_cdc/rebuild_04_2021/mediapipe_handtracking/gl_graph_demo.html), you can get only around 14-15 FPS (frames per second) on a modern laptop, while [with SIMD enabled in Chrome Canary](https://storage.googleapis.com/aim-bucket/users/tmullen/demos_10_2019_cdc/rebuild_04_2021/mediapipe_handtracking_simd/gl_graph_demo.html) you get a much smoother experience at 38-40 frames per second.
+One of the most visually appealing demos where it’s easy to observe the difference in performance SIMD makes, is a CPU-only (non-GPU) build of a hand-tracking system. [Without SIMD](https://storage.googleapis.com/aim-bucket/users/tmullen/demos_10_2019_cdc/rebuild_04_2021/mediapipe_handtracking/gl_graph_demo.html), you can get only around 14-15 FPS (frames per second) on a modern laptop, while [with SIMD enabled in Chrome Canary](https://storage.googleapis.com/aim-bucket/users/tmullen/demos_10_2019_cdc/rebuild_04_2021/mediapipe_handtracking_simd/gl_graph_demo.html) you get a much smoother experience at 38-40 FPS.
 
 <figure>
   <video autoplay muted playsinline loop width="600" height="216" src="/_img/simd/hand.mp4"></video>
