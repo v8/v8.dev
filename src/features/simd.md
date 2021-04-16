@@ -56,7 +56,7 @@ WebAssembly SIMD support is available behind a flag in Chrome. To try out the SI
 
 WebAssembly SIMD is also available as an origin trial in Chrome versions 84-90. Origin trials allow developers to experiment with a feature on the chosen origin, and provide valuable feedback. Once an origin trial token has been registered, the trial users are opted into the feature for the duration of the trial period without having to update Chrome flags.
 
-To try this out, read the [origin trial developer guide](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md), and [register for an origin trial token](https://developers.chrome.com/origintrials/#/view_trial/-4708513410415853567). More information about origin trials can be found in the [FAQ](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md#faq). Please file a [bug](https://bugs.chromium.org/p/v8/issues/entry) if something isn't working as you expect. The origin trial is compatible with Emscripten versions 1.39.15 onwards.
+To try this out, read the [origin trial developer guide](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md), and [register for an origin trial token](https://developers.chrome.com/origintrials/#/view_trial/-4708513410415853567). More information about origin trials can be found in the [FAQ](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md#faq). Please file a [bug](https://bugs.chromium.org/p/v8/issues/entry) if something isn't working as you expect. The origin trial is compatible with Emscripten versions 2.0.17 onwards.
 
 ### Enabling experimental SIMD support in Firefox
 
