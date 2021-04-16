@@ -24,7 +24,7 @@ The current proposal introduces a new `v128` value type, and a number of new ope
 - Performance wins should be positive across multiple relevant architectures within an instruction group.
 - The chosen set of operations should minimize performance cliffs if any.
 
-The proposal is now in finalized state, both V8 and the toolchain have working implementations.
+The proposal is now in [finalized state (phase 4)](https://github.com/WebAssembly/simd/issues/480), both V8 and the toolchain have working implementations.
 
 ## Enabling SIMD support
 
