@@ -6,22 +6,31 @@ This document describes how ports should be handled.
 
 ## MIPS (not officially supported)
 
-Contact/CC the MIPS team in the CL if needed. Use the mailing list <v8-mips-ports@googlegroups.com> for that purpose.
+The Mips team will do the port. Contact/CC the MIPS team in the CL if needed by adding
+`v8-mips-ports@googlegroups.com` to the reviewer or CC list. For questions you can email
+the group ([mailto link](mailto://v8-mips-ports@googlegroups.com)).
 
 ## PPC (not officially supported)
 
-Contact/CC the PPC team in the CL if needed. Use the mailing list <v8-ppc-ports@googlegroups.com> for that purpose.
+The PPC team will do the port. Contact/CC the PPC team in the CL if needed by adding
+`v8-ppc-ports@googlegroups.com` to the reviewer or CC list. For questions you can email
+the group ([mailto link](mailto://v8-ppc-ports@googlegroups.com)).
 
 ## s390 (not officially supported)
 
-Contact/CC the s390 team in the CL if needed. Use the mailing list <v8-s390-ports@googlegroups.com> for that purpose.
+The s390 team will do the port. Contact/CC the s390 team in the CL if needed by adding
+`v8-s390-ports@googlegroups.com` to the reviewer or CC list. For questions you can email
+the group ([mailto link](mailto://v8-s390-ports@googlegroups.com)).
+
+## RISC-V (not officially supported)
+
+The Risc-V team will do the port. Contact/CC the Risc-V team in the CL if needed by adding
+`v8-risc-v-ports@chromium.org` to the reviewer or CC list. For questions you can email
+the group ([mailto link](mailto://v8-risc-v-ports@chromium.org)).
 
 ## ARM
 
-### Straight-forward ARM ports
-
-Do them yourself.
-
-### When you are lost
-
-CC the ARM team in the CL. Use the mailing list v8-arm-ports.at.googlegroups.com for that purpose.
+For straight-forward ARM ports, do them yourself. If there are difficulties or questions,
+contact the ARM team in the CL by adding `v8-arm-ports@googlegroups.com` to the reviewer or
+CC list. For questions you can email
+the group ([mailto link](mailto://v8-arm-ports@googlegroups.com)).
