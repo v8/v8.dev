@@ -6,6 +6,7 @@ avatars:
 date: 2018-12-13
 tags:
   - ECMAScript
+  - ES2022
   - io19
 description: 'Several proposals expand the existing JavaScript class syntax with new functionality. This article explains the new public class fields syntax in V8 v7.2 and Chrome 72, as well as the upcoming private class fields syntax.'
 tweet: '1121395767170740225'
