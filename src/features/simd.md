@@ -2,7 +2,7 @@
 title: 'Fast, parallel applications with WebAssembly SIMD'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52)), Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser))'
 date: 2020-01-30
-updated: 2021-04-08
+updated: 2021-04-19
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
@@ -52,7 +52,7 @@ To learn about building code with SIMD support, check the section [below](#build
 
 ### Enabling experimental SIMD support in Chrome
 
-WebAssembly SIMD support is available behind a flag in Chrome. To try out the SIMD support in Chrome, pass `--enable-features=WebAssemblySimd`, or toggle the "WebAssembly SIMD support" flag in `chrome://flags`. Make sure to use the latest version of the toolchain as detailed below, and a recent Chrome Canary. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
+WebAssembly SIMD support will be available by default from Chrome 91, while on older versions it's gated behind a flag. To try out the SIMD support in stable Chrome, pass `--enable-features=WebAssemblySimd`, or toggle the "WebAssembly SIMD support" flag in `chrome://flags`. Make sure to use the latest version of the toolchain as detailed below, and a recent Chrome Canary. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
 
 WebAssembly SIMD is also available as an origin trial in Chrome versions 84-90. Origin trials allow developers to experiment with a feature on the chosen origin, and provide valuable feedback. Once an origin trial token has been registered, the trial users are opted into the feature for the duration of the trial period without having to update Chrome flags.
 
