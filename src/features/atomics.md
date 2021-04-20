@@ -7,6 +7,7 @@ date: 2020-09-24
 tags:
   - ECMAScript
   - ES2020
+  - Node.js 16
 description: 'Atomics.wait and Atomics.notify are low-level synchronization primitives useful for implementing e.g. mutexes. Atomics.wait is only usable on worker threads. V8 version 8.7 now supports a non-blocking version, Atomics.waitAsync, which is also usable on the main thread.'
 tweet: '1309118447377358848'
 ---
@@ -210,5 +211,5 @@ In this post, we showed how to use the synchronization primitives `Atomics.wait`
 <feature-support chrome="87"
                  firefox="no"
                  safari="no"
-                 nodejs="no"
+                 nodejs="16"
                  babel="no"></feature-support>

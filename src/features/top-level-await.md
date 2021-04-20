@@ -6,6 +6,7 @@ avatars:
 date: 2019-10-08
 tags:
   - ECMAScript
+  - Node.js 14
 description: 'Top-level `await` is coming to JavaScript modules! You’ll soon be able to use `await` without needing to be in an async function.'
 tweet: '1181581262399643650'
 ---
@@ -112,5 +113,5 @@ Without top-level `await`, JavaScript developers often used async immediately-in
 <feature-support chrome="89 https://bugs.chromium.org/p/v8/issues/detail?id=9344"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1519100"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202484"
-                 nodejs="no"
+                 nodejs="14"
                  babel="no https://github.com/babel/proposals/issues/44"></feature-support>

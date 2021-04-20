@@ -6,6 +6,7 @@ avatars:
 date: 2019-12-17
 tags:
   - ECMAScript
+  - Node.js 16
 description: 'RegExp match indices provide `start` and `end` indices of each matched capture group.'
 tweet: '1206970814400270338'
 ---
@@ -133,5 +134,5 @@ getVariablePosition('let foo');
 <feature-support chrome="90 https://bugs.chromium.org/p/v8/issues/detail?id=9548"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1519483"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202475"
-                 nodejs="no"
+                 nodejs="16"
                  babel="no"></feature-support>
