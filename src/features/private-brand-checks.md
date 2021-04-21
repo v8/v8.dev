@@ -59,7 +59,7 @@ A.test(o); // false, private field is inherited and not owned
 A.test(o.__proto__); // true
 
 const o2 = {};
-Object.setProrotypeOf(o2, a);
+Object.setPrototypeOf(o2, a);
 A.test(o2); // false, private field is inherited and not owned
 A.test(o2.__proto__); // true
 ```
