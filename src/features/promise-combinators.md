@@ -9,6 +9,7 @@ tags:
   - ES2020
   - ES2021
   - io19
+  - Node.js 16
 description: 'There are four promise combinators in JavaScript: Promise.all, Promise.race, Promise.allSettled, and Promise.any.'
 tweet: '1138819493956710400'
 ---
@@ -119,7 +120,7 @@ removeLoadingIndicator();
 <feature-support chrome="85 https://bugs.chromium.org/p/v8/issues/detail?id=9808"
                  firefox="79 https://bugzilla.mozilla.org/show_bug.cgi?id=1568903"
                  safari="14 https://bugs.webkit.org/show_bug.cgi?id=202566"
-                 nodejs="no"
+                 nodejs="16"
                  babel="yes"></feature-support>
 
 `Promise.any` gives you a signal as soon as one of the promises fulfills. This is similar to `Promise.race`, except `any` doesn’t reject early when one of the promises rejects.

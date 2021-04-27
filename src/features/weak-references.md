@@ -12,6 +12,7 @@ tags:
   - ECMAScript
   - ES2021
   - io19
+  - Node.js 14
 description: 'Weak references and finalizers are coming to JavaScript! This article explains the new functionality.'
 tweet: '1148603966848151553'
 ---
@@ -229,7 +230,7 @@ So, don’t place important logic in the code path of a finalizer. They're usefu
 ## `WeakRef` support { #support }
 
 <feature-support chrome="74 https://v8.dev/blog/v8-release-84#weak-references-and-finalizers"
-                 firefox="partial https://bugzilla.mozilla.org/show_bug.cgi?id=1561074"
+                 firefox="79 https://bugzilla.mozilla.org/show_bug.cgi?id=1561074"
                  safari="no"
-                 nodejs="no"
+                 nodejs="14"
                  babel="no"></feature-support>
