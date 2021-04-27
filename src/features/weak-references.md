@@ -223,7 +223,7 @@ In general, avoid writing code that depends on the garbage collector cleaning up
 - Might not happen in the same order as actual garbage collection.
 - Might not happen at all, e.g. if the browser window is closed.
 
-So, don’t place important logic in the code path of a finalizer. They're useful to perform clean-up in response to garbage-collection, but you can't reliably use them to, say, record meaningful metrics about memory usage. For that use case, see [`measureMemory`](https://web.dev/monitor-total-page-memory-usage/).
+So, don’t place important logic in the code path of a finalizer. They're useful to perform clean-up in response to garbage-collection, but you can't reliably use them to, say, record meaningful metrics about memory usage. For that use case, see [`performance.measureUserAgentSpecificMemory`](https://web.dev/monitor-total-page-memory-usage/).
 
 `WeakRef`s and finalizers can help you save memory, and work best when used sparingly as a means of progressive enhancement. Since they’re power-user features, we expect most usage to happen within frameworks or libraries.
 
