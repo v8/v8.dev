@@ -232,5 +232,5 @@ So, don’t place important logic in the code path of a finalizer. They're usefu
 <feature-support chrome="74 https://v8.dev/blog/v8-release-84#weak-references-and-finalizers"
                  firefox="79 https://bugzilla.mozilla.org/show_bug.cgi?id=1561074"
                  safari="no"
-                 nodejs="14"
+                 nodejs="14.6.0"
                  babel="no"></feature-support>
