@@ -8,6 +8,7 @@ tags:
   - ECMAScript
   - ES2022
   - io19
+  - Node.js 14
 description: 'Several proposals expand the existing JavaScript class syntax with new functionality. This article explains the new public class fields syntax in V8 v7.2 and Chrome 72, as well as the upcoming private class fields syntax.'
 tweet: '1121395767170740225'
 ---
@@ -209,5 +210,5 @@ class Cat extends Animal {
 <feature-support chrome="84 /blog/v8-release-84#private-methods-and-accessors"
                  firefox="no"
                  safari="no"
-                 nodejs="no"
+                 nodejs="14.6.0"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-private-methods"></feature-support>
