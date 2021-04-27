@@ -7,6 +7,7 @@ date: 2019-11-11
 tags:
   - ECMAScript
   - ES2021
+  - Node.js 16
 description: 'JavaScript now has first-class support for global substring replacement through the new `String.prototype.replaceAll` API.'
 tweet: '1193917549060280320'
 ---
@@ -121,5 +122,5 @@ In case your replacement string contains one of these patterns, and you want to 
 <feature-support chrome="85 https://bugs.chromium.org/p/v8/issues/detail?id=9801"
                  firefox="77 https://bugzilla.mozilla.org/show_bug.cgi?id=1608168#c8"
                  safari="13.1 https://webkit.org/blog/10247/new-webkit-features-in-safari-13-1/"
-                 nodejs="no"
+                 nodejs="16"
                  babel="yes"></feature-support>
