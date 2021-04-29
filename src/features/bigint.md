@@ -266,6 +266,6 @@ If you’re interested in how `BigInt`s work behind the scenes (e.g. how they ar
 
 <feature-support chrome="67 /blog/bigint"
                  firefox="68 https://wingolog.org/archives/2019/05/23/bigint-shipping-in-firefox"
-                 safari="no"
+                 safari="14"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="yes #polyfilling-transpiling"></feature-support>
