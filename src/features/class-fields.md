@@ -193,7 +193,7 @@ class Cat extends Animal {
 
 <feature-support chrome="72 /blog/v8-release-72#public-class-fields"
                  firefox="partial https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/69#JavaScript"
-                 safari="partial https://bugs.webkit.org/show_bug.cgi?id=174212"
+                 safari="yes https://bugs.webkit.org/show_bug.cgi?id=174212"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-properties"></feature-support>
 
@@ -201,7 +201,7 @@ class Cat extends Animal {
 
 <feature-support chrome="74 /blog/v8-release-74#private-class-fields"
                  firefox="no"
-                 safari="no"
+                 safari="yes"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-properties"></feature-support>
 
@@ -209,6 +209,6 @@ class Cat extends Animal {
 
 <feature-support chrome="84 /blog/v8-release-84#private-methods-and-accessors"
                  firefox="no"
-                 safari="no"
+                 safari="yes"
                  nodejs="14.6.0"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-private-methods"></feature-support>
