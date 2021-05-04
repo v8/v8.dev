@@ -7,7 +7,7 @@ date: 2021-05-04
 tags:
  - release
 description: 'V8 release v9.1 brings support for private brand checks, top-level await enabled by default and performance improvements.'
-tweet: ''
+tweet: '1389613320953532417'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 9.1](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/9.1), which is in beta until its release in coordination with Chrome 91 Stable in several weeks. V8 v9.1 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
