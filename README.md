@@ -1,4 +1,4 @@
-# v8.dev [![Build status](https://travis-ci.com/v8/v8.dev.svg?branch=main)](https://travis-ci.com/v8/v8.dev)
+# v8.dev [![Build status](https://github.com/v8/v8.dev/actions/workflows/deploy.yml)](https://github.com/v8/v8.dev/actions/workflows/deploy.yml/badge.svg)
 
 This repository hosts the source code of [v8.dev, the official website of the V8 project](https://v8.dev/).
 
