@@ -42,6 +42,7 @@ use_xcode_clang = true
 v8_enable_i18n_support = false        # Produces a smaller binary.
 v8_monolithic = true                  # Enable the v8_monolith target.
 v8_use_external_startup_data = false  # The snaphot is included in the binary.
+v8_enable_pointer_compression = false # Unsupported on iOS.
 ```
 
 Now build:
