@@ -192,7 +192,7 @@ class Cat extends Animal {
 ### Support for public class fields { #support-public-fields }
 
 <feature-support chrome="72 /blog/v8-release-72#public-class-fields"
-                 firefox="partial https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/69#JavaScript"
+                 firefox="yes https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/69#JavaScript"
                  safari="yes https://bugs.webkit.org/show_bug.cgi?id=174212"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-properties"></feature-support>
@@ -200,7 +200,7 @@ class Cat extends Animal {
 ### Support for private class fields { #support-private-fields }
 
 <feature-support chrome="74 /blog/v8-release-74#private-class-fields"
-                 firefox="no"
+                 firefox="90 https://spidermonkey.dev/blog/2021/05/03/private-fields-ship.html"
                  safari="yes"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-properties"></feature-support>
@@ -208,7 +208,7 @@ class Cat extends Animal {
 ### Support for private methods and accessors { #support-private-methods }
 
 <feature-support chrome="84 /blog/v8-release-84#private-methods-and-accessors"
-                 firefox="no"
+                 firefox="90 https://spidermonkey.dev/blog/2021/05/03/private-fields-ship.html"
                  safari="yes"
                  nodejs="14.6.0"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-private-methods"></feature-support>
