@@ -6,7 +6,7 @@ avatars:
 date: 2021-05-06
 tags:
   - JavaScript
-description: 'Faster builtin calls in V8 v9.1'
+description: 'In V8 9.1 we've temporarily unembedded the builtins on desktop to avoid performance issues resulting from far indirect calls.'
 tweet: ''
 ---
 
