@@ -6,7 +6,7 @@ avatars:
 date: 2021-05-06
 tags:
   - JavaScript
-description: 'In V8 9.1 we've temporarily unembedded the builtins on desktop to avoid performance issues resulting from far indirect calls.'
+description: 'In V8 9.1 we’ve temporarily unembedded the builtins on desktop to avoid performance issues resulting from far indirect calls.'
 tweet: ''
 ---
 
