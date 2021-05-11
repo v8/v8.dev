@@ -1,5 +1,5 @@
 ---
-title: 'Short Builtin Calls'
+title: 'Short builtin calls'
 author: '[Toon Verwaest](https://twitter.com/tverwaes), The Big Short'
 avatars:
   - toon-verwaest
