@@ -42,4 +42,4 @@ To avoid the cost of frequent mispredictions, and to avoid unnecessarily relying
 
 ![Benchmark score improvement](/_img/short-builtin-calls/benchmarks.svg)
 
-Unembedding builtins does increase memory usage on affected devices by 1.2 to 1.4MiB per V8 instance. As a better long-term solution we’re looking into allocating JIT code closer to the Chrome binary. That way we can re-embed the builtins to regain the memory benefits, while additionally improving the performance of calls from V8-generated code to C++ code.
+Unembedding builtins does increase memory usage on affected devices by 1.2 to 1.4 MiB per V8 instance. As a better long-term solution we’re looking into allocating JIT code closer to the Chrome binary. That way we can re-embed the builtins to regain the memory benefits, while additionally improving the performance of calls from V8-generated code to C++ code.
