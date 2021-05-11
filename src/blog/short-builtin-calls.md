@@ -10,7 +10,7 @@ description: 'In V8 v9.1 we’ve temporarily unembedded the builtins on desktop 
 tweet: ''
 ---
 
-In V8 9.1 we’ve temporarily disabled [embedded builtins](https://v8.dev/blog/embedded-builtins) on desktop. While embedding builtins significantly improves memory usage, we’ve realized that function calls between embedded builtins and JIT compiled code can come at a considerable performance penalty. This cost depends on the microarchitecture of the CPU. In this post we’ll explain why this is happening, what the performance looks like, and what we’re planning to do to resolve this long-term.
+In V8 v9.1 we’ve temporarily disabled [embedded builtins](https://v8.dev/blog/embedded-builtins) on desktop. While embedding builtins significantly improves memory usage, we’ve realized that function calls between embedded builtins and JIT compiled code can come at a considerable performance penalty. This cost depends on the microarchitecture of the CPU. In this post we’ll explain why this is happening, what the performance looks like, and what we’re planning to do to resolve this long-term.
 
 ## Code allocation
 
