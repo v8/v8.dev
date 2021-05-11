@@ -22,7 +22,7 @@ V8 JIT code very commonly calls into builtins. Builtins are essentially snippets
 
 On 64 bit architectures, the Chrome binary, which includes these builtins, lies arbitrarily far away from JIT code. With the [x86-64](https://en.wikipedia.org/wiki/X86-64) instruction set, this means we can’t use direct calls: they take a 32-bit signed immediate that’s used as an offset to the address of the call, and the target may be more than 2 GiB away. Instead, we need to rely on indirect calls through a register or memory operand. Such calls rely more heavily on prediction since it’s not immediately apparent from the call instruction itself what the target of the call is. On [ARM64](https://en.wikipedia.org/wiki/AArch64) we can’t use direct calls at all since the range is limited to 128 MiB. This means that in both cases we rely on the accuracy of the CPU's indirect branch predictor.
 
-## Indirect Branch Prediction Limitations
+## Indirect branch prediction limitations
 
 When targeting x86-64 it would be nice to rely on direct calls. It should reduce strain on the indirect branch predictor as the target is known after the instruction is decoded, but it also doesn't require the target to be loaded into a register from a constant or memory. But it's not just the obvious differences visible in the machine code.
 
