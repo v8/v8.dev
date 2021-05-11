@@ -34,7 +34,7 @@ More importantly, even though 64-bit instruction set architectures (the “high-
 
 While on ARM64 the architectural call range for direct calls is limited to 128 MiB, it turns out that [Apple’s M1](https://en.wikipedia.org/wiki/Apple_M1) chip has the same microarchitectural 4 GiB range limitation for indirect call prediction. Indirect calls to a call target further away than 4 GiB always seem to be mispredicted. Due to the particularly large [re-order buffer](https://en.wikipedia.org/wiki/Re-order_buffer) of the M1, the component of the CPU that enables future predicted instructions to be executed speculatively out-of-order, frequent misprediction results in an exceptionally large performance penalty.
 
-## Temporary Solution: Copy the Builtins
+## Temporary solution: copy the builtins
 
 To avoid the cost of frequent mispredictions, and to avoid unnecessarily relying on branch prediction where possible on x86-64, we’ve decided to temporarily copy the builtins into V8's pointer compression cage on desktop machines with enough memory. This puts the copied builtin code close to dynamically generated code. The performance results heavily depend on the device configuration, but here are some results from our performance bots:
 
