@@ -52,7 +52,7 @@ To learn about building code with SIMD support, check the section [below](#build
 
 ### SIMD support in Chrome
 
-WebAssembly SIMD support is available by default from Chrome 91. Make sure to use the latest version of the toolchain as well as detailed below, as well as latest wasm-feature-detect to detect engines that support the final version of the spec. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
+WebAssembly SIMD support is available by default from Chrome 91. Make sure to use the latest version of the toolchain as detailed below, as well as latest wasm-feature-detect to detect engines that support the final version of the spec. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
 
 ### Enabling experimental SIMD support in Firefox
 
