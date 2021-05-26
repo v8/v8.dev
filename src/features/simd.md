@@ -2,7 +2,7 @@
 title: 'Fast, parallel applications with WebAssembly SIMD'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52)), Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser))'
 date: 2020-01-30
-updated: 2021-04-19
+updated: 2021-05-26
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
@@ -50,31 +50,19 @@ import { simd } from 'wasm-feature-detect';
 
 To learn about building code with SIMD support, check the section [below](#building-with-simd-support).
 
-### Enabling experimental SIMD support in Chrome
+### SIMD support in Chrome
 
-WebAssembly SIMD support will be available by default from Chrome 91, while on older versions it's gated behind a flag. To try out the SIMD support in stable Chrome, pass `--enable-features=WebAssemblySimd`, or toggle the "WebAssembly SIMD support" flag in `chrome://flags`. Make sure to use the latest version of the toolchain as detailed below, and a recent Chrome Canary. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
-
-WebAssembly SIMD is also available as an origin trial in Chrome versions 84-90. Origin trials allow developers to experiment with a feature on the chosen origin, and provide valuable feedback. Once an origin trial token has been registered, the trial users are opted into the feature for the duration of the trial period without having to update Chrome flags.
-
-To try this out, read the [origin trial developer guide](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md), and [register for an origin trial token](https://developers.chrome.com/origintrials/#/view_trial/-4708513410415853567). More information about origin trials can be found in the [FAQ](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md#faq). Please file a [bug](https://bugs.chromium.org/p/v8/issues/entry) if something isn't working as you expect. The origin trial is compatible with Emscripten versions 2.0.17 onwards.
+WebAssembly SIMD support is available by default from Chrome 91. Make sure to use the latest version of the toolchain as detailed below, as well as latest wasm-feature-detect to detect engines that support the final version of the spec. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
 
 ### Enabling experimental SIMD support in Firefox
 
 WebAssembly SIMD is available behind a flag in Firefox. Currently it's supported only on x86 and x86-64 architectures. To try out the SIMD support in Firefox, go to `about:config` and enable `javascript.options.wasm_simd`. Note that this feature is still experimental and being worked on.
 
-### Enabling experimental SIMD support in Node.js
-
-In Node.js WebAssembly SIMD can be enabled via `--experimental-wasm-simd` flag:
-
-```bash
-node --experimental-wasm-simd main.js
-```
-
 ## Building with SIMD support
 
 ### Building C / C++ to target SIMD
 
-WebAssembly’s SIMD support depends on using a recent build of clang with the WebAssembly LLVM backend enabled. Emscripten has support for the WebAssembly SIMD proposal as well. Install and activate the `latest` distribution of emscripten using [emsdk](https://emscripten.org/docs/getting_started/downloads.html) to use the bleeding edge SIMD features.
+WebAssembly’s SIMD support depends on using a recent build of clang with the WebAssembly LLVM backend enabled. Emscripten has support for the WebAssembly SIMD proposal as well. Install and activate the `latest` distribution of emscripten using [emsdk](https://emscripten.org/docs/getting_started/downloads.html) to use the SIMD features.
 
 ```bash
 ./emsdk install latest
