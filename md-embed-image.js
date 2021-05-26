@@ -1,7 +1,7 @@
 'use strict';
 
 const imageSize = require('image-size');
-const { existsSync } = require('fs');
+const { existsSync, readFileSync } = require('fs');
 const assert = require('assert');
 
 module.exports = md => {
@@ -10,10 +10,12 @@ module.exports = md => {
     for (const t of state.tokens) {
       switch (t.type) {
         case 'figure_open':
+        case 'container_figure_open':
           assert(!inFigure);
           inFigure = true;
           break;
         case 'figure_close':
+        case 'container_figure_close':
           assert(inFigure);
           inFigure = false;
           break;
@@ -47,8 +49,28 @@ module.exports = md => {
           // If it does, use it in `srcset` as an alternative variant.
           t.attrs.push(['srcset', `${imgSrc2x} 2x`]);
         }
+      } else if (imgSrc.startsWith('/_svg/')) {
+        // Ignore, we'll fix this in the embed_svg pass.
       } else {
         throw new Error(`Image ${imgSrc} is not in the "/_img/..." directory.`);
+      }
+    }
+  });
+
+  // Add a post-process rule for inline svgs. This has to be done after implicit
+  // figures, else we'd lose the implicit figures for the image.
+  md.core.ruler.after('implicit_figures', 'embed_svg', state => {
+    for (const t of state.tokens) {
+      // Skip non-inline images tokens.
+      if (t.type !== 'inline') continue;
+      const image = t.children.find(t => t.type === 'image');
+      if (!image) continue;
+      let imgSrc = image.attrGet('src');
+      if (imgSrc.startsWith('/_svg/')) {
+        const svgfile = readFileSync('src' + imgSrc, {encoding:"utf8"});
+        image.type = 'html_inline';
+        image.tag = '';
+        image.content = svgfile;
       }
     }
   });
