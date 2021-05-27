@@ -50,7 +50,7 @@ ReferenceError: FAIL is not defined
     at async foo (<anonymous>)
 ```
 
-At the time of this writing, this functionality is limited to `await` locations and `Promise.all()`, since for those cases the engine can reconstruct the necessary information without any additional overhead (that’s why it’s zero-cost).
+At the time of this writing, this functionality is limited to `await` locations, `Promise.all()` and `Promise.any()`, since for those cases the engine can reconstruct the necessary information without any additional overhead (that’s why it’s zero-cost).
 
 ## Stack trace collection for custom exceptions
 
@@ -100,9 +100,10 @@ The structured stack trace is an array of `CallSite` objects, each of which repr
 - `isEval`: does this call take place in code defined by a call to `eval`?
 - `isNative`: is this call in native V8 code?
 - `isConstructor`: is this a constructor call?
-- `isAsync`: is this an async call (i.e. `await` or `Promise.all()`)?
+- `isAsync`: is this an async call (i.e. `await`, `Promise.all()`, or `Promise.any()`)?
 - `isPromiseAll`: is this an async call to `Promise.all()`?
-- `getPromiseIndex`: returns the index of the promise element that was followed in `Promise.all()` for async stack traces, or `null` if the `CallSite` is not a `Promise.all()` call.
+- `isPromiseAny`: is this an async call to `Promise.any()`?
+- `getPromiseIndex`: returns the index of the promise element that was followed in `Promise.all()` or `Promise.any()` for async stack traces, or `null` if the `CallSite` is not an async `Promise.all()` or `Promise.any()` call.
 
 The default stack trace is created using the CallSite API so any information that is available there is also available through this API.
 
@@ -135,6 +136,12 @@ Or, in the case of a construct call:
 
 ```
 at new functionName (location)
+```
+
+Or, in case of an async call:
+
+```
+at async functionName (location)
 ```
 
 If only one of `functionName` and `methodName` is available, or if they are both available but the same, the format is:
