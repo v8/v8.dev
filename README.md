@@ -1,4 +1,4 @@
-# v8.dev [![Build status](https://github.com/v8/v8.dev/actions/workflows/deploy.yml)](https://github.com/v8/v8.dev/actions/workflows/deploy.yml/badge.svg)
+# v8.dev [![Build status](https://github.com/v8/v8.dev/actions/workflows/deploy.yml/badge.svg)](https://github.com/v8/v8.dev/actions/workflows/deploy.yml)
 
 This repository hosts the source code of [v8.dev, the official website of the V8 project](https://v8.dev/).
 
