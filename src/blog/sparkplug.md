@@ -17,11 +17,11 @@ tweet: '1397945205198835719'
 <!-- markdownlint-disable no-inline-html -->
 <style>
   svg {
-    --other-frame-bg: rgb(200, 200, 200, 0.2);
-    --machine-frame-bg: rgb(200, 200, 200, 0.5);
-    --js-frame-bg: rgba(212, 205, 100, 0.603);
-    --interpreter-frame-bg: rgba(215, 137, 218, 0.5);
-    --sparkplug-frame-bg: rgba(235, 163, 104, 0.5);
+    --other-frame-bg: rgb(200 200 200 / 20%);
+    --machine-frame-bg: rgb(200 200 200 / 50%);
+    --js-frame-bg: rgb(212 205 100 / 60%);
+    --interpreter-frame-bg: rgb(215 137 218 / 50%);
+    --sparkplug-frame-bg: rgb(235 163 104 / 50%);
   }
   svg text {
     font-family: Gloria Hallelujah, cursive;
