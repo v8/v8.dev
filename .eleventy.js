@@ -44,18 +44,18 @@ const md = markdownIt(markdownItConfig)
   .use(markdownItContainer, 'note')
   .use(markdownItContainer, 'table-wrapper')
   .use(markdownItContainer, 'ecmascript-algorithm')
-  .use(markdownItContainer, "figure",  {
+  .use(markdownItContainer, 'figure',  {
     validate(params) {
       return params.trim().match(/^figure\s+(.*)$/);
     },
     render(tokens, idx) {
-      var m = tokens[idx].info.trim().match(/^figure\s+(.*)$/);
+      const m = tokens[idx].info.trim().match(/^figure\s+(.*)$/);
       if (tokens[idx].nesting === 1) {
-        // opening tag, save caption for the closing tag.
+        // Opening tag; save caption for the closing tag.
         this.saved_caption_ = m[1];
         return '<figure>\n';
       } else {
-        // closing tag
+        // Closing tag.
         return '<figcaption>' + md.utils.escapeHtml(this.saved_caption_) + '</figcaption></figure>\n';
       }
     },

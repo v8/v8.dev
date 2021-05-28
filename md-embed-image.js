@@ -1,3 +1,16 @@
+// Copyright 2021 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the “License”);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// <https://apache.org/licenses/LICENSE-2.0>.
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an “AS IS” BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 'use strict';
 
 const imageSize = require('image-size');
@@ -50,27 +63,27 @@ module.exports = md => {
           t.attrs.push(['srcset', `${imgSrc2x} 2x`]);
         }
       } else if (imgSrc.startsWith('/_svg/')) {
-        // Ignore, we'll fix this in the embed_svg pass.
+        // Ignore; we’ll fix this in the embed_svg pass.
       } else {
-        throw new Error(`Image ${imgSrc} is not in the "/_img/..." directory.`);
+        throw new Error(`Image ${imgSrc} is not in the \`/_img/…\` directory.`);
       }
     }
   });
 
-  // Add a post-process rule for inline svgs. This has to be done after implicit
-  // figures, else we'd lose the implicit figures for the image.
+  // Add a post-process rule for inline SVGs. This has to be done after implicit
+  // <figure>s, else we’d lose the implicit figures for the image.
   md.core.ruler.after('implicit_figures', 'embed_svg', state => {
     for (const t of state.tokens) {
       // Skip non-inline images tokens.
       if (t.type !== 'inline') continue;
       const image = t.children.find(t => t.type === 'image');
       if (!image) continue;
-      let imgSrc = image.attrGet('src');
+      const imgSrc = image.attrGet('src');
       if (imgSrc.startsWith('/_svg/')) {
-        const svgfile = readFileSync('src' + imgSrc, {encoding:"utf8"});
+        const svgContent = readFileSync(`src${imgSrc}`, 'utf8');
         image.type = 'html_inline';
         image.tag = '';
-        image.content = svgfile;
+        image.content = svgContent;
       }
     }
   });
