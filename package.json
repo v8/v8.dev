@@ -3,7 +3,7 @@
   "scripts": {
     "lint": "markdownlint \"src/**/*.md\"",
     "eleventy": "eleventy",
-    "html": "html-minifier --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
+    "html": "html-minifier-terser --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css && postcss src/_css/feature-support.css --output dist/_css/feature-support.css",
     "js": "shx mkdir -p dist/_js && terser src/_js/main.mjs -cm --module -o dist/_js/main.mjs && terser src/_js/legacy.js -cm -o dist/_js/legacy.js",
     "json": "json-minify src/.webmanifest > dist/.webmanifest",
@@ -45,7 +45,7 @@
     "get-video-dimensions": "^1.0.0",
     "glob": "^7.1.6",
     "he": "^1.2.0",
-    "html-minifier": "^4.0.0",
+    "html-minifier-terser": "^5.1.1",
     "husky": "^4.2.5",
     "image-size": "^0.8.3",
     "json-minify": "^1.0.0",
