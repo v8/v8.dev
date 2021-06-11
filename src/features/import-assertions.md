@@ -52,9 +52,9 @@ When a developer wants to import a JSON module, they must use an import assertio
 import data from 'https://sketchy-third-party.com/data.json' assert { type: 'json' };
 ```
 
-# Dynamic `import()`
+## Dynamic `import()`
 
-Import assertions can also be passed to dynamic `import()` with a new second parameter:
+Import assertions can also be passed to [dynamic `import()`](https://v8.dev/features/dynamic-import#dynamic) with a new second parameter:
 
 ```javascript
 // foo.json
@@ -65,7 +65,7 @@ const jsonModule = await import('./foo.json', { assert: { type: 'json' } });
 console.log(jsonModule.default.answer); // 42
 ```
 
-The data is referenced through the `default` property because the JSON content is the [default export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#importing_defaults) of the module.
+The JSON content is the default export of the module, so it's referenced through the `default` property on the object returned from `import()`.
 
 ## Conclusion
 
