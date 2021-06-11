@@ -59,7 +59,7 @@ const jsonModule = await import("./foo.json", { assert: { type: "json" } });
 console.log(jsonModule.default.answer); // 42
 ```
 
-The data is referenced through the `default` property because the JSON content is the default export of the module.
+The data is referenced through the `default` property because the JSON content is the [default export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#importing_defaults) of the module.
 
 ## Conclusion
 
