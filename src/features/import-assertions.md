@@ -31,7 +31,11 @@ import json from './foo.json';
 
 The web platform checks the MIME type of a module resource for validity prior to executing it, and in theory this MIME type could also be used to determine whether to treat the resource as a JSON or as a JavaScript module.
 
-But, there's an [escalation-of-privilege security issue](https://github.com/w3c/webcomponents/issues/839) with relying on the MIME type alone. Modules can be imported cross-origin, and a developer might import a JSON module from a third-party source. The developer might consider an import of JSON even from an untrusted  third-party to be basically safe as long as the JSON is properly sanitized, since importing JSON won't execute script. But, the third-party server could unexpectedly reply with a JavaScript MIME type and a malicious JavaScript payload, executing code in the importer's domain.
+But, there's a [security issue](https://github.com/w3c/webcomponents/issues/839) with relying on the MIME type alone.
+
+Modules can be imported cross-origin, and a developer might import a JSON module from a third-party source. They might consider this to be basically safe even from an untrusted third-party as long as the JSON is properly sanitized, since importing JSON won't execute script.
+
+However, third-party script can actually execute in this scenario because the third-party server could unexpectedly reply with a JavaScript MIME type and a malicious JavaScript payload, running code in the importer's domain.
 
 ```javascript
 // Executes JS if sketchy-third-party.com responds with
