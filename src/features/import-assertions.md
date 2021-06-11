@@ -65,7 +65,7 @@ The data is referenced through the `default` property because the JSON content i
 
 Currently the only specified use of import assertions is for specifying module type. However, the feature was designed to allow arbitrary key/value assertion pairs, so additional uses may be added in the future if it becomes useful to restrain module imports in other ways.
 
-Meanwhile, JSON modules with the new import assertions syntax are available by default in Chromium 91. [CSS module scripts](https://chromestatus.com/feature/5948572598009856#) are also coming soon, using the same module-type-assertion syntax.
+Meanwhile, JSON modules with the new import assertions syntax are available by default in Chromium 91. [CSS module scripts](https://chromestatus.com/feature/5948572598009856) are also coming soon, using the same module-type-assertion syntax.
 
 ## Import Assertions support { #support }
 
