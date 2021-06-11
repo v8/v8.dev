@@ -39,7 +39,9 @@ But, there's an [escalation-of-privilege security issue](https://github.com/w3c/
 import data from "https://sketchy-third-party.com/data.json";
 ```
 
-File extensions can't be used to make a module type determination because they [aren't a reliable indicator of content type on the web](https://github.com/tc39/proposal-import-assertions/blob/master/content-type-vs-file-extension.md). So instead, we use import assertions to indicate the expected module type and prevent this escalation-of-privilege pitfall. When a developer wants to import a JSON module, they must use an import assertion to specify that it's supposed to be JSON. The import will fail if the MIME type received from the network doesn't match the expected type.
+File extensions can't be used to make a module type determination because they [aren't a reliable indicator of content type on the web](https://github.com/tc39/proposal-import-assertions/blob/master/content-type-vs-file-extension.md). So instead, we use import assertions to indicate the expected module type and prevent this escalation-of-privilege pitfall.
+
+When a developer wants to import a JSON module, they must use an import assertion to specify that it's supposed to be JSON. The import will fail if the MIME type received from the network doesn't match the expected type:
 
 ```javascript
 // Fails if sketchy-third-party responds with a non-JSON MIME type.
