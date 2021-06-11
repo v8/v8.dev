@@ -3,7 +3,7 @@ title: 'Import assertions'
 author: 'Dan Clark ([@dandclark1](https://twitter.com/dandclark1))'
 avatars:
   - 'dan-clark'
-date: 2021-06-10
+date: 2021-06-14
 tags:
   - ECMAScript
 description: 'Import assertions allow module import statements to include additional information alongside the module specifier'
