@@ -1,5 +1,5 @@
 ---
-title: 'Import Assertions'
+title: 'Import assertions'
 author: 'Dan Clark ([@dandclark1](https://twitter.com/dandclark1))'
 avatars:
   - 'dan-clark'
