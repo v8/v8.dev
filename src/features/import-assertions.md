@@ -14,10 +14,10 @@ The new [import assertions](https://github.com/tc39/proposal-import-assertions) 
 
 ```javascript
 // foo.json
-{ "answer": 42 }
+{ 'answer': 42 }
 
 // main.mjs
-import json from "./foo.json" assert { type: "json" };
+import json from './foo.json' assert { type: 'json' };
 console.log(json.answer); // 42
 ```
 
@@ -26,7 +26,7 @@ console.log(json.answer); // 42
 A natural question to ask is why a JSON module couldn't simply be imported like this:
 
 ```javascript
-import json from "./foo.json";
+import json from './foo.json';
 ```
 
 The web platform checks the MIME type of a module resource for validity prior to executing it, and in theory this MIME type could also be used to determine whether to treat the resource as a JSON or as a JavaScript module.
@@ -36,7 +36,7 @@ But, there's an [escalation-of-privilege security issue](https://github.com/w3c/
 ```javascript
 // Executes JS if sketchy-third-party.com responds with
 // application/javascript MIME type!
-import data from "https://sketchy-third-party.com/data.json";
+import data from 'https://sketchy-third-party.com/data.json';
 ```
 
 File extensions can't be used to make a module type determination because they [aren't a reliable indicator of content type on the web](https://github.com/tc39/proposal-import-assertions/blob/master/content-type-vs-file-extension.md). So instead, we use import assertions to indicate the expected module type and prevent this escalation-of-privilege pitfall.
@@ -45,7 +45,7 @@ When a developer wants to import a JSON module, they must use an import assertio
 
 ```javascript
 // Fails if sketchy-third-party responds with a non-JSON MIME type.
-import data from "https://sketchy-third-party.com/data.json" assert { type: "json" };
+import data from 'https://sketchy-third-party.com/data.json' assert { type: 'json' };
 ```
 
 # Dynamic `import()`
@@ -54,10 +54,10 @@ Import assertions can also be passed to dynamic `import()` with a new second par
 
 ```javascript
 // foo.json
-{ "answer": 42 }
+{ 'answer': 42 }
 
 // main.mjs
-const jsonModule = await import("./foo.json", { assert: { type: "json" } });
+const jsonModule = await import('./foo.json', { assert: { type: 'json' } });
 console.log(jsonModule.default.answer); // 42
 ```
 
@@ -71,8 +71,8 @@ Meanwhile, JSON modules with the new import assertions syntax are available by d
 
 ## Import Assertions support { #support }
 
-<feature-support chrome="91 https://chromestatus.com/feature/5765269513306112"
-                 firefox="no"
-                 safari="no"
-                 nodejs="no"
-                 babel="yes https://github.com/babel/babel/pull/12139"></feature-support>
+<feature-support chrome='91 https://chromestatus.com/feature/5765269513306112'
+                 firefox='no'
+                 safari='no'
+                 nodejs='no'
+                 babel='yes https://github.com/babel/babel/pull/12139'></feature-support>
