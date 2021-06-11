@@ -14,7 +14,7 @@ The new [import assertions](https://github.com/tc39/proposal-import-assertions) 
 
 ```javascript
 // foo.json
-{ 'answer': 42 }
+{ "answer": 42 }
 
 // main.mjs
 import json from './foo.json' assert { type: 'json' };
@@ -58,7 +58,7 @@ Import assertions can also be passed to [dynamic `import()`](https://v8.dev/feat
 
 ```javascript
 // foo.json
-{ 'answer': 42 }
+{ "answer": 42 }
 
 // main.mjs
 const jsonModule = await import('./foo.json', { assert: { type: 'json' } });
@@ -75,8 +75,8 @@ Meanwhile, JSON modules with the new import assertions syntax are available by d
 
 ## Import Assertions support { #support }
 
-<feature-support chrome='91 https://chromestatus.com/feature/5765269513306112'
-                 firefox='no'
-                 safari='no'
-                 nodejs='no'
-                 babel='yes https://github.com/babel/babel/pull/12139'></feature-support>
+<feature-support chrome="91 https://chromestatus.com/feature/5765269513306112"
+                 firefox="no"
+                 safari="no"
+                 nodejs="no"
+                 babel="yes https://github.com/babel/babel/pull/12139"></feature-support>
