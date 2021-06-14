@@ -1,6 +1,6 @@
 ---
 title: 'Import assertions'
-author: 'Dan Clark ([@dandclark1](https://twitter.com/dandclark1))'
+author: 'Dan Clark ([@dandclark1](https://twitter.com/dandclark1)), assertive importer of import assertions'
 avatars:
   - 'dan-clark'
 date: 2021-06-14
