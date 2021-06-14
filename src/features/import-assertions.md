@@ -58,10 +58,12 @@ import data from 'https://sketchy-third-party.com/data.json' assert { type: 'jso
 
 Import assertions can also be passed to [dynamic `import()`](https://v8.dev/features/dynamic-import#dynamic) with a new second parameter:
 
-```javascript
+```json
 // foo.json
 { "answer": 42 }
+```
 
+```javascript
 // main.mjs
 const jsonModule = await import('./foo.json', {
   assert: { type: 'json' }
