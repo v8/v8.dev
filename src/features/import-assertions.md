@@ -63,7 +63,9 @@ Import assertions can also be passed to [dynamic `import()`](https://v8.dev/feat
 { "answer": 42 }
 
 // main.mjs
-const jsonModule = await import('./foo.json', { assert: { type: 'json' } });
+const jsonModule = await import('./foo.json', {
+  assert: { type: 'json' }
+});
 console.log(jsonModule.default.answer); // 42
 ```
 
