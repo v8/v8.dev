@@ -40,8 +40,8 @@ Modules can be imported cross-origin, and a developer might import a JSON module
 However, third-party script can actually execute in this scenario because the third-party server could unexpectedly reply with a JavaScript MIME type and a malicious JavaScript payload, running code in the importer’s domain.
 
 ```javascript
-// Executes JS if evil.com responds with
-// application/javascript MIME type!
+// Executes JS if evil.com responds with a
+// JavaScript MIME type (e.g. `text/javascript`)!
 import data from 'https://evil.com/data.json';
 ```
 
@@ -79,7 +79,7 @@ Currently the only specified use of import assertions is for specifying module t
 
 Meanwhile, JSON modules with the new import assertions syntax are available by default in Chromium 91. [CSS module scripts](https://chromestatus.com/feature/5948572598009856) are also coming soon, using the same module-type-assertion syntax.
 
-## Import Assertions support { #support }
+## Import assertions support { #support }
 
 <feature-support chrome="91 https://chromestatus.com/feature/5765269513306112"
                  firefox="no"
