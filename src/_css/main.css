@@ -504,7 +504,7 @@ dark-mode-toggle {
   }
 }
 
-@media (max-width: 670px) {
+@media (max-width: 819px) {
   #header, .compact #header {
     height: auto;
     background: transparent;
