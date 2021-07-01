@@ -30,8 +30,7 @@ jobs:
         id: event_number
         with:
           path: event-number.gh
-      - uses: peter-evans/create-or-update-comment@v1
+      - uses: marocchino/sticky-pull-request-comment@v2
         with:
-          issue-number: ${{ steps.event_number.outputs.content }}
-          edit-mode: replace
-          body: "👀 Preview has been deployed at ${{ steps.deploy.outputs.details_url }}"
+          number: ${{ steps.event_number.outputs.content }}
+          message: "👀 Preview has been deployed at ${{ steps.deploy.outputs.details_url }}"
