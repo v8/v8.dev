@@ -7,7 +7,7 @@ date: 2021-06-25
 tags:
   - ECMAScript
 description: '`Object.hasOwn` makes `Object.prototype.hasOwnProperty` more accessible.'
-tweet:
+tweet: '1410577516943847424'
 ---
 
 Today, it is very common to write code like this:
