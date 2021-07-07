@@ -3,11 +3,11 @@ title: 'Error causes'
 author: 'Victor Gomes ([@VictorBFG](https://twitter.com/VictorBFG))'
 avatars:
   - 'victor-gomes'
-date: 2021-06-25
+date: 2021-07-07
 tags:
   - ECMAScript
 description: 'JavaScript now supports error causes.'
-tweet:
+tweet: ''
 ---
 
 Imagine you have a function that is calling two separate work loads `doSomeWork` and `doMoreWork`. Both functions can throw the same kind of errors, but you need to handle them in different ways.
