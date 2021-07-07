@@ -7,7 +7,7 @@ date: 2021-07-07
 tags:
   - ECMAScript
 description: 'JavaScript now supports error causes.'
-tweet: ''
+tweet: '1412774651558862850'
 ---
 
 Imagine you have a function that is calling two separate work loads `doSomeWork` and `doMoreWork`. Both functions can throw the same kind of errors, but you need to handle them in different ways.
