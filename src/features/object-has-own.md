@@ -3,7 +3,7 @@ title: '`Object.hasOwn`'
 author: 'Victor Gomes ([@VictorBFG](https://twitter.com/VictorBFG))'
 avatars:
   - 'victor-gomes'
-date: 2021-06-25
+date: 2021-07-01
 tags:
   - ECMAScript
 description: '`Object.hasOwn` makes `Object.prototype.hasOwnProperty` more accessible.'
