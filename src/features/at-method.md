@@ -3,7 +3,7 @@ title: '`at` method for relative indexing'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
-date: 2021-01-21
+date: 2021-07-12
 tags:
   - ECMAScript
 description: 'JavaScript now has a relative indexing method for Arrays, TypedArrays, and Strings.'
@@ -11,7 +11,7 @@ description: 'JavaScript now has a relative indexing method for Arrays, TypedArr
 
 The new `at` method on `Array.prototype`, the various TypedArray prototypes, and `String.prototype` makes accessing an element nearer to the end of the collection easier and more succinct.
 
-Accessing the Nth element from the end of a collection is a common operation. However, the usual ways to do so are verbose, like `my_array[my_array.length - N]`, or might not be performant, like `my_array.slice(-N)[0]`. The new `at` method makes this operation more ergonomic by interpreting negative indices to mean "from the end". The previous examples may be expressed as `my_array.at(-n)`.
+Accessing the Nth element from the end of a collection is a common operation. However, the usual ways to do so are verbose, like `my_array[my_array.length - N]`, or might not be performant, like `my_array.slice(-N)[0]`. The new `at` method makes this operation more ergonomic by interpreting negative indices to mean "from the end". The previous examples may be expressed as `my_array.at(-N)`.
 
 For uniformity, positive indices are also supported, and are equivalent to ordinary property access.
 
@@ -36,8 +36,8 @@ Since `at` ultimately performs ordinary indexing, calling `at` on String values 
 
 ## `at` method support { #support }
 
-<feature-support chrome="89"
-                 firefox="85"
-                 safari="STP118"
+<feature-support chrome="92"
+                 firefox="90"
+                 safari="no"
                  nodejs="no"
                  babel="no"></feature-support>
