@@ -3,7 +3,7 @@ title: '`at` method for relative indexing'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
-date: 2021-07-12
+date: 2021-07-13
 tags:
   - ECMAScript
 description: 'JavaScript now has a relative indexing method for Arrays, TypedArrays, and Strings.'
