@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v8.3'
-author: 'Victor Gomes, safely working from home'
+author: '[Victor Gomes](https://twitter.com/VictorBFG), safely working from home'
 avatars:
  - 'victor-gomes'
 date: 2020-05-04
