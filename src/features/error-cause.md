@@ -52,7 +52,7 @@ function doWork() {
 try {
   doWork();
 } catch (err) {
-  switch(err) {
+  switch(err.message) {
     case 'Some work failed':
       handleSomeWorkFailure(err.cause);
       break;
