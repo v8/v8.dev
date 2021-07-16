@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v8.9'
-author: 'Ingvar Stepanyan, awaiting a call'
+author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), awaiting a call'
 avatars:
  - 'ingvar-stepanyan'
 date: 2021-02-04
