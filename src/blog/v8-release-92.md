@@ -21,10 +21,10 @@ The new `at` method is now available on Arrays, TypedArrays, and Strings. When p
 
 V8 supports [pointer compression](https://v8.dev/blog/pointer-compression) on 64-bit platforms including x64 and arm64. This is achieved by splitting a 64-bit pointer into two halves. The upper 32-bits can be thought of as a base while the lower 32-bits can be thought of as an index into that base.
 
-<pre>
+```
             |----- 32 bits -----|----- 32 bits -----|
 Pointer:    |________base_______|_______index_______|
-</pre>
+```
 
 Currently, an Isolate performs all allocations in the GC heap within a 4GB virtual memory "cage", which ensures that all pointers have the same upper 32-bit base address. With the base address held constant, 64-bit pointers can be passed around only using the 32-bit index, since the full pointer can be reconstructed.
 
