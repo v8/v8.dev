@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v9.1'
-author: 'Ingvar Stepanyan, testing my private brand'
+author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), testing my private brand'
 avatars:
  - 'ingvar-stepanyan'
 date: 2021-05-04
