@@ -93,4 +93,4 @@ The general idea is that you just write a simple `for`-`of` loop, and `String#ma
                  firefox="67"
                  safari="13"
                  nodejs="12"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-string-and-regexp"></feature-support>

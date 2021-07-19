@@ -77,7 +77,7 @@ But there’s some good news. We [proposed a spec change](https://github.com/tc3
                  firefox="yes"
                  safari="yes"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="no"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-array"></feature-support>
 
 ### Stable `%TypedArray%.prototype.sort` { #support-stable-typedarray-sort }
 
@@ -85,4 +85,4 @@ But there’s some good news. We [proposed a spec change](https://github.com/tc3
                  firefox="67 https://bugzilla.mozilla.org/show_bug.cgi?id=1290554"
                  safari="yes"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="no"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-typed-arrays"></feature-support>

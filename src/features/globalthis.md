@@ -44,4 +44,4 @@ Note that modern code might not need access to the global `this` at all. With Ja
                  firefox="65"
                  safari="12.1"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-globalthis"></feature-support>

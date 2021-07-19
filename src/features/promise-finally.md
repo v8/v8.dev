@@ -83,4 +83,4 @@ Since [`async` and `await` are strictly better](https://mathiasbynens.be/notes/a
                  firefox="58"
                  safari="11.1"
                  nodejs="10"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-promise"></feature-support>

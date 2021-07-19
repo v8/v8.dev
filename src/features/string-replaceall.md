@@ -123,4 +123,4 @@ In case your replacement string contains one of these patterns, and you want to 
                  firefox="77 https://bugzilla.mozilla.org/show_bug.cgi?id=1608168#c8"
                  safari="13.1 https://webkit.org/blog/10247/new-webkit-features-in-safari-13-1/"
                  nodejs="16"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-string-and-regexp"></feature-support>

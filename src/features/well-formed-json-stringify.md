@@ -33,4 +33,4 @@ This feature is a small fix that was long overdue in JavaScript. It’s one less
                  firefox="64"
                  safari="12.1"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="no"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-json"></feature-support>

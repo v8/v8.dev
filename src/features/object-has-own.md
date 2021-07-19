@@ -38,4 +38,4 @@ if (Object.hasOwn(object, 'foo')) {
                  firefox="yes https://hg.mozilla.org/try/rev/94515f78324e83d4fd84f4b0ab764b34aabe6d80"
                  safari="yes https://bugs.webkit.org/show_bug.cgi?id=226291"
                  nodejs="no"
-                 babel="no"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#accessible-objectprototypehasownproperty"></feature-support>
