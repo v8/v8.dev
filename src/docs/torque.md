@@ -209,7 +209,7 @@ ClassDeclaration :
   }
 
 ClassAnnotation :
-  @generateCppClass
+  @doNotGenerateCppClass
   @generateBodyDescriptor
   @generatePrint
   @abstract
@@ -242,7 +242,6 @@ ArraySpecifier :
 An example class:
 
 ```torque
-@generateCppClass
 extern class JSProxy extends JSReceiver {
   target: JSReceiver|Null;
   handler: JSReceiver|Null;
@@ -259,7 +258,7 @@ TNode<HeapObject> LoadJSProxyTarget(TNode<JSProxy> p_o);
 void StoreJSProxyTarget(TNode<JSProxy> p_o, TNode<HeapObject> p_v);
 ```
 
-As described above, the fields defined in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. Because the example above uses `@generateCppClass`, the hand-written definition of JSProxy must inherit from a generated class template, like this:
+As described above, the fields defined in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. The hand-written definition of JSProxy must inherit from a generated class template, like this:
 
 ```cpp
 // In js-proxy.h:
@@ -279,7 +278,7 @@ The generated class provides cast functions, field accessor functions, and field
 
 ##### Class type annotations
 
-`@generateCppClass` is recommended where possible (as in the example above), but some classes still don't use it. In those cases, the class should instead include a Torque-generated macro for its field offset constants, and must implement its own accessors and cast functions. Using that macro looks like this:
+Some classes can't use the inheritance pattern shown in the example above. In those cases, the class can specify `@doNotGenerateCppClass`, inherit directly from its superclass type, and include a Torque-generated macro for its field offset constants. Such classes must implement their own accessors and cast functions. Using that macro looks like this:
 
 ```cpp
 class JSProxy : public JSReceiver {
