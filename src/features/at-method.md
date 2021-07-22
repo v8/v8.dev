@@ -40,4 +40,4 @@ Since `at` ultimately performs ordinary indexing, calling `at` on String values 
                  firefox="90"
                  safari="no"
                  nodejs="no"
-                 babel="no"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#relative-indexing-method"></feature-support>
