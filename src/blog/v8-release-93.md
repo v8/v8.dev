@@ -23,7 +23,14 @@ Batch compilation reduces overall compilation time (Ignition + Sparkplug) by up 
 
 ### `Object.hasOwn`
 
-`Object.hasOwn` is an easier-to-reach-for alias for `Object.prototype.hasOwnProperty.call`. For example, `Object.hasOwn({ prop: 42 }, 'prop')` is `true`. It is available starting in v9.3. Slightly more (but not much!) details are available in our [feature explainer](https://v8.dev/features/object-has-own).
+`Object.hasOwn` is an easier-to-reach-for alias for `Object.prototype.hasOwnProperty.call`. For example:
+
+```javascript
+Object.hasOwn({ prop: 42 }, 'prop')
+// → true
+```
+
+Slightly more (but not much more!) details are available in our [feature explainer](https://v8.dev/features/object-has-own).
 
 ### Error cause
 
