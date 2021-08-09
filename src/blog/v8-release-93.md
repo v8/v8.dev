@@ -9,11 +9,11 @@ tags:
 description: 'V8 release v9.3 brings support for Object.hasOwn and Error causes, improves compilation performance and disables untrusted codegen mitigations on Android.'
 tweet: ''
 ---
-Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 9.3](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/9.3), which is in beta until its release in coordination with Chrome 93 Stable in several weeks. V8 v9.3 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
+Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s main Git branch immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 9.3](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/9.3), which is in beta until its release in coordination with Chrome 93 Stable in several weeks. V8 v9.3 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
 ## JavaScript
 
-### Sparkplug Batch Compilation
+### Sparkplug batch compilation
 
 We released our super-fast new mid-tier JIT compiler [Sparkplug](https://v8.dev/blog/sparkplug) in v9.1. For security reasons V8 [write-protects](https://en.wikipedia.org/wiki/W%5EX) code memory that it generates, requiring it to flip permissions between writable (during compilation) and executable. This is currently implemented using `mprotect` calls. However, since Sparkplug generates code so quickly, the cost of calling `mprotect` for each individual compiled function became a major bottleneck in the compilation time. In V8 v9.3 we’re introducing batch compilation for Sparkplug: Instead of compiling each function individually, we compile multiple functions in a batch. This amortises the cost of flipping memory page permissions by doing it only once per batch.
 
@@ -41,9 +41,9 @@ Starting in v9.3, the various built-in `Error` constructors are extended to acce
 For example:
 
 ```javascript
-let parentError = new Error('parent');
-let e = new Error('parent', { cause: parentError });
-console.log(e.cause === parentError);
+const parentError = new Error('parent');
+const error = new Error('parent', { cause: parentError });
+console.log(error.cause === parentError);
 // → true
 ```
 
