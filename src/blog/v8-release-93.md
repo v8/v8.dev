@@ -23,7 +23,9 @@ Batch compilation reduces overall compilation time (Ignition + Sparkplug) by up 
 
 ### `Object.hasOwn`
 
-`Object.hasOwn` is an easier-to-reach-for alias for `Object.prototype.hasOwnProperty.call`. For example:
+`Object.hasOwn` is an easier-to-reach-for alias for `Object.prototype.hasOwnProperty.call`.
+
+For example:
 
 ```javascript
 Object.hasOwn({ prop: 42 }, 'prop')
@@ -34,7 +36,9 @@ Slightly more (but not much more!) details are available in our [feature explain
 
 ### Error cause
 
-Starting in v9.3, the various built-in `Error` constructors are extended to accept an options bag with a `cause` property for the second parameter. If such an options bag is passed, the value of the `cause` property is installed as an own property on the `Error` instance. This provides a standardized way to chain errors. For example,
+Starting in v9.3, the various built-in `Error` constructors are extended to accept an options bag with a `cause` property for the second parameter. If such an options bag is passed, the value of the `cause` property is installed as an own property on the `Error` instance. This provides a standardized way to chain errors.
+
+For example:
 
 ```javascript
 let parentError = new Error('parent');
