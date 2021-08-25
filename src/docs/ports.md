@@ -35,8 +35,8 @@ contact the ARM team in the CL by adding `v8-arm-ports@googlegroups.com` to the 
 CC list. For questions you can email
 the group ([mailto link](mailto://v8-arm-ports@googlegroups.com)).
 
-## LoongArch64
+## Loong64
 
-The LoongArm64 team will do the port. Contact/CC the team in the CL if needed by adding
+The Loong64 team will do the port. Contact/CC the team in the CL if needed by adding
 `v8-loongarch64-ports@chromium.org` to the reviewer or CC list. For questions you can email
 the group ([mailto link](mailto://v8-loongarch64-ports@chromium.org)).
