@@ -34,3 +34,9 @@ For straight-forward ARM ports, do them yourself. If there are difficulties or q
 contact the ARM team in the CL by adding `v8-arm-ports@googlegroups.com` to the reviewer or
 CC list. For questions you can email
 the group ([mailto link](mailto://v8-arm-ports@googlegroups.com)).
+
+## LoongArch64
+
+The LoongArm64 team will do the port. Contact/CC the team in the CL if needed by adding
+`v8-loongarch64-ports@chromium.org` to the reviewer or CC list. For questions you can email
+the group ([mailto link](mailto://v8-loongarch64-ports@chromium.org)).
