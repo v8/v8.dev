@@ -36,7 +36,7 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
 
 ## Building V8
 
-1. Make sure that you are in the V8 source directory on the `master` branch.
+1. Make sure that you are in the V8 source directory on the `main` branch.
 
     ```bash
     cd /path/to/v8
