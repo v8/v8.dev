@@ -7,7 +7,7 @@ date: 2021-09-06
 tags:
  - release
 description: 'V8 release v9.4 brings class static initialization blocks to JavaScript.'
-tweet: ''
+tweet: '1434915404418277381'
 ---
 Every six weeks, we create a new branch of V8 as part of our [release process](https://v8.dev/docs/release-process). Each version is branched from V8’s Git master immediately before a Chrome Beta milestone. Today we’re pleased to announce our newest branch, [V8 version 9.4](https://chromium.googlesource.com/v8/v8.git/+log/branch-heads/9.4), which is in beta until its release in coordination with Chrome 94 Stable in several weeks. V8 v9.4 is filled with all sorts of developer-facing goodies. This post provides a preview of some of the highlights in anticipation of the release.
 
