@@ -29,7 +29,10 @@
     }
   },
   "lint-staged": {
-    "*.md": "markdownlint"
+    "*.md": [
+      "markdownlint",
+      "markdown-link-check --config markdown-link-check.json"
+    ]
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.11.1",
@@ -58,6 +61,7 @@
     "markdown-it-footnote": "^3.0.2",
     "markdown-it-implicit-figures": "^0.10.0",
     "markdown-it-multimd-table": "^4.0.2",
+    "markdown-link-check": "^3.8.7",
     "markdownlint-cli": "^0.23.1",
     "minify-xml": "^1.0.3",
     "post-npm-install": "^2.0.0",
