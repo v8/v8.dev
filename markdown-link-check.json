@@ -1,0 +1,12 @@
+{
+  "replacementPatterns": [
+    {
+      "pattern": "^/((docs|blog|features)/[\\w-]+)(?:#.*)?$",
+      "replacement": "{{BASEURL}}/src/$1.md"
+    },
+    {
+      "pattern": "^/",
+      "replacement": "{{BASEURL}}/src/"
+    }
+  ]
+}
