@@ -19,7 +19,9 @@ following categories:
 - Stability: `status=available,untriaged component:Blink>JavaScript label:Stability -label:Clusterfuzz`
     - Will show up in [this](https://bugs.chromium.org/p/chromium/issues/list?can=2&q=status%3Davailable%2Cuntriaged+component%3ABlink%3EJavaScript+label%3AStability+-label%3AClusterfuzz&colspec=ID+Pri+M+Stars+ReleaseBlock+Component+Status+Owner+Summary+OS+Modified&x=m&y=releaseblock&cells=ids) query
     - No CC needed, will be triaged by a sheriff automatically
-- Performance: <mvstanton@chromium.org>
+- Performance: `status=untriaged component:Blink>JavaScript label:Performance`
+    - Will show up in [this](https://bugs.chromium.org/p/chromium/issues/list?colspec=ID%20Pri%20M%20Stars%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&x=m&y=releaseblock&cells=tiles&q=component%3Ablink%3Ejavascript%20status%3DUntriaged%20label%3APerformance&can=2) query
+    - No CC needed, will be triaged by a sheriff automatically
 - Clusterfuzz: Set the bug to the following state:
     - `label:ClusterFuzz component:Blink>JavaScript status:Untriaged`
     - Will show up in [this](https://bugs.chromium.org/p/chromium/issues/list?can=2&q=label%3AClusterFuzz+component%3ABlink%3EJavaScript+status%3AUntriaged&colspec=ID+Pri+M+Stars+ReleaseBlock+Component+Status+Owner+Summary+OS+Modified&x=m&y=releaseblock&cells=ids) query.
