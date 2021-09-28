@@ -16,7 +16,7 @@ Some nuances:
 If you have a configuration that exhibits a problem, but is not covered by one of the bots above:
 
 - Feel free to submit a CL that fixes your problem. The team will support you with a code review.
-- You can use v8-dev@goolgegroups.com to discuss the problem.
+- You can use v8-dev@googlegroups.com to discuss the problem.
 - If you think we should support this configuration (maybe a hole in our test matrix?), please file a bug on the [V8 issue tracker](https://bugs.chromium.org/p/v8/issues/entry) and ask.
 
-However: We don't have the bandwidth to support every possible configuration.
+However, we don’t have the bandwidth to support every possible configuration.
