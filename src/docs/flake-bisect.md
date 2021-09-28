@@ -2,7 +2,7 @@
 title: 'Flake bisect'
 description: 'This document explains how to bisect flaky tests.'
 ---
-Flaky tests are reported in a separate step on the bots ([example build](https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20verify%20csa/9271)).
+Flaky tests are reported in a separate step on the bots ([example build](https://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20TSAN/38630/overview)).
 
 Each test log provides a pre-filled command line for triggering an automated flake bisect, like:
 
@@ -17,7 +17,7 @@ Before triggering flake bisects for the first time, users must log in with a goo
 bb auth-login
 ```
 
-Then execute the provided command, which returns a build URL running flake bisect ([example](https://ci.chromium.org/p/v8/builders/luci.v8.try/v8_flako/b8935497223724984544)).
+Then execute the provided command, which returns a build URL running flake bisect ([example](https://ci.chromium.org/ui/p/v8/builders/try.triggered/v8_flako/b8836020260675019825/overview)).
 
 If you’re in luck, bisection points you to a suspect. If not, you might want to read further…
 
