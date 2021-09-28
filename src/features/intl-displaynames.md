@@ -86,7 +86,7 @@ narrowLanguageNames.of('en-US');
 The full API for `Intl.DisplayNames` is as follows.
 
 ```js
-Intl.DisplayNames([ locales [ , options ]])
+Intl.DisplayNames(locales, options)
 Intl.DisplayNames.prototype.of( code )
 ```
 
@@ -108,7 +108,7 @@ Like other `Intl` APIs, as `Intl.DisplayNames` become more widely available, lib
 ## `Intl.DisplayNames` support { #support }
 
 <feature-support chrome="81 /blog/v8-release-81#intl.displaynames"
-                 firefox="no"
-                 safari="no"
+                 firefox="86 https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/86#javascript"
+                 safari="14 https://bugs.webkit.org/show_bug.cgi?id=209779"
                  nodejs="14 https://medium.com/@nodejs/node-js-version-14-available-now-8170d384567e"
                  babel="no"></feature-support>
