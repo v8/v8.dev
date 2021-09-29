@@ -17,6 +17,7 @@ jobs:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           name: preview
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        id: deploy
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_V8_DEV }}"
@@ -25,3 +26,11 @@ jobs:
           expires: 30d
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
+      - uses: juliangruber/read-file-action@v1
+        id: event_number
+        with:
+          path: event-number.gh
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          number: ${{ steps.event_number.outputs.content }}
+          message: "👀 Preview has been deployed at ${{ steps.deploy.outputs.details_url }}"

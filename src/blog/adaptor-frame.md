@@ -1,6 +1,6 @@
 ---
 title: 'Faster JavaScript calls'
-author: 'Victor Gomes, the frame shredder'
+author: '[Victor Gomes](https://twitter.com/VictorBFG), the frame shredder'
 avatars:
   - 'victor-gomes'
 date: 2021-02-15

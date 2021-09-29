@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v9.0'
-author: 'Ingvar Stepanyan, standing inline'
+author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), standing inline'
 avatars:
  - 'ingvar-stepanyan'
 date: 2021-03-17

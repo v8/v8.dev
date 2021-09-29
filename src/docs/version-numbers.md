@@ -5,7 +5,7 @@ description: 'This document explains V8’s version numbering scheme.'
 V8 version numbers are of the form `x.y.z.w`, where:
 
 - `x.y` is the Chromium milestone divided by 10 (e.g. M60 → `6.0`)
-- `z` is automatically bumped whenever there’s a new [LKGR](https://chromium.googlesource.com/chromiumos/docs/+/master/glossary.md#acronyms) (typically a few times per day)
+- `z` is automatically bumped whenever there’s a new [LKGR](https://chromium.googlesource.com/chromiumos/docs/+/main/glossary.md#acronyms) (typically a few times per day)
 - `w` is bumped for manually backmerged patches after a branch point
 
 If `w` is `0`, it’s omitted from the version number. E.g. v5.9.211 (instead of “v5.9.211.0”) gets bumped up to v5.9.211.1 after backmerging a patch.
