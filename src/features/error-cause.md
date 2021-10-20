@@ -26,7 +26,7 @@ function doWork() {
 
 try {
   doWork();
-catch (err) {
+} catch (err) {
   // Is |err| coming from |doSomeWork| or |doMoreWork|?
 }
 ```
