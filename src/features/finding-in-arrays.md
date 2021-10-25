@@ -10,7 +10,7 @@ description: 'JavaScript methods to find elements in Arrays and TypedArrays'
 ---
 ## Finding elements in `Array`s and `TypedArray`s from the beginning
 
-Finding an element that satisfies some condition in an `Array` is a common task and is done with the `find` and `findIndex` methods on `Array.prototype` and the various TypedArray prototypes. `Array.prototype.find` takes a predicate and returns the first element in the array for which that predicate returns `true`. If the predicate doesn't return `true` for any element, the method returns `undefined`. `Array.prototype.findIndex` works similarly, except it returns the index when found, and `-1` when not found. The TypedArray versions of `find` and `findIndex` work exactly the same, with the only difference being that they operate on TypedArray instances instead of Array instances.
+Finding an element that satisfies some condition in an `Array` is a common task and is done with the `find` and `findIndex` methods on `Array.prototype` and the various TypedArray prototypes. `Array.prototype.find` takes a predicate and returns the first element in the array for which that predicate returns `true`. If the predicate doesn't return `true` for any element, the method returns `undefined`.
 
 ```js
 const inputArray = [{v:1}, {v:2}, {v:3}, {v:4}, {v:5}];
@@ -18,6 +18,11 @@ inputArray.find((element) => element.v % 2 === 0);
 // → {v:2}
 inputArray.find((element) => element.v % 7 === 0);
 // → undefined
+```
+
+`Array.prototype.findIndex` works similarly, except it returns the index when found, and `-1` when not found. The TypedArray versions of `find` and `findIndex` work exactly the same, with the only difference being that they operate on TypedArray instances instead of Array instances.
+
+```js
 inputArray.findIndex((element) => element.v % 2 === 0);
 // → 1
 inputArray.findIndex((element) => element.v % 7 === 0);
