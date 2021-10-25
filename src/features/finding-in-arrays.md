@@ -8,7 +8,7 @@ tags:
   - ECMAScript
 description: 'JavaScript methods to find elements in Arrays and TypedArrays'
 ---
-## Finding elements in `Array`s and `TypedArray`s from the beginning
+## Finding elements from the beginning
 
 Finding an element that satisfies some condition in an `Array` is a common task and is done with the `find` and `findIndex` methods on `Array.prototype` and the various TypedArray prototypes. `Array.prototype.find` takes a predicate and returns the first element in the array for which that predicate returns `true`. If the predicate doesn't return `true` for any element, the method returns `undefined`.
 
@@ -29,7 +29,7 @@ inputArray.findIndex((element) => element.v % 7 === 0);
 // → -1
 ```
 
-## Finding elements in `Array`s and `TypedArray`s from the end
+## Finding elements from the end
 
 What if you want to find the last element in the `Array`? This use case often naturally arises, such as choosing to deduplicate multiple matches in favor of the last element, or knowing ahead of time that the element is likely to be near the end of the `Array`. With the `find` method, one solution is to first reverse the input, like so: `inputArray.reverse().find(predicate)`. However, that reverses the input in-place, which is sometimes undesirable.
 
