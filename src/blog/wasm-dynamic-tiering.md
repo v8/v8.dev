@@ -15,9 +15,9 @@ In the current configuration of Chrome a WebAssembly module first gets compiled 
 
 Compiling the whole WebAssembly module with TurboFan provides the best possible performance once compilation is completed, but that comes at a cost:
 
-* The CPU cores that execute TurboFan compilation in the background can block other tasks that would require the CPU, e.g. workers of the web application.
-* TurboFan compilation of unimportant functions may delay the TurboFan compilation of more important functions, which may delay the web application to reach full performance.
-* Some WebAssembly functions may never get executed, and spending resources on compiling these functions with TurboFan may not be worth it.
+- The CPU cores that execute TurboFan compilation in the background can block other tasks that would require the CPU, e.g. workers of the web application.
+- TurboFan compilation of unimportant functions may delay the TurboFan compilation of more important functions, which may delay the web application to reach full performance.
+- Some WebAssembly functions may never get executed, and spending resources on compiling these functions with TurboFan may not be worth it.
 
 # Dynamic tiering
 
