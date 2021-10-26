@@ -19,18 +19,18 @@ Compiling the whole WebAssembly module with TurboFan provides the best possible 
 - TurboFan compilation of unimportant functions may delay the TurboFan compilation of more important functions, which may delay the web application to reach full performance.
 - Some WebAssembly functions may never get executed, and spending resources on compiling these functions with TurboFan may not be worth it.
 
-# Dynamic tiering
+## Dynamic tiering
 
 Dynamic tiering should alleviate these issues by compiling only those functions with TurboFan that actually get executed multiple times. Thereby dynamic tiering can change the performance of web applications in several ways: dynamic tiering can speed up startup time by reducing the load on CPUs and thereby allowing startup tasks other than WebAssembly compilation to use the CPU more. Dynamic tiering can also slow down performance by delaying TurboFan compilation for important functions. As V8 does not use on-stack-replacement for WebAssembly code, the execution can be stuck in a loop in Liftoff code, for example. Also code caching is affected, because Chrome only caches TurboFan code, and all functions that never qualify for TurboFan compilation get compiled with Liftoff at startup even when the compiled WebAssembly module already exists in cache.
 
-# How to try it out
+## How to try it out
 
 We encourage interested developers to experiment with the performance impact of dynamic tiering on their web applications. This will allow us to react and avoid potential performance regressions early. Dynamic tiering can be enabled locally by running Chrome with the command line flag `--enable-blink-features=WebAssemblyDynamicTiering`.
 
-## Testing in the field with an Origin Trial
+### Testing in the field with an Origin Trial
 
 Running Chrome with a command line flag is something a developer can do, but it should not be expected from an end user. To experiment with your application in the field, it is possible to join what is called an [Origin Trial](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md). Origin trials allow you to try out experimental features with end users through a special token that is tied to a domain. This special token enables WebAssembly dynamic tiering for the end user on specific pages that include the token. To obtain your own token to run an origin trial, [use the application form](https://developer.chrome.com/origintrials/#/view_trial/3716595592487501825).
 
-# Give us feedback
+## Give us feedback
 
 We're looking for feedback from developers trying out this feature as it'll help to get the heuristics right on when TurboFan compilation is useful, and when TurboFan compilation does not pay off and can be avoided. The best way to send feedback is to [report issues](https://bugs.chromium.org/p/chromium/issues/detail?id=1260322).
