@@ -58,6 +58,6 @@ inputArray.findLastIndex((element) => element.v % 7 === 0);
 
 <feature-support chrome="97"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1704385"
-                 safari="yes https://bugs.webkit.org/show_bug.cgi?id=227939"
+                 safari="partial https://bugs.webkit.org/show_bug.cgi?id=227939"
                  nodejs="no"
                  babel="no"></feature-support>
