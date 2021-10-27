@@ -7,6 +7,7 @@ date: 2021-10-27
 tags:
   - ECMAScript
 description: 'JavaScript methods to find elements in Arrays and TypedArrays'
+tweet: '1453354998063149066'
 ---
 ## Finding elements from the beginning
 
