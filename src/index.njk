@@ -7,10 +7,10 @@ description: 'V8 is Google’s open source high-performance JavaScript and WebAs
 
 <p>V8 is Google’s open source high-performance JavaScript and WebAssembly engine, written in C++. It is used in Chrome and in Node.js, among others. It implements <a href="https://tc39.es/ecma262/">ECMAScript</a> and <a href="https://webassembly.github.io/spec/core/">WebAssembly</a>, and runs on Windows 7 or later, macOS 10.12+, and Linux systems that use x64, IA-32, ARM, or MIPS processors. V8 can run standalone, or can be embedded into any C++ application.</p>
 
-<h2>Latest blog posts</h2>
+<h2>Latest posts and feature explainers</h2>
 
-{% set posts = collections.posts | head(10) %}
-{% set start = collections.posts | length %}
+{% set posts = collections.allPosts | head(10) %}
+{% set start = collections.allPosts | length %}
 {% include "posts.njk" %}
 
 <p>More articles can be found in <a href="/blog">the blog archive</a>.</p>
