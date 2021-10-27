@@ -147,6 +147,12 @@ module.exports = (eleventyConfig) => {
                      .sort((a, b) => b.date - a.date);
   });
 
+  // Create a collection with merged blogs and feature explainers.
+  eleventyConfig.addCollection('allPosts', (collection) => {
+    return collection.getFilteredByGlob('src/{blog,features}/*.md')
+                     .sort((a, b) => b.date - a.date);
+  });
+
   // Patch the Markdown renderer to recognize <feature-support>.
   const oldRender = md.render.bind(md);
   md.render = (input) => {
