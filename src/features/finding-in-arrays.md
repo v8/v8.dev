@@ -31,7 +31,13 @@ inputArray.findIndex((element) => element.v % 7 === 0);
 
 ## Finding elements from the end
 
-What if you want to find the last element in the `Array`? This use case often naturally arises, such as choosing to deduplicate multiple matches in favor of the last element, or knowing ahead of time that the element is likely to be near the end of the `Array`. With the `find` method, one solution is to first reverse the input, like so: `inputArray.reverse().find(predicate)`. However, that reverses the input in-place, which is sometimes undesirable.
+What if you want to find the last element in the `Array`? This use case often naturally arises, such as choosing to deduplicate multiple matches in favor of the last element, or knowing ahead of time that the element is likely to be near the end of the `Array`. With the `find` method, one solution is to first reverse the input, like so:
+
+```js
+inputArray.reverse().find(predicate)
+```
+
+However, that reverses the original `inputArray` in-place, which is sometimes undesirable.
 
 With the `findLast` and `findLastIndex` methods, this use case can be solved directly and ergonomically. They behave exactly as their `find` and `findIndex` counterparts, except they start their search from the end of the `Array` or TypedArray.
 
