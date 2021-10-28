@@ -209,6 +209,6 @@ class Cat extends Animal {
 
 <feature-support chrome="84 /blog/v8-release-84#private-methods-and-accessors"
                  firefox="90 https://spidermonkey.dev/blog/2021/05/03/private-fields-ship.html"
-                 safari="yes"
+                 safari="yes https://webkit.org/blog/11989/new-webkit-features-in-safari-15/"
                  nodejs="14.6.0"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-private-methods"></feature-support>

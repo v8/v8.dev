@@ -69,6 +69,6 @@ This feature is available in V8 v9.3.
 
 <feature-support chrome="93 https://chromium-review.googlesource.com/c/v8/v8/+/2784681"
                  firefox="91 https://bugzilla.mozilla.org/show_bug.cgi?id=1679653"
-                 safari="yes https://github.com/WebKit/WebKit/commit/b03c4f4dada2c477376b9275332e08a3d08eba5f"
+                 safari="15 https://bugs.webkit.org/show_bug.cgi?id=223302"
                  nodejs="no"
                  babel="no"></feature-support>
