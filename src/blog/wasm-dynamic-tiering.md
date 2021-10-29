@@ -7,6 +7,7 @@ date: 2021-10-29
 tags:
   - WebAssembly
 description: 'WebAssembly Dynamic Tiering ready to try in V8 v9.6 and Chrome 96, either through a commandline flag, or through an origin trial'
+tweet: '1454158971674271760'
 ---
 
 V8 has two compilers to compile WebAssembly code to machine code that can then be executed: the baseline compiler __Liftoff__ and the optimizing compiler __TurboFan__. Liftoff can generate code much faster than TurboFan, which allows fast startup time. TurboFan, on the other hand, can generate faster code, which allows high peak performance.
