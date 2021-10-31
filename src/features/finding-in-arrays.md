@@ -60,4 +60,4 @@ inputArray.findLastIndex((element) => element.v % 7 === 0);
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1704385"
                  safari="partial https://bugs.webkit.org/show_bug.cgi?id=227939"
                  nodejs="no"
-                 babel="no"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#array-find-from-last"></feature-support>
