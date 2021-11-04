@@ -30,7 +30,6 @@ We encourage interested developers to experiment with the performance impact of 
 
 V8 embedders who want to enable dynamic tiering can do so by setting the V8 flag `--wasm-dynamic-tiering`.
 
-
 ### Testing in the field with an Origin Trial
 
 Running Chrome with a command line flag is something a developer can do, but it should not be expected from an end user. To experiment with your application in the field, it is possible to join what is called an [Origin Trial](https://github.com/GoogleChrome/OriginTrials/blob/gh-pages/developer-guide.md). Origin trials allow you to try out experimental features with end users through a special token that is tied to a domain. This special token enables WebAssembly dynamic tiering for the end user on specific pages that include the token. To obtain your own token to run an origin trial, [use the application form](https://developer.chrome.com/origintrials/#/view_trial/3716595592487501825).
