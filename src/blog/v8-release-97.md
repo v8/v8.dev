@@ -15,7 +15,14 @@ Every four weeks, we create a new branch of V8 as part of our [release process](
 
 ### `findLast` and `findLastIndex` on Array and TypedArray prototypes
 
-The `findLast` and `findLastIndex` methods find elements that match a predicate from the end of an Array. For example, `[1,2,3,4].findLast((el) => el %2 === 0)` returns the last even element, `4`. These methods are available without a flag starting in v9.7.
+The `findLast` and `findLastIndex` methods find elements that match a predicate from the end of an Array. For example:
+
+```js
+[1,2,3,4].findLast((el) => el % 2 === 0)
+// → 4 (last even element)
+```
+
+These methods are available without a flag starting in v9.7.
 
 For more details, please see our [feature explainer](https://v8.dev/features/finding-in-arrays#finding-elements-from-the-end).
 
