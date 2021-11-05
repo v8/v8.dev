@@ -13,9 +13,11 @@ Every four weeks, we create a new branch of V8 as part of our [release process](
 
 ## JavaScript
 
-### `findLast` and `findLastIndex` on Array and TypedArray prototypes
+### `findLast` and `findLastIndex` array methods
 
-The `findLast` and `findLastIndex` methods find elements that match a predicate from the end of an Array. For example:
+The `findLast` and `findLastIndex` methods on `Array`s and `TypedArray`s find elements that match a predicate from the end of an array.
+
+For example:
 
 ```js
 [1,2,3,4].findLast((el) => el % 2 === 0)
