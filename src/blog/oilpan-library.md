@@ -5,7 +5,7 @@ avatars:
   - anton-bikineev
   - omer-katz
   - michael-lippautz
-date: 2021-11-09
+date: 2021-11-10
 tags:
   - internals
   - memory
