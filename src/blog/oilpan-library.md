@@ -1,5 +1,5 @@
 ---
-title: 'Oilpan Library'
+title: 'Oilpan library'
 author: 'Anton Bikineev, Omer Katz ([@omerktz](https://twitter.com/omerktz)), and Michael Lippautz ([@mlippautz](https://twitter.com/mlippautz)), efficient and effective file movers'
 avatars:
   - anton-bikineev
