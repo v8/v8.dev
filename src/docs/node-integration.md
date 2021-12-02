@@ -26,7 +26,7 @@ Remember to run gclient hooks before compiling.
 
 ```bash
 gclient runhooks
-JOBS=72 make test
+JOBS=`nproc` make test
 ```
 
 ## Make changes to Node.js
