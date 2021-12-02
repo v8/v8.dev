@@ -26,7 +26,7 @@ Remember to run gclient hooks before compiling.
 
 ```bash
 gclient runhooks
-JOBS=4 make test
+JOBS=`nproc` make test
 ```
 
 ## Make changes to Node.js
@@ -40,11 +40,13 @@ Fork [V8’s Node.js repository on GitHub](https://github.com/v8/node/) (click t
 Add your both your fork and V8’s fork as remotes to the existing checkout:
 
 ```bash
+cd node
 git remote add v8 http://github.com/v8/node
 git remote add <your-user-name> http://github.com/<your-user-name>/node
 git fetch
 git checkout node-ci-<sync-date>
-git checkout -b make-changes
+export BRANCH_NAME=`date +"%Y-%m-%d"`_fix_name
+git checkout -b $BRANCH_NAME
 ```
 
 Make your changes to the Node.js checkout, and commit them. Then push the changes to GitHub and create a pull request against the branch `node-ci-<sync-date>`.
@@ -56,14 +58,14 @@ Make your changes to the Node.js checkout, and commit them. Then push the change
 If your changes need to be eventually upstreamed, please add the tag `upstream` with the supported V8 version, e.g. `[upstream:v8.4.377]`. If your changes are temporary (it disables for example a test), please add the tag `temp` and the version of V8 in which the changes should be discarded, e.g., `[temp:v8.4.377]`.
 
 ```bash
-git push <your-user-name> make-changes
+git push <your-user-name> $BRANCH_NAME
 ```
 
 Once the pull request has been merged to V8’s fork of Node.js, you need to update node-ci’s `DEPS` file, and create a CL.
 
 ```bash
 git checkout -b update-deps
-gclient setdep --var=node_revision=`(cd node && git rev-parse make-changes)`
+gclient setdep --var=node_revision=`(cd node && git rev-parse $BRANCH_NAME)`
 git add DEPS
 git commit -m 'Update Node'
 git cl upload
