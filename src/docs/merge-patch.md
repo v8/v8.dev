@@ -61,8 +61,6 @@ Run the script with `-h` to display its help message, which includes more option
 tools/release/merge_to_branch.py --branch 2.4 af3cf11 cf33f1b sf3cf09
 ```
 
-In case you are a V8 committer, feel free to use `TBR` to land the merge if 1) it has approval and 2) the merge was clean and there are no conflicts to resolve.
-
 ### Option 2: Using [gerrit](https://chromium-review.googlesource.com/)
 
 Note that this option only works if the patch applies cleanly on the release branch.
@@ -81,7 +79,7 @@ Note that this option only works if the patch applies cleanly on the release bra
        No-Tree-Checks: true
        ```
 
-1. Send out to review, or add a "TBR=..." or "Tbr: ..." line if the CL is unmodified.
+1. Send out for review
 
 ### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8)
 
