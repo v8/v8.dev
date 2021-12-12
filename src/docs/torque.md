@@ -18,7 +18,7 @@ Begin by opening up the `test/torque/test-torque.tq` file and add the following 
 
 ```torque
 @export
-macro PrintHelloWorld() {
+macro PrintHelloWorld(): void {
   Print('Hello world!');
 }
 ```
