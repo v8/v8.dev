@@ -98,7 +98,8 @@ In combination with generics, `constexpr` is a powerful Torque tool that can be 
 ## Files
 
 Torque code is packaged in individual source files. Each source file consists of a series of declarations, which themselves can optionally wrapped in a namespace declaration to separate the namespaces of declarations. The following description of the grammar is likely out-of-date. The source-of-truth is [the grammar definition in the Torque compiler](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/torque/torque-parser.cc?q=TorqueGrammar::TorqueGrammar), which is written using contex-free grammar rules.
-A Torque file is a sequence of declarations. The possible declarations are listed [here](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/torque/torque-parser.cc?q=TorqueGrammar::declaration).
+
+A Torque file is a sequence of declarations. The possible declarations are listed [in `torque-parser.cc`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/torque/torque-parser.cc?q=TorqueGrammar::declaration).
 
 ## Namespaces
 
