@@ -588,7 +588,7 @@ IntrinsicDeclaration :
 ```
 
 For the most part, “user” Torque code should rarely have to use `intrinsic`s directly.
-The following are some of the  supported intrinsics:
+The following are some of the supported intrinsics:
 
 ```torque
 // %RawObjectCast downcasts from Object to a subtype of Object without
