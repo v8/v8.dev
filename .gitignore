@@ -2,7 +2,7 @@
 src/_css/img/chrome.svg
 src/_css/img/firefox.svg
 src/_css/img/node.js.svg
-src/_css/img/safari.png
+src/_css/img/safari.svg
 # Other ignores:
 dist/
 .firebase/
