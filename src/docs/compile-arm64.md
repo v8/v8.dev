@@ -1,8 +1,8 @@
 ---
-title: 'Compiling on Arm64'
-description: 'Tips and tricks to build V8 natively on Arm64'
+title: 'Compiling on Arm64 Linux'
+description: 'Tips and tricks to build V8 natively on Arm64 Linux'
 ---
-If you've gone through instructions on how to [check out](/docs/source-code) and [build](/docs/build-gn) V8 on a machine that is not x86, you may have ran into a bit of trouble, due to the build system downloading native binaries and then not being able to run them. However, even though using an Arm64 machine to work on V8 is __not officially supported__, overcoming those hurdles is pretty straightforward.
+If you've gone through instructions on how to [check out](/docs/source-code) and [build](/docs/build-gn) V8 on a machine that is neither x86 nor an Apple Silicon Mac, you may have ran into a bit of trouble, due to the build system downloading native binaries and then not being able to run them. However, even though using an Arm64 Linux machine to work on V8 is __not officially supported__, overcoming those hurdles is pretty straightforward.
 
 ## Bypassing `vpython`
 
@@ -12,30 +12,15 @@ If you've gone through instructions on how to [check out](/docs/source-code) and
 export VPYTHON_BYPASS="manually managed python not supported by chrome operations"
 ```
 
-## Building `ninja` and `gn` from source
+## Compatible `ninja` binary
 
-The first thing to do is to make sure we have native binaries for `ninja` and `gn`, and that we pick those instead of the ones in `depot_tools`. A simple way to do this is to tweak your PATH as follows when installing `depot_tools`:
+The first thing to do is to make sure we use a native binary for `ninja`, which we pick instead of the one in `depot_tools`. A simple way to do this is to tweak your PATH as follows when installing `depot_tools`:
 
 ```bash
 export PATH=$PATH:/path/to/depot_tools
 ```
 
 This way, you'll be able to use your system's `ninja` installation, given it's likely to be available. Although if it isn't you can [build it from source](https://github.com/ninja-build/ninja#building-ninja-itself).
-
-Then you'll need `gn`, which can be built with:
-
-```bash
-git clone https://gn.googlesource.com/gn
-cd gn
-python build/gen.py
-ninja -C out
-```
-
-And finally tweak your `PATH` so that it comes before the `gn` from `depot_tools`.
-
-```bash
-export PATH=/path/to/gn/out:$PATH
-```
 
 ## Compiling clang
 
@@ -45,8 +30,9 @@ You can build it locally directly from the V8 checkout:
 
 ```bash
 ./tools/clang/scripts/build.py --without-android --without-fuchsia \
-                               --gcc-toolchain=/usr --use-system-cmake \
-                               --disable-asserts
+                               --host-cc=gcc --host-cxx=g++ \
+                               --gcc-toolchain=/usr \
+                               --use-system-cmake --disable-asserts
 ```
 
 ## Setting up GN arguments manually
