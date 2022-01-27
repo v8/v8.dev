@@ -374,6 +374,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin-bottom: 1em;
+  font-variant-numeric: tabular-nums;
 }
 thead th {
   background: var(--darkblue);
