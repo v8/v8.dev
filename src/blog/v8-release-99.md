@@ -15,7 +15,7 @@ Every four weeks, we create a new branch of V8 as part of our [release process](
 
 ### Intl.Locale extensions
 
-In v7.4 we launched the [`Intl.Locale` API](https://v8.dev/blog/v8-release-74#intl.locale)  in Chrome 74. With v9.9, we added seven new properties to the Intl.Locale object: `calendars`, `collations`, `hourCycles`, `numberingSystems`, `timeZones`, `textInfo`, and `weekInfo`.
+In v7.4 we launched the [`Intl.Locale` API](https://v8.dev/blog/v8-release-74#intl.locale). With v9.9, we added seven new properties to the `Intl.Locale` object: `calendars`, `collations`, `hourCycles`, `numberingSystems`, `timeZones`, `textInfo`, and `weekInfo`.
 
 The `calendars`, `collations`, `hourCycles`, `numberingSystems`, and `timeZones` property of `Intl.Locale` return an array of preferred identifiers of those in common use, designed to be use with other `Intl` API:
 
@@ -34,7 +34,7 @@ arabicEgyptLocale.timeZones
 // ['Africa/Cairo']
 ```
 
-The `textInfo` property of Intl.Locale returns an object to specify the information related to text. Currently it only has one property, `direction`, to indicate default directionality for text in the locale. It is designed to be used for [HTML `dir` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir) and [CSS `direction` property](https://developer.mozilla.org/en-US/docs/Web/CSS/direction). It indicates the ordering of characters ltr (left-to-right) or rtl (right-to-left):
+The `textInfo` property of `Intl.Locale` returns an object to specify the information related to text. Currently it only has one property, `direction`, to indicate default directionality for text in the locale. It is designed to be used for [HTML `dir` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir) and [CSS `direction` property](https://developer.mozilla.org/en-US/docs/Web/CSS/direction). It indicates the ordering of characters - `ltr` (left-to-right) or `rtl` (right-to-left):
 
 ```js
 arabicEgyptLocale.textInfo
@@ -45,7 +45,7 @@ chineseTaiwanLocale.textInfo
 // { direction: 'ltr' }
 ```
 
-The `weekInfo` property of Intl.Locale returns an object to specify the information related to week. The `firstDay` property in the return object is a number, ranging from 1 to 7, indicating which day of the week is considered the 'first' day, for calendar purposes. 1 specifies Monday; 2 Tuesday; 3 Wednesday; 4 Thursday; 5 Friday; 6 Saturday; and 7 Sunday. The `minimalDays` property in the return object is the minimum days required in the first week of a month or year, for calendar purposes. The `weekend` property in the return object is an array of integers, usually with two elements, encoded the same as `firstDay`. Itindicating which days of the week are considered as part of the 'weekend', for calendar purposes. Notice that the number of days in the weekend are different in each locale and may not be contiguous.
+The `weekInfo` property of `Intl.Locale` returns an object to specify the information related to week. The `firstDay` property in the return object is a number, ranging from 1 to 7, indicating which day of the week is considered the first day, for calendar purposes. 1 specifies Monday, 2 - Tuesday, 3 - Wednesday, 4 - Thursday, 5 - Friday, 6 - Saturday, and 7 - Sunday. The `minimalDays` property in the return object is the minimum days required in the first week of a month or year, for calendar purposes. The `weekend` property in the return object is an array of integers, usually with two elements, encoded the same as `firstDay`. It indicates which days of the week are considered as part of the 'weekend', for calendar purposes. Notice that the number of days in the weekend are different in each locale and may not be contiguous.
 
 ```js
 arabicEgyptLocale.weekInfo
@@ -57,7 +57,7 @@ arabicEgyptLocale.weekInfo
 
 ### Intl Enumeration
 
-In v9.9, we add a new function [`Intl.supportedValuesOf(code)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/supportedValuesOf) to returns the array of supported identifiers in v8 for the Intl APIs. The supported `code` values are `calendar`, `collation`, `currency`,`numberingSystem`, `timeZone`, and `unit`. The information in this new method is designed to allow web developers to easily discover which value is supported by the implementation.
+In v9.9, we added a new function [`Intl.supportedValuesOf(code)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/supportedValuesOf) that returns the array of supported identifiers in v8 for the Intl APIs. The supported `code` values are `calendar`, `collation`, `currency`,`numberingSystem`, `timeZone`, and `unit`. The information in this new method is designed to allow web developers to easily discover which value is supported by the implementation.
 
 ```js
 Intl.supportedValuesOf('calendar')
