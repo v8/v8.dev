@@ -54,11 +54,10 @@ Note that this option only works if the patch applies cleanly on the release bra
 1. Open the CL you want to back-merge.
 1. Select "Cherry pick" from the extended menu (three vertical dots in the upper right corner).
 1. Enter "refs/branch-heads/*X.X*" as destination branch (replace *X.X* by the proper branch).
-1. In case of merge conflict, please also go ahead and create the CL
 1. Modify the commit message:
    1. Prefix the title with "Merged: ".
    1. Remove lines from the footer that correspond to the original CL ("Change-Id", "Reviewed-on", "Reviewed-by", "Commit-Queue", "Cr-Commit-Position"). Definitely keep the "(cherry picked from commit XXX)" line, as this is needed by some tools to relate merges to original CLs.
-1. Resolve the conflicts (if any) - either using the gerrit UI or you can easily pull the patch locally by using the "download patch" command from the menu (three vertical dots in the upper right corner)
+1. In case of merge conflict, please also go ahead and create the CL. To resolve  conflicts (if any) - either using the gerrit UI or you can easily pull the patch locally by using the "download patch" command from the menu (three vertical dots in the upper right corner)
 1. Send out for review
 
 ### Option 2: Using the automated script
