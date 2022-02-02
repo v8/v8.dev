@@ -1,6 +1,6 @@
 ---
 title: 'V8 release v9.9'
-author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), at his 99%.'
+author: 'Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser)), at his 99%'
 avatars:
  - 'ingvar-stepanyan'
 date: 2022-01-31
