@@ -143,5 +143,5 @@ Static `import` and dynamic `import()` are both useful. Each have their own, ver
 <feature-support chrome="63"
                  firefox="67"
                  safari="11.1"
-                 nodejs="no"
+                 nodejs="13.2"
                  babel="yes https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import"></feature-support>
