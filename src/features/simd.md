@@ -2,7 +2,7 @@
 title: 'Fast, parallel applications with WebAssembly SIMD'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52)), Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser))'
 date: 2020-01-30
-updated: 2021-05-26
+updated: 2022-03-21
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
@@ -141,7 +141,7 @@ This manually rewritten code assumes that the input and output arrays are aligne
 
 Many existing projects already support SIMD when targeting other platforms, in particular [SSE](https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions) and [AVX](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) instructions on x86 / x86-64 platforms and [NEON](https://en.wikipedia.org/wiki/ARM_architecture#Advanced_SIMD_(Neon)) instructions on ARM platforms. There are two ways those are usually implemented.
 
-First one is via assembly files that take care of SIMD operations and are linked together with C / C++ during the build process. The assembly syntax and instructions are highly platform-dependant and not portable, so, to make use of SIMD, such projects need to add WebAssembly as an additional supported target and reimplement corresponding functions using either [WebAssembly text format](https://webassembly.github.io/spec/core/text/index.html) or intrinsics described [above](#building-c-/-c++-to-target-simd).
+First one is via assembly files that take care of SIMD operations and are linked together with C / C++ during the build process. The assembly syntax and instructions are highly platform-dependant and not portable, so, to make use of SIMD, such projects need to add WebAssembly as an additional supported target and reimplement corresponding functions using either [WebAssembly text format](https://webassembly.github.io/spec/core/text/index.html) or intrinsics described [above](#building-c-%2F-c%2B%2B-to-target-simd).
 
 Another common approach is to use SSE / SSE2 / AVX / NEON intrinsics directly from C / C++ code and here Emscripten can help. Emscripten [provides compatible headers and an emulation layer](https://emscripten.org/docs/porting/simd.html) for all those instruction sets, and an emulation layer that compiles them directly to Wasm intrinsics where possible, or scalarized code otherwise.
 
