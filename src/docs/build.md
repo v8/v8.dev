@@ -12,6 +12,12 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
 
 1. For macOS: install Xcode and accept its license agreement. (If you’ve installed the command-line tools separately, [remove them first](https://bugs.chromium.org/p/chromium/issues/detail?id=729990#c1).)
 
+1. Install Python 2.X
+
+   ```bash
+   sudo apt install python
+   ```
+
 1. Make sure that you are in the V8 source directory. If you followed every step in the previous section, you’re already at the right location.
 
 1. Download all the build dependencies:
@@ -40,6 +46,7 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
 
     ```bash
     cd /path/to/v8
+    git checkout main
     ```
 
 1. Pull in the latest changes and install any new build dependencies:
@@ -59,5 +66,5 @@ Follow the instructions in our guide on [checking out the V8 source code](/docs/
     ```bash
     tools/dev/gm.py x64.release.check
     ```
-
+    
     For more information on the `gm.py` helper script and the commands it triggers, see [Building with GN](/docs/build-gn).
