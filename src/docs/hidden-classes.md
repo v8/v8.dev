@@ -5,9 +5,9 @@ description: 'How does V8 track and optimize the perceived structure of your obj
 
 Let's show how V8 builds it's hidden classes. The principal data structures are:
 
-- **Map**: the hidden class itself. It's the first pointer value in an object and therefore allows easy comparison to see if two objects have the same class.
-- **DescriptorArray**: The full list of properties that this class has along with information about them. In some cases, the property value is even in this array.
-- **TransitionArray**: An array of "edges" from this `Map` to sibling Maps. Each edge is a property name, and should be thought of as "if I were to add a property with this name to the current class, what class would I transition to?"
+- `Map`: the hidden class itself. It's the first pointer value in an object and therefore allows easy comparison to see if two objects have the same class.
+- `DescriptorArray`: The full list of properties that this class has along with information about them. In some cases, the property value is even in this array.
+- `TransitionArray`: An array of "edges" from this `Map` to sibling Maps. Each edge is a property name, and should be thought of as "if I were to add a property with this name to the current class, what class would I transition to?"
 
 Because many `Map` objects only have one transition to another one (ie, they are "transitional" maps, only used on the way to something else), V8 doesn't always create a full-blown `TransitionArray` for it. Instead it'll just link directly to this "next" `Map`. The system has to do a bit of spelunking in the `DescriptorArray` of the `Map` being pointed to in order to figure out the name attached to the transition.
 
@@ -39,7 +39,7 @@ m2 = new Peak("Wendelstein", 1838, "good");
 With this code we've already got an interesting map tree from the root map (also known as the initial map) which is attached to the function `Peak`:
 
 <figure>
-  <img src="/_img/docs/hidden-classes/drawing-one.svg" width="400" height="480" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/drawing-one.svg" width="400" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
 Each blue box is a map, starting with the initial map. This is the map of the object returned if somehow, we managed to run the function `Peak` without adding a single property. The follow-on maps are the ones that result by adding the properties given by the names on the edges between maps. Each map has a list of the properties associated with an object of that map. Furthermore, it describes the exact location of each property. Finally, from one of these maps, say, `Map3` which is the hidden class of the object you'll get if you passed a number for the `extra` argument in `Peak()`, you can follow a back link up all the way to the initial map.
@@ -47,17 +47,17 @@ Each blue box is a map, starting with the initial map. This is the map of the ob
 Let's draw it again with this extra information. The annotation (i0), (i1), means in-object field location 0, 1, etc:
 
 <figure>
-  <img src="/_img/docs/hidden-classes/drawing-two.svg" width="400" height="480" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/drawing-two.svg" width="400" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
-Now, if you spend time examining these maps before you've created at least 7 `Peak` objects, you'll encounter **slack tracking** which can be confusing. I have another article about that HERE. Just create 7 more objects and it will be finished. At this point, your Peak objects will have exactly 3 in-object properties, with no possibility to add more directly in the object. Any additional properties will be offloaded to the object's property backing store. It's just an array of property values, whose index comes from the map (Well, technically, from the `DescriptorArray` attached to the map). Let's add a property to `m2` on a new line, and look again at the map tree:
+Now, if you spend time examining these maps before you've created at least 7 `Peak` objects, you'll encounter **slack tracking** which can be confusing. I have [another article](https://v8.dev/blog/slack-tracking) about that. Just create 7 more objects and it will be finished. At this point, your Peak objects will have exactly 3 in-object properties, with no possibility to add more directly in the object. Any additional properties will be offloaded to the object's property backing store. It's just an array of property values, whose index comes from the map (Well, technically, from the `DescriptorArray` attached to the map). Let's add a property to `m2` on a new line, and look again at the map tree:
 
 ```javascript
 m2.cost = "one arm, one leg";
 ```
 
 <figure>
-  <img src="/_img/docs/hidden-classes/drawing-three.svg" width="400" height="480" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/drawing-three.svg" width="400" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
 I snuck something in here. Notice that all of the properties are annotated with "const," which means that from V8's point of view, nobody ever changed them since the constructor, so they can be considered constants once they've been initialized. TurboFan (the optimizing compiler) loves this. Say `m2` is referenced as a constant global by a function. Then the lookup of `m2.cost` can be done at compile time, since the field is marked as constant. I'll return to this later in the article.
@@ -105,7 +105,7 @@ The extra properties are there just in case you decide to add more all of a sudd
 There are different things we could do at this point, but since you must really like V8, having read this far, I'd like to try drawing the real data structures we use, the ones mentioned at the beginning of `Map`, `DescriptorArray`, and `TransitionArray`. Now that you have some idea of the hidden class concept being built up behind the scenes, you may as well bind your thinking more closely to the code through the right names and structures. Let me try and reproduce that last figure in V8's representation. First I'm going to draw the **DescriptorArrays**, which hold the list of properties for a given Map. These arrays can be shared -- the key to that is that the Map itself knows how many properties it is allowed to look at in the DescriptorArray. Since the properties are in the order they were added in time, these arrays can be shared by several maps. See:
 
 <figure>
-  <img src="/_img/docs/hidden-classes/drawing-four.svg" width="600" height="480" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/drawing-four.svg" width="600" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
 Notice that **Map1**, **Map2**, and **Map3** all point to **DescriptorArray1**. The number next to the "descriptors" field in each Map indicates how many fields over in the DescriptorArray belong to the Map. So **Map1**, which only knows about the "name" property, looks only at the first property listed in **DescriptorArray1**. Whereas **Map2** has two properties, "name" and "height." So it looks at the first and second items in **DescriptorArray1** (name and height). This kind of sharing saves a lot of space.
@@ -115,7 +115,7 @@ Naturally, we can't share where there is a split. There is a transition from Map
 The only thing missing from our "true to life" diagram is the `TransitionArray` which is still metaphorical at this point. Let's change that. I took the liberty of removing the **back pointer** lines, which cleans things up a bit. Just remember that from any Map in the tree, you can walk up the tree, too.
 
 <figure>
-  <img src="/_img/docs/hidden-classes/drawing-five.svg" width="600" height="480" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/drawing-five.svg" width="600" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
 The diagram rewards study. **Question: what would happen if a new property "rating" was added after "name" instead of going on to "height" and other properties?**
@@ -125,7 +125,7 @@ The diagram rewards study. **Question: what would happen if a new property "rati
 *I checked my answer with the help of `%DebugPrintPtr()`, and drew the following:*
 
 <figure>
-  <img src="/_img/docs/hidden-classes/drawing-six.svg" width="500" height="480" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/drawing-six.svg" width="500" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
 No need to beg me to stop, I see that this is the upper limit of such diagrams! But I think you can get a sense of how the parts move. Just imagine if after adding this ersatz property *rating*, we continued on with *height*, *experience* and *cost*. Well, we'd have to create maps **Map7**, **Map8** and **Map9**. Because we insisted on adding this property in the middle of an established chain of maps, we will duplicate much structure. I don't have the heart to make that drawing -- though if you send it to me I will add it to this document :).
@@ -190,7 +190,7 @@ What do you think will happen? One thing for sure, we can't let `foo()` stay as 
 Wow.
 
 <figure>
-  <img src="/_img/docs/hidden-classes/i_like_it_a_lot.gif" width="440" height="374" alt="" loading="lazy">
+  <img src="/_img/docs/hidden-classes/i_like_it_a_lot.gif" width="440" height="374" alt="I like it a lot" loading="lazy">
 </figure>
 
 If you force re-optimization you'll get code that is not quite as good, but still benefits greatly from the Map structure we've been describing. Remember from our diagrams that property *cost* is the first property in
