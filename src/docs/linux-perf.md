@@ -43,7 +43,6 @@ perf record -g -k mono out/x64.release/d8 \
 
 [`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone.
 
-
 ## Profiling chrome with the [linux-perf.py](https://source.chromium.org/search?q=linux-perf.py) script
 
 1. You can use the same V8 flags to profile chrome itself. Follow the instructions above for the correct V8 flags and add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to your chrome build.
@@ -55,8 +54,8 @@ perf record -g -k mono out/x64.release/d8 \
     tools/chrome/linux-perf.py out/x64.release/chrome --perf-data-dir=perf_results --timeout=30
     ```
 
-2. Navigate to your website and then close the browser (or wait for the `--timeout` to complete)
-3. After quitting the browser `linux-perf.py` will post-process the files and show a list with a result file for each renderer process:
+1. Navigate to your website and then close the browser (or wait for the `--timeout` to complete)
+1. After quitting the browser `linux-perf.py` will post-process the files and show a list with a result file for each renderer process:
   
    ```
    chrome_renderer_1583105_3.perf.data.jitted      19.79MiB
@@ -79,7 +78,6 @@ You can also use [pprof](https://github.com/google/pprof) to generate more visua
 pprof -flame perf.data.jitted;
 ```
 
-
 ## Using linux-perf with chrome directly
 
 1. You can use the same V8 flags to profile chrome itself. Follow the instructions above for the correct V8 flags and add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to your chrome build.
@@ -101,26 +99,26 @@ pprof -flame perf.data.jitted;
 
 1. Navigate to your website and then continue with the next section on how to evaluate the perf output.
 
-2. After execution finishes, combine the static information gathered from the `perf` tool with the performance samples output by V8 for JIT code:
+1. After execution finishes, combine the static information gathered from the `perf` tool with the performance samples output by V8 for JIT code:
 
    ```bash
    perf inject -j -i perf.data -o perf.data.jitted
    ```
 
-3 Finally you can use the Linux `perf` [tool to explore](#Explore-linux-perf-results) 
-
-
+1. Finally you can use the Linux `perf` [tool to explore](#Explore-linux-perf-results) 
 
 ## Build `perf`
 
 If you have an outdated linux kernel you can build linux-perf with jit support locally.
 
 - Install a new Linux kernel, and then reboot your machine:
+
   ```bash
    sudo apt-get install linux-generic-lts-wily;
   ```
 
 - Install dependencies:
+
   ```bash
   sudo apt-get install libdw-dev libunwind8-dev systemtap-sdt-dev libaudit-dev \
      libslang2-dev binutils-dev liblzma-dev;
