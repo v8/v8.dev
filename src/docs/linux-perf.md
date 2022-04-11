@@ -10,7 +10,6 @@ V8 writes out performance data during execution into a file that can be used to 
 - `linux-perf` version 5 or higher (previous version don't have jit support). (See instructions at the [end](#build-perf))
 - Build V8/Chrome with `enable_profiling=true` for better symbolized stacks
 
-
 ## Build V8
 
 To use V8’s integration with Linux perf you need to build it with the `enable_profiling = true` gn flag:
@@ -105,7 +104,7 @@ pprof -flame perf.data.jitted;
    perf inject -j -i perf.data -o perf.data.jitted
    ```
 
-1. Finally you can use the Linux `perf` [tool to explore](#Explore-linux-perf-results) 
+1. Finally you can use the Linux `perf` [tool to explore](#Explore-linux-perf-results)
 
 ## Build `perf`
 
