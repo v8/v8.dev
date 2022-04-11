@@ -50,7 +50,7 @@ Let's draw it again with this extra information. The annotation (i0), (i1), mean
   <img src="/_img/docs/hidden-classes/drawing-two.svg" width="400" height="480" alt="Hidden class example" loading="lazy">
 </figure>
 
-Now, if you spend time examining these maps before you've created at least 7 `Peak` objects, you'll encounter **slack tracking** which can be confusing. I have another article about that HERE. Just create 7 more objects and it will be finished. At this point, your Peak objects will have exactly 3 in-object properties, with no possibility to add more directly in the object. Any additional properties will be offloaded to the object's property backing store. It's just an array of property values, whose index comes from the map (Well, technically, from the `DescriptorArray` attached to the map). Let's add a property to `m2` on a new line, and look again at the map tree:
+Now, if you spend time examining these maps before you've created at least 7 `Peak` objects, you'll encounter **slack tracking** which can be confusing. I have [another article](https://v8.dev/blog/slack-tracking) about that. Just create 7 more objects and it will be finished. At this point, your Peak objects will have exactly 3 in-object properties, with no possibility to add more directly in the object. Any additional properties will be offloaded to the object's property backing store. It's just an array of property values, whose index comes from the map (Well, technically, from the `DescriptorArray` attached to the map). Let's add a property to `m2` on a new line, and look again at the map tree:
 
 ```javascript
 m2.cost = "one arm, one leg";
