@@ -72,7 +72,8 @@
 }
 
 :root.dark figure img[src*=".png"]:not(.no-darkening),
-:root.dark figure img[src*=".svg"]:not(.no-darkening) {
+:root.dark figure img[src*=".svg"]:not(.no-darkening),
+:root.dark figure svg:not(.no-darkening) {
   filter: invert(0.862745) hue-rotate(180deg);
 }
 
@@ -325,13 +326,20 @@ figure {
   padding: 0;
   text-align: center;
 }
-figure img {
+figure img,
+figure svg {
   display: block;
   margin: 0 auto;
+  max-width: 100%;
 }
 figure a {
   border-bottom: 0;
   padding: 0;
+}
+figure p {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
 }
 blockquote {
   border-left: 1em solid var(--lightestgray);
@@ -366,6 +374,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin-bottom: 1em;
+  font-variant-numeric: tabular-nums;
 }
 thead th {
   background: var(--darkblue);
@@ -496,7 +505,7 @@ dark-mode-toggle {
   }
 }
 
-@media (max-width: 670px) {
+@media (max-width: 819px) {
   #header, .compact #header {
     height: auto;
     background: transparent;

@@ -6,7 +6,9 @@ avatars:
 date: 2018-12-13
 tags:
   - ECMAScript
+  - ES2022
   - io19
+  - Node.js 14
 description: 'Several proposals expand the existing JavaScript class syntax with new functionality. This article explains the new public class fields syntax in V8 v7.2 and Chrome 72, as well as the upcoming private class fields syntax.'
 tweet: '1121395767170740225'
 ---
@@ -190,23 +192,23 @@ class Cat extends Animal {
 ### Support for public class fields { #support-public-fields }
 
 <feature-support chrome="72 /blog/v8-release-72#public-class-fields"
-                 firefox="partial https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/69#JavaScript"
-                 safari="partial https://bugs.webkit.org/show_bug.cgi?id=174212"
+                 firefox="yes https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/69#JavaScript"
+                 safari="yes https://bugs.webkit.org/show_bug.cgi?id=174212"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="no"></feature-support>
+                 babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-properties"></feature-support>
 
 ### Support for private class fields { #support-private-fields }
 
 <feature-support chrome="74 /blog/v8-release-74#private-class-fields"
-                 firefox="no"
-                 safari="no"
+                 firefox="90 https://spidermonkey.dev/blog/2021/05/03/private-fields-ship.html"
+                 safari="yes"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="no"></feature-support>
+                 babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-class-properties"></feature-support>
 
 ### Support for private methods and accessors { #support-private-methods }
 
 <feature-support chrome="84 /blog/v8-release-84#private-methods-and-accessors"
-                 firefox="no"
-                 safari="no"
-                 nodejs="no"
-                 babel="no"></feature-support>
+                 firefox="90 https://spidermonkey.dev/blog/2021/05/03/private-fields-ship.html"
+                 safari="yes https://webkit.org/blog/11989/new-webkit-features-in-safari-15/"
+                 nodejs="14.6.0"
+                 babel="yes https://babeljs.io/docs/en/babel-plugin-proposal-private-methods"></feature-support>

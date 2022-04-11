@@ -37,5 +37,5 @@ try {
 <feature-support chrome="66 /blog/v8-release-66#optional-catch-binding"
                  firefox="58 https://bugzilla.mozilla.org/show_bug.cgi?id=1380881"
                  safari="yes https://trac.webkit.org/changeset/220068/webkit"
-                 nodejs="8"
+                 nodejs="10 https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V10.md#2018-04-24-version-1000-current-jasnell"
                  babel="yes"></feature-support>

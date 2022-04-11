@@ -9,6 +9,7 @@ tags:
   - ES2020
   - ES2021
   - io19
+  - Node.js 16
 description: 'There are four promise combinators in JavaScript: Promise.all, Promise.race, Promise.allSettled, and Promise.any.'
 tweet: '1138819493956710400'
 ---
@@ -35,7 +36,7 @@ Let’s take a look at an example use case for each combinator.
                  firefox="29"
                  safari="8"
                  nodejs="0.12"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-promise"></feature-support>
 
 `Promise.all` lets you know when either all input promises have fulfilled or when one of them rejects.
 
@@ -66,7 +67,7 @@ In such a case, you could use `Promise.all`: you want to know when all promises 
                  firefox="29"
                  safari="8"
                  nodejs="0.12"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-promise"></feature-support>
 
 `Promise.race` is useful if you want to run multiple promises, and either…
 
@@ -95,7 +96,7 @@ We kick off a computationally expensive task that might take a long time, but we
                  firefox="71 https://bugzilla.mozilla.org/show_bug.cgi?id=1549176"
                  safari="13"
                  nodejs="12.9.0 https://nodejs.org/en/blog/release/v12.9.0/"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-promise"></feature-support>
 
 `Promise.allSettled` gives you a signal when all the input promises are _settled_, which means they’re either _fulfilled_ or _rejected_. This is useful in cases where you don’t care about the state of the promise, you just want to know when the work is done, regardless of whether it was successful.
 
@@ -119,8 +120,8 @@ removeLoadingIndicator();
 <feature-support chrome="85 https://bugs.chromium.org/p/v8/issues/detail?id=9808"
                  firefox="79 https://bugzilla.mozilla.org/show_bug.cgi?id=1568903"
                  safari="14 https://bugs.webkit.org/show_bug.cgi?id=202566"
-                 nodejs="no"
-                 babel="yes"></feature-support>
+                 nodejs="16"
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-promise"></feature-support>
 
 `Promise.any` gives you a signal as soon as one of the promises fulfills. This is similar to `Promise.race`, except `any` doesn’t reject early when one of the promises rejects.
 

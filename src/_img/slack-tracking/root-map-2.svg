@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="600" height="340" style='overflow: visible; margin: 5px;'
+     xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="200" height="80" stroke="black" fill="transparent" stroke-width="2"/>
+  <text x="20" y="30">Initial map</text>
+  <text x="20" y="50">Construction counter: 0</text>
+  <text x="20" y="70">(20, 2, 2)</text>
+
+  <line x1="100" x2="100" y1="90" y2="130" stroke="black"/>
+  <text x="110" y="115">"name"</text>
+  <rect x="20" y="130" width="200" height="80" stroke="black" fill="transparent" stroke-width="2"/>
+  <text x="30" y="150">Map with 1 property</text>
+  <text x="30" y="170">(20, 2, 1)</text>
+
+  <line x1="110" x2="110" y1="210" y2="250" stroke="black"/>
+  <text x="120" y="235">"height"</text>
+  <rect x="30" y="250" width="200" height="80" stroke="black" fill="transparent" stroke-width="2"/>
+  <text x="40" y="270">Map with 2 properties</text>
+  <text x="40" y="290">(20, 2, 0)</text>
+</svg>
+

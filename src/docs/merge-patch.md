@@ -47,7 +47,20 @@ If it tells you `Is on Canary: No Canary coverage` you should not merge yet beca
 
 ## How to create the merge CL
 
-### Option 1: Using the automated script
+### Option 1: Using [gerrit](https://chromium-review.googlesource.com/)
+
+Note that this option only works if the patch applies cleanly on the release branch.
+
+1. Open the CL you want to back-merge.
+1. Select "Cherry pick" from the extended menu (three vertical dots in the upper right corner).
+1. Enter "refs/branch-heads/*X.X*" as destination branch (replace *X.X* by the proper branch).
+1. Modify the commit message:
+   1. Prefix the title with "Merged: ".
+   1. Remove lines from the footer that correspond to the original CL ("Change-Id", "Reviewed-on", "Reviewed-by", "Commit-Queue", "Cr-Commit-Position"). Definitely keep the "(cherry picked from commit XXX)" line, as this is needed by some tools to relate merges to original CLs.
+1. In case of merge conflict, please also go ahead and create the CL. To resolve  conflicts (if any) - either using the gerrit UI or you can easily pull the patch locally by using the "download patch" command from the menu (three vertical dots in the upper right corner).
+1. Send out for review.
+
+### Option 2: Using the automated script
 
 Let’s assume you’re merging revision af3cf11 to branch 2.4 (please specify full git hashes - abbreviations are used here for simplicity).
 
@@ -60,28 +73,6 @@ Run the script with `-h` to display its help message, which includes more option
 ```bash
 tools/release/merge_to_branch.py --branch 2.4 af3cf11 cf33f1b sf3cf09
 ```
-
-In case you are a V8 committer, feel free to use `TBR` to land the merge if 1) it has approval and 2) the merge was clean and there are no conflicts to resolve.
-
-### Option 2: Using [gerrit](https://chromium-review.googlesource.com/)
-
-Note that this option only works if the patch applies cleanly on the release branch.
-
-1. Open the CL you want to back-merge.
-1. Select "Cherry pick" from the extended menu (three vertical dots in the upper right corner).
-1. Enter "refs/branch-heads/*X.X*" as destination branch (replace *X.X* by the proper branch).
-1. Modify the commit message:
-   1. Prefix the title with "Merged: ".
-   1. Remove lines from the footer that correspond to the original CL ("Change-Id", "Reviewed-on", "Reviewed-by", "Commit-Queue", "Cr-Commit-Position"). Definitely keep the "(cherry picked from commit XXX)" line, as this is needed by some tools to relate merges to original CLs.
-   1. Add the following flags to the footer:
-
-       ```
-       No-Try: true
-       No-Presubmit: true
-       No-Tree-Checks: true
-       ```
-
-1. Send out to review, or add a "TBR=..." or "Tbr: ..." line if the CL is unmodified.
 
 ### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8)
 

@@ -3,13 +3,13 @@
   "scripts": {
     "lint": "markdownlint \"src/**/*.md\"",
     "eleventy": "eleventy",
-    "html": "html-minifier --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
+    "html": "html-minifier-terser --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css && postcss src/_css/feature-support.css --output dist/_css/feature-support.css",
     "js": "shx mkdir -p dist/_js && terser src/_js/main.mjs -cm --module -o dist/_js/main.mjs && terser src/_js/legacy.js -cm -o dist/_js/legacy.js",
     "json": "json-minify src/.webmanifest > dist/.webmanifest",
     "xml": "minify-xml --in-place dist/sitemap.xml && minify-xml --in-place dist/blog.atom && minify-xml --in-place dist/features.atom",
     "sw": "workbox injectManifest workbox-config.js && terser dist/sw.js -cm -o dist/sw.js",
-    "copy-img": "shx cp ./node_modules/@browser-logos/{chrome,firefox}/*.svg src/_css/img/ && shx cp ./node_modules/@browser-logos/safari/safari_256x256.png src/_css/img/safari.png",
+    "copy-img": "shx cp ./node_modules/@browser-logos/{chrome,firefox,node.js,safari}/*.svg src/_css/img/",
     "copy-js": "shx cp ./node_modules/dark-mode-toggle/dist/dark-mode-toggle.min.mjs dist/_js/dark-mode-toggle.mjs",
     "img-video-dimensions": "node add-image-and-video-dimensions.js",
     "clean": "shx rm -rf -- dist",
@@ -29,15 +29,19 @@
     }
   },
   "lint-staged": {
-    "*.md": "markdownlint"
+    "*.md": [
+      "markdownlint",
+      "markdown-link-check --config markdown-link-check.json"
+    ]
   },
   "devDependencies": {
-    "@11ty/eleventy": "^0.11.0",
+    "@11ty/eleventy": "^0.11.1",
     "@11ty/eleventy-plugin-rss": "^1.0.7",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
     "@browser-logos/chrome": "^1.0.17",
     "@browser-logos/firefox": "^3.0.8",
-    "@browser-logos/safari": "^1.0.7",
+    "@browser-logos/node.js": "^1.0.1",
+    "@browser-logos/safari": "^2.1.0",
     "autoprefixer": "^9.8.2",
     "cssnano": "^4.1.10",
     "dark-mode-toggle": "^0.7.2",
@@ -45,7 +49,7 @@
     "get-video-dimensions": "^1.0.0",
     "glob": "^7.1.6",
     "he": "^1.2.0",
-    "html-minifier": "^4.0.0",
+    "html-minifier-terser": "^5.1.1",
     "husky": "^4.2.5",
     "image-size": "^0.8.3",
     "json-minify": "^1.0.0",
@@ -58,6 +62,7 @@
     "markdown-it-footnote": "^3.0.2",
     "markdown-it-implicit-figures": "^0.10.0",
     "markdown-it-multimd-table": "^4.0.2",
+    "markdown-link-check": "^3.8.7",
     "markdownlint-cli": "^0.23.1",
     "minify-xml": "^1.0.3",
     "post-npm-install": "^2.0.0",

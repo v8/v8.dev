@@ -21,7 +21,7 @@ The `Object.entries` API has been around for a while.
                  firefox="47"
                  safari="10.1"
                  nodejs="7"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-object"></feature-support>
 
 For each key-value pair in an object, `Object.entries` gives you an array where the first element is the key, and the second element is the value.
 
@@ -107,7 +107,7 @@ Object.fromEntries(map);
 // stringify to the same value of '[object Object]'.
 ```
 
-Before using `Object.fromEntries` or any other techique to convert a map into a object, make sure the map’s keys produce unique `toString` results.
+Before using `Object.fromEntries` or any other technique to convert a map into a object, make sure the map’s keys produce unique `toString` results.
 
 ## `Object.fromEntries` support { #support }
 
@@ -115,4 +115,4 @@ Before using `Object.fromEntries` or any other techique to convert a map into a 
                  firefox="63"
                  safari="12.1"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-object"></feature-support>

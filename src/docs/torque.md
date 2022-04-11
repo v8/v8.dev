@@ -10,7 +10,7 @@ Torque provides language constructs to represent high-level, semantically-rich t
 
 ## Getting started
 
-Most source written in Torque is checked into the V8 repository under [the `src/builtins` directory](https://github.com/v8/v8/tree/master/src/builtins), with the file extension `.tq`. (The actual Torque compiler can be found under [`src/torque`](https://github.com/v8/v8/tree/master/src/torque).). Tests for Torque functionality are checked in under [`test/torque`](https://github.com/v8/v8/tree/master/test/torque).
+Most source written in Torque is checked into the V8 repository under [the `src/builtins` directory](https://github.com/v8/v8/tree/master/src/builtins), with the file extension `.tq`. Torque definitions of V8's heap-allocated classses are found alongside their C++ definitions, in `.tq` files with the same name as corresponding C++ files in `src/objects`. The actual Torque compiler can be found under [`src/torque`](https://github.com/v8/v8/tree/master/src/torque). Tests for Torque functionality are checked in under [`test/torque`](https://github.com/v8/v8/tree/master/test/torque), [`test/cctest/torque`](https://github.com/v8/v8/tree/master/test/cctest/torque), and [`test/unittests/torque`](https://github.com/v8/v8/tree/master/test/unittests/torque).
 
 To give you a taste of the language, let’s write a V8 builtin that prints “Hello World!”. To do this, we’ll add a Torque `macro` in a test case and call it from the `cctest` test framework.
 
@@ -50,13 +50,16 @@ Hello world!
 
 The Torque compiler doesn’t create machine code directly, but rather generates C++ code that calls V8’s existing `CodeStubAssembler` interface. The `CodeStubAssembler` uses the [TurboFan compiler’s](https://v8.dev/docs/turbofan) backend to generate efficient code. Torque compilation therefore requires multiple steps:
 
-1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files, outputting corresponding `*-tq-csa.cc`
-and `*-tq-csa.h` files in appropriate subdirectories under `gen/torque-generated`. The Torque compiler also generates various known `.h` files, meant to be consumed by the V8 build. These contain any class definitions found in the `.tq` files under
-compile.
-1. The `.h` files produced by Torque are included at strategic points in the V8 build, supplementing class definitions declared "by hand" in the V8 sources.
-1. The `gn` build then compiles the generated `.cc` files from step 1 into the `mksnapshot` executable.
+1. The `gn` build first runs the Torque compiler. It processes all `*.tq` files. Each Torque file `path/to/file.tq` causes the generation of the following files:
+    - `path/to/file-tq-csa.cc` and `path/to/file-tq-csa.h` containing generated CSA macros.
+    - `path/to/file-tq.inc` to be included in in a corresponding header `path/to/file.h` containing class definitions.
+    - `path/to/file-tq-inl.inc` to be included in the corresponding inline header `path/to/file-inl.h`, containing C++ accessors of class definitions.
+    - `path/to/file-tq.cc` containing generated heap verifiers, printers, etc.
+
+    The Torque compiler also generates various other known `.h` files, meant to be consumed by the V8 build.
+1. The `gn` build then compiles the generated `-csa.cc` files from step 1 into the `mksnapshot` executable.
 1. When `mksnapshot` runs, all of V8’s builtins are generated and packaged in to the snapshot file, including those that are defined in Torque and any other builtins that use Torque-defined functionality.
-1. The rest of V8 is built. All of Torque-authored builtins are made accessible via the snapshot file which is linked into V8. They can be called like any other builtin. In the final packaging, no direct traces of Torque remain (except for debug information): neither the Torque source code (`.tq` files) nor Torque-generated `.cc` files are included in the `d8` or `chrome` executable.
+1. The rest of V8 is built. All of Torque-authored builtins are made accessible via the snapshot file which is linked into V8. They can be called like any other builtin. In addition, the `d8` or `chrome` executable also includes the generated compilation units related to class definitions directly.
 
 Graphically, the build process looks like this:
 
@@ -68,7 +71,7 @@ Graphically, the build process looks like this:
 
 Basic tooling and development environment support is available for Torque.
 
-- There is a Visual Studio code syntax highlighting plugin available for Torque: `tools/torque/vscode-torque`
+- There is a [Visual Studio Code plugin](https://github.com/v8/vscode-torque) for Torque, which uses a custom language server to provide features like go-to-definition.
 - There is also a formatting tool that should be used after changing `.tq` files: `tools/torque/format-torque.py -i <filename>`
 
 ## Troubleshooting builds involving Torque { #troubleshooting }
@@ -76,8 +79,8 @@ Basic tooling and development environment support is available for Torque.
 Why do you need to know this? Understanding how Torque files get converted into machine code is important because different problems (and bugs) can potentially arise in the different stages of translating Torque into the binary bits embedded in the snapshot:
 
 - If you have a syntax or semantic error in Torque code (i.e. a `.tq` file), the Torque compiler fails. The V8 build aborts during this stage, and you will not see other errors that may be uncovered by later parts of the build.
-- Once your Torque code is syntactically correct and passes the Torque compiler’s (more or less) rigorous semantic checks, the build of `mksnapshot` can still fail. This most frequently happens with inconsistencies in external definitions provided in `.tq` files. Definitions marked with the `extern` keyword in Torque code signal to the Torque compiler that the definition of required functionality is found in C++. Currently, the coupling between `extern` definitions from `.tq` files and the C++ code to which those `extern` definitions refer is loose, and there is no verification at Torque-compile time of that coupling. When `extern` definitions don’t match (or in the most subtle cases mask) the functionality that they access in the `code-stub-assembler.h` header file or other V8 headers, the C++ build of `mksnapshot` fails, usually in `*-gen.cc` files.
-- Even once `mksnapshot` successfully builds, it can fail during execution if a Torque-provided builtin has a bug. Many builtins run as part of snapshot creation, including Torque-generated ones. For example, `Array.prototype.splice`, a Torque-authored builtin, is called as part of the JavaScript snapshot initialization process to setup the default JavaScript environment. If there is a bug in the implementation, `mksnapshot` crashes during execution. When `mksnapshot` crashes, it’s sometimes useful to call `mksnapshot` passing the `--gdb-jit-full` flag, which generates extra debug information that provides useful context, e.g. names for Torque-generated builtins in `gdb` stack crawls.
+- Once your Torque code is syntactically correct and passes the Torque compiler’s (more or less) rigorous semantic checks, the build of `mksnapshot` can still fail. This most frequently happens with inconsistencies in external definitions provided in `.tq` files. Definitions marked with the `extern` keyword in Torque code signal to the Torque compiler that the definition of required functionality is found in C++. Currently, the coupling between `extern` definitions from `.tq` files and the C++ code to which those `extern` definitions refer is loose, and there is no verification at Torque-compile time of that coupling. When `extern` definitions don’t match (or in the most subtle cases mask) the functionality that they access in the `code-stub-assembler.h` header file or other V8 headers, the C++ build of `mksnapshot` fails.
+- Even once `mksnapshot` successfully builds, it can fail during execution. This might happen because Turbofan fails to compile the generated CSA code, for example because a Torque `static_assert` cannot be verified by Turbofan. Also, Torque-provided builtin that are run during snapshot creation might have a bug. For example, `Array.prototype.splice`, a Torque-authored builtin, is called as part of the JavaScript snapshot initialization process to setup the default JavaScript environment. If there is a bug in the implementation, `mksnapshot` crashes during execution. When `mksnapshot` crashes, it’s sometimes useful to call `mksnapshot` passing the `--gdb-jit-full` flag, which generates extra debug information that provides useful context, e.g. names for Torque-generated builtins in `gdb` stack crawls.
 - Of course, even if Torque-authored code makes it through `mksnapshot`, it still may be buggy or crash. Adding test cases to `torque-test.tq` and `torque-test.cc` is a good way to ensure that your Torque code does what you actually expect. If your Torque code does end up crashing in `d8` or `chrome`, the `--gdb-jit-full` flag is again very useful.
 
 ## `constexpr`: compile-time vs. run-time { #constexpr }
@@ -94,29 +97,13 @@ In combination with generics, `constexpr` is a powerful Torque tool that can be 
 
 ## Files
 
-Torque code is packaged in individual source files. Each source file consists of a series of declarations, which themselves can optionally wrapped in a namespace declaration to separate the namespaces of declarations. The grammar for a `.tq` file is as follows:
+Torque code is packaged in individual source files. Each source file consists of a series of declarations, which themselves can optionally wrapped in a namespace declaration to separate the namespaces of declarations. The following description of the grammar is likely out-of-date. The source-of-truth is [the grammar definition in the Torque compiler](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/torque/torque-parser.cc?q=TorqueGrammar::TorqueGrammar), which is written using contex-free grammar rules.
 
-```grammar
-Declaration :
-  AbstractTypeDeclaration
-  ClassDeclaration
-  TypeAliasDeclaration
-  EnumDeclaration
-  CallableDeclaration
-  ConstDeclaration
-  GenericSpecialization
-
-NamespaceDeclaration :
-  namespace IdentifierName { Declaration* }
-
-FileDeclaration :
-  NamespaceDeclaration
-  Declaration
-```
+A Torque file is a sequence of declarations. The possible declarations are listed [in `torque-parser.cc`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/torque/torque-parser.cc?q=TorqueGrammar::declaration).
 
 ## Namespaces
 
-Torque namespaces allow declarations to be independent namespaces. They are similar to C++ namespaces. They allow you to create declarations that are not automatically visible in other namespaces. They can be nested, and declarations inside a nested namespace can access the declarations in the namespace that contains them without qualification. Declarations that are not explicitly in a namespace declaration are put in a shared global default namespace that is visible to all namespaces. Namespaces can be reopened, allowing them to be defined over multiple files.
+Torque namespaces allow declarations to be in independent namespaces. They are similar to C++ namespaces. They allow you to create declarations that are not automatically visible in other namespaces. They can be nested, and declarations inside a nested namespace can access the declarations in the namespace that contains them without qualification. Declarations that are not explicitly in a namespace declaration are put in a shared global default namespace that is visible to all namespaces. Namespaces can be reopened, allowing them to be defined over multiple files.
 
 For example:
 
@@ -132,6 +119,7 @@ namespace string {
   macro TestVisibility() {
     IsJsObject(o); // OK, global namespace visible here
     IsJSArray(o);  // ERROR, not visible in this namespace
+    array::IsJSArray(o);  // OK, explicit namespace qualification
   }
   // …
 };
@@ -148,9 +136,7 @@ namespace array {
 
 Torque is strongly typed. Its type system is the basis for many of the security and correctness guarantees it provides.
 
-However, with a few notable exceptions discussed later, Torque doesn’t actually inherently know very much about the core types that are used to write most Torque code. In order to enable better interoperability between Torque and hand-written `CodeStubAssembler` code, Torque’s type system rigorously specifies the relationship between Torque types, but it is much less rigorous in specifying how the types themselves actually work. Instead, it is loosely coupled with `CodeStubAssembler` and C++ types through explicit type mappings, and it relies on the C++ compiler to enforce the rigor of that mapping.
-
-In Torque, there are three different kinds of types: Abstract, Function and Union.
+For many basic types, Torque doesn’t actually inherently know very much about them. Instead, many types are just loosely coupled with `CodeStubAssembler` and C++ types through explicit type mappings and rely on the C++ compiler to enforce the rigor of that mapping. Such types are realized as abstract types.
 
 #### Abstract types
 
@@ -199,7 +185,7 @@ When mapping union types to CSA, the most specific common supertype of all the t
 
 #### Class types
 
-Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accesing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
+Class types make it possible to define, allocate and manipulate structured objects on the V8 GC heap from Torque code. Each Torque class type must correspond to a subclass of HeapObject in C++ code. In order to minimize the expense of maintaining boilerplate object-accessing code between V8’s C++ and Torque implementation, the Torque class definitions are used to generate the required C++ object-accessing code whenever possible (and appropriate) to reduce the hassle of keeping C++ and Torque synchronized by hand.
 
 ```grammar
 ClassDeclaration :
@@ -209,7 +195,7 @@ ClassDeclaration :
   }
 
 ClassAnnotation :
-  @generateCppClass
+  @doNotGenerateCppClass
   @generateBodyDescriptor
   @generatePrint
   @abstract
@@ -242,7 +228,6 @@ ArraySpecifier :
 An example class:
 
 ```torque
-@generateCppClass
 extern class JSProxy extends JSReceiver {
   target: JSReceiver|Null;
   handler: JSReceiver|Null;
@@ -259,7 +244,7 @@ TNode<HeapObject> LoadJSProxyTarget(TNode<JSProxy> p_o);
 void StoreJSProxyTarget(TNode<JSProxy> p_o, TNode<HeapObject> p_v);
 ```
 
-As described above, the fields definied in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. Because the example above uses `@generateCppClass`, the hand-written definition of JSProxy must inherit from a generated class template, like this:
+As described above, the fields defined in Torque classes generate C++ code that removes the need for duplicate boilerplate accessor and heap visitor code. The hand-written definition of JSProxy must inherit from a generated class template, like this:
 
 ```cpp
 // In js-proxy.h:
@@ -279,7 +264,7 @@ The generated class provides cast functions, field accessor functions, and field
 
 ##### Class type annotations
 
-`@generateCppClass` is recommended where possible (as in the example above), but some classes still don't use it. In those cases, the class should instead include a Torque-generated macro for its field offset constants, and must implement its own accessors and cast functions. Using that macro looks like this:
+Some classes can't use the inheritance pattern shown in the example above. In those cases, the class can specify `@doNotGenerateCppClass`, inherit directly from its superclass type, and include a Torque-generated macro for its field offset constants. Such classes must implement their own accessors and cast functions. Using that macro looks like this:
 
 ```cpp
 class JSProxy : public JSReceiver {
@@ -320,8 +305,12 @@ This means that instances of `CoverageInfo` are of varying sizes based on the da
 Unlike C++, Torque will not implicitly add padding between fields; instead, it will fail and emit an error if fields are not properly aligned. Torque also requires that strong fields, weak fields, and scalar fields be together with other fields of the same category in the field order.
 
 `const` means that a field cannot be altered at runtime (or at least not easily; Torque will fail compilation if you attempt to set it). This is a good idea for length fields, which should only be reset with great care because they would require freeing any released space and might cause data races with a marking thread.
+In fact, Torque requires length fields used for indexed data to be `const`.
 
-`weak` at the beginning of a field declaration means that the field should be grouped with other `weak` fields, and affects the generation of constants such as `kEndOfStrongFieldsOffset` and `kStartOfWeakFieldsOffset` which can be used in custom `BodyDescriptor`s. We hope to remove this keyword once Torque is fully capable of generating all `BodyDescriptor`s. If the object stored in a field may be a weak reference (with the second bit set), then `Weak<T>` should be used in the type. As an example, this field from `Map` can contain some strong and some weak types, and is also marked for inclusion in the `weak` section:
+`weak` at the beginning of a field declaration means that the field is a custom weak reference, as opposed to the `MaybeObject` tagging mechanism for weak fields.
+In addition `weak` affects generation of constants such as `kEndOfStrongFieldsOffset` and `kStartOfWeakFieldsOffset`, which is a legacy feature used in some custom  `BodyDescriptor`s and currently also still requires grouping fields marked as `weak` together. We hope to remove this keyword once Torque is fully capable of generating all `BodyDescriptor`s.
+
+If the object stored in a field may be a `MaybeObject`-style weak reference (with the second bit set), then `Weak<T>` should be used in the type and the `weak` keyword should **not** be used. There are still some exceptions to this rule, like this field from `Map`, which can contain some strong and some weak types, and is also marked as `weak` for inclusion in the weak section:
 
 ```torque
   weak transitions_or_prototype_info: Map|Weak<Map>|TransitionArray|
@@ -367,7 +356,7 @@ struct ConstantIterator<T: type> {
 
 ##### Struct annotations
 
-Any struct marked as `@export` will be included with a predictable name in the generated file `gen/torque-generated/csa-types-tq.h`. The name is prepended with `TorqueStruct`, so `PromiseResolvingFunctions` becomes `TorqueStructPromiseResolvingFunctions`.
+Any struct marked as `@export` will be included with a predictable name in the generated file `gen/torque-generated/csa-types.h`. The name is prepended with `TorqueStruct`, so `PromiseResolvingFunctions` becomes `TorqueStructPromiseResolvingFunctions`.
 
 Struct fields can be marked as `const`, which means they shouldn't be written to. The entire struct can still be overwritten.
 
@@ -394,9 +383,9 @@ extern class DescriptorArray extends HeapObject {
 
 ##### References and Slices
 
-`Reference<T>` and `Slice<T>` are special structs representing pointers to data held within heap objects. They both contain an object and an offset; `Slice<T>` also contains a length. Rather than constructing these structs directly, you can use special syntax: `&o.x` will create a `Reference` to the field `x` within the object `o`, or a `Slice` to the data if `x` is an indexed field. `Reference<T>` can be dereferenced with `*` or `->`, consistent with C++.
+`Reference<T>` and `Slice<T>` are special structs representing pointers to data held within heap objects. They both contain an object and an offset; `Slice<T>` also contains a length. Rather than constructing these structs directly, you can use special syntax: `&o.x` will create a `Reference` to the field `x` within the object `o`, or a `Slice` to the data if `x` is an indexed field. For both references and slices, there are const and mutable versions. For references, these types are written as `&T` and `const &T` for mutable and constant references, respectively. The mutability refers to the data they point to and might not hold globally, that is, you can create const references to mutable data. For slices, there is no special syntax for the types and the two versions are written `ConstSlice<T>` and `MutableSlice<T>`. References can be dereferenced with `*` or `->`, consistent with C++.
 
-`Reference<T>` should not used directly. Instead, it has two subtypes `MutableReference<T>` and `ConstReference<T>`, which can be referred to using syntactic sugar: `&T` and `const &T`.
+References and slices to untagged data can also point to off-heap data.
 
 #### Bitfield structs
 
@@ -586,6 +575,8 @@ Like `builtin`s, `runtime`s cannot have labels.
 
 You can also call a `runtime` function as a tailcall when appropriate. Simply include the `tail` keyword before the call.
 
+Runtime function declarations are often placed in a namespace called `runtime`. This disambiguates them from builtins of the same name and makes it easier to see at the callsite that we are calling a runtime funtion. We should consider making this mandatory.
+
 #### `intrinsic` callables
 
 `intrinsic`s are builtin Torque callables that provide access to internal funtionality that can’t be otherwise implemented in Torque. They are declared in Torque, but not defined, since the implementation is provided by the Torque compiler. `intrinsic` declarations use the following grammar:
@@ -595,7 +586,8 @@ IntrinsicDeclaration :
   intrinsic % IdentifierName ImplicitParameters opt ExplicitParameters ReturnType opt ;
 ```
 
-For the most part, “user” Torque code should rarely have to use `intrinsic`s directly. The currently supported intrinsics are:
+For the most part, “user” Torque code should rarely have to use `intrinsic`s directly.
+The following are some of the supported intrinsics:
 
 ```torque
 // %RawObjectCast downcasts from Object to a subtype of Object without
@@ -632,7 +624,7 @@ Like `builtin`s and `runtime`s, `intrinsic`s cannot have labels.
 
 ### Explicit parameters
 
-Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optonally support rest parameters if the builtin uses V8’s internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
+Declarations of Torque-defined Callables, e.g. Torque `macro`s and `builtin`s, have explicit parameter lists. They are a list of identifier and type pairs using a syntax reminiscent of typed TypeScript function parameter lists, with the exception that Torque doesn’t support optional parameters or default parameters. Moreover, Torque-implement `builtin`s can optionally support rest parameters if the builtin uses V8’s internal JavaScript calling convention (e.g. is marked with the `javascript` keyword).
 
 ```grammar
 ExplicitParameters :

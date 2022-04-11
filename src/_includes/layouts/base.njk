@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>{% if '/' === page.url %}V8 JavaScript engine{% else %}{{ (renderData.title or title) | markdown | striptags | decodeHtmlEntities }} · V8{% endif %}</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width">
     <meta name="color-scheme" content="dark light">
     <link rel="stylesheet" href="/_css/main.css">
 {% if '/features' in page.url %}
@@ -13,6 +13,9 @@
     <meta name="theme-color" content="#4285F4">
     <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="V8 Atom feed">
     <link rel="alternate" href="/features.atom" type="application/atom+xml" title="V8 JS/Wasm features Atom feed">
+{% for extra_link in extra_links %}
+    <link rel="{{ extra_link.rel }}" href="{{ extra_link.href }}">
+{% endfor %}
     <script>document.documentElement.className+=' js'</script>
 {% if description %}
     <meta name="description" content="{{ description }}">
@@ -27,6 +30,7 @@
           <li{% if '/' === page.url %} class="current"{% endif %}><a href="/">Home</a></li>
           <li{% if '/blog' in page.url %} class="current"{% endif %}><a href="/blog">Blog</a></li>
           <li{% if '/docs' in page.url %} class="current"{% endif %}><a href="/docs">Docs</a></li>
+          <li><a href="/tools">Tools</a></li>
           <li{% if '/features' in page.url %} class="current"{% endif %}><a href="/features" title="JavaScript and WebAssembly language features">JS/Wasm features</a></li>
           <li{% if '/grant' in page.url %} class="current"{% endif %}><a href="/grant">Research</a></li>
         </ul>

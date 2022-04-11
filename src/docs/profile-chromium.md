@@ -18,25 +18,29 @@ Chromium is a complex application, unlike V8 shells. Below is the list of Chromi
 Here is how to run Chromium in order to get a CPU profile from the start of the process:
 
 ```bash
-./Chromium --no-sandbox --js-flags='--logfile=%t.log --prof'
+./Chromium --no-sandbox --user-data-dir=`mktemp -d` --incognito --js-flags='--prof'
 ```
 
 Please note that you wouldn’t see profiles in Developer Tools, because all the data is being logged to a file, not to Developer Tools.
 
 ### Flags description
 
-`--no-sandbox` turns off the renderer sandbox, which is a must for this exercise.
+`--no-sandbox` turns off the renderer sandbox so chrome can write to the log file.
+
+`--user-data-dir` is used to create a fresh profile, use this to avoid caches and potential side-effects from installed extensions (optional).
+
+`--incognito` is used to further prevent pollution of your results (optional).
 
 `--js-flags` contains the flags passed to V8:
 
-- `--logfile=%t.log` specifies a name pattern for log files. `%t` gets expanded into the current time in milliseconds, so each process gets its own log file. You can use prefixes and suffixes if you want, like this: `prefix-%t-suffix.log`.
+- `--logfile=%t.log` specifies a name pattern for log files. `%t` gets expanded into the current time in milliseconds, so each process gets its own log file. You can use prefixes and suffixes if you want, like this: `prefix-%t-suffix.log`. By default every isolate gets a separate log file.
 - `--prof` tells V8 to write statistical profiling information into the log file.
 
 ## Android
 
 Chrome on Android has a number of unique points that make it a bit more complex to profile.
 
-- The command line must be written via `adb` before starting Chrome on the device. As a result, quotes in the command line sometimes get lost, and it is best to seperate arguments in `--js-flags` with a comma rather than trying to use whitespace and quotes.
+- The command line must be written via `adb` before starting Chrome on the device. As a result, quotes in the command line sometimes get lost, and it is best to separate arguments in `--js-flags` with a comma rather than trying to use whitespace and quotes.
 - The path for the logfile must be specified as an absolute path to somewhere that is writable on Android’s filesystem.
 - The sandboxing used for renderer processes on Android means that even with `--no-sandbox`, the renderer process still can’t write to files on the filesystem, therefore `--single-process` needs to be passed to run the renderer in the same process as the browser process.
 - The `.so` is embedded in Chrome’s APK which means symbolization needs to convert from APK memory addresses to the unstripped `.so` file in the builds.

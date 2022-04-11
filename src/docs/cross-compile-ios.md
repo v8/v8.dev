@@ -9,6 +9,7 @@ This page serves as a brief introduction to building V8 for iOS targets.
 - A macOS (OS X) host machine with Xcode installed.
 - A 64-bit target iOS device (legacy 32-bit iOS devices are unsupported).
 - V8 v7.5 or newer.
+- jitless is a hard requirement for iOS (as of Dec. 2020). Therefore please use the flags '--expose_gc --jitless'
 
 ## Initial setup
 
@@ -41,6 +42,7 @@ use_xcode_clang = true
 v8_enable_i18n_support = false        # Produces a smaller binary.
 v8_monolithic = true                  # Enable the v8_monolith target.
 v8_use_external_startup_data = false  # The snaphot is included in the binary.
+v8_enable_pointer_compression = false # Unsupported on iOS.
 ```
 
 Now build:

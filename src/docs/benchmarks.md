@@ -103,7 +103,7 @@ Wrote /usr/local/google/home/mvstanton/src/v8/_results/master.
 Run octane again with compare mode to see results.
 ```
 
-Note the warning that one run usually isn’t enough to be sure of many performance optimizations, however, our “change” should have a reproducable effect with only one run! Now let’s compare, passing the `--noopt` flag to turn off [TurboFan](/docs/turbofan):
+Note the warning that one run usually isn’t enough to be sure of many performance optimizations, however, our “change” should have a reproducible effect with only one run! Now let’s compare, passing the `--noopt` flag to turn off [TurboFan](/docs/turbofan):
 
 ```bash
 $ test/benchmarks/csuite/csuite.py -r 1 octane compare out.gn/x64.release/d8 \

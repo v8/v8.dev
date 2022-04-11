@@ -44,6 +44,23 @@ const md = markdownIt(markdownItConfig)
   .use(markdownItContainer, 'note')
   .use(markdownItContainer, 'table-wrapper')
   .use(markdownItContainer, 'ecmascript-algorithm')
+  .use(markdownItContainer, 'figure',  {
+    validate(params) {
+      return params.trim().match(/^figure\s+(.*)$/);
+    },
+    render(tokens, idx) {
+      const m = tokens[idx].info.trim().match(/^figure\s+(.*)$/);
+      if (tokens[idx].nesting === 1) {
+        // Opening tag; save caption for the closing tag.
+        this.saved_caption_ = m[1];
+        return '<figure>\n';
+      } else {
+        // Closing tag.
+        return '<figcaption>' + md.utils.escapeHtml(this.saved_caption_) + '</figcaption></figure>\n';
+      }
+    },
+    saved_caption_: null
+  })
   .use(markdownItMultiMdTable, {
     rowspan: true,
     multiline: true,
@@ -127,6 +144,12 @@ module.exports = (eleventyConfig) => {
   // Create a collection for feature explainers only.
   eleventyConfig.addCollection('features', (collection) => {
     return collection.getFilteredByGlob('src/features/*.md')
+                     .sort((a, b) => b.date - a.date);
+  });
+
+  // Create a collection with merged blogs and feature explainers.
+  eleventyConfig.addCollection('allPosts', (collection) => {
+    return collection.getFilteredByGlob('src/{blog,features}/*.md')
                      .sort((a, b) => b.date - a.date);
   });
 

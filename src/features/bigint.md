@@ -166,6 +166,22 @@ BigInt('1.5');
 // → SyntaxError
 ```
 
+The first of those examples passes a numeric literal to `BigInt()`. This is a bad practice, since `Number`s suffer from precision loss, and so we might already lose precision before the `BigInt` conversion happens:
+
+```js
+BigInt(123456789123456789);
+// → 123456789123456784n ❌
+```
+
+For this reason, we recommend either sticking to the `BigInt` literal notation (with the `n` suffix), or passing a string (not a `Number`!) to `BigInt()` instead:
+
+```js
+123456789123456789n;
+// → 123456789123456789n ✅
+BigInt('123456789123456789');
+// → 123456789123456789n ✅
+```
+
 Two library functions enable wrapping `BigInt` values as either signed or unsigned integers, limited to a specific number of bits. `BigInt.asIntN(width, value)` wraps a `BigInt` value to a `width`-digit binary signed integer, and `BigInt.asUintN(width, value)` wraps a `BigInt` value to a `width`-digit binary unsigned integer. If you’re doing 64-bit arithmetic for example, you can use these APIs to stay within the appropriate range:
 
 ```js
@@ -250,6 +266,6 @@ If you’re interested in how `BigInt`s work behind the scenes (e.g. how they ar
 
 <feature-support chrome="67 /blog/bigint"
                  firefox="68 https://wingolog.org/archives/2019/05/23/bigint-shipping-in-firefox"
-                 safari="no"
+                 safari="14"
                  nodejs="12 https://twitter.com/mathias/status/1120700101637353473"
                  babel="yes #polyfilling-transpiling"></feature-support>

@@ -43,4 +43,4 @@ string.trim(); // ES5
                  firefox="61"
                  safari="12"
                  nodejs="8"
-                 babel="yes"></feature-support>
+                 babel="yes https://github.com/zloirock/core-js#ecmascript-string-and-regexp"></feature-support>

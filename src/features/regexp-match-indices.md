@@ -6,6 +6,7 @@ avatars:
 date: 2019-12-17
 tags:
   - ECMAScript
+  - Node.js 16
 description: 'RegExp match indices provide `start` and `end` indices of each matched capture group.'
 tweet: '1206970814400270338'
 ---
@@ -20,7 +21,7 @@ In the example above, `function` is a reserved word and cannot be used as a vari
 
 ```js
 function displayError(text, message) {
-  const re = /\b(continue|function|break|for|if)\b/;
+  const re = /\b(continue|function|break|for|if)\b/d;
   const match = text.match(re);
   // Index `1` corresponds to the first capture group.
   const [start, end] = match.indices[1];
@@ -40,7 +41,7 @@ displayError(code, 'Invalid variable name');
 **Note:** For simplicity, the above example contains only a few of the JavaScript [reserved words](https://mathiasbynens.be/notes/reserved-keywords).
 :::
 
-In short, the new `indices` array stores the start and end positions of each matched capture group. This new array is available for all builtins producing regular expression match objects, including `RegExp#exec`, `String#match`, and [`String#matchAll`](https://v8.dev/features/string-matchall).
+In short, the new `indices` array stores the start and end positions of each matched capture group. This new array is available when the source regular expression uses the `/d` flag for all builtins producing regular expression match objects, including `RegExp#exec`, `String#match`, and [`String#matchAll`](https://v8.dev/features/string-matchall).
 
 Read on if you’re interested in how it works in more detail.
 
@@ -102,7 +103,8 @@ As mentioned above, [the new JavaScript feature](https://github.com/tc39/proposa
 
 ```js
 function getVariablePosition(source) {
-  const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/;
+  // Notice the `d` flag, which enables `match.indices`
+  const re = /(let|const|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/d;
   const match = re.exec(source);
   if (!match) return undefined;
   return match.indices[2];
@@ -119,7 +121,7 @@ The `indices` object also contains a `groups` property, which can be indexed by 
 
 ```js
 function getVariablePosition(source) {
-  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_$][0-9a-zA-Z_$]*)/;
+  const re = /(?<keyword>let|const|var)\s+(?<id>[a-zA-Z_$][0-9a-zA-Z_$]*)/d;
   const match = re.exec(source);
   if (!match) return -1;
   return match.indices.groups.id;
@@ -129,8 +131,8 @@ getVariablePosition('let foo');
 
 ## Support for RegExp match indices
 
-<feature-support chrome="partial https://bugs.chromium.org/p/v8/issues/detail?id=9548"
+<feature-support chrome="90 https://bugs.chromium.org/p/v8/issues/detail?id=9548"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1519483"
                  safari="no https://bugs.webkit.org/show_bug.cgi?id=202475"
-                 nodejs="no"
+                 nodejs="16"
                  babel="no"></feature-support>
