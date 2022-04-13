@@ -26,6 +26,9 @@
       "video"
     ]
   },
+  "ol-prefix": false,
+  "no-multiple-blanks": false,
+  "no-trailing-spaces": false,
   "fenced-code-language": false,
   "no-alt-text": false
 }
