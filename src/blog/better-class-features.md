@@ -20,9 +20,9 @@ The first issue has been fixed in V8 v9.7 and the fix for the second issue has b
 
 To get rid of the performance gap between the assignment of ordinary properties and the initialization of class fields, we updated the existing [inline cache (IC) system](https://mathiasbynens.be/notes/shapes-ics) to work with the latter. Before v9.7, V8 always used a costly runtime call for class field initializations. With v9.7, when V8 considers the pattern of the initialization to be predictable enough, it uses a new IC to speed up the operation just like what it does for assignments of ordinary properties.
 
-![Performance of initialization, optimized](/_img/better-class-features/class-fields-performance-optimized.svg)
+![Performance of initializations, optimized](/_img/better-class-features/class-fields-performance-optimized.svg)
 
-![Performance of initialization, interpreted](/_img/better-class-features/class-fields-performance-interpreted.svg)
+![Performance of initializations, interpreted](/_img/better-class-features/class-fields-performance-interpreted.svg)
 
 ### The original implementation of class fields
 
@@ -262,7 +262,7 @@ Ldar <context>
 DefineKeyedOwnProperty <this>, r0, [0]
 ```
 
-![Performance of initialization of instances with private methods](/_img/better-class-features/private-methods-performance.svg)
+![Performance of instance initializations of classes with different methods](/_img/better-class-features/private-methods-performance.svg)
 
 There is a caveat, however: if the class is a derived class whose constructor calls `super()`,  the initialization of the private methods - and in our case, the installation of the private brand symbol - has to happen after `super()` returns:
 
