@@ -114,7 +114,7 @@ class A {
 
 To implement the specified semantics before the proposal finalized, V8 used calls to runtime functions since they are more flexible. As shown in the bytecode above, the initialization of public fields was implemented with `%CreateDataProperty()` runtime calls, while the initialization of private fields was implemented with `%AddPrivateField()`. Since calling into the runtime incurs a significant overhead, the initialization of class fields was much slower compared to the assignment of ordinary object properties.
 
-In most use cases, however, the semantic differences are insignificant. It would be nice to have the performance of the optimized assignments of properties when the pattern of the class field initialization is predictable enough &mdash; so a more optimal implementation was created after the proposal finalized.
+In most use cases, however, the semantic differences are insignificant. It would be nice to have the performance of the optimized assignments of properties in these cases &mdash; so a more optimal implementation was created after the proposal finalized.
 
 ### Optimizing private class fields and computed public class fields
 
@@ -176,7 +176,7 @@ GetKeyedProperty <this>, [2]
 DefineNamedOwnProperty <this>, [0], [4]
 ```
 
-The original `DefineNamedOwnIC` machinery could not be simply plugged into the handling of the named public class fields, since it was originally intended only for object literal initialization. Previously it expected the target being initialized to be an object created by V8, which was always true for object literals, but the class fields can be initialized on user-defined objects when the class extends a base class whose constructor overrides the target:
+The original `DefineNamedOwnIC` machinery could not be simply plugged into the handling of the named public class fields, since it was originally intended only for object literal initialization. Previously it expected the target being initialized to be an object that has not yet been touched by the user since its creation, which was always true for object literals, but the class fields can be initialized on user-defined objects when the class extends a base class whose constructor overrides the target:
 
 ```js
 class A {
