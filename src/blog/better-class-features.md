@@ -26,7 +26,7 @@ To get rid of the performance gap between the assignment of ordinary properties 
 
 ### The original implementation of class fields
 
-To implement private fields, V8 makes use of the internal private symbols - they are an internal V8 data structure similar to standard `Symbol`s, except not enumerable when used as a property key. Take this class for an example:
+To implement private fields, V8 makes use of the internal private symbols &mdash; they are an internal V8 data structure similar to standard `Symbol`s, except not enumerable when used as a property key. Take this class for an example:
 
 
 ```js
@@ -85,7 +85,7 @@ class A {
 }
 ```
 
-Technically these two classes are not equivalent, even ignoring the difference in visibility between `this.#a` and `this._a` - as the specification mandates, initialization of the class fields does not trigger setters or `set` Proxy traps. So an approximation of the first class should use `Object.defineProperty()` instead of simple assignments to initialize the properties. In addition, it should throw if the private field already exists in the instance (in case the target being initialized is overridden in the base constructor to be another instance):
+Technically these two classes are not equivalent, even ignoring the difference in visibility between `this.#a` and `this._a`. The specification mandates "define" semantics instead of "set" semantics. That is, the initialization of class fields does not trigger setters or `set` Proxy traps. So an approximation of the first class should use `Object.defineProperty()` instead of simple assignments to initialize the properties. In addition, it should throw if the private field already exists in the instance (in case the target being initialized is overridden in the base constructor to be another instance):
 
 ```js
 class A {
@@ -112,17 +112,17 @@ class A {
 }
 ```
 
-To implement the specified semantics before the proposal finalized, V8 used calls to runtime functions since they are more flexible. As shown in the bytecode above, the initialization of public fields was implemented with `%CreateDataProperty()` runtime calls, while the initialization of private fields was implemented with `%AddPrivateField()`. Since calling into the runtime incurs a significant overhead, the initialization of class fields was significantly slower compared to the assignment of ordinary object properties.
+To implement the specified semantics before the proposal finalized, V8 used calls to runtime functions since they are more flexible. As shown in the bytecode above, the initialization of public fields was implemented with `%CreateDataProperty()` runtime calls, while the initialization of private fields was implemented with `%AddPrivateField()`. Since calling into the runtime incurs a significant overhead, the initialization of class fields was much slower compared to the assignment of ordinary object properties.
 
-In most use cases, however, the semantic differences are insignificant. It would be nice to have the performance of the optimized assignments of properties when the pattern of the class field initialization is predictable enough - so a more optimal implementation was created after the proposal finalized.
+In most use cases, however, the semantic differences are insignificant. It would be nice to have the performance of the optimized assignments of properties when the pattern of the class field initialization is predictable enough &mdash; so a more optimal implementation was created after the proposal finalized.
 
 ### Optimizing private class fields and computed public class fields
 
-To speed up initialization of private class fields and computed public class fields, the implementation introduced a new machinery to plug into the [inline cache (IC) system](https://mathiasbynens.be/notes/shapes-ics) when handling these operations, including:
+To speed up initialization of private class fields and computed public class fields, the implementation introduced a new machinery to plug into the [inline cache (IC) system](https://mathiasbynens.be/notes/shapes-ics) when handling these operations. This new machinery comes in three cooperating pieces:
 
 - A new bytecode `DefineKeyedOwnProperty`. This gets emitted when generating code for the `ClassLiteral::Property` AST nodes representing class field initializers.
-- A corresponding Turbofan IR opcode `JSDefineKeyedOwnProperty`, which can be compiled from the new bytecode.
-- A new `DefineKeyedOwnIC` which is used in the interpreter handler of the new bytecode as well as the code compiled from the new IR opcode. To simplify the implementation, the new IC reuses some of the code in `KeyedStoreIC` which was intended for ordinary property stores.
+- In the TurboFan JIT, a corresponding IR opcode `JSDefineKeyedOwnProperty`, which can be compiled from the new bytecode.
+- In the IC system, a new `DefineKeyedOwnIC` that is used in the interpreter handler of the new bytecode as well as the code compiled from the new IR opcode. To simplify the implementation, the new IC reuses some of the code in `KeyedStoreIC` which was intended for ordinary property stores.
 
 Now when V8 encounters this class:
 
@@ -146,11 +146,11 @@ LdaZero
 DefineKeyedOwnProperty <this>, r0, [0]
 ```
 
-When the initializer is executed for enough times, V8 allocates one [feedback vector slot](https://ponyfoo.com/articles/an-introduction-to-speculative-optimization-in-v8) for each field being initialized. The slot contains the key of the field being added (in the case of the private field, the private name symbol) and a pair of [hidden classes](https://v8.dev/blog/fast-properties) between which the instance has been transitioning as the result of field initialization. In subsequent initializations, the IC uses the feedback to see if the fields are initialized in the same order on instances with the same hidden classes. If the initialization matches the pattern that V8 has seen before (which is usually the case), V8 takes the fast path and performs the initialization with pre-generated code instead of calling into the runtime, thus speeding up the operation. If the initialization does not match a pattern that V8 has seen before, it falls back to a runtime call to deal with the slow cases.
+When the initializer is executed enough times, V8 allocates one [feedback vector slot](https://ponyfoo.com/articles/an-introduction-to-speculative-optimization-in-v8) for each field being initialized. The slot contains the key of the field being added (in the case of the private field, the private name symbol) and a pair of [hidden classes](https://v8.dev/docs/hidden-classes) between which the instance has been transitioning as the result of field initialization. In subsequent initializations, the IC uses the feedback to see if the fields are initialized in the same order on instances with the same hidden classes. If the initialization matches the pattern that V8 has seen before (which is usually the case), V8 takes the fast path and performs the initialization with pre-generated code instead of calling into the runtime, thus speeding up the operation. If the initialization does not match a pattern that V8 has seen before, it falls back to a runtime call to deal with the slow cases.
 
 ### Optimizing named public class fields
 
-To speed up initialization of named public class fields, we reused the existing `DefineNamedOwnProperty` bytecode which calls into `DefineNamedOwnIC` either in the interpreter or through the code compiled from the `JSDefineNamedOwnProperty` IR opcode. These were intended for object literal initializations and essentially implement a specialized case of the `[[CreateDataProperty]]` semantics which is also what the named public class fields are specified to use.
+To speed up initialization of named public class fields, we reused the existing `DefineNamedOwnProperty` bytecode which calls into `DefineNamedOwnIC` either in the interpreter or through the code compiled from the `JSDefineNamedOwnProperty` IR opcode.
 
 Now when V8 encounters this class:
 
@@ -176,7 +176,7 @@ GetKeyedProperty <this>, [2]
 DefineNamedOwnProperty <this>, [0], [4]
 ```
 
-The original `DefineNamedOwnIC` machinery could not be simply plugged into the handling of the named public class fields, as it needed a few patches to deal with an edge case of the class fields. Previously it expected the target being initialized to be an object created by V8, which was always true for object literals, but the class fields can be initialized on user-defined objects when the class extends a base class whose constructor overrides the target:
+The original `DefineNamedOwnIC` machinery could not be simply plugged into the handling of the named public class fields, since it was originally intended only for object literal initialization. Previously it expected the target being initialized to be an object created by V8, which was always true for object literals, but the class fields can be initialized on user-defined objects when the class extends a base class whose constructor overrides the target:
 
 ```js
 class A {
@@ -283,7 +283,7 @@ class B extends A {
 };
 ```
 
-As described before, when initializing the brand, V8 also stores a reference to the class context in the instance. This reference isn't used in brand checks, it's intended for the debugger to retrieve a list of private methods from the instance without knowing which class it is constructed from. When `super()` is invoked directly in the constructor, V8 can simply load the context from the context register (which is what `Mov <context>, r2` or `Ldar <context>` in the bytecodes above does) to perform the initialization, but `super()` can also be invoked from a nested arrow function, which in turn can be invoked from a different context. In this case, V8 falls back to a runtime function (still named `%AddPrivateBrand()`) to look for the class context in the context chain instead of relying on the context register. For example, for the `callSuper` function below:
+As described before, when initializing the brand, V8 also stores a reference to the class context in the instance. This reference isn't used in brand checks, but is instead intended for the debugger to retrieve a list of private methods from the instance without knowing which class it is constructed from. When `super()` is invoked directly in the constructor, V8 can simply load the context from the context register (which is what `Mov <context>, r2` or `Ldar <context>` in the bytecodes above does) to perform the initialization, but `super()` can also be invoked from a nested arrow function, which in turn can be invoked from a different context. In this case, V8 falls back to a runtime function (still named `%AddPrivateBrand()`) to look for the class context in the context chain instead of relying on the context register. For example, for the `callSuper` function below:
 
 ```js
 class A extends class {} {
@@ -329,4 +329,4 @@ In this case the cost of the runtime call is back so initializing instances of t
 
 The work mentioned in this blog post is also included in the upcoming Node.js v18 release. Previously, Node.js switched to symbol properties in a few built-in classes that had been using private fields in order to include them into the embedded bootstrap snapshot as well as to improve the performance of the constructors (see [this blog post](https://www.nearform.com/blog/node-js-and-the-struggles-of-being-an-eventtarget/) for more context). With the improved support of class features in V8, Node.js [switched back to private class fields](https://github.com/nodejs/node/pull/42361) in these classes and Node.js's benchmarks showed that [these changes did not introduce any performance regressions](https://github.com/nodejs/node/pull/42361#issuecomment-1068961385).
 
-We'd like to thank Bloomberg for sponsoring Igalia to work on improvements of the class features and startup snapshots.
+This work was contributed to V8 by Igalia under the sponsorship of Bloomberg.
