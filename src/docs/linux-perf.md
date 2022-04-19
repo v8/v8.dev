@@ -87,6 +87,7 @@ pprof -flame perf.data.jitted;
 ## Low-level linux-perf usage
 
 ### Using linux-perf with `d8` directly
+
 Depending on your use-case you might want to resort to using linux-perf directly with `d8`.
 This requires a two-step process, first `perf record` creates a `perf.data` file that has to be post-processed with `perf inject` to inject the JS-symbols.
 
