@@ -287,7 +287,7 @@ As described before, when initializing the brand, V8 also stores a reference to 
 
 ```js
 class A extends class {} {
-  #method();
+  #method() {}
   constructor(run) {
     const callSuper = () => super();
     // ...do something
