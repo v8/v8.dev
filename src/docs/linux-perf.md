@@ -8,9 +8,9 @@ V8 writes out performance data during execution into a file that can be used to 
 ## Requirements
 
 - `linux-perf` version 5 or higher (previous version don't have jit support). (See instructions at the [end](#build-perf))
-- Build V8/Chrome with `enable_profiling=true` for better symbolized stacks
+- Build V8/Chrome with `enable_profiling=true` for better symbolized C++ code.
 
-## Build V8
+## Building V8
 
 To use V8’s integration with Linux perf you need to build it with the `enable_profiling = true` gn flag:
 
@@ -27,30 +27,37 @@ After building `d8`, you can start using linux perf:
 cd <path_to_your_v8_checkout>
 echo '(function f() {
     var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s;
-  })();' > test.js
-perf record -g -k mono out/x64.release/d8 \
-    --perf-prof --no-write-protect-code-memory \
-    --interpreted-frames-native-stack \
-    test.js
+  })();' > test.js;
+  
+# Optional: create and output directory
+mkdir profiling_out_dir;
+tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
+    out/x64.release/d8 test.js;
+
+# Fancy UI:
+pprof -flame profiling_out_dir/*perf.data.jitted;
+# Terminal-based tool:
+perf report -i profiling_out_dir/*perf.data.jitted;
 ```
 
-## V8 linux-perf Flags
+Check `linux-perf-d8.py --help` for more details. Note that you can use all `d8` flags after `--`:
 
-[`--perf-prof`](https://source.chromium.org/search?q=FLAG_perf_prof) is used to the V8 command-line to record performance samples in JIT code.
+```bash
+tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
+    -- out/x64.release/d8 --expose-gc --allow-natives-syntaxn test.js;
+```
 
-[`--nowrite-protect-code-memory`](https://source.chromium.org/search?q=FLAG_nowrite_protect_code_memory) is requried to disable write protection for code memory. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
 
-[`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone.
+## Profiling Chrome or content_shell
 
-## Profiling chrome with the [linux-perf.py](https://source.chromium.org/search?q=linux-perf.py) script
-
-1. You can use the same V8 flags to profile chrome itself. Follow the instructions above for the correct V8 flags and add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to your chrome build.
+1. You can use the [linux-perf.py](https://source.chromium.org/search?q=linux-perf.py) script to profile chrome. Make sure to add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to get proper C++ symbols.
 
 1. Once your build is ready, you can profile a website with both, full symbols for C++ and JS code.
 
     ```bash
     mkdir perf_results;
-    tools/chrome/linux-perf.py out/x64.release/chrome --perf-data-dir=perf_results --timeout=30
+    tools/profiling/linux-perf-chrome.py out/x64.release/chrome \
+        --perf-data-dir=perf_results --timeout=30
     ```
 
 1. Navigate to your website and then close the browser (or wait for the `--timeout` to complete)
@@ -63,7 +70,7 @@ perf record -g -k mono out/x64.release/d8 \
    chrome_renderer_1583105_1.perf.data.jitted       0.16MiB
    ```
 
-## Explore linux-perf results
+## Exploring linux-perf results
 
 Finally you can use the Linux `perf` tool to explore the profile of a d8 or chrome renderer process:
 
@@ -77,7 +84,33 @@ You can also use [pprof](https://github.com/google/pprof) to generate more visua
 pprof -flame perf.data.jitted;
 ```
 
-## Using linux-perf with chrome directly
+## Low-level linux-perf usage
+
+### Using linux-perf with `d8` directly
+Depending on your use-case you might want to resort to using linux-perf directly with `d8`.
+This requires a two-step process, first `perf record` creates a `perf.data` file that has to be post-processed with `perf inject` to inject the JS-symbols.
+
+``` bash
+perf record --call-graph=fp --clockid=mono --freq=max \
+    --output=perf.data
+    out/x64.release/d8 \
+      --perf-prof --no-write-protect-code-memory \
+      --interpreted-frames-native-stack \
+    test.js;
+perf inject --jit --input=perf.data --output=perf.data.jitted;
+perf report --input=perf.data.jitted;
+```
+
+### V8 linux-perf Flags
+
+[`--perf-prof`](https://source.chromium.org/search?q=FLAG_perf_prof) is used to the V8 command-line to record performance samples in JIT code.
+
+[`--nowrite-protect-code-memory`](https://source.chromium.org/search?q=FLAG_nowrite_protect_code_memory) is requried to disable write protection for code memory. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
+
+[`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone. Since the InterpreterEntryTrampoline has to be copied this comes at slight performance and memory regression.
+
+
+### Using linux-perf with chrome directly
 
 1. You can use the same V8 flags to profile chrome itself. Follow the instructions above for the correct V8 flags and add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to your chrome build.
 
@@ -101,7 +134,7 @@ pprof -flame perf.data.jitted;
 1. After execution finishes, combine the static information gathered from the `perf` tool with the performance samples output by V8 for JIT code:
 
    ```bash
-   perf inject -j -i perf.data -o perf.data.jitted
+   perf inject --jit --input=perf.data --output=perf.data.jitted
    ```
 
 1. Finally you can use the Linux `perf` [tool to explore](#Explore-linux-perf-results)
