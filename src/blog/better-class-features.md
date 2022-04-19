@@ -120,7 +120,7 @@ In most use cases, however, the semantic differences are insignificant. It would
 
 To speed up initialization of private class fields and computed public class fields, the implementation introduced a new machinery to plug into the [inline cache (IC) system](https://mathiasbynens.be/notes/shapes-ics) when handling these operations. This new machinery comes in three cooperating pieces:
 
-- A new bytecode `DefineKeyedOwnProperty`. This gets emitted when generating code for the `ClassLiteral::Property` AST nodes representing class field initializers.
+- In the bytecode generator, a new bytecode `DefineKeyedOwnProperty`. This gets emitted when generating code for the `ClassLiteral::Property` AST nodes representing class field initializers.
 - In the TurboFan JIT, a corresponding IR opcode `JSDefineKeyedOwnProperty`, which can be compiled from the new bytecode.
 - In the IC system, a new `DefineKeyedOwnIC` that is used in the interpreter handler of the new bytecode as well as the code compiled from the new IR opcode. To simplify the implementation, the new IC reuses some of the code in `KeyedStoreIC` which was intended for ordinary property stores.
 
