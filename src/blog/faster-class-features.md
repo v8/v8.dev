@@ -14,7 +14,7 @@ Class fields have been shipped in V8 since v7.2 and private class methods have b
 1. The initialization of class fields and private methods was much slower than the assignment of ordinary properties.
 2. The class field initializers were broken in [startup snapshots](https://v8.dev/blog/custom-startup-snapshots) used by embedders like Node.js and Deno to speed up the bootstrapping of themselves or user applications.
 
-The first issue has been fixed in V8 v9.7 and the fix for the second issue has been released in V8 v10.0. This post covers how the first issue was fixed, for another read about how the fix of the snapshot issue, check out [this post](https://joyeecheung.github.io/blog/2022/04/14/fixing-snapshot-support-of-class-fields-in-v8/).
+The first issue has been fixed in V8 v9.7 and the fix for the second issue has been released in V8 v10.0. This post covers how the first issue was fixed, for another read about the fix of the snapshot issue, check out [this post](https://joyeecheung.github.io/blog/2022/04/14/fixing-snapshot-support-of-class-fields-in-v8/).
 
 ## Optimizing class fields
 
