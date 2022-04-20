@@ -35,9 +35,9 @@ tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
     out/x64.release/d8 test.js;
 
 # Fancy UI (`-flame` is googler-only, use `-web` as an alterntive):
-pprof -flame profiling_out_dir/*perf.data.jitted;
+pprof -flame profiling_out_dir/XXX_perf.data.jitted;
 # Terminal-based tool:
-perf report -i profiling_out_dir/*perf.data.jitted;
+perf report -i profiling_out_dir/XXX_perf.data.jitted;
 ```
 
 Check `linux-perf-d8.py --help` for more details. Note that you can use all `d8` flags after `--`:
@@ -75,14 +75,14 @@ tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
 Finally you can use the Linux `perf` tool to explore the profile of a d8 or chrome renderer process:
 
 ```bash
-perf report -i perf.data.jitted
+perf report -i perf_results/XXX_perf.data.jitted
 ```
 
 You can also use [pprof](https://github.com/google/pprof) to generate more visualizations:
 
 ```bash
 # Note: `-flame` is google-only, use `-web` as a public alterntive:
-pprof -flame perf.data.jitted;
+pprof -flame perf_results/XXX_perf.data.jitted;
 ```
 
 ## Low-level linux-perf usage
