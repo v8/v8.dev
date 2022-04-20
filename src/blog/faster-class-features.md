@@ -1,5 +1,5 @@
 ---
-title: 'Better support for class features'
+title: 'Faster initialization of instances with new class features'
 author: '[Joyee Cheung](https://twitter.com/JoyeeCheung), instance initializer'
 avatars:
   - 'joyee-cheung'
@@ -20,9 +20,9 @@ The first issue has been fixed in V8 v9.7 and the fix for the second issue has b
 
 To get rid of the performance gap between the assignment of ordinary properties and the initialization of class fields, we updated the existing [inline cache (IC) system](https://mathiasbynens.be/notes/shapes-ics) to work with the latter. Before v9.7, V8 always used a costly runtime call for class field initializations. With v9.7, when V8 considers the pattern of the initialization to be predictable enough, it uses a new IC to speed up the operation just like what it does for assignments of ordinary properties.
 
-![Performance of initializations, optimized](/_img/better-class-features/class-fields-performance-optimized.svg)
+![Performance of initializations, optimized](/_img/faster-class-features/class-fields-performance-optimized.svg)
 
-![Performance of initializations, interpreted](/_img/better-class-features/class-fields-performance-interpreted.svg)
+![Performance of initializations, interpreted](/_img/faster-class-features/class-fields-performance-interpreted.svg)
 
 ### The original implementation of class fields
 
@@ -213,11 +213,11 @@ To deal with these targets, we patched the IC to fall back to the runtime when i
 
 In [the specification](https://tc39.es/ecma262/#sec-privatemethodoraccessoradd), the private methods are described as if they are installed on the instances but not on the class. In order to save memory, however, V8's implementation stores the private methods along with a private brand symbol in a context associated with the class. When the constructor is invoked, V8 only stores a reference to that context in the instance, with the private brand symbol as the key.
 
-![Evaluation and instantiation of classes with private methods](/_img/better-class-features/class-evaluation-and-instantiation.svg)
+![Evaluation and instantiation of classes with private methods](/_img/faster-class-features/class-evaluation-and-instantiation.svg)
 
 When the private methods are accessed, V8 walks the context chain starting from the execution context to find the class context, reads a statically known slot from the found context to get the private brand symbol for the class, then checks if the instance has a property keyed by this brand symbol to see if the instance is created from this class. If the brand check passes, V8 loads the private method from another known slot in the same context and completes the access.
 
-![Access of private methods](/_img/better-class-features/access-private-methods.svg)
+![Access of private methods](/_img/faster-class-features/access-private-methods.svg)
 
 Take this snippet as an example:
 
@@ -262,7 +262,7 @@ Ldar <context>
 DefineKeyedOwnProperty <this>, r0, [0]
 ```
 
-![Performance of instance initializations of classes with different methods](/_img/better-class-features/private-methods-performance.svg)
+![Performance of instance initializations of classes with different methods](/_img/faster-class-features/private-methods-performance.svg)
 
 There is a caveat, however: if the class is a derived class whose constructor calls `super()`,  the initialization of the private methods - and in our case, the installation of the private brand symbol - has to happen after `super()` returns:
 
@@ -327,6 +327,6 @@ In this case the cost of the runtime call is back so initializing instances of t
 
 ## Final notes
 
-The work mentioned in this blog post is also included in the Node.js v18 release. Previously, Node.js switched to symbol properties in a few built-in classes that had been using private fields in order to include them into the embedded bootstrap snapshot as well as to improve the performance of the constructors (see [this blog post](https://www.nearform.com/blog/node-js-and-the-struggles-of-being-an-eventtarget/) for more context). With the improved support of class features in V8, Node.js [switched back to private class fields](https://github.com/nodejs/node/pull/42361) in these classes and Node.js's benchmarks showed that [these changes did not introduce any performance regressions](https://github.com/nodejs/node/pull/42361#issuecomment-1068961385).
+The work mentioned in this blog post is also included in the [Node.js 18.0.0 release](https://nodejs.org/en/blog/announcements/v18-release-announce/). Previously, Node.js switched to symbol properties in a few built-in classes that had been using private fields in order to include them into the embedded bootstrap snapshot as well as to improve the performance of the constructors (see [this blog post](https://www.nearform.com/blog/node-js-and-the-struggles-of-being-an-eventtarget/) for more context). With the improved support of class features in V8, Node.js [switched back to private class fields](https://github.com/nodejs/node/pull/42361) in these classes and Node.js's benchmarks showed that [these changes did not introduce any performance regressions](https://github.com/nodejs/node/pull/42361#issuecomment-1068961385).
 
 Thanks to Igalia and Bloomberg for contributing this implementation!
