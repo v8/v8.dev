@@ -19,7 +19,7 @@ echo 'enable_profiling = true' >> out/x64.release/args.gn
 ninja -C out/x64.release
 ```
 
-## Profiling `d8` with perf flags
+## Profiling `d8` with [`linux-perf-d8.py`](https://source.chromium.org/search?q=linux-perf-d8.py)
 
 After building `d8`, you can start using linux perf:
 
@@ -34,7 +34,7 @@ mkdir profiling_out_dir;
 tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
     out/x64.release/d8 test.js;
 
-# Fancy UI:
+# Fancy UI (`-flame` is googler-only, use `-web` as an alterntive):
 pprof -flame profiling_out_dir/*perf.data.jitted;
 # Terminal-based tool:
 perf report -i profiling_out_dir/*perf.data.jitted;
@@ -48,9 +48,9 @@ tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
 ```
 
 
-## Profiling Chrome or content_shell
+## Profiling Chrome or content_shell with [linux-perf-chrome.py](https://source.chromium.org/search?q=linux-perf-chrome.py)
 
-1. You can use the [linux-perf.py](https://source.chromium.org/search?q=linux-perf.py) script to profile chrome. Make sure to add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to get proper C++ symbols.
+1. You can use the [linux-perf-chrome.py](https://source.chromium.org/search?q=linux-perf-chrome.py) script to profile chrome. Make sure to add the [required chrome gn flags](https://chromium.googlesource.com/chromium/src/+/master/docs/profiling.md#General-checkout-setup) to get proper C++ symbols.
 
 1. Once your build is ready, you can profile a website with both, full symbols for C++ and JS code.
 
@@ -81,6 +81,7 @@ perf report -i perf.data.jitted
 You can also use [pprof](https://github.com/google/pprof) to generate more visualizations:
 
 ```bash
+# Note: `-flame` is google-only, use `-web` as a public alterntive:
 pprof -flame perf.data.jitted;
 ```
 
