@@ -3,7 +3,7 @@ title: 'Faster initialization of instances with new class features'
 author: '[Joyee Cheung](https://twitter.com/JoyeeCheung), instance initializer'
 avatars:
   - 'joyee-cheung'
-date: 2022-04-14
+date: 2022-04-20
 tags:
   - internals
 description: 'Initializations of instances with new class features have become faster since V8 v9.7.'
