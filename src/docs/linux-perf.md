@@ -16,7 +16,7 @@ To use V8’s integration with Linux perf you need to build it with the `enable_
 
 ```bash
 echo 'enable_profiling = true' >> out/x64.release/args.gn
-ninja -C out/x64.release
+autoninja -C out/x64.release
 ```
 
 ## Profiling `d8` with [`linux-perf-d8.py`](https://source.chromium.org/search?q=linux-perf-d8.py)
