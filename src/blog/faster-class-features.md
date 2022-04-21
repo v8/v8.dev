@@ -7,6 +7,7 @@ date: 2022-04-20
 tags:
   - internals
 description: 'Initializations of instances with new class features have become faster since V8 v9.7.'
+tweet: '1517041137378373632'
 ---
 
 Class fields have been shipped in V8 since v7.2 and private class methods have been shipped since v8.4. After the proposals reached stage 4 in 2021, work had begun to improve the support of the new class features in V8 - until then, there had been two main issues affecting their adoption:
