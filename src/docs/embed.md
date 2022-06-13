@@ -26,7 +26,7 @@ These concepts are discussed in greater detail in [the advanced guide](/docs/emb
 Follow the steps below to run the example yourself:
 
 1. Download the V8 source code by following [the Git instructions](/docs/source-code#using-git).
-1. The instructions for this hello world example have last been tested with V8 v7.1.11. You can check out this branch with `git checkout refs/tags/10.5.1 -b sample -t`
+1. The instructions for this hello world example have last been tested with V8 v10.5.1. You can check out this branch with `git checkout refs/tags/10.5.1 -b sample -t`
 1. Create a build configuration using the helper script:
 
     ```bash
