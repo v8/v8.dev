@@ -3,7 +3,7 @@ title: 'Discontinuing release blog posts'
 author: 'Shu-yu Guo ([@shu_](https://twitter.com/_shu))'
 avatars:
  - 'shu-yu-guo'
-date: 2022-06-16
+date: 2022-06-17
 tags:
  - release
 description: 'V8 to discontinue release blog posts in favor of Chrome release schedule and feature blog posts.'
