@@ -7,8 +7,9 @@ avatars:
   - hannes-payer
 date: 2022-06-14
 tags:
+  - internals
+  - memory
   - security
-  - scan
 description: 'Eliminating use-after-frees vulnerabilities in Chrome with heap scanning.'
 ---
 <sup>*The post was originally posted in the [Google Security Blog](https://security.googleblog.com/2022/05/retrofitting-temporal-memory-safety-on-c.html).*</sup>
