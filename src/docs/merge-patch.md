@@ -80,7 +80,8 @@ If one of the builders is not green after handling your patch, revert the merge 
 
 ## Patching a version used on Canary/Dev
 
-In case you need to patch a Canary/Dev version (which should not happen often), follow these instructions:
+In case you need to patch a Canary/Dev version (which should not happen often), follow these instructions.
+Google please check out the [internal site](https://g3doc.corp.google.com/company/teams/v8/patching_a_version.md?cl=head) before crearting the CL
 
 ### Step 1: Merge to roll branch
 
