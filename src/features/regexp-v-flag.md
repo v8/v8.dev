@@ -5,7 +5,7 @@ avatars:
   - 'mark-davis'
   - 'markus-scherer'
   - 'mathias-bynens'
-date: 2022-06-15
+date: 2022-06-27
 tags:
   - ECMAScript
 description: 'The new RegExp `v` flag enables `unicodeSets` mode, unlocking support for extended character classes, including Unicode properties of strings, set notation, and improved case-insensitive matching.'
