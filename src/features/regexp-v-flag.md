@@ -24,7 +24,7 @@ This article dives into each of these. But first things first — here’s how t
 const re = /…/v;
 ```
 
-The `v` flag can be combined with existing regular expression flags, with one notable exception. The `v` flag enables all the good parts of the `u` flag, but with additional features and improvements. Crucially, `v` is a completely separate mode from `u` rather than a complementary one. For this reason, the `v` and `u` flags cannot be combined — trying to use both flags on the same regular expression results in an error. The only valid options are: either use `u`, or use `v`, or use neither `u` nor `v`. But since `v` is the most feature-complete option, that choice is easily made…
+The `v` flag can be combined with existing regular expression flags, with one notable exception. The `v` flag enables all the good parts of the `u` flag, but with additional features and improvements — some of which are backwards-incompatible with the `u` flag. Crucially, `v` is a completely separate mode from `u` rather than a complementary one. For this reason, the `v` and `u` flags cannot be combined — trying to use both flags on the same regular expression results in an error. The only valid options are: either use `u`, or use `v`, or use neither `u` nor `v`. But since `v` is the most feature-complete option, that choice is easily made…
 
 Let’s dig into the new functionality!
 
