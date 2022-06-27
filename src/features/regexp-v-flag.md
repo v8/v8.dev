@@ -9,6 +9,7 @@ date: 2022-06-27
 tags:
   - ECMAScript
 description: 'The new RegExp `v` flag enables `unicodeSets` mode, unlocking support for extended character classes, including Unicode properties of strings, set notation, and improved case-insensitive matching.'
+tweet: '1541419838513594368'
 ---
 JavaScript has supported regular expressions since ECMAScript 3 (1999). Sixteen years later, ES2015 introduced [Unicode mode (the `u` flag)](https://mathiasbynens.be/notes/es6-unicode-regex), [sticky mode (the `y` flag)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/sticky#description), and [the `RegExp.prototype.flags` getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/flags). Another three years later, ES2018 introduced [`dotAll` mode (the `s` flag)](https://mathiasbynens.be/notes/es-regexp-proposals#dotAll), [lookbehind assertions](https://mathiasbynens.be/notes/es-regexp-proposals#lookbehinds), [named capture groups](https://mathiasbynens.be/notes/es-regexp-proposals#named-capture-groups), and [Unicode character property escapes](https://mathiasbynens.be/notes/es-unicode-property-escapes). And in ES2020, [`String.prototype.matchAll`](https://v8.dev/features/string-matchall) made it easier to work with regular expressions. JavaScript regular expressions have come a long way, and are still improving.
 
