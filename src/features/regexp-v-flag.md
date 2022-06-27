@@ -29,6 +29,8 @@ The `v` flag can be combined with existing regular expression flags, with one no
 
 Let’s dig into the new functionality!
 
+> 💡 You can test all these examples directly in the [Babel REPL](https://babeljs.io/repl//#?code_lz=DYUwLgBATiDmIA8AOEC8ED0BtLBDAtAGYC6AZKVgMb4AWxxGAbgNwBQrGGEAKjQJYBnCIIg0ArvAA0EMFACeEMQDtKAewC26kErB8lsYWACEHLqEgh1qgFYj0GADpIA3gCUA4gEkA-gFErtgC-TMxAA&presets=stage-3), enabling the `stage-3` preset in the left sidebar.
+
 ## Unicode properties of strings
 
 The Unicode Standard assigns various properties and property values to every symbol. For example, to get the set of symbols that are used in the Greek script, search the Unicode database for symbols whose `Script_Extensions` property value includes `Greek`.
