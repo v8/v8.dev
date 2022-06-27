@@ -1,5 +1,5 @@
 ---
-title: 'Retrofitting Temporal Memory Safety on C++'
+title: 'Retrofitting temporal memory safety on C++'
 author: 'Anton Bikineev, Michael Lippautz ([@mlippautz](https://twitter.com/mlippautz)), Hannes Payer ([@PayerHannes](https://twitter.com/PayerHannes))'
 avatars:
   - anton-bikineev
@@ -12,7 +12,9 @@ tags:
   - security
 description: 'Eliminating use-after-frees vulnerabilities in Chrome with heap scanning.'
 ---
-<sup>*The post was originally posted in the [Google Security Blog](https://security.googleblog.com/2022/05/retrofitting-temporal-memory-safety-on-c.html).*</sup>
+:::note
+**Note:** This post was originally posted on the [Google Security Blog](https://security.googleblog.com/2022/05/retrofitting-temporal-memory-safety-on-c.html).
+:::
 
 [Memory safety in Chrome](https://security.googleblog.com/2021/09/an-update-on-memory-safety-in-chrome.html) is an ever-ongoing effort to protect our users. We are constantly experimenting with different technologies to stay ahead of malicious actors. In this spirit, this post is about our journey of using heap scanning technologies to improve memory safety of C++.
 
@@ -36,11 +38,11 @@ Over the last decade, another approach has seen some success: memory quarantine.
 
 (At this point, one may ask where memory tagging fits into this picture – keep on reading!)
 
-## Quarantining and Heap Scanning, the Basics
+## Quarantining and heap scanning, the basics
 
 The main idea behind assuring temporal safety with quarantining and heap scanning is to avoid reusing memory until it has been proven that there are no more (dangling) pointers referring to it. To avoid changing C++ user code or its semantics, the memory allocator providing `new` and `delete` is intercepted.
 
-![Figure 1: Quarantine Basics](/_img/retrofitting-temporal-memory-safety-on-c++/basics.png)
+![Figure 1: quarantine basics](/_img/retrofitting-temporal-memory-safety-on-c++/basics.png)
 
 Upon invoking `delete`, the memory is actually put in a quarantine, where it is unavailable for being reused for subsequent `new` calls by the application. At some point a heap scan is triggered which scans the whole heap, much like a garbage collector, to find references to quarantined memory blocks. Blocks that have no incoming references from the regular application memory are transferred back to the allocator where they can be reused for subsequent allocations.
 
@@ -55,13 +57,13 @@ There are various hardening options which come with a performance cost:
 
 We call the collection of different versions of these algorithms *StarScan* [stɑː skæn], or *\*Scan* for short.
 
-## Reality Check
+## Reality check
 
 We apply \*Scan to the unmanaged parts of the renderer process and use [Speedometer2](https://browserbench.org/Speedometer2.0/) to evaluate the performance impact.
 
 We have experimented with different versions of \*Scan. To minimize performance overhead as much as possible though, we evaluate a configuration that uses a separate thread to scan the heap and avoids clearing of quarantined memory eagerly on `delete` but rather clears quarantined memory when running \*Scan. We opt in all memory allocated with `new` and don’t discriminate between allocation sites and types for simplicity in the first implementation.
 
-![Figure 2: Scanning in Separate Thread](/_img/retrofitting-temporal-memory-safety-on-c++/separate-thread.png)
+![Figure 2: Scanning in separate thread](/_img/retrofitting-temporal-memory-safety-on-c++/separate-thread.png)
 
 Note that the proposed version of \*Scan is not complete. Concretely, a malicious actor may exploit a race condition with the scanning thread by moving a dangling pointer from an unscanned to an already scanned memory region. Fixing this race condition requires keeping track of writes into blocks of already scanned memory, by e.g. using memory protection mechanisms to intercept those accesses, or stopping all application threads in safepoints from mutating the object graph altogether. Either way, solving this issue comes at a performance cost and exhibits an interesting performance and security trade-off. Note that this kind of attack is not generic and does not work for all UAF. Problems such as depicted in the introduction would not be prone to such attacks as the dangling pointer is not copied around.
 
@@ -83,11 +85,11 @@ In the end, the algorithm is still memory bound and scanning remains a noticeabl
 
 While we improved raw scanning time, the fact that memory sits in a quarantine increases the overall working set of a process. To further quantify this overhead, we use a selected set of [Chrome’s real-world browsing benchmarks](https://chromium.googlesource.com/catapult/) to measure memory consumption. \*Scan in the renderer process regresses memory consumption by about 12%. It’s this increase of the working set that leads to more memory being paged in which is noticeable on application fast paths.
 
-## Hardware Memory Tagging to the Rescue
+## Hardware memory tagging to the rescue
 
 MTE (Memory Tagging Extension) is a new extension on the ARM v8.5A architecture that helps with detecting errors in software memory use. These errors can be spatial errors (e.g. out-of-bounds accesses) or temporal errors (use-after-free). The extension works as follows. Every 16 bytes of memory are assigned a 4-bit tag. Pointers are also assigned a 4-bit tag. The allocator is responsible for returning a pointer with the same tag as the allocated memory. The load and store instructions verify that the pointer and memory tags match. In case the tags of the memory location and the pointer do not match a hardware exception is raised.
 
-MTE doesn't offer a deterministic protection against use-after-free. Since the number of tag bits is finite there is a chance that the tag of the memory and the pointer match due to overflow. With 4 bits, only 16 reallocations are enough to have the tags match. A malicious actor may exploit the tag bit overflow to get a use-after-free by just waiting until the tag of a dangling pointer matches (again) the memory it is pointing to.
+MTE doesn’t offer a deterministic protection against use-after-free. Since the number of tag bits is finite there is a chance that the tag of the memory and the pointer match due to overflow. With 4 bits, only 16 reallocations are enough to have the tags match. A malicious actor may exploit the tag bit overflow to get a use-after-free by just waiting until the tag of a dangling pointer matches (again) the memory it is pointing to.
 
 \*Scan can be used to fix this problematic corner case. On each `delete` call the tag for the underlying memory block gets incremented by the MTE mechanism. Most of the time the block will be available for reallocation as the tag can be incremented within the 4-bit range. Stale pointers would refer to the old tag and thus reliably crash on dereference. Upon overflowing the tag, the object is then put into quarantine and processed by \*Scan. Once the scan verifies that there are no more dangling pointers to this block of memory, it is returned back to the allocator. This reduces the number of scans and their accompanying cost by ~16x.
 
@@ -106,7 +108,7 @@ Is this some actual [free lunch](https://en.wikipedia.org/wiki/No_free_lunch_the
 
 (We are also aware that there’s synchronous and asynchronous MTE which also affects determinism and performance. For the sake of this experiment we kept using the asynchronous mode.)
 
-![Figure 4: MTE Regression](/_img/retrofitting-temporal-memory-safety-on-c++/mte-regression.png)
+![Figure 4: MTE regression](/_img/retrofitting-temporal-memory-safety-on-c++/mte-regression.png)
 
 The results show that MTE and memory zeroing come with some cost which is around 2% on Speedometer2. Note that neither PartitionAlloc, nor hardware has been optimized for these scenarios yet. The experiment also shows that adding \*Scan on top of MTE comes without measurable cost.
 
