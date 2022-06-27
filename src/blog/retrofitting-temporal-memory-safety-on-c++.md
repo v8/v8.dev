@@ -42,7 +42,7 @@ Over the last decade, another approach has seen some success: memory quarantine.
 
 The main idea behind assuring temporal safety with quarantining and heap scanning is to avoid reusing memory until it has been proven that there are no more (dangling) pointers referring to it. To avoid changing C++ user code or its semantics, the memory allocator providing `new` and `delete` is intercepted.
 
-![Figure 1: quarantine basics](/_img/retrofitting-temporal-memory-safety-on-c++/basics.png)
+![Figure 1: quarantine basics](/_img/retrofitting-temporal-memory-safety-on-c++/basics.svg)
 
 Upon invoking `delete`, the memory is actually put in a quarantine, where it is unavailable for being reused for subsequent `new` calls by the application. At some point a heap scan is triggered which scans the whole heap, much like a garbage collector, to find references to quarantined memory blocks. Blocks that have no incoming references from the regular application memory are transferred back to the allocator where they can be reused for subsequent allocations.
 
@@ -63,7 +63,7 @@ We apply \*Scan to the unmanaged parts of the renderer process and use [Speedome
 
 We have experimented with different versions of \*Scan. To minimize performance overhead as much as possible though, we evaluate a configuration that uses a separate thread to scan the heap and avoids clearing of quarantined memory eagerly on `delete` but rather clears quarantined memory when running \*Scan. We opt in all memory allocated with `new` and don’t discriminate between allocation sites and types for simplicity in the first implementation.
 
-![Figure 2: Scanning in separate thread](/_img/retrofitting-temporal-memory-safety-on-c++/separate-thread.png)
+![Figure 2: Scanning in separate thread](/_img/retrofitting-temporal-memory-safety-on-c++/separate-thread.svg)
 
 Note that the proposed version of \*Scan is not complete. Concretely, a malicious actor may exploit a race condition with the scanning thread by moving a dangling pointer from an unscanned to an already scanned memory region. Fixing this race condition requires keeping track of writes into blocks of already scanned memory, by e.g. using memory protection mechanisms to intercept those accesses, or stopping all application threads in safepoints from mutating the object graph altogether. Either way, solving this issue comes at a performance cost and exhibits an interesting performance and security trade-off. Note that this kind of attack is not generic and does not work for all UAF. Problems such as depicted in the introduction would not be prone to such attacks as the dangling pointer is not copied around.
 
@@ -95,7 +95,7 @@ MTE doesn’t offer a deterministic protection against use-after-free. Since the
 
 The following picture depicts this mechanism. The pointer to `foo` initially has a tag of `0x0E` which allows it to be incremented once again for allocating `bar`. Upon invoking `delete` for `bar` the tag overflows and the memory is actually put into quarantine of \*Scan.
 
-![Figure 3: MTE](/_img/retrofitting-temporal-memory-safety-on-c++/mte.png)
+![Figure 3: MTE](/_img/retrofitting-temporal-memory-safety-on-c++/mte.svg)
 
 We got our hands on some actual hardware supporting MTE and redid the experiments in the renderer process. The results are promising as the regression on Speedometer was within noise and we only regressed memory footprint by around 1% on Chrome’s real-world browsing stories.
 
@@ -108,7 +108,7 @@ Is this some actual [free lunch](https://en.wikipedia.org/wiki/No_free_lunch_the
 
 (We are also aware that there’s synchronous and asynchronous MTE which also affects determinism and performance. For the sake of this experiment we kept using the asynchronous mode.)
 
-![Figure 4: MTE regression](/_img/retrofitting-temporal-memory-safety-on-c++/mte-regression.png)
+![Figure 4: MTE regression](/_img/retrofitting-temporal-memory-safety-on-c++/mte-regression.svg)
 
 The results show that MTE and memory zeroing come with some cost which is around 2% on Speedometer2. Note that neither PartitionAlloc, nor hardware has been optimized for these scenarios yet. The experiment also shows that adding \*Scan on top of MTE comes without measurable cost.
 
