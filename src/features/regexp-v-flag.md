@@ -29,8 +29,6 @@ The `v` flag can be combined with existing regular expression flags, with one no
 
 Let’s dig into the new functionality!
 
-> 💡 You can test all these examples directly in the [Babel REPL](https://babeljs.io/repl//#?code_lz=DYUwLgBATiDmIA8AOEC8ED0BtLBDAtAGYC6AZKVgMb4AWxxGAbgNwBQrGGEAKjQJYBnCIIg0ArvAA0EMFACeEMQDtKAewC26kErB8lsYWACEHLqEgh1qgFYj0GADpIA3gCUA4gEkA-gFErtgC-TMxAA&presets=stage-3), enabling the `stage-3` preset in the left sidebar.
-
 ## Unicode properties of strings
 
 The Unicode Standard assigns various properties and property values to every symbol. For example, to get the set of symbols that are used in the Greek script, search the Unicode database for symbols whose `Script_Extensions` property value includes `Greek`.
@@ -246,7 +244,7 @@ As part of our work on these JavaScript features, we went beyond “just” prop
 
 ## RegExp `v` flag support { #support }
 
-The `v` flag is not yet supported in any JavaScript engine. However, Babel already supports transpiling it! The support table below links to tracking issues you can subscribe to for updates.
+The `v` flag is not yet supported in any JavaScript engine. However, Babel already supports transpiling it — [try out the examples from this article in the Babel REPL](https://babeljs.io/repl/#?code_lz=MYewdgzgLgBATgUxgXhgegNoYIYFoBmAugGTEbC4AWhhaAbgNwBQTaaMAKpQJYQy8xKAVwDmSQCgEMKHACeMIWFABbJQjBRuYEfygBCVmlCRYCJSABW3FOgA6ABwDeAJQDiASQD6AUTOWAvvTMQA&presets=stage-3)! The support table below links to tracking issues you can subscribe to for updates.
 
 <feature-support chrome="no https://bugs.chromium.org/p/v8/issues/detail?id=11935"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=regexp-v-flag"
