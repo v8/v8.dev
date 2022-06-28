@@ -86,7 +86,9 @@ The `v` flag enables support for the following Unicode properties of strings fro
 
 This list of supported properties might grow in the future as the Unicode Standard defines additional properties of strings. Although all current properties of strings happen to be emoji-related, future properties of strings might serve entirely different use cases.
 
-*Note:* Although properties of strings are currently gated on the new `v` flag, [we plan to eventually make them available in `u` mode as well](https://github.com/tc39/proposal-regexp-v-flag/issues/49).
+:::note
+**Note:** Although properties of strings are currently gated on the new `v` flag, [we plan to eventually make them available in `u` mode as well](https://github.com/tc39/proposal-regexp-v-flag/issues/49).
+:::
 
 ## Set notation + string literal syntax { #set-notation }
 
