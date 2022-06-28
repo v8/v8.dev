@@ -94,7 +94,7 @@ When working with `\p{…}` escapes (be it character properties or the new prope
 
 ### Difference/subtraction with `--` { #difference }
 
-The syntax `A--B` can be used to match strings _in `A` but not in `B`_, a.k.a. difference/subtraction. For example, what if you want to match all Greek symbols except for the letter `π`? Previously, there was no way to benefit from `\p{Script_Extensions=Greek}` in this case, since it already matches `π`. The only way to achieve this was to go back to hand-writing a lengthy character class containing the individual characters or ranges. And if Unicode added another Greek character, you would need to notice, and manually update your character class.
+The syntax `A--B` can be used to match strings _in `A` but not in `B`_, a.k.a. difference/subtraction. For example, what if you want to match all Greek symbols except for the letter `π`? Previously, there was no way to benefit from `\p{Script_Extensions=Greek}` in this case, since it already matches `π`. One way to achieve this was to go back to hand-writing a lengthy character class containing the individual characters or ranges — but then, whenever Unicode added another Greek character, you would need to notice, and manually update your character class.
 
 With set notation, solving this is trivial:
 
