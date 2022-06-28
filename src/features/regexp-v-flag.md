@@ -90,13 +90,13 @@ This list of supported properties might grow in the future as the Unicode Standa
 
 ## Set notation + string literal syntax { #set-notation }
 
-When working with `\p{…}` escapes (be it character properties or the new properties of strings) it can be useful to perform difference/subtraction or intersection. With the `v` flag, character classes can now be nested, and those set operations can now be performed within them.
+When working with `\p{…}` escapes (be it character properties or the new properties of strings) it can be useful to perform difference/subtraction or intersection. With the `v` flag, character classes can now be nested, and those set operations can now be performed within them rather than with adjacent lookahead or lookbehind assertions or lengthy character classes expressing the computed ranges.
 
 ### Difference/subtraction with `--` { #difference }
 
-The syntax `A--B` can be used to match strings _in `A` but not in `B`_, a.k.a. difference/subtraction. For example, what if you want to match all Greek symbols except for the letter `π`? Previously, there was no easy way to benefit from `\p{Script_Extensions=Greek}` in this case, since it already matches `π`. One way to achieve this was to go back to hand-writing a lengthy character class containing the individual characters or ranges — but then, whenever Unicode added another Greek character, you would need to notice, and manually update your character class.
+The syntax `A--B` can be used to match strings _in `A` but not in `B`_, a.k.a. difference/subtraction.
 
-With set notation, solving this is trivial:
+For example, what if you want to match all Greek symbols except for the letter `π`? With set notation, solving this is trivial:
 
 ```js
 /[\p{Script_Extensions=Greek}--π]/v.test('π'); // → false
