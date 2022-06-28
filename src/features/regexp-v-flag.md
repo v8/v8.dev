@@ -244,7 +244,7 @@ As part of our work on these JavaScript features, we went beyond “just” prop
 
 ## RegExp `v` flag support { #support }
 
-The `v` flag is not yet supported in any JavaScript engine. However, Babel already supports transpiling it! The support table below links to tracking issues you can subscribe to for updates.
+The `v` flag is not yet supported in any JavaScript engine. However, Babel already supports transpiling it — [try out the examples from this article in the Babel REPL](https://babeljs.io/repl/#?code_lz=MYewdgzgLgBATgUxgXhgegNoYIYFoBmAugGTEbC4AWhhaAbgNwBQTaaMAKpQJYQy8xKAVwDmSQCgEMKHACeMIWFABbJQjBRuYEfygBCVmlCRYCJSABW3FOgA6ABwDeAJQDiASQD6AUTOWAvvTMQA&presets=stage-3)! The support table below links to tracking issues you can subscribe to for updates.
 
 <feature-support chrome="no https://bugs.chromium.org/p/v8/issues/detail?id=11935"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=regexp-v-flag"
