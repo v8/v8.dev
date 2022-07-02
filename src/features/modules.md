@@ -132,7 +132,7 @@ You may have noticed we’re using the `.mjs` file extension for modules. On the
 Still, we recommend using the `.mjs` extension for modules, for two reasons:
 
 1. During development, the `.mjs` extension makes it crystal clear to you and anyone else looking at your project that the file is a module as opposed to a classic script. (It’s not always possible to tell just by looking at the code.) As mentioned before, modules are treated differently than classic scripts, so the difference is hugely important!
-1. It ensures that your file is parsed as a module by runtimes such as [Node.js](https://nodejs.org/api/esm.html#esm_enabling) and [`d8`](/docs/d8), and build tools such as [Babel](https://babeljs.io/docs/en/options#sourcetype). While these environments and tools each have proprietary ways via configuration to interpret files with other extensions as modules, the `.mjs` extension is the cross-compatible way to ensure that files are treated as modules.
+1. It ensures that your file is parsed as a module by runtimes such as [Node.js](https://nodejs.org/api/esm.html#enabling) and [`d8`](/docs/d8), and build tools such as [Babel](https://babeljs.io/docs/en/options#sourcetype). While these environments and tools each have proprietary ways via configuration to interpret files with other extensions as modules, the `.mjs` extension is the cross-compatible way to ensure that files are treated as modules.
 
 :::note
 **Note:** To deploy `.mjs` on the web, your web server needs to be configured to serve files with this extension using the appropriate `Content-Type: text/javascript` header, as mentioned above. Additionally, you may want to configure your editor to treat `.mjs` files as `.js` files to get syntax highlighting. Most modern editors already do this by default.
@@ -305,9 +305,9 @@ This is especially important for larger dependency trees. Without `rel="modulepr
 
 ### Use HTTP/2 { #http2 }
 
-Using HTTP/2 where possible is always good performance advice, if only for [its multiplexing support](https://developers.google.com/web/fundamentals/performance/http2/#request_and_response_multiplexing). With HTTP/2 multiplexing, multiple request and response messages can be in flight at the same time, which is beneficial for loading module trees.
+Using HTTP/2 where possible is always good performance advice, if only for [its multiplexing support](https://web.dev/performance-http2/#request-and-response-multiplexing). With HTTP/2 multiplexing, multiple request and response messages can be in flight at the same time, which is beneficial for loading module trees.
 
-The Chrome team investigated if another HTTP/2 feature, specifically [HTTP/2 server push](https://developers.google.com/web/fundamentals/performance/http2/#server_push), could be a practical solution for deploying highly-modularized apps. Unfortunately, [HTTP/2 server push is tricky to get right](https://jakearchibald.com/2017/h2-push-tougher-than-i-thought/), and web servers’ and browsers’ implementations are not currently optimized towards highly-modularized web app use cases. It’s hard to only push the resources that the user doesn’t already have cached, for example, and solving that by communicating the entire cache state of an origin to the server is a privacy risk.
+The Chrome team investigated if another HTTP/2 feature, specifically [HTTP/2 server push](https://web.dev/performance-http2/#server-push), could be a practical solution for deploying highly-modularized apps. Unfortunately, [HTTP/2 server push is tricky to get right](https://jakearchibald.com/2017/h2-push-tougher-than-i-thought/), and web servers’ and browsers’ implementations are not currently optimized towards highly-modularized web app use cases. It’s hard to only push the resources that the user doesn’t already have cached, for example, and solving that by communicating the entire cache state of an origin to the server is a privacy risk.
 
 So by all means, go ahead and use HTTP/2! Just keep in mind that HTTP/2 server push is (unfortunately) not a silver bullet.
 
