@@ -41,18 +41,7 @@ This has been [pointed out](https://medium.com/@betable/tifu-by-using-math-rando
 
 The implementation [landed in V8 v4.9.41.0](https://github.com/v8/v8/blob/085fed0fb5c3b0136827b5d7c190b4bd1c23a23e/src/base/utils/random-number-generator.h#L102) within a few days of us becoming aware of the issue. It will become available with Chrome 49. Both [Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=322529#c99) and [Safari](https://bugs.webkit.org/show_bug.cgi?id=151641) switched to xorshift128+ as well.
 
-In V8 7.1 the implemementation was adjusted again [CL](https://chromium-review.googlesource.com/c/v8/v8/+/1238551/5) relaying only on state0.
-
-```cpp
-uint64_t state0 = 1;
-uint64_t xorshift128plus() {
-  uint64_t s1 = state0;
-  s1 ^= s1 << 23;
-  s1 ^= s1 >> 17;
-  state1 = s1;
-  return state1;
-}
-```
+In V8 7.1 the implemementation was adjusted again [CL](https://chromium-review.googlesource.com/c/v8/v8/+/1238551/5) relaying only on state0. Please find further implementation details in the [source code](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/base/utils/random-number-generator.h;l=119?q=XorShift128&sq=&ss=chromium).
 
 Make no mistake however: even though xorshift128+ is a huge improvement over MWC1616, it still is not [cryptographically secure](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator). For use cases such as hashing, signature generation, and encryption/decryption, ordinary PRNGs are unsuitable. The Web Cryptography API introduces [`window.crypto.getRandomValues`](https://developer.mozilla.org/en-US/docs/Web/API/RandomSource/getRandomValues), a method that returns cryptographically secure random values, at a performance cost.
 
