@@ -18,7 +18,7 @@ An associated issue on Chromium’s or V8’s issue tracker is mandatory if a pa
 - The patch does not alter APIs.
 - The patch does not change behavior present before branch cut (except if the behavior change fixes a bug).
 
-More information can be found on the [relevant Chromium page](https://www.chromium.org/developers/the-zen-of-merge-requests). When in doubt, send an email to <v8-dev@googlegroups.com>.
+More information can be found on the [relevant Chromium page](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/process/merge_request.md). When in doubt, send an email to <v8-dev@googlegroups.com>.
 
 ## The merge process
 
