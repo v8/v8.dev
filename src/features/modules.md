@@ -198,7 +198,7 @@ So far we’ve only used static `import`. With static `import`, your entire modu
 Unlike static `import`, dynamic `import()` can be used from within regular scripts. It’s an easy way to incrementally start using modules in your existing code base. For more details, see [our article on dynamic `import()`](/features/dynamic-import).
 
 :::note
-**Note:** [webpack has its own version of `import()`](https://developers.google.com/web/fundamentals/performance/webpack/use-long-term-caching) that cleverly splits the imported module into its own chunk, separate from the main bundle.
+**Note:** [webpack has its own version of `import()`](https://web.dev/use-long-term-caching/) that cleverly splits the imported module into its own chunk, separate from the main bundle.
 :::
 
 ### `import.meta` { #import-meta }
