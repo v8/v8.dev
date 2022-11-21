@@ -1,6 +1,6 @@
 ---
 title: '`Intl.ListFormat`'
-author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias)) and Frank Tang'
+author: 'Mathias Bynens ([@mathias](https://twitter.com/mathias)) and Frank Yung-Fong Tang'
 avatars:
   - 'mathias-bynens'
   - 'frank-tang'
