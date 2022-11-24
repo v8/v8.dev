@@ -4,7 +4,7 @@ author: 'Anton Bikineev, and Michael Lippautz ([@mlippautz](https://twitter.com/
 avatars:
   - anton-bikineev
   - michael-lippautz
-date: 2022-11-23
+date: 2022-11-28
 tags:
   - internals
   - memory
@@ -17,7 +17,7 @@ description: 'Pointer compression in Oilpan allows for compressing C++ pointers 
 > – [Donald Knuth (2008)](https://cs.stanford.edu/~knuth/news08.html)
 
 
-Truer words have (almost) never been spoken.  We also see CPU vendors not actually shipping [64-bit CPUs](https://en.wikipedia.org/wiki/64-bit_computing#Limits_of_processors) and Android OEMs [opting for only 39-bit of address space](https://www.kernel.org/doc/Documentation/arm64/memory.txt) to speed up page table walks in the Kernel.  V8 running in Chrome also [isolates sites into separate processes](https://www.chromium.org/Home/chromium-security/site-isolation/), which further limits the requirements of actual address space needed for a single tab.  None of this is completely new though, which is why we launched [pointer compression for V8 in 2020](https://v8.dev/blog/pointer-compression) and saw great improvements in memory across the web.  With the [Oilpan library](https://v8.dev/blog/oilpan-library) we have another building block of the web under control.  [Oilpan](https://source.chromium.org/chromium/chromium/src/+/main:v8/include/cppgc/README.md) is a traced-based garbage collector for C++ which is used to model the Document Object Model in Blink and thus an interesting target for optimizing memory.
+Truer words have (almost) never been spoken.  We also see CPU vendors not actually shipping [64-bit CPUs](https://en.wikipedia.org/wiki/64-bit_computing#Limits_of_processors) and Android OEMs [opting for only 39-bit of address space](https://www.kernel.org/doc/Documentation/arm64/memory.txt) to speed up page table walks in the Kernel.  V8 running in Chrome also [isolates sites into separate processes](https://www.chromium.org/Home/chromium-security/site-isolation/), which further limits the requirements of actual address space needed for a single tab.  None of this is completely new though, which is why we launched [pointer compression for V8 in 2020](https://v8.dev/blog/pointer-compression) and saw great improvements in memory across the web.  With the [Oilpan library](https://v8.dev/blog/oilpan-library) we have another building block of the web under control.  [Oilpan](https://source.chromium.org/chromium/chromium/src/+/main:v8/include/cppgc/README.md) is a traced-based garbage collector for C++ which is among other things used to host the Document Object Model in Blink and thus an interesting target for optimizing memory.
 
 ## Background
 
@@ -195,9 +195,9 @@ The generated code performs the base load in the hot basic block, even though th
 
 ### Improving structure packing in Blink
 
-It is hard to estimate the effect of halving Oilpan's pointer size.  In essence it should improve memory utilization for "packed" data-structures, such as containers of such pointers. Local measurements showed an improvement of about 16% of Oilpan memory. However, investigation showed that for some types we have not reduced their actual size but only increased internal padding between fields.
+It is hard to estimate the effect of halving Oilpan's pointer size.  In essence it should improve memory utilization for "packed" data-structures, such as containers of such pointers. Local measurements showed an improvement of about 16% of Oilpan memory.  However, investigation showed that for some types we have not reduced their actual size but only increased internal padding between fields.
 
-To minimize such padding, we wrote a clang plugin that automatically identified such garbage-collected classes for which reordering of the fields would reduce the overall class size.  Since there have been many of these cases across the Blink codebase, we applied the reordering to the most used ones.  This helped to reduce memory further by 4%. More details can be found in the [design doc](https://docs.google.com/document/d/1bE5gZOCg7ipDUOCylsz4_shz1YMYG5-Ycm0911kBKFA).
+To minimize such padding, we wrote a clang plugin that automatically identified such garbage-collected classes for which reordering of the fields would reduce the overall class size.  Since there have been many of these cases across the Blink codebase, we applied the reordering to the most used ones, see the [design doc](https://docs.google.com/document/d/1bE5gZOCg7ipDUOCylsz4_shz1YMYG5-Ycm0911kBKFA).
 
 ### Failed attempt: Limiting heap cage size
 
@@ -214,7 +214,7 @@ Pointer compression in Oilpan was enabled by default in **Chrome M106**.  We hav
 | Windows      | **<span style="color:green">-21% (-1.37MB)</span>** | **<span style="color:green">-33% (-59MB)</span>** |
 | Android      | **<span style="color:green">-6% (-0.1MB)</span>**   | **<span style="color:green">-8% (-3.9MB)</span>** |
 
-The improvement carries directly over to the overall private memory footprint of Chrome.
+The results show improvements in Blink memory allocated with Oilpan and represent a lower bound of improvement. The improved padding of structures landed in **Chrome M108** and shows another 4% improvement on Blink memory.  The improvement carries directly over to the overall private memory footprint which is what users perceive as Chrome’s overall memory usage.
 
 Because Oilpan is ubiquitous in Blink, the performance cost can be estimated on [Speedometer2](https://browserbench.org/Speedometer2.1/). The [initial prototype](https://chromium-review.googlesource.com/c/v8/v8/+/2739979) based on a thread-local version showed a regression of 15%. With all the aforementioned optimizations we did not observe a regression.
 
