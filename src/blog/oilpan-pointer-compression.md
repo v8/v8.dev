@@ -68,7 +68,7 @@ The main idea for the scheme that is implemented as of today is to separate regu
 | ------------ | ---------------------------------------: | ----------------------------------------: |
 | heap pointer | <tt>U<sub>31</sub>...U<sub>1</sub>1</tt> | <tt>L<sub>31</sub>...L<sub>2</sub>00</tt> |
 | `nullptr`    | <tt>0...0</tt>                           | <tt>0...000</tt>                          |
-| sentinel     | <tt>0...0</tt>                           | <tt>0..010</tt>                           |
+| sentinel     | <tt>0...0</tt>                           | <tt>0...010</tt>                          |
 
 Compression generates a compressed value by merely right-shifting by one and truncating away the upper half of the value.  In this way, the alignment bit (which now becomes the most significant bit of the compressed value) signals a valid heap pointer.
 
@@ -155,7 +155,7 @@ Technically, in C++ terms, the global base pointer can’t be a constant, becaus
 <!-- markdownlint-enable no-space-in-code -->
 :::
 
-With some additional attributes we taught clang to treat the global base as constant (via attributes) and thereby indeed perform only a single load within a context.
+With some additional attributes we taught clang to treat the global base as constant and thereby indeed perform only a single load within a context.
 
 ### Avoiding decompression at all
 
