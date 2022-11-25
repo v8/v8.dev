@@ -1,5 +1,5 @@
 ---
-title: 'Pointer Compression in Oilpan'
+title: 'Pointer compression in Oilpan'
 author: 'Anton Bikineev, and Michael Lippautz ([@mlippautz](https://twitter.com/mlippautz)), walking disassemblers'
 avatars:
   - anton-bikineev
@@ -78,15 +78,13 @@ The main idea for the scheme that is implemented as of today is to separate regu
 Compression generates a compressed value by merely right-shifting by one and truncating away the upper half of the value.  In this way, the alignment bit (which now becomes the most significant bit of the compressed value) signals a valid heap pointer.
 
 :::table-wrapper
-<!-- markdownlint-disable no-space-in-code -->
 | C++                                             | x64 assembly  |
 | :---------------------------------------------- | :----------- |
 | ```cpp                                          | ```asm       \
 | uint32_t Compress(void* ptr) {                  | mov rax, rdi \
 |   return ((uintptr_t)ptr) >> 1;                 | shr rax      \
 | }                                               | ```          \
-| ```                                             | <br />       |
-<!-- markdownlint-enable no-space-in-code -->
+| ```                                             |              |
 :::
 
 The encoding for compressed values is thus as follows:
@@ -129,7 +127,6 @@ The decompression operation first sign extends the compressed value and then lef
 Finally, the decompressed pointer is just the result of a bitwise and between this intermediate value and the base pointer.
 
 :::table-wrapper
-<!-- markdownlint-disable no-space-in-code -->
 | C++                                                    | x64 assembly       |
 | :----------------------------------------------------- | :----------------- |
 | ```cpp                                                 | ```asm             \
@@ -138,8 +135,7 @@ Finally, the decompressed pointer is just the result of a bitwise and between th
 |       (uintptr_t)((int32_t)compressed) << 1;           | and rax, qword ptr \
 |   return (void*)(intermediate & base);                 |     [rip + base]   \
 | }                                                      | ```                \
-| ```                                                    | <br />             |
-<!-- markdownlint-enable no-space-in-code -->
+| ```                                                    |                    |
 :::
 
 The resulting scheme handles cases 1.-3. transparently via a branchless asymmetric scheme.  Compression uses 3 bytes, not counting the initial register move as the call would anyways be inlined.  Decompression uses 13 bytes, counting the initial sign-extending register move.
@@ -154,7 +150,6 @@ Technically, in C++ terms, the global base pointer can’t be a constant, becaus
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
-<!-- markdownlint-disable no-space-in-code -->
 | C++                        | x64 assembly                    |
 | :------------------------- | :------------------------------ |
 | ```cpp                     | ```asm                          \
@@ -166,11 +161,10 @@ Technically, in C++ terms, the global base pointer can’t be a constant, becaus
 |   bar(m.get());            |   and rdi, rbx                  \
 | }                          |   call foo(GCed*)               \
 | ```                        |   and rbx, qword ptr            \
-| <br />                     |       [rip + base] # extra load \
-| <br />                     |   mov rdi, rbx                  \
-| <br />                     |   jmp bar(GCed*)                \
-| <br />                     | ```                             |
-<!-- markdownlint-enable no-space-in-code -->
+|                            |       [rip + base] # extra load \
+|                            |   mov rdi, rbx                  \
+|                            |   jmp bar(GCed*)                \
+|                            | ```                             |
 <!-- markdownlint-enable no-inline-html -->
 :::
 
@@ -187,7 +181,6 @@ Hashing can be sped up with compressed pointers. Decompression for hash calculat
 When looking into the generated code we found another interesting place where the compiler did not perform enough optimizations:
 
 :::table-wrapper
-<!-- markdownlint-disable no-space-in-code -->
 | C++                               | x64 assembly               |
 | :-------------------------------- | :------------------------- |
 | ```cpp                            | ```asm                     \
@@ -206,7 +199,6 @@ When looking into the generated code we found another interesting place where th
 |   SlowPath(ptr);                  |   and rdi, rax             \
 | }                                 |   jmp SlowPath(void*)      \
 | ```                               | ```                        |
-<!-- markdownlint-enable no-space-in-code -->
 :::
 
 The generated code performs the base load in the hot basic block, even though the variable is not used in it and could be trivially sunk into the basic block below, where the call to `SlowPath()` is made and the decompressed pointer is actually used.  The compiler conservatively decided not to reorder the non-atomic load with the atomic-relaxed load, even though it would be perfectly legal with respect to the language rules.  We manually moved the decompression below the atomic read to make the assignment with the write-barrier as efficient as possible.
@@ -214,11 +206,11 @@ The generated code performs the base load in the hot basic block, even though th
 
 ### Improving structure packing in Blink
 
-It is hard to estimate the effect of halving Oilpan's pointer size.  In essence it should improve memory utilization for "packed" data-structures, such as containers of such pointers. Local measurements showed an improvement of about 16% of Oilpan memory.  However, investigation showed that for some types we have not reduced their actual size but only increased internal padding between fields.
+It is hard to estimate the effect of halving Oilpan’s pointer size.  In essence it should improve memory utilization for “packed” data-structures, such as containers of such pointers. Local measurements showed an improvement of about 16% of Oilpan memory.  However, investigation showed that for some types we have not reduced their actual size but only increased internal padding between fields.
 
 To minimize such padding, we wrote a clang plugin that automatically identified such garbage-collected classes for which reordering of the fields would reduce the overall class size.  Since there have been many of these cases across the Blink codebase, we applied the reordering to the most used ones, see the [design doc](https://docs.google.com/document/d/1bE5gZOCg7ipDUOCylsz4_shz1YMYG5-Ycm0911kBKFA).
 
-### Failed attempt: Limiting heap cage size
+### Failed attempt: limiting heap cage size
 
 Not every optimization did work out well though.  In an attempt to optimize compression even further, we limited the heap cage to 2GB.  We made sure that the most significant bit of the lower halfword of the cage base is 1 which allowed us to avoid the shift completely.  Compression would become a simple truncation and decompression would be a simple load and a bitwise and.
 
@@ -226,7 +218,7 @@ Given that Oilpan memory in the Blink renderer takes on average less than 10MB, 
 
 ## Results and future
 
-Pointer compression in Oilpan was enabled by default in **Chrome M106**.  We have seen great memory improvements across the board:
+Pointer compression in Oilpan was enabled by default in **Chrome 106**.  We have seen great memory improvements across the board:
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
@@ -247,9 +239,8 @@ In Oilpan the stack is conservatively scanned to find pointers to the heap. With
 
 ### Other compression
 
-We've seen great improvements by applying compression to V8 JavaScript and Oilpan in the past. We think the paradigm can be applied to other smart pointers in Chrome (e.g., `base::scoped_refptr`) that already point into other heap cages.  Initial experiments [showed](https://docs.google.com/document/d/1Rlr7FT3kulR8O-YadgiZkdmAgiSq0OaB8dOFNqf4cD8/edit?usp=sharing) promising results.
+We’ve seen great improvements by applying compression to V8 JavaScript and Oilpan in the past. We think the paradigm can be applied to other smart pointers in Chrome (e.g., `base::scoped_refptr`) that already point into other heap cages.  Initial experiments [showed](https://docs.google.com/document/d/1Rlr7FT3kulR8O-YadgiZkdmAgiSq0OaB8dOFNqf4cD8/edit) promising results.
 
-Investigations also showed that a large portion of memory is actually held via vtables.  In the same spirit, we've thus [enabled](https://docs.google.com/document/d/1rt6IOEBevCkiVjiARUy8Ib1c5EAxDtW0wdFoTiijy1U/edit?usp=sharing) the relative-vtable-ABI on Android64, which compacts virtual tables, letting us save more memory and improve the startup at the same time.
+Investigations also showed that a large portion of memory is actually held via vtables.  In the same spirit, we’ve thus [enabled](https://docs.google.com/document/d/1rt6IOEBevCkiVjiARUy8Ib1c5EAxDtW0wdFoTiijy1U/edit?usp=sharing) the relative-vtable-ABI on Android64, which compacts virtual tables, letting us save more memory and improve the startup at the same time.
 
-[^1]: Interested readers can refer to Blink's [`ThreadStorage::Current()`](https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state_storage.cc;drc=603337a74bf04efd536b251a7f2b4eb44fe153a9;l=19) to see the result of compiling down TLS access with different modes.
-
+[^1]: Interested readers can refer to Blink’s [`ThreadStorage::Current()`](https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state_storage.cc;drc=603337a74bf04efd536b251a7f2b4eb44fe153a9;l=19) to see the result of compiling down TLS access with different modes.
