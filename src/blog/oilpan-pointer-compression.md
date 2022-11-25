@@ -1,5 +1,5 @@
 ---
-title: 'Pointer Compression in Oilpan'
+title: 'Pointer compression in Oilpan'
 author: 'Anton Bikineev, and Michael Lippautz ([@mlippautz](https://twitter.com/mlippautz)), walking disassemblers'
 avatars:
   - anton-bikineev
@@ -210,7 +210,7 @@ It is hard to estimate the effect of halving Oilpan's pointer size.  In essence 
 
 To minimize such padding, we wrote a clang plugin that automatically identified such garbage-collected classes for which reordering of the fields would reduce the overall class size.  Since there have been many of these cases across the Blink codebase, we applied the reordering to the most used ones, see the [design doc](https://docs.google.com/document/d/1bE5gZOCg7ipDUOCylsz4_shz1YMYG5-Ycm0911kBKFA).
 
-### Failed attempt: Limiting heap cage size
+### Failed attempt: limiting heap cage size
 
 Not every optimization did work out well though.  In an attempt to optimize compression even further, we limited the heap cage to 2GB.  We made sure that the most significant bit of the lower halfword of the cage base is 1 which allowed us to avoid the shift completely.  Compression would become a simple truncation and decompression would be a simple load and a bitwise and.
 
