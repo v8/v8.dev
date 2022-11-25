@@ -2,7 +2,7 @@
 title: 'Fast, parallel applications with WebAssembly SIMD'
 author: 'Deepti Gandluri ([@dptig](https://twitter.com/dptig)), Thomas Lively ([@tlively52](https://twitter.com/tlively52)), Ingvar Stepanyan ([@RReverser](https://twitter.com/RReverser))'
 date: 2020-01-30
-updated: 2022-03-21
+updated: 2022-11-06
 tags:
   - WebAssembly
 description: 'Bringing vector operations to WebAssembly'
@@ -50,13 +50,11 @@ import { simd } from 'wasm-feature-detect';
 
 To learn about building code with SIMD support, check the section [below](#building-with-simd-support).
 
-### SIMD support in Chrome
+### SIMD support in browsers
 
 WebAssembly SIMD support is available by default from Chrome 91. Make sure to use the latest version of the toolchain as detailed below, as well as latest wasm-feature-detect to detect engines that support the final version of the spec. If something doesn’t look right, please [file a bug](https://crbug.com/v8).
 
-### Enabling experimental SIMD support in Firefox
-
-WebAssembly SIMD is available behind a flag in Firefox. Currently it's supported only on x86 and x86-64 architectures. To try out the SIMD support in Firefox, go to `about:config` and enable `javascript.options.wasm_simd`. Note that this feature is still experimental and being worked on.
+WebAssembly SIMD is also supported in Firefox 89 and above.
 
 ## Building with SIMD support
 
