@@ -53,6 +53,7 @@ if (ptr == nullptr) { /* ... * }
 Since there’s no explicit type to store a possibly compressed `nullptr` value, an actual decompression is required to compare against the constant.
 
 Having this usage in mind, we were looking for a scheme that transparently handles case 1.-3. Since the compression and decompression sequence will be inlined everywhere Member is used, the following properties are also desirable:
+
 - Fast and compact instruction sequence to minimize icache misses.
 - Branchless instruction sequence to avoid using up branch predictors.
 
@@ -64,11 +65,15 @@ For brevity, this description only covers the final compression scheme used. See
 
 The main idea for the scheme that is implemented as of today is to separate regular heap pointers from `nullptr` and sentinel by relying on alignment of the heap cage.  Essentially, the heap cage is allocated with alignment such that the least significant bit of the upper halfword is always set.  We denote the upper and lower half (32 bits each) as U<sub>31</sub>...U<sub>0</sub> and L<sub>31</sub>...L<sub>0</sub>, respectively.
 
+:::table-wrapper
+<!-- markdownlint-disable no-inline-html -->
 |              | upper half                               | lower half                                |
 | ------------ | ---------------------------------------: | ----------------------------------------: |
 | heap pointer | <tt>U<sub>31</sub>...U<sub>1</sub>1</tt> | <tt>L<sub>31</sub>...L<sub>2</sub>00</tt> |
 | `nullptr`    | <tt>0...0</tt>                           | <tt>0...000</tt>                          |
 | sentinel     | <tt>0...0</tt>                           | <tt>0...010</tt>                          |
+<!-- markdownlint-enable no-inline-html -->
+:::
 
 Compression generates a compressed value by merely right-shifting by one and truncating away the upper half of the value.  In this way, the alignment bit (which now becomes the most significant bit of the compressed value) signals a valid heap pointer.
 
@@ -86,42 +91,54 @@ Compression generates a compressed value by merely right-shifting by one and tru
 
 The encoding for compressed values is thus as follows:
 
+:::table-wrapper
+<!-- markdownlint-disable no-inline-html -->
 |              | compressed value                          |
 | ------------ | ----------------------------------------: |
 | heap pointer | <tt>1L<sub>31</sub>...L<sub>2</sub>0</tt> |
 | `nullptr`    | <tt>0...00</tt>                           |
 | sentinel     | <tt>0...01</tt>                           |
+<!-- markdownlint-enable no-inline-html -->
+:::
 
 Note that this allows for figuring out whether a compressed value represents a heap pointer, `nullptr`, or the sentinel value, which is important to avoid useless decompressions in user code (see below).
 
 The idea for decompression then is to rely on a specifically crafted base pointer, in which the least significant 32 bits are set to 1.
 
+:::table-wrapper
+<!-- markdownlint-disable no-inline-html -->
 |              | upper half                               | lower half     |
 | ------------ | ---------------------------------------: | -------------: |
 | base         | <tt>U<sub>31</sub>...U<sub>1</sub>1</tt> | <tt>1...1</tt> |
+<!-- markdownlint-enable no-inline-html -->
+:::
 
 
 The decompression operation first sign extends the compressed value and then left-shifts to undo the compression operation for the sign bit. The resulting intermediate value is encoded as follows
 
+:::table-wrapper
+<!-- markdownlint-disable no-inline-html -->
 |              | upper half     | lower half                                |
 | ------------ | -------------: | ----------------------------------------: |
 | heap pointer | <tt>1...1</tt> | <tt>L<sub>31</sub>...L<sub>2</sub>00</tt> |
 | `nullptr`    | <tt>0...0</tt> | <tt>0...000</tt>                          |
 | sentinel     | <tt>0...0</tt> | <tt>0...010</tt>                          |
+<!-- markdownlint-enable no-inline-html -->
+:::
 
 Finally, the decompressed pointer is just the result of a bitwise and between this intermediate value and the base pointer.
 
 :::table-wrapper
 <!-- markdownlint-disable no-space-in-code -->
-| C++                                                    | x64 assembly     |
-| :----------------------------------------------------- | :--------------- |
-| ```cpp                                                 | ```asm           \
-| void* Decompress(uint32_t compressed) {                | movsxd rax, edi \
-|   uintptr_t intermediate =                             | add rax, rax \
+| C++                                                    | x64 assembly       |
+| :----------------------------------------------------- | :----------------- |
+| ```cpp                                                 | ```asm             \
+| void* Decompress(uint32_t compressed) {                | movsxd rax, edi    \
+|   uintptr_t intermediate =                             | add rax, rax       \
 |       (uintptr_t)((int32_t)compressed) << 1;           | and rax, qword ptr \
-|   return (void*)(intermediate & base);                 |     [rip + base] \
-| }                                                      | ```              \
-| ```                                                    | <br />           |
+|   return (void*)(intermediate & base);                 |     [rip + base]   \
+| }                                                      | ```                \
+| ```                                                    | <br />             |
 <!-- markdownlint-enable no-space-in-code -->
 :::
 
@@ -136,6 +153,7 @@ The previous section explained the compression scheme used.  A compact compressi
 Technically, in C++ terms, the global base pointer can’t be a constant, because it is initialized at runtime after `main()`, whenever the embedder initializes Oilpan.  Having this global variable  mutable would inhibit the important const propagation optimization, e.g. the compiler cannot prove that a random call doesn’t modify the base and would have to load it twice:
 
 :::table-wrapper
+<!-- markdownlint-disable no-inline-html -->
 <!-- markdownlint-disable no-space-in-code -->
 | C++                        | x64 assembly                    |
 | :------------------------- | :------------------------------ |
@@ -153,6 +171,7 @@ Technically, in C++ terms, the global base pointer can’t be a constant, becaus
 | <br />                     |   jmp bar(GCed*)                \
 | <br />                     | ```                             |
 <!-- markdownlint-enable no-space-in-code -->
+<!-- markdownlint-enable no-inline-html -->
 :::
 
 With some additional attributes we taught clang to treat the global base as constant and thereby indeed perform only a single load within a context.
@@ -209,10 +228,14 @@ Given that Oilpan memory in the Blink renderer takes on average less than 10MB, 
 
 Pointer compression in Oilpan was enabled by default in **Chrome M106**.  We have seen great memory improvements across the board:
 
+:::table-wrapper
+<!-- markdownlint-disable no-inline-html -->
 | Blink memory | P50                                                 | P99                                               |
 | -----------: | :-------------------------------------------------: | :-----------------------------------------------: |
 | Windows      | **<span style="color:green">-21% (-1.37MB)</span>** | **<span style="color:green">-33% (-59MB)</span>** |
 | Android      | **<span style="color:green">-6% (-0.1MB)</span>**   | **<span style="color:green">-8% (-3.9MB)</span>** |
+<!-- markdownlint-enable no-inline-html -->
+:::
 
 The results show improvements in Blink memory allocated with Oilpan and represent a lower bound of improvement. The improved padding of structures landed in **Chrome M108** and shows another 4% improvement on Blink memory.  The improvement carries directly over to the overall private memory footprint which is what users perceive as Chrome’s overall memory usage.
 
