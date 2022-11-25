@@ -24,28 +24,28 @@ autoninja -C out/x64.release
 After building `d8`, you can start using linux perf:
 
 ```bash
-cd <path_to_your_v8_checkout>
+tools/profiling/linux-perf-d8.py out/x64.release/d8 path/to/test.js;
+```
+
+A more complete example:
+
+```bash
 echo '(function f() {
     var s = 0; for (var i = 0; i < 1000000000; i++) { s += i; } return s;
   })();' > test.js;
-  
-# Optional: create and output directory
-mkdir profiling_out_dir;
-tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
-    out/x64.release/d8 test.js;
 
-# Fancy UI (`-flame` is googler-only, use `-web` as an alterntive):
-pprof -flame profiling_out_dir/XXX_perf.data.jitted;
+# Use custom V8 flags and a separate output dir for less clutter:
+mkdir perf_results
+tools/profiling/linux-perf-d8.py --perf-data-dir=perf_results \
+    out/x64.release/d8 --expose-gc --allow-natives-syntax test.js;
+
+# Fancy UI (`-flame` is googler-only, use `-web` as a public alternative):
+pprof -flame perf_results/XXX_perf.data.jitted;
 # Terminal-based tool:
-perf report -i profiling_out_dir/XXX_perf.data.jitted;
+perf report -i perf_results/XXX_perf.data.jitted;
 ```
 
-Check `linux-perf-d8.py --help` for more details. Note that you can use all `d8` flags after `--`:
-
-```bash
-tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
-    -- out/x64.release/d8 --expose-gc --allow-natives-syntaxn test.js;
-```
+Check `linux-perf-d8.py --help` for more details. Note that you can use all `d8` flags after the d8 binary argument.
 
 
 ## Profiling Chrome or content_shell with [linux-perf-chrome.py](https://source.chromium.org/search?q=linux-perf-chrome.py)
@@ -62,7 +62,7 @@ tools/profiling/linux-perf-d8.py --perf-data-dir=profiling_out_dir \
 
 1. Navigate to your website and then close the browser (or wait for the `--timeout` to complete)
 1. After quitting the browser `linux-perf.py` will post-process the files and show a list with a result file for each renderer process:
-  
+
    ```
    chrome_renderer_1583105_3.perf.data.jitted      19.79MiB
    chrome_renderer_1583105_2.perf.data.jitted       8.59MiB
@@ -81,7 +81,7 @@ perf report -i perf_results/XXX_perf.data.jitted
 You can also use [pprof](https://github.com/google/pprof) to generate more visualizations:
 
 ```bash
-# Note: `-flame` is google-only, use `-web` as a public alterntive:
+# Note: `-flame` is google-only, use `-web` as a public alternative:
 pprof -flame perf_results/XXX_perf.data.jitted;
 ```
 
@@ -107,7 +107,7 @@ perf report --input=perf.data.jitted;
 
 [`--perf-prof`](https://source.chromium.org/search?q=FLAG_perf_prof) is used to the V8 command-line to record performance samples in JIT code.
 
-[`--nowrite-protect-code-memory`](https://source.chromium.org/search?q=FLAG_nowrite_protect_code_memory) is requried to disable write protection for code memory. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
+[`--nowrite-protect-code-memory`](https://source.chromium.org/search?q=FLAG_nowrite_protect_code_memory) is required to disable write protection for code memory. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
 
 [`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone. Since the InterpreterEntryTrampoline has to be copied this comes at slight performance and memory regression.
 
