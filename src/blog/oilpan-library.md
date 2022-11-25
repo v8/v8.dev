@@ -51,4 +51,4 @@ Encountering issues, or have suggestions? Let us know:
 - [oilpan-dev@chromium.org](mailto:oilpan-dev@chromium.org)
 - Monorail: [Blink>GarbageCollection](https://bugs.chromium.org/p/chromium/issues/entry?template=Defect+report+from+user&components=Blink%3EGarbageCollection) (Chromium), [Oilpan](https://bugs.chromium.org/p/v8/issues/entry?template=Defect+report+from+user&components=Oilpan) (V8)
 
-[^1]: Find more info on garbage collection across components in the [research article](https://research.google/pubs/pub48052/).
+Find more info on garbage collection across components in the [research article](https://research.google/pubs/pub48052/).
