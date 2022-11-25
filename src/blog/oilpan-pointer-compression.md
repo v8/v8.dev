@@ -239,7 +239,7 @@ In Oilpan the stack is conservatively scanned to find pointers to the heap. With
 
 ### Other compression
 
-We've seen great improvements by applying compression to V8 JavaScript and Oilpan in the past. We think the paradigm can be applied to other smart pointers in Chrome (e.g., `base::scoped_refptr`) that already point into other heap cages.  Initial experiments [showed](https://docs.google.com/document/d/1Rlr7FT3kulR8O-YadgiZkdmAgiSq0OaB8dOFNqf4cD8/edit?usp=sharing) promising results.
+We've seen great improvements by applying compression to V8 JavaScript and Oilpan in the past. We think the paradigm can be applied to other smart pointers in Chrome (e.g., `base::scoped_refptr`) that already point into other heap cages.  Initial experiments [showed](https://docs.google.com/document/d/1Rlr7FT3kulR8O-YadgiZkdmAgiSq0OaB8dOFNqf4cD8/edit) promising results.
 
 Investigations also showed that a large portion of memory is actually held via vtables.  In the same spirit, we've thus [enabled](https://docs.google.com/document/d/1rt6IOEBevCkiVjiARUy8Ib1c5EAxDtW0wdFoTiijy1U/edit?usp=sharing) the relative-vtable-ABI on Android64, which compacts virtual tables, letting us save more memory and improve the startup at the same time.
 
