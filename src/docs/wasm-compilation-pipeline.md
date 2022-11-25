@@ -23,7 +23,7 @@ V8 monitors how often WebAssembly functions get called. Once a function reaches 
 
 If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, then the cached code can be used immediately, without additional compilation. More information about code caching is available [in a separate blog post](/blog/wasm-code-caching).
 
-Code caching gets triggered whenever a the amount of generated TurboFan code reaches a certain threshold. This means that for large WebAssembly modules the TurboFan code gets cached incrementally, whereas for small WebAssembly modules the TurboFan code may never get cached. Liftoff code does not get cached, as Liftoff is nearly as fast compiling code as code is loaded from the cache.
+Code caching gets triggered whenever the amount of generated TurboFan code reaches a certain threshold. This means that for large WebAssembly modules the TurboFan code gets cached incrementally, whereas for small WebAssembly modules the TurboFan code may never get cached. Liftoff code does not get cached, as Liftoff is nearly as fast compiling code as code is loaded from the cache.
 
 ## Debugging
 
