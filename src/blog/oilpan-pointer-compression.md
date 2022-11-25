@@ -206,7 +206,7 @@ The generated code performs the base load in the hot basic block, even though th
 
 ### Improving structure packing in Blink
 
-It is hard to estimate the effect of halving Oilpan's pointer size.  In essence it should improve memory utilization for "packed" data-structures, such as containers of such pointers. Local measurements showed an improvement of about 16% of Oilpan memory.  However, investigation showed that for some types we have not reduced their actual size but only increased internal padding between fields.
+It is hard to estimate the effect of halving Oilpan’s pointer size.  In essence it should improve memory utilization for “packed” data-structures, such as containers of such pointers. Local measurements showed an improvement of about 16% of Oilpan memory.  However, investigation showed that for some types we have not reduced their actual size but only increased internal padding between fields.
 
 To minimize such padding, we wrote a clang plugin that automatically identified such garbage-collected classes for which reordering of the fields would reduce the overall class size.  Since there have been many of these cases across the Blink codebase, we applied the reordering to the most used ones, see the [design doc](https://docs.google.com/document/d/1bE5gZOCg7ipDUOCylsz4_shz1YMYG5-Ycm0911kBKFA).
 
@@ -239,9 +239,8 @@ In Oilpan the stack is conservatively scanned to find pointers to the heap. With
 
 ### Other compression
 
-We've seen great improvements by applying compression to V8 JavaScript and Oilpan in the past. We think the paradigm can be applied to other smart pointers in Chrome (e.g., `base::scoped_refptr`) that already point into other heap cages.  Initial experiments [showed](https://docs.google.com/document/d/1Rlr7FT3kulR8O-YadgiZkdmAgiSq0OaB8dOFNqf4cD8/edit) promising results.
+We’ve seen great improvements by applying compression to V8 JavaScript and Oilpan in the past. We think the paradigm can be applied to other smart pointers in Chrome (e.g., `base::scoped_refptr`) that already point into other heap cages.  Initial experiments [showed](https://docs.google.com/document/d/1Rlr7FT3kulR8O-YadgiZkdmAgiSq0OaB8dOFNqf4cD8/edit) promising results.
 
-Investigations also showed that a large portion of memory is actually held via vtables.  In the same spirit, we've thus [enabled](https://docs.google.com/document/d/1rt6IOEBevCkiVjiARUy8Ib1c5EAxDtW0wdFoTiijy1U/edit?usp=sharing) the relative-vtable-ABI on Android64, which compacts virtual tables, letting us save more memory and improve the startup at the same time.
+Investigations also showed that a large portion of memory is actually held via vtables.  In the same spirit, we’ve thus [enabled](https://docs.google.com/document/d/1rt6IOEBevCkiVjiARUy8Ib1c5EAxDtW0wdFoTiijy1U/edit?usp=sharing) the relative-vtable-ABI on Android64, which compacts virtual tables, letting us save more memory and improve the startup at the same time.
 
-[^1]: Interested readers can refer to Blink's [`ThreadStorage::Current()`](https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state_storage.cc;drc=603337a74bf04efd536b251a7f2b4eb44fe153a9;l=19) to see the result of compiling down TLS access with different modes.
-
+[^1]: Interested readers can refer to Blink’s [`ThreadStorage::Current()`](https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state_storage.cc;drc=603337a74bf04efd536b251a7f2b4eb44fe153a9;l=19) to see the result of compiling down TLS access with different modes.
