@@ -218,7 +218,7 @@ Given that Oilpan memory in the Blink renderer takes on average less than 10MB, 
 
 ## Results and future
 
-Pointer compression in Oilpan was enabled by default in **Chrome M106**.  We have seen great memory improvements across the board:
+Pointer compression in Oilpan was enabled by default in **Chrome 106**.  We have seen great memory improvements across the board:
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
