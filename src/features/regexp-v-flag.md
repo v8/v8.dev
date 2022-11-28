@@ -212,6 +212,9 @@ The first pattern matches all lowercase letters. The second pattern uses `\P` in
 Intuitively, you might expect both regular expressions to behave the same. In practice, they behave very differently:
 
 ```js
+const re1 = /\p{Lowercase_Letter}/giu;
+const re2 = /[^\P{Lowercase_Letter}]/giu;
+
 const string = 'aAbBcC4#';
 
 string.replaceAll(re1, 'X');
