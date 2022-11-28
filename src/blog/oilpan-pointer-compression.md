@@ -10,6 +10,7 @@ tags:
   - memory
   - cppgc
 description: 'Pointer compression in Oilpan allows for compressing C++ pointers and reducing the heap size by up to 33%.'
+tweet: '1597274125780893697'
 ---
 
 > It is absolutely idiotic to have 64-bit pointers when I compile a program that uses less than 4 gigabytes of RAM. When such pointer values appear inside a struct, they not only waste half the memory, they effectively throw away half of the cache.
