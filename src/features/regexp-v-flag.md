@@ -146,7 +146,7 @@ re.test('𐆊'); // → false
 Matching all ASCII white space:
 
 ```js
-const re = [\p{White_Space}&&\p{ASCII}];
+const re = /[\p{White_Space}&&\p{ASCII}]/v;
 re.test('\n'); // → true
 re.test('\u2028'); // → false
 ```
@@ -154,7 +154,7 @@ re.test('\u2028'); // → false
 Or matching all Mongolian numbers:
 
 ```js
-const re = [\p{Script_Extensions=Mongolian}&&\p{Number}];
+const re = /[\p{Script_Extensions=Mongolian}&&\p{Number}]/v;
 // U+1817 MONGOLIAN DIGIT SEVEN
 re.test('᠗'); // → true
 // U+1834 MONGOLIAN LETTER CHA
