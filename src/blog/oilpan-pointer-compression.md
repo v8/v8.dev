@@ -79,12 +79,12 @@ Compression generates a compressed value by merely right-shifting by one and tru
 
 :::table-wrapper
 | C++                                             | x64 assembly  |
-| :---------------------------------------------- | :----------- |
-| ```cpp                                          | ```asm       \
-| uint32_t Compress(void* ptr) {                  | mov rax, rdi \
-|   return ((uintptr_t)ptr) >> 1;                 | shr rax      \
-| }                                               | ```          \
-| ```                                             |              |
+| :---------------------------------------------- | :------------ |
+| ```cpp                                          | ```asm        \
+| uint32_t Compress(void* ptr) {                  | mov rax, rdi  \
+|   return ((uintptr_t)ptr) >> 1;                 | shr rax       \
+| }                                               | ```           \
+| ```                                             |               |
 :::
 
 The encoding for compressed values is thus as follows:
@@ -229,9 +229,9 @@ Pointer compression in Oilpan was enabled by default in **Chrome 106**.  We have
 <!-- markdownlint-enable no-inline-html -->
 :::
 
-The results show improvements in Blink memory allocated with Oilpan and represent a lower bound of improvement. The improved padding of structures landed in **Chrome M108** and shows another 4% improvement on Blink memory.  The improvement carries directly over to the overall private memory footprint which is what users perceive as Chrome’s overall memory usage.
+The numbers reported represent the 50th and 99th percentile for Blink memory allocated with Oilpan across the fleet[^2].  The reported data shows the delta between Chrome 105 and 106 stable versions.  The absolute numbers in MB give an indication on the lower bound that users can expect to see.  The real improvements are generally a bit higher due to indirect effects on Chrome’s overall memory consumption.  The larger relative improvement suggests that packing of data is better in such cases which is an indicator that more memory is used in collections (e.g. vectors) that have good packing.  The improved padding of structures landed in Chrome 108 and showed another 4% improvement on Blink memory on average.
 
-Because Oilpan is ubiquitous in Blink, the performance cost can be estimated on [Speedometer2](https://browserbench.org/Speedometer2.1/). The [initial prototype](https://chromium-review.googlesource.com/c/v8/v8/+/2739979) based on a thread-local version showed a regression of 15%. With all the aforementioned optimizations we did not observe a regression.
+Because Oilpan is ubiquitous in Blink, the performance cost can be estimated on [Speedometer2](https://browserbench.org/Speedometer2.1/).  The [initial prototype](https://chromium-review.googlesource.com/c/v8/v8/+/2739979) based on a thread-local version showed a regression of 15%.  With all the aforementioned optimizations we did not observe a notable regression.
 
 ### Conservative stack scanning
 
@@ -244,3 +244,4 @@ We’ve seen great improvements by applying compression to V8 JavaScript and Oil
 Investigations also showed that a large portion of memory is actually held via vtables.  In the same spirit, we’ve thus [enabled](https://docs.google.com/document/d/1rt6IOEBevCkiVjiARUy8Ib1c5EAxDtW0wdFoTiijy1U/edit?usp=sharing) the relative-vtable-ABI on Android64, which compacts virtual tables, letting us save more memory and improve the startup at the same time.
 
 [^1]: Interested readers can refer to Blink’s [`ThreadStorage::Current()`](https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state_storage.cc;drc=603337a74bf04efd536b251a7f2b4eb44fe153a9;l=19) to see the result of compiling down TLS access with different modes.
+[^2]: The numbers are gathered through Chrome’s User Metrics Analysis framework.
