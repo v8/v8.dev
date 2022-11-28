@@ -174,7 +174,7 @@ With some additional attributes we taught clang to treat the global base as cons
 
 The fastest instruction sequence is a nop! With that in mind, for many pointer operations redundant compressions and decompressions can easily be avoided. Trivially, we do not need to decompress a Member to check if it is nullptr. We do not need to decompress and compress when constructing or assigning a Member from another Member. Comparison of pointers is preserved by compression, so we can avoid transformations for them as well. The Member abstraction nicely serves us as a bottleneck here.
 
-Hashing can be sped up with compressed pointers. Decompression for hash calculation is redundant, because the fixed base does not increase the hash entropy. Instead, a simpler hashing function for 32-bit integers can be used. Blink has many hash tables that use Member as a key; the 32-bit hashing resulted in  faster collections!
+Hashing can be sped up with compressed pointers. Decompression for hash calculation is redundant, because the fixed base does not increase the hash entropy. Instead, a simpler hashing function for 32-bit integers can be used. Blink has many hash tables that use Member as a key; the 32-bit hashing resulted in faster collections!
 
 ### Helping clang where it fails to optimize
 
