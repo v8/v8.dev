@@ -67,11 +67,11 @@ The main idea for the scheme that is implemented as of today is to separate regu
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
-|              | upper half                               | lower half                                |
-| ------------ | ---------------------------------------: | ----------------------------------------: |
-| heap pointer | <tt>U<sub>31</sub>...U<sub>1</sub>1</tt> | <tt>L<sub>31</sub>...L<sub>2</sub>00</tt> |
-| `nullptr`    | <tt>0...0</tt>                           | <tt>0...000</tt>                          |
-| sentinel     | <tt>0...0</tt>                           | <tt>0...010</tt>                          |
+|              | upper half                               | lower half                                 |
+| ------------ | ---------------------------------------: | -----------------------------------------: |
+| heap pointer | <tt>U<sub>31</sub>...U<sub>1</sub>1</tt> | <tt>L<sub>31</sub>...L<sub>3</sub>000</tt> |
+| `nullptr`    | <tt>0...0</tt>                           | <tt>0...000</tt>                           |
+| sentinel     | <tt>0...0</tt>                           | <tt>0...010</tt>                           |
 <!-- markdownlint-enable no-inline-html -->
 :::
 
@@ -91,11 +91,11 @@ The encoding for compressed values is thus as follows:
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
-|              | compressed value                          |
-| ------------ | ----------------------------------------: |
-| heap pointer | <tt>1L<sub>31</sub>...L<sub>2</sub>0</tt> |
-| `nullptr`    | <tt>0...00</tt>                           |
-| sentinel     | <tt>0...01</tt>                           |
+|              | compressed value                           |
+| ------------ | -----------------------------------------: |
+| heap pointer | <tt>1L<sub>31</sub>...L<sub>2</sub>00</tt> |
+| `nullptr`    | <tt>0...00</tt>                            |
+| sentinel     | <tt>0...01</tt>                            |
 <!-- markdownlint-enable no-inline-html -->
 :::
 
@@ -116,11 +116,11 @@ The decompression operation first sign extends the compressed value and then lef
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
-|              | upper half     | lower half                                |
-| ------------ | -------------: | ----------------------------------------: |
-| heap pointer | <tt>1...1</tt> | <tt>L<sub>31</sub>...L<sub>2</sub>00</tt> |
-| `nullptr`    | <tt>0...0</tt> | <tt>0...000</tt>                          |
-| sentinel     | <tt>0...0</tt> | <tt>0...010</tt>                          |
+|              | upper half     | lower half                                 |
+| ------------ | -------------: | -----------------------------------------: |
+| heap pointer | <tt>1...1</tt> | <tt>L<sub>31</sub>...L<sub>3</sub>000</tt> |
+| `nullptr`    | <tt>0...0</tt> | <tt>0...000</tt>                           |
+| sentinel     | <tt>0...0</tt> | <tt>0...010</tt>                           |
 <!-- markdownlint-enable no-inline-html -->
 :::
 
@@ -146,7 +146,7 @@ The previous section explained the compression scheme used.  A compact compressi
 
 ### Optimizing cage base load
 
-Technically, in C++ terms, the global base pointer can’t be a constant, because it is initialized at runtime after `main()`, whenever the embedder initializes Oilpan.  Having this global variable  mutable would inhibit the important const propagation optimization, e.g. the compiler cannot prove that a random call doesn’t modify the base and would have to load it twice:
+Technically, in C++ terms, the global base pointer can’t be a constant, because it is initialized at runtime after `main()`, whenever the embedder initializes Oilpan.  Having this global variable mutable would inhibit the important const propagation optimization, e.g. the compiler cannot prove that a random call doesn’t modify the base and would have to load it twice:
 
 :::table-wrapper
 <!-- markdownlint-disable no-inline-html -->
