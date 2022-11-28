@@ -189,13 +189,13 @@ Another example is matching all commonly-used flag emoji, regardless of whether 
 ```js
 const reFlag = /[\p{RGI_Emoji_Flag_Sequence}\p{RGI_Emoji_Tag_Sequence}]/v;
 // A flag sequence, consisting of 2 code points (flag of Belgium):
-re.test('🇧🇪'); // → true
+reFlag.test('🇧🇪'); // → true
 // A tag sequence, consisting of 7 code points (flag of England):
-re.test('🏴󠁧󠁢󠁥󠁮󠁧󠁿'); // → true
+reFlag.test('🏴󠁧󠁢󠁥󠁮󠁧󠁿'); // → true
 // A flag sequence, consisting of 2 code points (flag of Switzerland):
-re.test('🇨🇭'); // → true
+reFlag.test('🇨🇭'); // → true
 // A tag sequence, consisting of 7 code points (flag of Wales):
-re.test('🏴󠁧󠁢󠁷󠁬󠁳󠁿'); // → true
+reFlag.test('🏴󠁧󠁢󠁷󠁬󠁳󠁿'); // → true
 ```
 
 ## Improved case-insensitive matching { #ignoreCase }
