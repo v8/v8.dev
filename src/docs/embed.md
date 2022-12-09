@@ -26,7 +26,7 @@ These concepts are discussed in greater detail in [the advanced guide](/docs/emb
 Follow the steps below to run the example yourself:
 
 1. Download the V8 source code by following [the Git instructions](/docs/source-code#using-git).
-1. The instructions for this hello world example have last been tested with V8 v7.1.11. You can check out this branch with `git checkout refs/tags/7.1.11 -b sample -t`
+1. The instructions for this hello world example have last been tested with V8 v10.5.1. You can check out this branch with `git checkout refs/tags/10.5.1 -b sample -t`
 1. Create a build configuration using the helper script:
 
     ```bash
@@ -48,7 +48,7 @@ Follow the steps below to run the example yourself:
 1. Compile `hello-world.cc`, linking to the static library created in the build process. For example, on 64bit Linux using the GNU compiler:
 
     ```bash
-    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -lv8_monolith -Lout.gn/x64.release.sample/obj/ -pthread -std=c++14 -DV8_COMPRESS_POINTERS
+    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -fno-rtti -lv8_monolith -lv8_libbase -lv8_libplatform -ldl -Lout.gn/x64.release.sample/obj/ -pthread -std=c++17 -DV8_COMPRESS_POINTERS
     ```
 
 1. For more complex code, V8 fails without an ICU data file. Copy this file to where your binary is stored:
