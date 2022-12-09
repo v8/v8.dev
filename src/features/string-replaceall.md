@@ -103,7 +103,7 @@ The important piece of new functionality lies in that first item. `String.protot
 
 ## A note on special replacement patterns { #special-patterns }
 
-Worth calling out: both `replace` and `replaceAll` support [special replacement patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter). Although these are most useful in combination with regular expressions, some of them (`$$`, `$&`, ``$` ``, and `$'`) also take effect when performing simple string replacement, which can be surprising:
+Worth calling out: both `replace` and `replaceAll` support [special replacement patterns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_the_replacement). Although these are most useful in combination with regular expressions, some of them (`$$`, `$&`, ``$` ``, and `$'`) also take effect when performing simple string replacement, which can be surprising:
 
 ```js
 'xyz'.replaceAll('y', '$$');

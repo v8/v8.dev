@@ -62,4 +62,4 @@ To check that you have enabled GDB JIT integration correctly try setting a break
 
 - Enabling GDB JIT interface disables compacting GC. This is done to reduce pressure on GDB as unregistering and registering each moved code object will incur considerable overhead.
 
-- GDB JIT integration provides only _approximate_ source information. It does not provide any information about local variables, function’s arguments, stack layout etc. It does not enable stepping through JavaScript code or setting breakpoint on the given line. However one can set a breakpoint on a function by it’s name.
+- GDB JIT integration provides only _approximate_ source information. It does not provide any information about local variables, function’s arguments, stack layout etc. It does not enable stepping through JavaScript code or setting breakpoint on the given line. However one can set a breakpoint on a function by its name.

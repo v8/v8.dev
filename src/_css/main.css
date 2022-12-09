@@ -387,6 +387,9 @@ th, td {
 tbody tr:nth-child(odd) {
   background-color: var(--alt-table-row-background);
 }
+td:has(pre) {
+  vertical-align: top;
+}
 td > pre {
   margin: 0;
   width: 100%;

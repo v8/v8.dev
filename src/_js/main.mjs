@@ -13,44 +13,10 @@
 
 const darkModeToggle = document.querySelector('dark-mode-toggle');
 
-// Only load the Twitter script when we need it.
-const twitterLink = document.querySelector('.twitter-link');
-let twitterLoaded = null;
-if (twitterLink) {
-  twitterLoaded = import('https://platform.twitter.com/widgets.js')
-    .then(() => twitterLink.remove());
-}
-
-// Dynamically either insert the dark- or the light-themed Twitter widget.
-let twitterTimelineContainer = document.querySelector('.twitter-widget');
-const updateTwitterTimeline = async () => {
-  if (twitterTimelineContainer) {
-    await twitterLoaded;
-    const newContainer = twitterTimelineContainer.cloneNode();
-    newContainer.style.display = 'none';
-    twitterTimelineContainer.insertAdjacentElement('afterend', newContainer);
-    await twttr.widgets.createTimeline({
-      screenName: 'v8js',
-      sourceType: 'profile',
-    },
-    newContainer,
-    {
-      dnt: true,
-      height: 1000,
-      chrome: 'noheader nofooter',
-      theme: darkModeToggle.mode,
-    });
-    twitterTimelineContainer.remove();
-    newContainer.style.display = 'block';
-    twitterTimelineContainer = newContainer;
-  }
-};
-
-// Toggles the `dark` class based on the dark mode toggle's mode
+// Toggles the `dark` class based on the dark mode toggle’s mode.
 const root = document.documentElement;
 const updateThemeClass = () => {
   root.classList.toggle('dark', darkModeToggle.mode === 'dark');
-  updateTwitterTimeline();
 };
 
 // Set or remove the `dark` class the first time.

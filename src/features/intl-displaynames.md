@@ -1,6 +1,6 @@
 ---
 title: '`Intl.DisplayNames`'
-author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu)) and Frank Tang'
+author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu)) and Frank Yung-Fong Tang'
 avatars:
   - 'shu-yu-guo'
   - 'frank-tang'
