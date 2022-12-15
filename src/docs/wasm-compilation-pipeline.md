@@ -7,7 +7,7 @@ WebAssembly is a binary format that allows you to run code from programming lang
 
 ## Liftoff
 
-Initially, V8 does not compile any functions in a WebAssembly module. Instead, functions get compiled lazily with the baseline compiler [Liftoff](/blog/liftoff) when the function gets called for the first time. Liftoff is a [one-pass compiler](https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, 10s of megabytes per second.
+Initially, V8 does not compile any functions in a WebAssembly module. Instead, functions get compiled lazily with the baseline compiler [Liftoff](/blog/liftoff) when the function gets called for the first time. Liftoff is a [one-pass compiler](https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, tens of megabytes per second.
 
 Once Liftoff compilation is finished, the the resulting machine code gets registered with the WebAssembly module, so that for future calls to the function the compiled code can be used immediately.
 
@@ -17,13 +17,13 @@ Liftoff emits decently fast machine code in a very short period of time. However
 
 This is why _hot_ functions, which are functions that get executed often, get re-compiled with [TurboFan](/docs/turbofan), the optimizing compiler in V8 for both WebAssembly and JavaScript. TurboFan is a [multi-pass compiler](https://en.wikipedia.org/wiki/Multi-pass_compiler), which means that it builds multiple internal representations of the compiled code before emitting machine code. These additional internal representations allow optimizations and better register allocations, resulting in significantly faster code.
 
-V8 monitors how often WebAssembly functions get called. Once a function reaches a certain threshold, the function is considered _hot_, and re-compilation gets triggered on a background thread. Once compilation is finished, the new code gets registered with the WebAssembly module, replacing the existing Liftoff code. Any new calls to that function will then use the new, optimized code produced by TurboFan, not the Liftoff code. Note though that we don’t do on-stack-replacement. This means that if TurboFan code gets available after the function gets called, the function call will complete its execution with Liftoff code.
+V8 monitors how often WebAssembly functions get called. Once a function reaches a certain threshold, the function is considered _hot_, and re-compilation gets triggered on a background thread. Once compilation is finished, the new code gets registered with the WebAssembly module, replacing the existing Liftoff code. Any new calls to that function will then use the new, optimized code produced by TurboFan, not the Liftoff code. Note though that we don’t do on-stack-replacement. This means that if TurboFan code becomes available after the function was called, the function call will complete its execution with Liftoff code.
 
 ## Code caching
 
-If the WebAssembly module was compiled with `WebAssembly.compileStreaming`, then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL, then the cached code can be used immediately, without additional compilation. More information about code caching is available [in a separate blog post](/blog/wasm-code-caching).
+If the WebAssembly module was compiled with `WebAssembly.compileStreaming` then the TurboFan-generated machine code will also get cached. When the same WebAssembly module is fetched again from the same URL then the cached code can be used immediately without additional compilation. More information about code caching is available [in a separate blog post](/blog/wasm-code-caching).
 
-Code caching gets triggered whenever the amount of generated TurboFan code reaches a certain threshold. This means that for large WebAssembly modules the TurboFan code gets cached incrementally, whereas for small WebAssembly modules the TurboFan code may never get cached. Liftoff code does not get cached, as Liftoff is nearly as fast compiling code as code is loaded from the cache.
+Code caching gets triggered whenever the amount of generated TurboFan code reaches a certain threshold. This means that for large WebAssembly modules the TurboFan code gets cached incrementally, whereas for small WebAssembly modules the TurboFan code may never get cached. Liftoff code does not get cached, as Liftoff compilation is nearly as fast as loading code from the cache.
 
 ## Debugging
 
