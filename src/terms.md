@@ -9,7 +9,7 @@ By using the official V8 website (the “Service”), you agree to be bound by o
 
 ## Code of conduct
 
-As part of the Chromium team, the V8 team is committed to preserving and fostering a diverse, welcoming community. To this end, the [Chromium Code of Conduct](https://chromium.googlesource.com/chromium/src/+/master/CODE_OF_CONDUCT.md) applies to our website, repositories, organizations, mailing lists, and any other Chromium-supported communication groups, as well as any private communication initiated in the context of these spaces.
+As part of the Chromium team, the V8 team is committed to preserving and fostering a diverse, welcoming community. To this end, the [Chromium Code of Conduct](https://chromium.googlesource.com/chromium/src/+/main/CODE_OF_CONDUCT.md) applies to our website, repositories, organizations, mailing lists, and any other Chromium-supported communication groups, as well as any private communication initiated in the context of these spaces.
 
 ## Site policies
 
@@ -17,10 +17,10 @@ We are pleased to license much of the documentation on the official V8 website u
 
 Many pages on the V8 website contain the following notice:
 
-> Except as otherwise noted, any code samples from the V8 project are licensed under [V8’s BSD-style license](https://chromium.googlesource.com/v8/v8.git/+/master/LICENSE). Other content on this page is licensed under [the Creative Commons Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/).
+> Except as otherwise noted, any code samples from the V8 project are licensed under [V8’s BSD-style license](https://chromium.googlesource.com/v8/v8.git/+/main/LICENSE). Other content on this page is licensed under [the Creative Commons Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/).
 
 When you see a page with this notice you are free to use [nearly everything](#restrictions) on the page in your own creations. For example, you could quote the text in a book, cut-and-paste sections to your blog, record it as an audiobook for the visually impaired, or even translate it into Swahili. Really. That’s what open content licenses are all about. We just ask that you give us attribution when you reuse our work.
-In addition, you are free to use the computer source code that appears in the content (such as in examples) in the code of your own projects. This applies to any source code from the V8 project as well, as long as [its license](https://chromium.googlesource.com/v8/v8.git/+/master/LICENSE) is respected.
+In addition, you are free to use the computer source code that appears in the content (such as in examples) in the code of your own projects. This applies to any source code from the V8 project as well, as long as [its license](https://chromium.googlesource.com/v8/v8.git/+/main/LICENSE) is respected.
 
 ### What is _not_ licensed?
 
