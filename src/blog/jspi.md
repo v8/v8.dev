@@ -201,7 +201,7 @@ EM_ASYNC_JS(long, promiseAdd, (long x,long y), {
 The `promiseFib` function itself is a straightforward recursive
 version of the fibonacci function. The intriguing part (from our point
 of view) is the definition of `promiseAdd` which does the
-addition of the two fibonacci halves—using JSPI!.
+addition of the two fibonacci halves — using JSPI!.
 
 We use the `EM_ASYNC_JS` Emscripten macro to write down the
 `promiseFib` function as a Javascript function within the body of
