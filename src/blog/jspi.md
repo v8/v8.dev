@@ -182,7 +182,7 @@ aware of:
 
 To see all this working, let’s try a simple example. This C program
 computes fibonacci in a spectacularly bad way: by asking JavaScript to
-do the addition, even worse by using JavaScript `Promise`s to do it:[^2]
+do the addition, even worse by using JavaScript Promises to do it:[^2]
 
 ```
 long promiseFib(long x){
