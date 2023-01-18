@@ -177,6 +177,9 @@ aware of:
   ```
   --js-flags=”--wasm-stack-switching-stack-size=1000”
   ```
+* Debugging support is somewhat minimal. In particular, it may be difficult to 
+  see the different events happening in the Dev tools panel. Providing a richer
+  support for debugging JSPI applications is on the roadmap.
 
 ## A small demo
 
