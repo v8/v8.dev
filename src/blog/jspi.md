@@ -83,7 +83,7 @@ The chrome implementation of JSPI should already support typical use cases. Howe
   From the chrome command line, this would look like:
 
   ```
-  --js-flags=”--wasm-stack-switching-stack-size=1000”
+  --js-flags="--wasm-stack-switching-stack-size=1000"
   ```
 
 - Debugging support is somewhat minimal. In particular, it may be difficult to see the different events happening in the Dev tools panel. Providing a richer support for debugging JSPI applications is on the roadmap.
@@ -92,7 +92,7 @@ The chrome implementation of JSPI should already support typical use cases. Howe
 
 To see all this working, let’s try a simple example. This C program computes fibonacci in a spectacularly bad way: by asking JavaScript to do the addition, even worse by using JavaScript Promises to do it:[^2]
 
-```
+```c
 long promiseFib(long x){
  if(x==0)
    return 0;
@@ -114,7 +114,7 @@ The `EM_ASYNC_JS` macro generates all the necessary glue code so that we can use
 
 To compile our small demo, we use Emscripten’s `emcc` compiler:[^4]
 
-```
+```sh
 emcc -O3 badfib.c -o b.html -s ASYNCIFY=2
 ```
 
@@ -145,7 +145,7 @@ The core idea is to replace a dynamically loaded function with a stub; this stub
 
 The module we are going to load is fairly simple, it contains a function that returns 42:
 
-```
+```c
 // This is a simple provider of forty-two
 #include <emscripten.h>
 
@@ -156,7 +156,7 @@ EMSCRIPTEN_KEEPALIVE long provide42(){
 
 which is in a file called `p42.c`, and is compiled using Emscripten without building any ‘extras’:
 
-```
+```sh
 emcc p42.c -o p42.wasm --no-entry -Wl,--import-memory 
 ```
 
@@ -166,13 +166,13 @@ The `-Wl,--import-memory` flag that we added to the build of `p42.c` is to ensur
 
 In order to dynamically load code, we use the standard WebAssembly.instantiateStreaming API:
 
-```
+```js
 WebAssembly.instantiateStreaming(fetch("p42.wasm"))
 ```
 
 This expression uses `fetch` to locate the compiled Wasm module, `WebAssembly.instantiateStreaming` to compile the result of the fetch and to create an instantiated module from it. Both fetch and WebAssembly.instantiateStreaming return Promises; so we cannot simply access the result and extract our needed function. Instead we wrap this into an JSPI-style import using the `EM_ASYNC_JS` macro:
 
-```
+```c
 EM_ASYNC_JS(fooFun, resolveFun, (), {
  console.log("loading promise42");
  LoadedModule = (await WebAssembly.instantiateStreaming(fetch("p42.wasm"))).instance;
@@ -185,13 +185,13 @@ Notice the `console.log` call, we will use it to make sure that our logic is cor
 
 The `addFunction` is part of the Emscripten API, but to make sure that it is available for us at run-time, we have to inform `emcc` that it is a required dependency. We do that in the following line:
 
-```
+```c
 EM_JS_DEPS(funDeps,"$addFunction")
 ```
 
 In a situation where we want to dynamically load code, we would like to make sure that we don’t load code unnecessarily; in this case, we would like to make sure that subsequent calls to `provide42` will not trigger reloads. C has a simple feature that we can use for this: we don’t call `provide42` directly, but do so via a trampoline that will cause the function to be loaded, and then, just before actually invoking the function, change the trampoline to bypass itself. We can do this using an appropriate function pointer:
 
-```
+```c
 extern fooFun get42;
 
 long stub(){
@@ -206,7 +206,7 @@ From the perspective of the rest of the program, the function that we want to ca
 
 Our main function calls `get42` twice:[^6]
 
-```
+```c
 int main(){
  printf("first call p42() = %ld\n",get42());
  printf("second call = %ld\n",get42());
@@ -231,7 +231,7 @@ We are definitely looking forward to seeing what you can do with this new capabi
 ## Appendix A: Complete Listing of `badfib`
 
 
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -333,7 +333,7 @@ EMSCRIPTEN_KEEPALIVE int main(){
 
 The `u42.c` C code represents the main part of our dynamic loading example:
 
-```
+```c
 #include <stdio.h>
 #include <emscripten.h>
 
@@ -366,7 +366,7 @@ int main(){
 
 The p42.c code is the dynamically loaded module.
 
-```
+```c
 #include <emscripten.h>
 
 EMSCRIPTEN_KEEPALIVE long provide42(){
@@ -390,7 +390,7 @@ EMSCRIPTEN_KEEPALIVE long provide42(){
     Note: you will need a version of Emscripten that is >= 3.1.28.
 
 [^5]:
-    The ASYNCIFY=2 option is a reference to the _other_ way of accessing385 asynchronous APIs – using the asyncify feature of Emscripten.
+    The ASYNCIFY=2 option is a reference to the _other_ way of accessing asynchronous APIs – using the asyncify feature of Emscripten.
 
 [^6]:
-    the complete program is shown in Appendix B.
+    The complete program is shown in Appendix B.
