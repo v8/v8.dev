@@ -69,7 +69,7 @@ Once the flag is enabled, you should be able to run scripts that use JSPI. Below
 
 ### Limitations
 
-The chrome implementation of JSPI should already support typical use cases. However it is experimental so there are a few limitations to be aware of:
+The Chrome implementation of JSPI should already support typical use cases. However it is experimental so there are a few limitations to be aware of:
 
 
 - Only x64 and arm64 are supported.
@@ -77,13 +77,13 @@ The chrome implementation of JSPI should already support typical use cases. Howe
 - Each call to a JSPI export runs on a separate stack. For now these stacks have a fixed size. The default stack size in kB can be changed with the V8 flag:
 
   ```
-  –wasm-stack-switching-stack-size
+  --wasm-stack-switching-stack-size
   ```
 
-  From the chrome command line, this would look like:
+  From the Chrome command line, this would look like:
 
   ```
-  --js-flags="--wasm-stack-switching-stack-size=1000"
+  chrome --js-flags="--wasm-stack-switching-stack-size=1000"
   ```
 
 - Debugging support is somewhat minimal. In particular, it may be difficult to see the different events happening in the Dev tools panel. Providing a richer support for debugging JSPI applications is on the roadmap.
@@ -157,7 +157,7 @@ EMSCRIPTEN_KEEPALIVE long provide42(){
 which is in a file called `p42.c`, and is compiled using Emscripten without building any ‘extras’:
 
 ```sh
-emcc p42.c -o p42.wasm --no-entry -Wl,--import-memory 
+emcc p42.c -o p42.wasm --no-entry -Wl,--import-memory
 ```
 
 The `EMSCRIPTEN_KEEPALIVE` prefix is an Emscripten macro that makes sure that the function `provide42` is not eliminated even though it is not used within the code. This results in a WebAssembly module that contains the function that we want to load dynamically.
@@ -383,7 +383,7 @@ EMSCRIPTEN_KEEPALIVE long provide42(){
 [^2]:
     Note: we include the complete program below, in Appendix A.
 
-[^3]: 
+[^3]:
     We do not need this flag for our specific example, but you would likely need it for anything bigger.
 
 [^4]:
