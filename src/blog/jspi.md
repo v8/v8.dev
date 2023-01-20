@@ -59,9 +59,9 @@ The rest of this post focuses on how to access the JSPI, how to develop code tha
 
 ## How can I use it today?
 
-JSPI is being developed on Intel x64 and on ARM 64 architectures. It is available for Linux, macOS, Windows and ChromeOS. To test it locally, go to chrome://flags in Chrome, search for “Experimental WebAssembly JavaScript Promise Integration (JSPI)” and check the box. Relaunch as suggested for it to take effect.
+JSPI is being developed on Intel x64 and on ARM 64 architectures. It is available for Linux, macOS, Windows and ChromeOS. To test it locally, go to `chrome://flags` in Chrome, search for “Experimental WebAssembly JavaScript Promise Integration (JSPI)” and check the box. Relaunch as suggested for it to take effect.
 
-You should use at least version `110.0.5473.0` (MacOS) / `110.0.5469.0` (Windows,Android) / `110.0.5478.4` (Linux) or ChromeOS to get the latest version of the API. We recommend using the Canary channel to ensure that any stability updates are applied. In addition, if you wish to use Emscripten to generate WebAssembly (which we recommend), you should use a version that is at least `3.1.28`.
+You should use at least version `110.0.5473.0` (macOS) / `110.0.5469.0` (Windows, Android) / `110.0.5478.4` (Linux) or ChromeOS to get the latest version of the API. We recommend using the Canary channel to ensure that any stability updates are applied. In addition, if you wish to use Emscripten to generate WebAssembly (which we recommend), you should use a version that is at least `3.1.28`.
 
 It is not yet possible to enable the feature for end users, only to test it locally by enabling this flag. Eventually we hope to do an Origin Trial to enable this feature for origins that want to opt in.
 
@@ -90,25 +90,29 @@ The Chrome implementation of JSPI should already support typical use cases. Howe
 
 ## A small demo
 
-To see all this working, let’s try a simple example. This C program computes fibonacci in a spectacularly bad way: by asking JavaScript to do the addition, even worse by using JavaScript Promises to do it:[^2]
+To see all this working, let’s try a simple example. This C program computes Fibonacci in a spectacularly bad way: by asking JavaScript to do the addition, even worse by using JavaScript Promises to do it:[^2]
 
 ```c
-long promiseFib(long x){
- if(x==0)
+long promiseFib(long x) {
+ if (x == 0)
    return 0;
- if(x==1)
+ if (x == 1)
    return 1;
- return promiseAdd(promiseFib(x-1),promiseFib(x-2));
+ return promiseAdd(promiseFib(x - 1), promiseFib(x - 2));
 }
 // promise an addition
-EM_ASYNC_JS(long, promiseAdd, (long x,long y), {
- return Promise.resolve((k,r)=>{setTimeout(()=> {return k(x+y)},0)});
+EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
+  return Promise.resolve((k, r) => {
+    setTimeout(() => {
+      return k(x + y);
+    }, 0);
+  });
 });
 ```
 
-The `promiseFib` function itself is a straightforward recursive version of the fibonacci function. The intriguing part (from our point of view) is the definition of `promiseAdd` which does the addition of the two fibonacci halves — using JSPI!.
+The `promiseFib` function itself is a straightforward recursive version of the Fibonacci function. The intriguing part (from our point of view) is the definition of `promiseAdd` which does the addition of the two Fibonacci halves — using JSPI!.
 
-We use the `EM_ASYNC_JS` Emscripten macro to write down the `promiseFib` function as a Javascript function within the body of our C program. Since addition does not normally involve Promises in JavaScript, we have to force it by using the standard `Promise.resolve` function. In addition, we have to hide the arithmetic behind a `setTimeout` call to make sure that the engine does actually create a Promise that involves the browser’s event loop.
+We use the `EM_ASYNC_JS` Emscripten macro to write down the `promiseFib` function as a JavaScript function within the body of our C program. Since addition does not normally involve Promises in JavaScript, we have to force it by using the standard `Promise.resolve` function. In addition, we have to hide the arithmetic behind a `setTimeout` call to make sure that the engine does actually create a Promise that involves the browser’s event loop.
 
 The `EM_ASYNC_JS` macro generates all the necessary glue code so that we can use JSPI to access the Promise’s result as though it were a normal function.
 
@@ -118,7 +122,7 @@ To compile our small demo, we use Emscripten’s `emcc` compiler:[^4]
 emcc -O3 badfib.c -o b.html -s ASYNCIFY=2
 ```
 
-This compiles our program, creating a loadable HTML file (b.html). The most special command line option here is `-s ASYNCIFY=2`. This invokes the option to generate code that uses JSPI to interface with JavaScript imports that return Promises.[^5]
+This compiles our program, creating a loadable HTML file (`b.html`). The most special command line option here is `-s ASYNCIFY=2`. This invokes the option to generate code that uses JSPI to interface with JavaScript imports that return Promises.[^5]
 
 If you load the generated `b.html` file into Chrome, then you should see output that approximates to:
 
@@ -131,9 +135,9 @@ fib(3) 0μs 0μs 4μs
 fib(15) 0μs 13μs 1225μs
 ```
 
-This is simply a list of the first 15 fibonacci numbers followed by the average time in microseconds it took to compute a single fibonacci number. The three time values on each line refer to the time taken for a pure WebAssembly computation, for a mixed JavaScript/WebAssembly computation and the third number gives the time for a suspending version of the computation.
+This is simply a list of the first 15 Fibonacci numbers followed by the average time in microseconds it took to compute a single Fibonacci number. The three time values on each line refer to the time taken for a pure WebAssembly computation, for a mixed JavaScript/WebAssembly computation and the third number gives the time for a suspending version of the computation.
 
-Note that `fib(2)` is the smallest calculation that involves accessing a Promise, and, by the time fib(15) is computed, approximately 1000 calls to `promiseAdd` will have been made. This suggests that the actual cost of a JSPI’d function is approximately 1μs; which is significantly higher than just adding two integers but much smaller than the milliseconds typically required for accessing an external I/O function.
+Note that `fib(2)` is the smallest calculation that involves accessing a Promise, and, by the time `fib(15)` is computed, approximately 1000 calls to `promiseAdd` have been made. This suggests that the actual cost of a JSPI’d function is approximately 1μs — significantly higher than just adding two integers but much smaller than the milliseconds typically required for accessing an external I/O function.
 
 ## Using JSPI to load code lazily
 
@@ -141,16 +145,16 @@ In this next example we are going to look at what may be a somewhat surprising u
 
 We need to use JSPI because APIs like `fetch` are inherently asynchronous in nature, but we want to be able to invoke them from arbitrary places in our application—in particular, from the middle of a call to a function that does not yet exist.
 
-The core idea is to replace a dynamically loaded function with a stub; this stub will first of all load the missing function code, replace itself by the loaded code and then call the newly loaded code with the original arguments. Any subsequent call to the function would go directly to the loaded function. This strategy allows for an essentially transparent approach to dynamically loading code.
+The core idea is to replace a dynamically loaded function with a stub; this stub first of all loads the missing function code, replaces itself by the loaded code, and then calls the newly loaded code with the original arguments. Any subsequent call to the function goes directly to the loaded function. This strategy allows for an essentially transparent approach to dynamically loading code.
 
-The module we are going to load is fairly simple, it contains a function that returns 42:
+The module we are going to load is fairly simple, it contains a function that returns `42`:
 
 ```c
 // This is a simple provider of forty-two
 #include <emscripten.h>
 
 EMSCRIPTEN_KEEPALIVE long provide42(){
- return 42l;
+  return 42l;
 }
 ```
 
@@ -164,21 +168,20 @@ The `EMSCRIPTEN_KEEPALIVE` prefix is an Emscripten macro that makes sure that th
 
 The `-Wl,--import-memory` flag that we added to the build of `p42.c` is to ensure that it has access to the same memory that the main module has.[^3]
 
-In order to dynamically load code, we use the standard WebAssembly.instantiateStreaming API:
+In order to dynamically load code, we use the standard `WebAssembly.instantiateStreaming` API:
 
 ```js
-WebAssembly.instantiateStreaming(fetch("p42.wasm"))
+WebAssembly.instantiateStreaming(fetch('p42.wasm'));
 ```
 
-This expression uses `fetch` to locate the compiled Wasm module, `WebAssembly.instantiateStreaming` to compile the result of the fetch and to create an instantiated module from it. Both fetch and WebAssembly.instantiateStreaming return Promises; so we cannot simply access the result and extract our needed function. Instead we wrap this into an JSPI-style import using the `EM_ASYNC_JS` macro:
+This expression uses `fetch` to locate the compiled Wasm module, `WebAssembly.instantiateStreaming` to compile the result of the fetch and to create an instantiated module from it. Both `fetch` and `WebAssembly.instantiateStreaming` return Promises; so we cannot simply access the result and extract our needed function. Instead we wrap this into an JSPI-style import using the `EM_ASYNC_JS` macro:
 
 ```c
 EM_ASYNC_JS(fooFun, resolveFun, (), {
- console.log("loading promise42");
- LoadedModule = (await WebAssembly.instantiateStreaming(fetch("p42.wasm"))).instance;
- return addFunction(LoadedModule.exports['provide42']);
-}
-);
+  console.log('loading promise42');
+  LoadedModule = (await WebAssembly.instantiateStreaming(fetch('p42.wasm'))).instance;
+  return addFunction(LoadedModule.exports['provide42']);
+});
 ```
 
 Notice the `console.log` call, we will use it to make sure that our logic is correct.
@@ -186,7 +189,7 @@ Notice the `console.log` call, we will use it to make sure that our logic is cor
 The `addFunction` is part of the Emscripten API, but to make sure that it is available for us at run-time, we have to inform `emcc` that it is a required dependency. We do that in the following line:
 
 ```c
-EM_JS_DEPS(funDeps,"$addFunction")
+EM_JS_DEPS(funDeps, "$addFunction")
 ```
 
 In a situation where we want to dynamically load code, we would like to make sure that we don’t load code unnecessarily; in this case, we would like to make sure that subsequent calls to `provide42` will not trigger reloads. C has a simple feature that we can use for this: we don’t call `provide42` directly, but do so via a trampoline that will cause the function to be loaded, and then, just before actually invoking the function, change the trampoline to bypass itself. We can do this using an appropriate function pointer:
@@ -195,8 +198,8 @@ In a situation where we want to dynamically load code, we would like to make sur
 extern fooFun get42;
 
 long stub(){
- get42 = resolveFun();
- return get42();
+  get42 = resolveFun();
+  return get42();
 }
 
 fooFun get42 = stub;
@@ -207,9 +210,9 @@ From the perspective of the rest of the program, the function that we want to ca
 Our main function calls `get42` twice:[^6]
 
 ```c
-int main(){
- printf("first call p42() = %ld\n",get42());
- printf("second call = %ld\n",get42());
+int main() {
+  printf("first call p42() = %ld\n", get42());
+  printf("second call = %ld\n", get42());
 }
 ```
 
@@ -227,7 +230,6 @@ This example demonstrates that JSPI can be used in some unexpected ways: loading
 
 We are definitely looking forward to seeing what you can do with this new capability!
 
-
 ## Appendix A: Complete Listing of `badfib`
 
 
@@ -237,95 +239,98 @@ We are definitely looking forward to seeing what you can do with this new capabi
 #include <time.h>
 #include <emscripten.h>
 
-typedef long (testFun)(long,int);
+typedef long (testFun)(long, int);
 
 #define microSeconds (1000000)
 
-long add(long x, long y){
- return x+y;
+long add(long x, long y) {
+  return x + y;
 }
 
 // Ask JS to do the addition
 EM_JS(long, jsAdd, (long x, long y), {
- return x+y;
+  return x + y;
 });
 
 // promise an addition
-EM_ASYNC_JS(long, promiseAdd, (long x,long y), {
- return Promise.resolve((k,r)=>{setTimeout(()=> {return k(x+y)},0)});
-}
-);
+EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
+  return Promise.resolve((k, r) => {
+    setTimeout(() => {
+      return k(x + y);
+    }, 0);
+  });
+});
 
 __attribute__((noinline))
-long localFib(long x){
- if(x==0)
+long localFib(long x) {
+ if (x==0)
    return 0;
- if(x==1)
+ if (x==1)
    return 1;
- return add(localFib(x-1),localFib(x-2));
-}
-
-__attribute__((noinline))
-long jsFib(long x){
- if(x==0)
-   return 0;
- if(x==1)
-   return 1;
- return jsAdd(jsFib(x-1),jsFib(x-2));
+ return add(localFib(x - 1), localFib(x - 2));
 }
 
 __attribute__((noinline))
-long promiseFib(long x){
- if(x==0)
-   return 0;
- if(x==1)
-   return 1;
- return promiseAdd(promiseFib(x-1),promiseFib(x-2));
+long jsFib(long x) {
+  if (x==0)
+    return 0;
+  if (x==1)
+    return 1;
+  return jsAdd(jsFib(x - 1), jsFib(x - 2));
 }
 
-long runLocal(long x,int count){
- long temp = 0;
- for(int ix=0;ix<count;ix++)
-   temp += localFib(x);
- return temp/count;
+__attribute__((noinline))
+long promiseFib(long x) {
+  if (x==0)
+    return 0;
+  if (x==1)
+    return 1;
+  return promiseAdd(promiseFib(x - 1), promiseFib(x - 2));
 }
 
-long runJs(long x,int count){
- long temp = 0;
- for(int ix=0;ix<count;ix++)
-   temp += jsFib(x);
- return temp/count;
+long runLocal(long x, int count) {
+  long temp = 0;
+  for(int ix = 0; ix < count; ix++)
+    temp += localFib(x);
+  return temp / count;
 }
 
-long runPromise(long x,int count){
- long temp = 0;
- for(int ix=0;ix<count;ix++)
-   temp += promiseFib(x);
- return temp/count;
+long runJs(long x,int count) {
+  long temp = 0;
+  for(int ix = 0; ix < count; ix++)
+    temp += jsFib(x);
+  return temp / count;
 }
 
-double runTest(testFun test,int limit,int count){
- clock_t start = clock();
- test(limit,count);
- clock_t stop = clock();
- return ((double)(stop-start))/CLOCKS_PER_SEC;
+long runPromise(long x, int count) {
+  long temp = 0;
+  for(int ix = 0; ix < count; ix++)
+    temp += promiseFib(x);
+  return temp / count;
 }
 
-void runTestSequence(int step,int limit,int count){
- for(int ix=0;ix<=limit;ix+=step){
-   double light = (runTest(runLocal,ix,count)/count)*microSeconds;
-   double jsTime = (runTest(runJs,ix,count)/count)*microSeconds;
-   double promiseTime = (runTest(runPromise,ix,count)/count)*microSeconds;
-   printf("fib(%d) %gμs %gμs %gμs %gμs\n",ix, light, jsTime, promiseTime, (promiseTime-jsTime));
- }
+double runTest(testFun test, int limit, int count){
+  clock_t start = clock();
+  test(limit, count);
+  clock_t stop = clock();
+  return ((double)(stop - start)) / CLOCKS_PER_SEC;
 }
 
-EMSCRIPTEN_KEEPALIVE int main(){
- int step =  1;
- int limit = 15;
- int count = 1000;
- runTestSequence(step,limit,count);
- return 0;
+void runTestSequence(int step, int limit, int count) {
+  for (int ix = 0; ix <= limit; ix += step){
+    double light = (runTest(runLocal, ix, count) / count) * microSeconds;
+    double jsTime = (runTest(runJs, ix, count) / count) * microSeconds;
+    double promiseTime = (runTest(runPromise, ix, count) / count) * microSeconds;
+    printf("fib(%d) %gμs %gμs %gμs %gμs\n",ix, light, jsTime, promiseTime, (promiseTime - jsTime));
+  }
+}
+
+EMSCRIPTEN_KEEPALIVE int main() {
+  int step =  1;
+  int limit = 15;
+  int count = 1000;
+  runTestSequence(step, limit, count);
+  return 0;
 }
 ```
 
@@ -341,56 +346,49 @@ typedef long (*fooFun)();
 
 // promise a function
 EM_ASYNC_JS(fooFun, resolveFun, (), {
- console.log("loading promise42");
- LoadedModule = (await WebAssembly.instantiateStreaming(fetch("p42.wasm"))).instance;
- return addFunction(LoadedModule.exports['provide42']);
-}
-);
+  console.log('loading promise42');
+  LoadedModule = (await WebAssembly.instantiateStreaming(fetch('p42.wasm'))).instance;
+  return addFunction(LoadedModule.exports['provide42']);
+});
 
-EM_JS_DEPS(funDeps,"$addFunction")
+EM_JS_DEPS(funDeps, "$addFunction")
 
 extern fooFun get42;
 
-long stub(){
- get42 = resolveFun();
- return get42();
+long stub() {
+  get42 = resolveFun();
+  return get42();
 }
 
 fooFun get42 = stub;
 
-int main(){
- printf("first call p42() = %ld\n",get42());
- printf("second call = %ld\n",get42());
+int main() {
+  printf("first call p42() = %ld\n", get42());
+  printf("second call = %ld\n", get42());
 }
 ```
 
-The p42.c code is the dynamically loaded module.
+The `p42.c` code is the dynamically loaded module.
 
 ```c
 #include <emscripten.h>
 
-EMSCRIPTEN_KEEPALIVE long provide42(){
- return 42l;
+EMSCRIPTEN_KEEPALIVE long provide42() {
+  return 42l;
 }
 ```
 
 <!-- Footnotes themselves at the bottom. -->
 ## Notes
 
-[^1]:
-    For the technically curious, see [the WebAssembly proposal for JSPI](https://github.com/WebAssembly/js-promise-integration/blob/main/proposals/js-promise-integration/Overview.md) and [the V8 stack switching design portfolio](https://docs.google.com/document/d/16Us-pyte2-9DECJDfGm5tnUpfngJJOc8jbj54HMqE9Y/edit#heading=h.n1atlriavj6v).
+[^1]: For the technically curious, see [the WebAssembly proposal for JSPI](https://github.com/WebAssembly/js-promise-integration/blob/main/proposals/js-promise-integration/Overview.md) and [the V8 stack switching design portfolio](https://docs.google.com/document/d/16Us-pyte2-9DECJDfGm5tnUpfngJJOc8jbj54HMqE9Y/edit#heading=h.n1atlriavj6v).
 
-[^2]:
-    Note: we include the complete program below, in Appendix A.
+[^2]: Note: we include the complete program below, in Appendix A.
 
-[^3]:
-    We do not need this flag for our specific example, but you would likely need it for anything bigger.
+[^3]: We do not need this flag for our specific example, but you would likely need it for anything bigger.
 
-[^4]:
-    Note: you will need a version of Emscripten that is >= 3.1.28.
+[^4]: Note: you need a version of Emscripten that is ≥ 3.1.28.
 
-[^5]:
-    The ASYNCIFY=2 option is a reference to the _other_ way of accessing asynchronous APIs – using the asyncify feature of Emscripten.
+[^5]: The `ASYNCIFY=2` option is a reference to the _other_ way of accessing asynchronous APIs — using the asyncify feature of Emscripten.
 
-[^6]:
-    The complete program is shown in Appendix B.
+[^6]: The complete program is shown in Appendix B.
