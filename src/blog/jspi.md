@@ -16,7 +16,7 @@ The JSPI is an API that bridges the gap between synchronous applications and asy
 
 Many modern APIs on the Web are _asynchronous_ in nature. Asynchronous APIs operate by splitting the offered functionality into two separate parts: the initiation of the operation and its resolution; with the latter coming some time after the first. Most importantly, the application continues execution after kicking off the operation; and is then notified when the operation completes.
 
-For example, using the fetch API allows Web applications to access the contents associated with a URL; however, the fetch function does not directly return the results of the fetch; instead it returns a Promise. The connection between the fetch response and the original request is reestablished by attaching a _callback_ to that Promise. The callback function can inspect the response and collectthe data (if it is there of course).
+For example, using the fetch API allows Web applications to access the contents associated with a URL; however, the fetch function does not directly return the results of the fetch; instead it returns a Promise. The connection between the fetch response and the original request is reestablished by attaching a _callback_ to that Promise. The callback function can inspect the response and collect the data (if it is there of course).
 
 Working directly with Promise values is quite difficult, as has often been documented. This problem is exacerbated in the case of WebAssembly applications, since they cannot directly manipulate Promises.
 
