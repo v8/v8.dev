@@ -102,9 +102,9 @@ long promiseFib(long x) {
 }
 // promise an addition
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
-  return Promise.resolve((k, r) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      return k(x + y);
+      resolve(x + y);
     }, 0);
   });
 });
@@ -112,7 +112,7 @@ EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
 
 The `promiseFib` function itself is a straightforward recursive version of the Fibonacci function. The intriguing part (from our point of view) is the definition of `promiseAdd` which does the addition of the two Fibonacci halves — using JSPI!.
 
-We use the `EM_ASYNC_JS` Emscripten macro to write down the `promiseFib` function as a JavaScript function within the body of our C program. Since addition does not normally involve Promises in JavaScript, we have to force it by using the standard `Promise.resolve` function. In addition, we have to hide the arithmetic behind a `setTimeout` call to make sure that the engine does actually create a Promise that involves the browser’s event loop.
+We use the `EM_ASYNC_JS` Emscripten macro to write down the `promiseFib` function as a JavaScript function within the body of our C program. Since addition does not normally involve Promises in JavaScript, we have to force it by constructing a `Promise`. In addition, we have to hide the arithmetic behind a `setTimeout` call to make sure that the engine does actually create a Promise that involves the browser’s event loop.
 
 The `EM_ASYNC_JS` macro generates all the necessary glue code so that we can use JSPI to access the Promise’s result as though it were a normal function.
 
@@ -254,9 +254,9 @@ EM_JS(long, jsAdd, (long x, long y), {
 
 // promise an addition
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
-  return Promise.resolve((k, r) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      return k(x + y);
+      resolve(x + y);
     }, 0);
   });
 });
