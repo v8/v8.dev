@@ -104,7 +104,7 @@ long promiseFib(long x) {
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      return resolve(x + y);
+      resolve(x + y);
     }, 0);
   });
 });
@@ -256,7 +256,7 @@ EM_JS(long, jsAdd, (long x, long y), {
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      return resolve(x + y);
+      resolve(x + y);
     }, 0);
   });
 });
