@@ -102,11 +102,7 @@ long promiseFib(long x) {
 }
 // promise an addition
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(x + y);
-    }, 0);
-  });
+  return Promise.resolve(x+y);
 });
 ```
 
@@ -228,7 +224,7 @@ Notice that the line `loading promise42` only appears once, whereas `get42` is a
 
 This example demonstrates that JSPI can be used in some unexpected ways: loading code dynamically seems a long way from creating promises. Moreover, there are other ways of dynamically linking WebAssembly modules together; this is not intended to represent the definitive solution to that problem.
 
-We are definitely looking forward to seeing what you can do with this new capability!
+We are definitely looking forward to seeing what you can do with this new capability! Join the discussion at the W3C WebAssembly Community Group [repo](https://github.com/WebAssembly/js-promise-integration).
 
 ## Appendix A: Complete Listing of `badfib`
 
@@ -254,11 +250,7 @@ EM_JS(long, jsAdd, (long x, long y), {
 
 // promise an addition
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(x + y);
-    }, 0);
-  });
+  return Promise.resolve(x+y);
 });
 
 __attribute__((noinline))
