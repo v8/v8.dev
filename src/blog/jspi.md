@@ -102,17 +102,13 @@ long promiseFib(long x) {
 }
 // promise an addition
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(x + y);
-    }, 0);
-  });
+  return Promise.resolve(x+y);
 });
 ```
 
 The `promiseFib` function itself is a straightforward recursive version of the Fibonacci function. The intriguing part (from our point of view) is the definition of `promiseAdd` which does the addition of the two Fibonacci halves — using JSPI!.
 
-We use the `EM_ASYNC_JS` Emscripten macro to write down the `promiseFib` function as a JavaScript function within the body of our C program. Since addition does not normally involve Promises in JavaScript, we have to force it by constructing a `Promise`. In addition, we have to hide the arithmetic behind a `setTimeout` call to make sure that the engine does actually create a Promise that involves the browser’s event loop.
+We use the `EM_ASYNC_JS` Emscripten macro to write down the `promiseFib` function as a JavaScript function within the body of our C program. Since addition does not normally involve Promises in JavaScript, we have to force it by constructing a `Promise`.
 
 The `EM_ASYNC_JS` macro generates all the necessary glue code so that we can use JSPI to access the Promise’s result as though it were a normal function.
 
@@ -228,7 +224,7 @@ Notice that the line `loading promise42` only appears once, whereas `get42` is a
 
 This example demonstrates that JSPI can be used in some unexpected ways: loading code dynamically seems a long way from creating promises. Moreover, there are other ways of dynamically linking WebAssembly modules together; this is not intended to represent the definitive solution to that problem.
 
-We are definitely looking forward to seeing what you can do with this new capability!
+We are definitely looking forward to seeing what you can do with this new capability! Join the discussion at the W3C WebAssembly Community Group [repo](https://github.com/WebAssembly/js-promise-integration).
 
 ## Appendix A: Complete Listing of `badfib`
 
@@ -254,11 +250,7 @@ EM_JS(long, jsAdd, (long x, long y), {
 
 // promise an addition
 EM_ASYNC_JS(long, promiseAdd, (long x, long y), {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(x + y);
-    }, 0);
-  });
+  return Promise.resolve(x+y);
 });
 
 __attribute__((noinline))
