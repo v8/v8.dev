@@ -17,7 +17,7 @@
     "watch": "npm run build && npx eleventy --watch",
     "serve": "npm start",
     "debug": "DEBUG=* npx eleventy",
-    "start": "superstatic --port=9001",
+    "start": "superstatic --port=9001 .",
     "deploy": "firebase deploy",
     "ci": "npm run lint && npm run build"
   },
