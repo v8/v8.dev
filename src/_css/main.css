@@ -53,7 +53,7 @@
 :root.dark {
   --html-color: var(--nearwhite);
   --html-background: var(--black);
-  --main-color:var(--nearwhite);
+  --main-color: var(--nearwhite);
   --main-background: var(--darkestgray);
   --footer-color: var(--nearwhite);
   --footer-background: var(--darkgray);
