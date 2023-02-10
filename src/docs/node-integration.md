@@ -49,23 +49,22 @@ export BRANCH_NAME=`date +"%Y-%m-%d"`_fix_name
 git checkout -b $BRANCH_NAME
 ```
 
-Make your changes to the Node.js checkout, and commit them. Then push the changes to GitHub and create a pull request against the branch `node-ci-<sync-date>`.
+> **Note** `<sync-date>` is the date we sync’ed with upstream Node.js. Choose the latest date.
 
-:::note
-**Note:** `<sync-date>` is the date we sync’ed with upstream Node.js. Choose the latest date.
-:::
-
-If your changes need to be eventually upstreamed, please add the tag `upstream` with the supported V8 version, e.g. `[upstream:v8.4.377]`. If your changes are temporary (it disables for example a test), please add the tag `temp` and the version of V8 in which the changes should be discarded, e.g., `[temp:v8.4.377]`.
+Make your changes to the Node.js checkout, and commit them. Then push the changes to GitHub:
 
 ```bash
 git push <your-user-name> $BRANCH_NAME
 ```
 
+And create a pull request against the branch `node-ci-<sync-date>`.
+
+
 Once the pull request has been merged to V8’s fork of Node.js, you need to update node-ci’s `DEPS` file, and create a CL.
 
 ```bash
 git checkout -b update-deps
-gclient setdep --var=node_revision=`(cd node && git rev-parse $BRANCH_NAME)`
+gclient setdep --var=node_revision=<merged-commit-hash>
 git add DEPS
 git commit -m 'Update Node'
 git cl upload
