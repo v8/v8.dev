@@ -4,16 +4,20 @@ description: 'This document explains how to cross-compile V8 for ARM/Android, an
 ---
 First, make sure you can [build with GN](/docs/build-gn).
 
-Then, add `android` to your `.gclient` configuration file.
+Then, add `android` to your `.gclient` configuration file to get the neceasseray android dependencies checked out:
 
-```python
-target_os = ['android']  # Add this to get Android stuff checked out.
+```
+...
+"target_os:" ["android"],
+...
 ```
 
 The `target_os` field is a list, so if you're also building on unix it'll look like this:
 
 ```python
-target_os = ['android', 'unix']  # Multiple target OSes.
+...,
+"target_os": ["android", 'unix"],
+...
 ```
 
 Run `gclient sync`, and you’ll get a large checkout under `./third_party/android_tools`.
@@ -42,8 +46,8 @@ tools/dev/v8gen.py arm.release
 Then run `gn args out.gn/arm.release` and make sure you have the following keys:
 
 ```python
-target_os = "android"      # These lines need to be changed manually
-target_cpu = "arm"         # as v8gen.py assumes a simulator build.
+target_os = "android"
+target_cpu = "arm"
 v8_target_cpu = "arm"
 is_component_build = false
 ```
@@ -51,8 +55,8 @@ is_component_build = false
 The keys should be the same for debug builds. If you are building for an arm64 device like the Pixel C, which supports 32bit and 64bit binaries, the keys should look like this:
 
 ```python
-target_os = "android"      # These lines need to be changed manually
-target_cpu = "arm64"       # as v8gen.py assumes a simulator build.
+target_os = "android"
+target_cpu = "arm64"
 v8_target_cpu = "arm64"
 is_component_build = false
 ```
@@ -60,7 +64,7 @@ is_component_build = false
 Now build:
 
 ```bash
-ninja -C out.gn/arm.release d8
+autoninja -C out.gn/arm.release d8
 ```
 
 Use `adb` to copy the binary and snapshot files to the phone:
