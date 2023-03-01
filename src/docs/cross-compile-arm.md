@@ -6,18 +6,11 @@ First, make sure you can [build with GN](/docs/build-gn).
 
 Then, add `android` to your `.gclient` configuration file to get the neceasseray android dependencies checked out:
 
-```
-...
-"target_os:" ["android"],
-...
-```
-
-The `target_os` field is a list, so if you're also building on unix it'll look like this:
-
 ```python
-...,
-"target_os": ["android", 'unix"],
-...
+solutions = [
+  ...
+]
+target_os = ['android', 'unix']
 ```
 
 Run `gclient sync`, and you’ll get a large checkout under `./third_party/android_tools`.
@@ -30,62 +23,29 @@ Use [the `tools/dev/gm.py` script](/docs/build-gn#gm) to automatically build V8 
 
 ```bash
 alias gm=/path/to/v8/tools/dev/gm.py
-gm android_arm.release.check
+# Just build d8:
+gm android_arm64.release.d8
+# Build tests and run them on a connected android device:
+gm android_arm64.release.check
 ```
 
-This command pushes the binaries and tests to the `/data/local/tmp/v8` directory on the device.
-
-## Manual build
-
-Use `v8gen.py` to generate an ARM release or debug build:
-
-```bash
-tools/dev/v8gen.py arm.release
-```
-
-Then run `gn args out.gn/arm.release` and make sure you have the following keys:
-
-```python
-target_os = "android"
-target_cpu = "arm"
-v8_target_cpu = "arm"
-is_component_build = false
-```
-
-The keys should be the same for debug builds. If you are building for an arm64 device like the Pixel C, which supports 32bit and 64bit binaries, the keys should look like this:
-
-```python
-target_os = "android"
-target_cpu = "arm64"
-v8_target_cpu = "arm64"
-is_component_build = false
-```
-
-Now build:
-
-```bash
-autoninja -C out.gn/arm.release d8
-```
+## Manually running d8 on an Android device
 
 Use `adb` to copy the binary and snapshot files to the phone:
 
 ```bash
-adb shell 'mkdir -p /data/local/tmp/v8/bin'
-adb push out.gn/arm.release/d8 /data/local/tmp/v8/bin
-adb push out.gn/arm.release/icudtl.dat /data/local/tmp/v8/bin
-adb push out.gn/arm.release/snapshot_blob.bin /data/local/tmp/v8/bin
+adb shell rm -vrf /data/local/tmp/v8/bin && \
+adb shell mkdir --parents /data/local/tmp/v8/bin && \
+adb push out/android_arm64.release/* /data/local/tmp/v8/bin && \
 ```
 
 ```bash
 rebuffat:~/src/v8$ adb shell
-bullhead:/ $ cd /data/local/tmp/v8/bin
-bullhead:/data/local/tmp/v8/bin $ ls
-v8 icudtl.dat snapshot_blob.bin
-bullhead:/data/local/tmp/v8/bin $ ./d8
-V8 version 5.8.0 (candidate)
-d8> 'w00t!'
-"w00t!"
-d8>
+bullhead:/ $ /data/local/tmp/v8/bin/d8
+V8 version 11.3.0 (candidate)
+d8> 2**12
+4096
+d8> 
 ```
 
 ## Debugging
