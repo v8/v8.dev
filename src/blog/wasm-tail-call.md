@@ -64,7 +64,7 @@ Let’s look at a recursive fibonacci function. The Wasm bytecode is included he
 
 At any given time there is only one `fib_rec` frame, which will unwind itself before performing the next recursive call. When we reach the base case, `fib_rec` returns the result `a` directly to `fib`.
 
-This has one observable consequence (besides a reduced risk of stack overflow): the tail-callers will not appear in stack traces. Neither in the stack property of a caught exception, nor in the DevTools stack trace. By the time an exception is thrown, or execution pauses, the tail-caller frames are gone and there is no way for V8 to recover them.
+This has one observable consequence (besides a reduced risk of stack overflow): the tail-callers will not appear in stack traces. Neither will they appear in the stack property of a caught exception, nor in the DevTools stack trace. By the time an exception is thrown, or execution pauses, the tail-caller frames are gone and there is no way for V8 to recover them.
 
 ## Using tail calls with Emscripten
 
@@ -130,7 +130,7 @@ Note that both of these examples are simple enough that if we compile with -O2, 
 
 Besides the `musttail` attribute, C++ depends on tail calls for one other feature: C++20 coroutines. The relationship between tail calls and C++20 coroutines is covered in extreme depth in this blog post: https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer, but to summarize, it is possible to use coroutines in a pattern that would subtly cause stack overflow even though the source code doesn't make it look like there is a problem. To fix this problem, the C++ committee added a requirement that compilers implement "symmetric transfer" to avoid the stack overflow, which in practice means using tail calls under the covers.
 
-When WebAssembly tail calls are enabled, Clang implements symmetric transfer as described in that blog post, but when tail calls are not enabled, clang silently compiles the code without symmetric transfer, which could lead to stack overflows and is technically not a correct implementation of C++20!
+When WebAssembly tail calls are enabled, Clang implements symmetric transfer as described in that blog post, but when tail calls are not enabled, Clang silently compiles the code without symmetric transfer, which could lead to stack overflows and is technically not a correct implementation of C++20!
 
 To see the difference in action, use Emscripten to compile the last example from the blog post linked above and observe that it only avoids overflowing the stack if tail calls are enabled. Note that due to a recently-fixed bug, this will only work correctly in Emscripten 3.1.35 or later.
 
