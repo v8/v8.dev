@@ -32,16 +32,17 @@ int sum(List* list, int acc) {
     acc = acc + list->val;
     list = list->next;
   }
+  return acc;
 }
 ```
 
-This optimization is particularly important for functional languages. They rely heavily on recursive functions, and pure ones like Haskell don’t even provide loop control structures. Any kind of custom iteration typically uses recursion one way or another. Without tail-call optimization, this would very quickly run into a stack overflow for any non-trivial program.
+This optimization is particularly important for functional languages. They rely heavily on recursive functions, and pure ones like Haskell don't even provide loop control structures. Any kind of custom iteration typically uses recursion one way or another. Without tail-call optimization, this would very quickly run into a stack overflow for any non-trivial program.
 
 ### The WebAssembly Tail Call Proposal
 
 There are two ways to call a function in Wasm MVP: `call` and `call_indirect`.  The Tail Call proposal adds their tail-call counterparts: `return_call` and `return_call_indirect`. This means that it is the responsibility of the toolchain to actually perform tail-call optimization and emit the appropriate call kind, which gives it more control over performance and stack space usage.
 
-Let’s look at a recursive fibonacci function. The Wasm bytecode is included here in the text format for completeness, but you can find it in C++ in the next section:
+Let's look at a recursive fibonacci function. The Wasm bytecode is included here in the text format for completeness, but you can find it in C++ in the next section:
 
 <pre>
 (func $fib_rec (param $n i32) (param $a i32) (param $b i32) (result i32)
@@ -125,10 +126,9 @@ int main() {
 }
 ```
 
-Note that both of these examples are simple enough that if we compile with -O2, the compiler can precompute the answer and avoid exhausting the stack even without tail calls, but this wouldn't be the case with more complex code. In real-world code, the musttail attribute can be helpful for writing high-performance interpreter loops as described in this blog post:
-<https://blog.reverberate.org/2021/04/21/musttail-efficient-interpreters.html>.
+Note that both of these examples are simple enough that if we compile with -O2, the compiler can precompute the answer and avoid exhausting the stack even without tail calls, but this wouldn't be the case with more complex code. In real-world code, the musttail attribute can be helpful for writing high-performance interpreter loops as described in [this blog post](https://blog.reverberate.org/2021/04/21/musttail-efficient-interpreters.html) by Josh Haberman.
 
-Besides the `musttail` attribute, C++ depends on tail calls for one other feature: C++20 coroutines. The relationship between tail calls and C++20 coroutines is covered in extreme depth in this blog post: <https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer>, but to summarize, it is possible to use coroutines in a pattern that would subtly cause stack overflow even though the source code doesn't make it look like there is a problem. To fix this problem, the C++ committee added a requirement that compilers implement "symmetric transfer" to avoid the stack overflow, which in practice means using tail calls under the covers.
+Besides the `musttail` attribute, C++ depends on tail calls for one other feature: C++20 coroutines. The relationship between tail calls and C++20 coroutines is covered in extreme depth in [this blog post](https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer) by Lewis Baker, but to summarize, it is possible to use coroutines in a pattern that would subtly cause stack overflow even though the source code doesn't make it look like there is a problem. To fix this problem, the C++ committee added a requirement that compilers implement "symmetric transfer" to avoid the stack overflow, which in practice means using tail calls under the covers.
 
 When WebAssembly tail calls are enabled, Clang implements symmetric transfer as described in that blog post, but when tail calls are not enabled, Clang silently compiles the code without symmetric transfer, which could lead to stack overflows and is technically not a correct implementation of C++20!
 
@@ -136,11 +136,11 @@ To see the difference in action, use Emscripten to compile the last example from
 
 ## Tail Calls in V8
 
-As we saw earlier, it is not the engine’s responsibility to detect calls in tail position. This should be done upstream by the toolchain. So the only thing left to do for TurboFan (V8's optimizing compiler) is to emit an appropriate sequence of instructions based on the call kind and the target function signature.  For our fibonacci example from earlier, the stack would look like this:
+As we saw earlier, it is not the engine's responsibility to detect calls in tail position. This should be done upstream by the toolchain. So the only thing left to do for TurboFan (V8's optimizing compiler) is to emit an appropriate sequence of instructions based on the call kind and the target function signature.  For our fibonacci example from earlier, the stack would look like this:
 
 ![Simple tail call in TurboFan](/_img/tail-call.png)
 
-On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail-call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to fib_rec’s linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
+On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail-call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to fib_rec's linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
 
 `fib_rec` will unwind and rewind itself like this until `n == 0`, at which point it will return `a` by register to `fib`.
 
@@ -154,12 +154,12 @@ All these reads and writes can conflict with each other, because we are reusing 
 
 ![Complex tail call in TurboFan](/_img/tail-call-complex.png)
 
-TurboFan handles these stack and register manipulations with the “gap resolver”, a component which takes a list of moves that should semantically be executed in parallel, and generates the appropriate sequence of moves to resolve potential interferences between the move’s sources and destinations. If the conflicts are acyclic, this is just a matter of reordering the moves such that all sources are read before they are overwritten. For cyclic conflicts (e.g. if we swap two stack parameters), this can involve moving one of the sources to a temporary register or a temporary stack slot to break the cycle.
+TurboFan handles these stack and register manipulations with the “gap resolver”, a component which takes a list of moves that should semantically be executed in parallel, and generates the appropriate sequence of moves to resolve potential interferences between the move's sources and destinations. If the conflicts are acyclic, this is just a matter of reordering the moves such that all sources are read before they are overwritten. For cyclic conflicts (e.g. if we swap two stack parameters), this can involve moving one of the sources to a temporary register or a temporary stack slot to break the cycle.
 
-Tail calls are also supported in Liftoff, our baseline compiler. However they are not optimized in this tier: Liftoff will push the parameters, return address and frame pointer to complete the frame as if this was a regular call, and then shift everything downwards to discard the caller frame:
+Tail calls are also supported in Liftoff, our baseline compiler. In fact, they must be supported, or the baseline code might run out of stack space. However they are not optimized in this tier: Liftoff will push the parameters, return address and frame pointer to complete the frame as if this was a regular call, and then shift everything downwards to discard the caller frame:
 
 ![Tail calls in Liftoff](/_img/tail-call-liftoff.png)
 
 Before jumping to the target function, we also pop the caller FP into the FP register to restore its previous value, and to let the target function push it again in the prologue.
 
-This strategy doesn’t require that we analyze and resolve move conflicts, which makes compilation faster. The generated code is slower, but will eventually [tier-up](/blog/wasm-dynamic-tiering) to TurboFan if the function is hot enough.
+This strategy doesn't require that we analyze and resolve move conflicts, which makes compilation faster. The generated code is slower, but will eventually [tier-up](/blog/wasm-dynamic-tiering) to TurboFan if the function is hot enough.
