@@ -2,7 +2,7 @@
 title: 'WebAssembly Tail Calls'
 description: 'This document explains the WebAssembly Tail Calls proposal and demonstrates it with some examples'
 author: 'Thibaud Michaud, Thomas Lively'
-date: 2023-04-04
+date: 2023-04-05
 tags:
   - WebAssembly
 ---
@@ -43,12 +43,12 @@ There are two ways to call a function in Wasm MVP: `call` and `call_indirect`.  
 
 Let's look at a recursive fibonacci function. The Wasm bytecode is included here in the text format for completeness, but you can find it in C++ in the next section:
 
-<pre>
+```wasm
 (func $fib_rec (param $n i32) (param $a i32) (param $b i32) (result i32)
   (if (i32.eqz (local.get $n))
     (then (return (local.get $a)))
     (else
-      (<b>return_call</b> $fib_rec
+      (return_call $fib_rec
         (i32.sub (local.get $n) (i32.const 1))
         (local_get $b)
         (i32.add (local.get $a) (local.get $b))
@@ -60,7 +60,7 @@ Let's look at a recursive fibonacci function. The Wasm bytecode is included here
 (func $fib (param $n i32) (result i32)
   (call $fib_rec (local.get $n) (i32.const 0) (i32.const 1))
 )
-</pre>
+```
 
 At any given time there is only one `fib_rec` frame, which will unwind itself before performing the next recursive call. When we reach the base case, `fib_rec` returns the result `a` directly to `fib`.
 
@@ -137,7 +137,7 @@ To see the difference in action, use Emscripten to compile the last example from
 
 As we saw earlier, it is not the engine's responsibility to detect calls in tail position. This should be done upstream by the toolchain. So the only thing left to do for TurboFan (V8's optimizing compiler) is to emit an appropriate sequence of instructions based on the call kind and the target function signature.  For our fibonacci example from earlier, the stack would look like this:
 
-![Simple tail call in TurboFan](/_img/tail-call.png)
+![Simple tail call in TurboFan](/_img/wasm-tail-calls/tail-calls.svg)
 
 On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail-call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to fib_rec's linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
 
@@ -151,13 +151,13 @@ This is a simple case where all parameters and return values fit into registers,
 
 All these reads and writes can conflict with each other, because we are reusing the same stack space. This is a crucial difference with a non-tail call, which would simply push all the stack parameters and the return address on top of the stack.
 
-![Complex tail call in TurboFan](/_img/tail-call-complex.png)
+![Complex tail call in TurboFan](/_img/wasm-tail-calls/tail-calls-complex.svg)
 
 TurboFan handles these stack and register manipulations with the “gap resolver”, a component which takes a list of moves that should semantically be executed in parallel, and generates the appropriate sequence of moves to resolve potential interferences between the move's sources and destinations. If the conflicts are acyclic, this is just a matter of reordering the moves such that all sources are read before they are overwritten. For cyclic conflicts (e.g. if we swap two stack parameters), this can involve moving one of the sources to a temporary register or a temporary stack slot to break the cycle.
 
 Tail calls are also supported in Liftoff, our baseline compiler. In fact, they must be supported, or the baseline code might run out of stack space. However they are not optimized in this tier: Liftoff will push the parameters, return address and frame pointer to complete the frame as if this was a regular call, and then shift everything downwards to discard the caller frame:
 
-![Tail calls in Liftoff](/_img/tail-call-liftoff.png)
+![Tail calls in Liftoff](/_img/wasm-tail-calls/tail-calls-liftoff.svg)
 
 Before jumping to the target function, we also pop the caller FP into the FP register to restore its previous value, and to let the target function push it again in the prologue.
 
