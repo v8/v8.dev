@@ -22,7 +22,7 @@ int sum(List* list, int acc) {
 }
 ```
 
-With a regular call, this consumes O(n) stack space: each element of the list adds a new frame on the call stack. With a long enough list, this could very quickly overflow the stack. By replacing the call with a jump, tail-call optimization effectively turns this recursive function into a loop which uses
+With a regular call, this consumes O(n) stack space: each element of the list adds a new frame on the call stack. With a long enough list, this could very quickly overflow the stack. By replacing the call with a jump, tail call optimization effectively turns this recursive function into a loop which uses
 O(1) stack space:
 
 ```c
@@ -35,11 +35,11 @@ int sum(List* list, int acc) {
 }
 ```
 
-This optimization is particularly important for functional languages. They rely heavily on recursive functions, and pure ones like Haskell don't even provide loop control structures. Any kind of custom iteration typically uses recursion one way or another. Without tail-call optimization, this would very quickly run into a stack overflow for any non-trivial program.
+This optimization is particularly important for functional languages. They rely heavily on recursive functions, and pure ones like Haskell don't even provide loop control structures. Any kind of custom iteration typically uses recursion one way or another. Without tail call optimization, this would very quickly run into a stack overflow for any non-trivial program.
 
 ### The WebAssembly Tail Call Proposal
 
-There are two ways to call a function in Wasm MVP: `call` and `call_indirect`.  The Tail Call proposal adds their tail-call counterparts: `return_call` and `return_call_indirect`. This means that it is the responsibility of the toolchain to actually perform tail-call optimization and emit the appropriate call kind, which gives it more control over performance and stack space usage.
+There are two ways to call a function in Wasm MVP: `call` and `call_indirect`.  The Tail Call proposal adds their tail call counterparts: `return_call` and `return_call_indirect`. This means that it is the responsibility of the toolchain to actually perform tail call optimization and emit the appropriate call kind, which gives it more control over performance and stack space usage.
 
 Let's look at a recursive fibonacci function. The Wasm bytecode is included here in the text format for completeness, but you can find it in C++ in the next section:
 
@@ -64,7 +64,7 @@ Let's look at a recursive fibonacci function. The Wasm bytecode is included here
 
 At any given time there is only one `fib_rec` frame, which will unwind itself before performing the next recursive call. When we reach the base case, `fib_rec` returns the result `a` directly to `fib`.
 
-One observable consequence of tail calls is (besides a reduced risk of stack overflow) that tail-callers will not appear in stack traces. Neither will they appear in the stack property of a caught exception, nor in the DevTools stack trace. By the time an exception is thrown, or execution pauses, the tail-caller frames are gone and there is no way for V8 to recover them.
+One observable consequence of tail calls is (besides a reduced risk of stack overflow) that tail callers will not appear in stack traces. Neither will they appear in the stack property of a caught exception, nor in the DevTools stack trace. By the time an exception is thrown, or execution pauses, the tail caller frames are gone and there is no way for V8 to recover them.
 
 ## Using tail calls with Emscripten
 
@@ -139,7 +139,7 @@ As we saw earlier, it is not the engine's responsibility to detect calls in tail
 
 ![Simple tail call in TurboFan](/_img/wasm-tail-calls/tail-calls.svg)
 
-On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail-call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to fib_rec's linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
+On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to fib_rec's linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
 
 `fib_rec` will unwind and rewind itself like this until `n == 0`, at which point it will return `a` by register to `fib`.
 
