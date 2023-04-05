@@ -43,7 +43,7 @@ There are two ways to call a function in Wasm MVP: `call` and `call_indirect`.  
 
 Let's look at a recursive fibonacci function. The Wasm bytecode is included here in the text format for completeness, but you can find it in C++ in the next section:
 
-```wasm
+```wasm/4
 (func $fib_rec (param $n i32) (param $a i32) (param $b i32) (result i32)
   (if (i32.eqz (local.get $n))
     (then (return (local.get $a)))
