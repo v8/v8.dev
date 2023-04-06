@@ -2,7 +2,7 @@
 title: 'WebAssembly Tail Calls'
 description: 'This document explains the WebAssembly Tail Calls proposal and demonstrates it with some examples'
 author: 'Thibaud Michaud, Thomas Lively'
-date: 2023-04-05
+date: 2023-04-06
 tags:
   - WebAssembly
 ---
@@ -50,7 +50,7 @@ Let's look at a recursive fibonacci function. The Wasm bytecode is included here
     (else
       (return_call $fib_rec
         (i32.sub (local.get $n) (i32.const 1))
-        (local_get $b)
+        (local.get $b)
         (i32.add (local.get $a) (local.get $b))
       )
     )
@@ -139,7 +139,7 @@ As we saw earlier, it is not the engine's responsibility to detect calls in tail
 
 ![Simple tail call in TurboFan](/_img/wasm-tail-calls/tail-calls.svg)
 
-On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to fib_rec's linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
+On the left we are inside `fib_rec` (green), called by `fib` (blue) and about to recursively tail call `fib_rec`. First we unwind the current frame by resetting the frame and stack pointer. The frame pointer just restores its previous value by reading it from the “Caller FP” slot. The stack pointer moves to the top of the parent frame, plus enough space for any potential stack parameters and stack return values for the callee (0 in this case, everything is passed by registers). Parameters are moved into their expected registers according to `fib_rec`'s linkage (not shown in the diagram). And finally we start running `fib_rec`, which will start by creating a new frame.
 
 `fib_rec` will unwind and rewind itself like this until `n == 0`, at which point it will return `a` by register to `fib`.
 
