@@ -8,7 +8,7 @@ tags:
 ---
 We are shipping WebAssembly tail calls in V8 v11.2! In this post we give a brief overview of this proposal, demonstrate an interesting use case for C++ coroutines with Emscripten, and show how V8 handles tail calls internally.
 
-## What is Tail Call Optimization?
+## What is Tail Call Optimization? { #what }
 
 A call is said to be in tail position if it is the last instruction executed before returning from the current function. Compilers can optimize such calls by discarding the caller frame and replacing the call with a jump.
 
@@ -35,7 +35,7 @@ int sum(List* list, int acc) {
 
 This optimization is particularly important for functional languages. They rely heavily on recursive functions, and pure ones like Haskell don’t even provide loop control structures. Any kind of custom iteration typically uses recursion one way or another. Without tail call optimization, this would very quickly run into a stack overflow for any non-trivial program.
 
-### The WebAssembly tail call proposal
+### The WebAssembly tail call proposal { #proposal }
 
 There are two ways to call a function in Wasm MVP: `call` and `call_indirect`.  The WebAssembly tail call proposal adds their tail call counterparts: `return_call` and `return_call_indirect`. This means that it is the responsibility of the toolchain to actually perform tail call optimization and emit the appropriate call kind, which gives it more control over performance and stack space usage.
 
@@ -64,7 +64,7 @@ At any given time there is only one `fib_rec` frame, which unwinds itself before
 
 One observable consequence of tail calls is (besides a reduced risk of stack overflow) that tail callers do not appear in stack traces. Neither do they appear in the stack property of a caught exception, nor in the DevTools stack trace. By the time an exception is thrown, or execution pauses, the tail caller frames are gone and there is no way for V8 to recover them.
 
-## Using tail calls with Emscripten
+## Using tail calls with Emscripten { #emscripten }
 
 Functional languages often depend on tail calls, but it’s possible to use them as a C or C++ programmer as well. Emscripten (and Clang, which Emscripten uses) supports the musttail attribute that tells the compiler that a call must be compiled into a tail call. As an example, consider this recursive implementation of a Fibonacci function that calculates the `n`th Fibonacci number mod 2^32 (because the integers overflow for large `n`):
 
@@ -131,7 +131,7 @@ When WebAssembly tail calls are enabled, Clang implements symmetric transfer as 
 
 To see the difference in action, use Emscripten to compile the last example from the blog post linked above and observe that it only avoids overflowing the stack if tail calls are enabled. Note that due to a recently-fixed bug, this only works correctly in Emscripten 3.1.35 or later.
 
-## Tail calls in V8
+## Tail calls in V8 { #v8 }
 
 As we saw earlier, it is not the engine’s responsibility to detect calls in tail position. This should be done upstream by the toolchain. So the only thing left to do for TurboFan (V8’s optimizing compiler) is to emit an appropriate sequence of instructions based on the call kind and the target function signature.  For our fibonacci example from earlier, the stack would look like this:
 
