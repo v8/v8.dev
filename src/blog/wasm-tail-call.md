@@ -1,10 +1,10 @@
 ---
 title: 'WebAssembly tail calls'
-description: 'This document explains the WebAssembly tail calls proposal and demonstrates it with some examples.'
 author: 'Thibaud Michaud, Thomas Lively'
 date: 2023-04-06
 tags:
   - WebAssembly
+description: 'This document explains the WebAssembly tail calls proposal and demonstrates it with some examples.'
 tweet: '1644077795059044353'
 ---
 We are shipping WebAssembly tail calls in V8 v11.2! In this post we give a brief overview of this proposal, demonstrate an interesting use case for C++ coroutines with Emscripten, and show how V8 handles tail calls internally.
