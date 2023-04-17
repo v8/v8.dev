@@ -480,7 +480,7 @@ dark-mode-toggle {
   --dark-mode-toggle-dark-icon: url(/_css/img/sun.svg);
   --dark-mode-toggle-color: var(--main-and-footer-link-color);
   --dark-mode-toggle-icon-filter: invert(80%);
-  margin-left: 1em;
+  margin-left: 0.9em;
   position: relative;
   top: 0.4rem;
 }
