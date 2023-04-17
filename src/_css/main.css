@@ -218,6 +218,10 @@ hr {
   align-items: flex-end;
 }
 
+#footer nav {
+  font-size : 15px;
+}
+
 pre, code, var, kbd, samp {
   font-family: Source Code Pro, Monaco, Lucida Console, monospace;
   font-size: 1em;
@@ -480,7 +484,7 @@ dark-mode-toggle {
   --dark-mode-toggle-dark-icon: url(/_css/img/sun.svg);
   --dark-mode-toggle-color: var(--main-and-footer-link-color);
   --dark-mode-toggle-icon-filter: invert(80%);
-  margin-left: 0.9em;
+  margin-left: 0.2em;
   position: relative;
   top: 0.4rem;
 }
