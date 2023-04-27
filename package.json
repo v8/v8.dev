@@ -47,7 +47,7 @@
     "dark-mode-toggle": "^0.14.3",
     "firebase-tools": "^11.16.1",
     "get-video-dimensions": "^1.0.0",
-    "glob": "^8.0.3",
+    "glob": "^9.3.4",
     "he": "^1.2.0",
     "html-minifier-terser": "^7.1.0",
     "husky": "^8.0.2",
