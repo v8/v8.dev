@@ -31,7 +31,6 @@ This section shows how to build a monolithic V8 version for use on either a phys
 Set up GN build files by running `gn args out/release-ios` and inserting the following keys:
 
 ```python
-enable_ios_bitcode = true
 ios_deployment_target = 10
 is_component_build = false
 is_debug = false
