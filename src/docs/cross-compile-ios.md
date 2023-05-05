@@ -37,7 +37,6 @@ is_debug = false
 target_cpu = "arm64"                  # "x64" for a simulator build.
 target_os = "ios"
 use_custom_libcxx = false             # Use Xcode's libcxx.
-use_xcode_clang = true
 v8_enable_i18n_support = false        # Produces a smaller binary.
 v8_monolithic = true                  # Enable the v8_monolith target.
 v8_use_external_startup_data = false  # The snaphot is included in the binary.
