@@ -249,7 +249,7 @@ As part of our work on these JavaScript features, we went beyond “just” prop
 
 ## RegExp `v` flag support { #support }
 
-V8 v11.0 (Chrome 110) offers experimental support for this new functionality via the `--harmony-regexp-unicode-sets` flag. Babel also supports transpiling the `v` flag — [try out the examples from this article in the Babel REPL](https://babeljs.io/repl#?code_lz=MYewdgzgLgBATgUxgXhgegNoYIYFoBmAugGTEbC4AWhhaAbgNwBQTaaMAKpQJYQy8xKAVwDmSQCgEMKHACeMIWFABbJQjBRuYEfygBCVmlCRYCJSABW3FOgA6ABwDeAJQDiASQD6AUTOWAvvTMQA&presets=stage-3)! The support table below links to tracking issues you can subscribe to for updates.
+V8 v11.0 (Chrome 110) offers experimental support for this new functionality via the `--harmony-regexp-unicode-sets` flag. V8 v12.0 (Chrome 112) has the new features enabled by default. Babel also supports transpiling the `v` flag — [try out the examples from this article in the Babel REPL](https://babeljs.io/repl#?code_lz=MYewdgzgLgBATgUxgXhgegNoYIYFoBmAugGTEbC4AWhhaAbgNwBQTaaMAKpQJYQy8xKAVwDmSQCgEMKHACeMIWFABbJQjBRuYEfygBCVmlCRYCJSABW3FOgA6ABwDeAJQDiASQD6AUTOWAvvTMQA&presets=stage-3)! The support table below links to tracking issues you can subscribe to for updates.
 
 <feature-support chrome="112 https://bugs.chromium.org/p/v8/issues/detail?id=11935"
                  firefox="116 https://bugzilla.mozilla.org/show_bug.cgi?id=regexp-v-flag"
