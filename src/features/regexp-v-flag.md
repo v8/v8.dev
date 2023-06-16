@@ -252,7 +252,7 @@ As part of our work on these JavaScript features, we went beyond “just” prop
 V8 v11.0 (Chrome 110) offers experimental support for this new functionality via the `--harmony-regexp-unicode-sets` flag. Babel also supports transpiling the `v` flag — [try out the examples from this article in the Babel REPL](https://babeljs.io/repl#?code_lz=MYewdgzgLgBATgUxgXhgegNoYIYFoBmAugGTEbC4AWhhaAbgNwBQTaaMAKpQJYQy8xKAVwDmSQCgEMKHACeMIWFABbJQjBRuYEfygBCVmlCRYCJSABW3FOgA6ABwDeAJQDiASQD6AUTOWAvvTMQA&presets=stage-3)! The support table below links to tracking issues you can subscribe to for updates.
 
 <feature-support chrome="112 https://bugs.chromium.org/p/v8/issues/detail?id=11935"
-                 firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=regexp-v-flag"
-                 safari="no https://bugs.webkit.org/show_bug.cgi?id=regexp-v-flag"
-                 nodejs="no"
+                 firefox="116 https://bugzilla.mozilla.org/show_bug.cgi?id=regexp-v-flag"
+                 safari="17 https://bugs.webkit.org/show_bug.cgi?id=regexp-v-flag"
+                 nodejs="20"
                  babel="7.17.0 https://babeljs.io/blog/2022/02/02/7.17.0"></feature-support>
