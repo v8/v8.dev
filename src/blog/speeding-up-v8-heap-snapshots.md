@@ -15,7 +15,7 @@ In this post about V8 heap snapshots, I will talk about some performance problem
 
 Ashley Claymore was working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. Despite the process having access to plenty of system memory, V8 places a hard limit on the amount of memory dedicated to the garbage-collected heap from which all JavaScript objects are allocated. This V8 heap limit (~1400MB) was being hit.
 
-The standard way to debug a routine memory leak scenario like this is to capture a heap snapshot and then inspect the various summaries and object attributes using DevTools "Memory" tab to find out what is consuming the most memory.  In DevTools, you click the round button marked "Take heap snapshot" to perform the capture. For Node.js applications, you can [trigger the snapshot](https://nodejs.org/en/docs/guides/diagnostics/memory/using-heap-snapshot) programatically using this API:
+The standard way to debug a routine memory leak scenario like this is to capture a heap snapshot and then inspect the various summaries and object attributes using DevTools "Memory" tab to find out what is consuming the most memory.  In DevTools, you click the round button marked _"Take heap snapshot"_ to perform the capture. For Node.js applications, you can [trigger the snapshot](https://nodejs.org/en/docs/guides/diagnostics/memory/using-heap-snapshot) programmatically using this API:
 
 ```javascript
 require('v8').writeHeapSnapshot();
@@ -53,7 +53,7 @@ We knew the snapshots were dramatically increasing execution time, so the first 
 
 We landed [this patch](https://chromium-review.googlesource.com/c/v8/v8/+/4428810) upstream to introduce a new command line flag `--profile_heap_snapshot` to V8, which enables recording of both the generation and serialization times.
 
-Using this flag, we learn some interesting things!
+Using this flag, we learned some interesting things!
 
 First, we could observe the exact time the CPU was using for each snapshot. In our reduced test case, the first took 5 minutes, the second took 8 minutes, and each subsequent snapshot kept on taking longer and longer.  Nearly all of this time was spent in the generation phase.
 
@@ -73,7 +73,7 @@ To record the session, I followed these steps:
 
 
 2. After that, I started the recording session (pressing the Start button).
-3. Then, I executed the failing script with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept --profile-heap-snapshot, as its command line parameters filter does not allow passing it in `NODE_OPTIONS` right now.
+3. Then, I executed the failing script with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept `--profile-heap-snapshot`, as its command line parameters filter has not yet been updated to accept the newer V8 flags.
 4. I just let it run a couple of dumps (it would already take over 10 minutes!) and then I stopped the recording.
 
 ## First Optimization: Improved StringsStorage hashing
@@ -98,7 +98,7 @@ Where exactly? I added the source line numbers to the break down and found this:
 
 So, that inlined `ComputeStringHash` call is causing over 30% of the delay! But why?
 
-Let’s first talk about `StringsStorage`. Its purpose is to store a unique copy of all the strings that will be used in the heap snapshot. For fast access and handling uniqueness, this class uses a flatmap: a hashmap backed by an array, where collisions are handled by storing elements in the next positions of the array.
+Let’s first talk about `StringsStorage`. Its purpose is to store a unique copy of all the strings that will be used in the heap snapshot. For fast access and handling uniqueness, this class uses a flatmap: a hashmap backed by an array, where collisions are handled by storing elements in the next position of the array.
 
 I started to suspect the problem could be too many collisions, which could lead to long searches in the array. But I needed to prove it. So I added exhaustive logs to see the generated hash keys and, on insertion, see how far an entry could end after the expected position for its hash key.
 
@@ -108,7 +108,7 @@ Part of the problem was caused by the scripts using strings for lots of numbers 
 
 Some examples of problems with this hash function:
 
-* Once we had strings with a hash key value in lower positions, then the storing of  new numbers would offset all the positions.
+* Once we had strings with a hash key value in lower positions, then the storing of new numbers would offset all the positions.
 * Or even worse: if we would introduce a string with a hash key value that would be a low number, and we already found several hundreds or thousands of consecutive numbers, then that value would be moved several hundreds or thousands of positions.
 
 What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 positions to the left. So, for each number, we would introduce 3 free positions. Why 2? Empirical testing across several work-sets showed this number was the best choice to minimize collisions.
