@@ -108,8 +108,8 @@ Part of the problem was caused by the scripts using strings for lots of numbers 
 
 Some examples of problems with this hash function:
 
-* Once we had strings with a hash key value in lower positions, then the storing of new numbers would offset all the positions.
-* Or even worse: if we would introduce a string with a hash key value that would be a low number, and we already found several hundreds or thousands of consecutive numbers, then that value would be moved several hundreds or thousands of positions.
+- Once we had strings with a hash key value in lower positions, then the storing of new numbers would offset all the positions.
+- Or even worse: if we would introduce a string with a hash key value that would be a low number, and we already found several hundreds or thousands of consecutive numbers, then that value would be moved several hundreds or thousands of positions.
 
 What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 positions to the left. So, for each number, we would introduce 3 free positions. Why 2? Empirical testing across several work-sets showed this number was the best choice to minimize collisions.
 
@@ -137,8 +137,8 @@ After enabling both fixes, we re-profiled. Both of our fixes only affect snapsho
 
 When operating on a JS program containing...
 
-* Unoptimized development JS, generation time is **50% faster** 👍
-* Optimized production JS, generation time is **90% faster** 😮
+- Unoptimized development JS, generation time is **50% faster** 👍
+- Optimized production JS, generation time is **90% faster** 😮
 
 Why such a massive difference between optimized and unoptimized code? It is mostly because of the source code line optimization. In code optimized using bundling and minification, there are fewer JS files and these files tend to be large, which means finding the newlines takes longer. And therefore, these larger files benefit most from the source position caching that only performs this work once.
 
