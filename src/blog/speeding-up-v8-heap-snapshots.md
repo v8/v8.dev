@@ -43,7 +43,7 @@ Jason Williams started investigating the issue using some V8 parameters. As desc
 
 After each snapshot, V8 tries to force garbage collection to reduce memory usage and avoid hitting the limit. In the test case, the memory usage increases, but, after several iterations, garbage collection ultimately could not free up enough space and so the application terminated with an *Out-Of-Memory* error.
 
-Jason took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, around 30 minutes would elapse just walking through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
+Jason took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, it took around 30 minutes just to walk through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
 
 This is when I was asked to take a look.
 
@@ -73,7 +73,7 @@ To record the session, I followed these steps:
 
 
 2. After that, I started the recording session (pressing the Start button).
-3. Then, I executed the failing script with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept `--profile-heap-snapshot`, as its command line parameters filter has not yet been updated to accept the newer V8 flags.
+3. Then, I executed the failing script with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept `--profile-heap-snapshot` in `NODE_OPTIONS`, as it uses an allowlist to filter V8 flags that can be configured through the environment variable.
 4. I just let it run a couple of dumps (it would already take over 10 minutes!) and then I stopped the recording.
 
 ## First Optimization: Improved StringsStorage hashing
@@ -123,7 +123,7 @@ For each allocation in the V8 heap, the heap snapshot tries to record the call s
 
 What was happening? It was something similar to [what I fixed in the ETW stack walk](https://chromium-review.googlesource.com/c/v8/v8/+/3669698) and that I explained in [this post](https://blogs.igalia.com/dape/2022/12/21/native-call-stack-profiling-3-3-2022-work-in-v8/).
 
-To compute the source code lines of a function, V8 knows the linear position of the function in the file. But, to find the source line, it needs to traverse the whole file to identify where each newline occurs. This is expensive.
+To compute the source code lines of a function, V8 knows the linear position of the function in the script. But, to find the source line, it needs to traverse the whole script to identify where each newline occurs. This is expensive.
 
 When requesting line information, V8 already knows how to cache the source line positions per-script. But the heap snapshot implementation was not using a cache!
 
@@ -150,7 +150,7 @@ The optimizations are generic wins that we expect to be widely applicable to any
 
 ## What’s next?
 
-First, it would be useful for Node.js to accept the new `--profile-heap-snapshot` flag. Today, it filters V8 command line options, and only allows a known subset.
+First, it would be useful for Node.js to accept the new `--profile-heap-snapshot` flag in `NODE_OPTIONS`. In some use cases, users cannot control the the command line options passed to Node.js directly and have to configure them through the environment variable `NODE_OPTIONS`. Today, Node.js filters V8 command line options set in the environment variable, and only allows a known subset, which could make it harder to test new V8 flags in Node.js, as what happened in our case.
 
 Information accuracy in snapshots can be improved further. Today, each script source code line information is stored in a representation in the V8 heap itself. And that’s a problem because we want to measure the heap precisely without the observability infrastructure affecting the subject we are observing. Ideally, we would store the cache of line information outside the V8 heap in order to make heap snapshot information more accurate.
 
