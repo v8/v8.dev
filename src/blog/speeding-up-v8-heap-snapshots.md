@@ -21,7 +21,7 @@ The standard way to debug a routine memory leak scenario like this is to capture
 require('v8').writeHeapSnapshot();
 ```
 
-The desire was to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between each.  The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes** alone!
+The desire was to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes** alone!
 
 It was this slowness in the memory analysis workflow that we needed to solve.
 
@@ -33,7 +33,7 @@ Jason Williams started investigating the issue using some V8 parameters. As desc
 : This limits the heap to 100 megabytes and helps to reproduce the issue much faster.
 
 `--heapsnapshot-near-heap-limit=10`
-: This tells V8 to produce a maximum of 10 snapshots, each time it comes close to running out of memory.  This prevents thrashing where the memory-starved program spends a long time producing more snapshots than needed.
+: This is a Node.js specific command line parameter that tells V8 to produce a maximum of 10 snapshots, each time it comes close to running out of memory.  This prevents thrashing where the memory-starved program spends a long time producing more snapshots than needed.
 
 `--enable-etw-stack-walking`
 : This allows tools such as ETW, WPA & xperf to see the JS stack which has been called in V8. (Node v20+)
@@ -41,7 +41,7 @@ Jason Williams started investigating the issue using some V8 parameters. As desc
 `--interpreted-frames-native-stack`
 : This flag is used in combination with tools like ETW, WPA & xperf to see the native stack when profiling. (Node v20+).
 
-After each snapshot, V8 tries to force garbage collection to reduce memory usage and avoid hitting the limit. In the test case, the memory usage increases, but, after several iterations, garbage collection ultimately could not free up enough space and so the application terminated with an *Out-Of-Memory* error.
+When V8 is close to the heap limit, it forces a garbage collection to reduce the memory usage and avoid hitting the limit. With the provided Node.js `--heapsnapshot-near-heap-limit` flag it will also dump a new heap snapshot. In the test case, the memory usage increases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
 
 Jason took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, it took around 30 minutes just to walk through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
 
