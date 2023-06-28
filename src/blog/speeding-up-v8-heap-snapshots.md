@@ -41,7 +41,7 @@ Jason Williams started investigating the issue using some V8 parameters. As desc
 `--interpreted-frames-native-stack`
 : This flag is used in combination with tools like ETW, WPA & xperf to see the native stack when profiling. (Node v20+).
 
-When V8 is close to the heap limit, it forces a garbage collection to reduce the memory usage and avoid hitting the limit. With the provided Node.js `--heapsnapshot-near-heap-limit` flag it will also dump a new heap snapshot. In the test case, the memory usage increases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
+When V8 is close to the heap limit, it forces a garbage collection to reduce the memory usage and avoid hitting the limit. It also notifies the embedder that the heap is about to reach the memory limit. The `--heapsnapshot-near-heap-limit` flag in Node.js dumps a new heap snapshot upon notification. In the test case, the memory usage decreases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
 
 Jason took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, it took around 30 minutes just to walk through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
 
