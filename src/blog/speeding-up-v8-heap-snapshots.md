@@ -125,9 +125,9 @@ What was happening? It was something similar to [what I fixed in the ETW stack w
 
 To compute the source code lines of a function, V8 knows the linear position of the function in the script. But, to find the source line, it needs to traverse the whole script to identify where each newline occurs. This is expensive.
 
-When requesting line information, V8 already knows how to cache the source line positions per-script. But the heap snapshot implementation was not using a cache!
+When requesting line information, V8 already implements caching the source line positions per-script in method `Script::InitLineEnds()`. That information is stored in each script using a new heap object. Unfortunately, that was a problem that prevented the heap snapshot from using the cache. This is because, when the snapshot implementation traverses the heap, it cannot modify it, so the newly calculated line information cannot be cached.
 
-The solution? Before generating the heap snapshot, we now iterate over all the scripts in the V8 context to compute and cache the source line positions.
+The solution? Before generating the heap snapshot, we now iterate over all the scripts in the V8 context to compute and cache the new source line positions information. As this is done out of the heap traversal done while capturing the snapshot, it is still possible to modify the heap to store the cached source code lines information.
 
 [This source position caching fix](https://chromium-review.googlesource.com/c/v8/v8/+/4538766) has also landed in V8.
 
