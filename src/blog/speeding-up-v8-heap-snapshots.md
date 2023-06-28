@@ -137,10 +137,10 @@ After enabling both fixes, we re-profiled. Both of our fixes only affect snapsho
 
 When operating on a JS program containing...
 
-- Unoptimized development JS, generation time is **50% faster** 👍
-- Optimized production JS, generation time is **90% faster** 😮
+- Development JS, generation time is **50% faster** 👍
+- Production JS, generation time is **90% faster** 😮
 
-Why such a massive difference between optimized and unoptimized code? It is mostly because of the source code line optimization. In code optimized using bundling and minification, there are fewer JS files and these files tend to be large, which means finding the newlines takes longer. And therefore, these larger files benefit most from the source position caching that only performs this work once.
+Why such a massive difference between production and development code? It is mostly because of the production source code optimizations. In production, code is optimized using bundling and minification, so there are fewer JS files and these files tend to be large, which means finding the newlines takes longer. And therefore, these larger files benefit most from the source position caching that only performs this work once.
 
 The optimizations were validated on both Windows and Linux target environments.
 
