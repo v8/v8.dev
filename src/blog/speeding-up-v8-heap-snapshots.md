@@ -115,7 +115,7 @@ What did I do to fix it? As the problem comes mostly from numbers represented as
 
 ## Second Optimization: Caching source positions
 
-After fixing the hashing, we re-profiled and found a further optimization opportunity that would take a significant part of the time. *An old friend*.
+After fixing the hashing, we re-profiled and found a further optimization opportunity that would reduce a significant part of the overhead.
 
 For each allocation in the V8 heap, the heap snapshot tries to record the call stack responsible for the allocation. Therefore, for each stack frame, it needs to know the function name and its source location (filename, line number, column number). It was the fetching of this information that turned out to be super slow!
 
