@@ -67,7 +67,7 @@ To record the session, I followed these steps:
 
 1. Opened [Windows Performance Recorder](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-recorder) and selected CPU profiling, verbose detail level, general scenario, and file logging mode.
 
-    ![](/_img/speeding-up-v8-heap-snapshots/d62c099f-6218-4991-a298-c735afe3d6ce.png){.no-darkening}
+    ![](/_img/speeding-up-v8-heap-snapshots/img1.png){.no-darkening}
 
 
 2. After that, I started the recording session (pressing the Start button).
@@ -78,7 +78,7 @@ To record the session, I followed these steps:
 
 When I opened the recording with [Windows Performance Analyzer](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer), this was what I found:
 
-![](/_img/speeding-up-v8-heap-snapshots/345360c1-297e-43d2-901f-ea4fa81ede3c.png){.no-darkening}
+![](/_img/speeding-up-v8-heap-snapshots/img2.png){.no-darkening}
 
 
 One third of the samples was spent in `v8::internal::StringsStorage::GetEntry`:
@@ -92,7 +92,7 @@ One third of the samples was spent in `v8::internal::StringsStorage::GetEntry`:
 
 Because this was run with a release build, the information of the inlined function calls were folded into `StringsStorage::GetEntry()`. To figure out exactly how much time the inlined function calls were taking, I added the "Source Line Number" column to the breakdown and found that most of the time was spent on line 182, which was a call to `ComputeStringHash()`:
 
-![](/_img/speeding-up-v8-heap-snapshots/59293b17-6d52-4d9e-8737-5b23d038d50a.png){.no-darkening}
+![](/_img/speeding-up-v8-heap-snapshots/img3.png){.no-darkening}
 
 So over 30% of the snapshot generation time was spent on `ComputeStringHash()`, but why?
 
