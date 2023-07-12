@@ -156,4 +156,4 @@ Finally, now that we improved the generation phase, the biggest cost is now the 
 
 ## Credits
 
-This work was possible thanks to the sponsorship of [Igalia](https://www.igalia.com) and [Bloomberg](https://techatbloomberg.com).
+This was possible thanks to the work of [Igalia](https://www.igalia.com) and [Bloomberg](https://techatbloomberg.com) engineers.
