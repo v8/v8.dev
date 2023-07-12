@@ -13,7 +13,7 @@ In this post about V8 heap snapshots, I will talk about some performance problem
 
 ## The Problem
 
-Ashley Claymore was working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. For the tested application, the V8 heap limit was configured to be around 1400MB. Normally V8's garbage collector should be able to keep the heap usage under that limit, so the failures indicated that there was a leak.
+Ashley Claymore was working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. For the tested application, the V8 heap limit was configured to be around 1400MB. Normally V8's garbage collector should be able to keep the heap usage under that limit, so the failures indicated that there was likely a leak.
 
 A common technique to debug a routine memory leak scenario like this is to capture a heap snapshot first, then load it in the DevTools "Memory" tab and find out what is consuming the most memory by inspecting the various summaries and object attributes. In the DevTools UI, the heap snapshot can be taken in the "Memory" tab. For Node.js applications, the heap snapshot [can be triggered programmatically](https://nodejs.org/en/docs/guides/diagnostics/memory/using-heap-snapshot) using this API:
 
