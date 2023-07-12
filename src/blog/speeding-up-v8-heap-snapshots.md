@@ -7,7 +7,7 @@ tags:
  - memory
  - tools
 ---
-*This blog post has been authored by José Dapena Paz (Igalia), with contributions from Jason Williams (Bloomberg), Ashley Claymore (Bloomberg), Rob Palmer (Bloomberg) and Joyee Cheung(Igalia).*
+*This blog post has been authored by José Dapena Paz (Igalia), with contributions from Jason Williams (Bloomberg), Ashley Claymore (Bloomberg), Rob Palmer (Bloomberg), Joyee Cheung (Igalia) and Shu-yu Guo (Google).*
 
 In this post about V8 heap snapshots, I will talk about some performance problems found by Bloomberg engineers, and how we fixed them to make JavaScript memory analysis faster than ever.
 
