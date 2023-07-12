@@ -25,7 +25,7 @@ We wanted to capture several snapshots at different points in the application's 
 
 It was this slowness in the memory analysis workflow that we needed to solve.
 
-## Narrowing down the Problem
+## Narrowing the Problem
 
 Jason Williams started investigating the issue using some V8 parameters. As described in the previous post, V8 has some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
 
@@ -154,6 +154,6 @@ Information accuracy in snapshots can be improved further. Today, each script so
 
 Finally, now that we improved the generation phase, the biggest cost is now the serialization phase. Further analysis may reveal new optimization opportunities in serialization.
 
-## The end
+## Credits
 
 This work was possible thanks to the sponsorship of [Igalia](https://www.igalia.com) and [Bloomberg](https://techatbloomberg.com).
