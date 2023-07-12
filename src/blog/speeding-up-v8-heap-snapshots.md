@@ -13,7 +13,7 @@ In this post about V8 heap snapshots, I will talk about some performance problem
 
 ## The Problem
 
-Ashley Claymore was working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. For the tested application, the V8 heap limit was configured to be around 1400MB. Normally V8's garbage collector should be able to keep the heap usage under that limit, so the failures indicated that there was likely a leak.
+Bloomberg engineers were working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. For the tested application, the V8 heap limit was configured to be around 1400MB. Normally V8's garbage collector should be able to keep the heap usage under that limit, so the failures indicated that there was likely a leak.
 
 A common technique to debug a routine memory leak scenario like this is to capture a heap snapshot first, then load it in the DevTools "Memory" tab and find out what is consuming the most memory by inspecting the various summaries and object attributes. In the DevTools UI, the heap snapshot can be taken in the "Memory" tab. For Node.js applications, the heap snapshot [can be triggered programmatically](https://nodejs.org/en/docs/guides/diagnostics/memory/using-heap-snapshot) using this API:
 
@@ -21,13 +21,13 @@ A common technique to debug a routine memory leak scenario like this is to captu
 require('v8').writeHeapSnapshot();
 ```
 
-We wanted to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes** alone!
+They wanted to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes** alone!
 
 It was this slowness in the memory analysis workflow that we needed to solve.
 
 ## Narrowing the Problem
 
-Jason Williams started investigating the issue using some V8 parameters. As described in the previous post, V8 has some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
+Then, Bloomberg engineers started investigating the issue using some V8 parameters. As described in the previous post, V8 has some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
 
 `--max-old-space-size=100`
 : This limits the heap to 100 megabytes and helps to reproduce the issue much faster.
@@ -43,7 +43,7 @@ Jason Williams started investigating the issue using some V8 parameters. As desc
 
 When V8 is close to the heap limit, it forces a garbage collection to reduce the memory usage and avoid hitting the limit. It also notifies the embedder that the heap is about to reach the memory limit. The `--heapsnapshot-near-heap-limit` flag in Node.js dumps a new heap snapshot upon notification. In the test case, the memory usage decreases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
 
-Jason took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, it took around 30 minutes just to walk through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
+They took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, it took around 30 minutes just to walk through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
 
 This is when I was asked to take a look.
 
