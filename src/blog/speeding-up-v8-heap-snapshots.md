@@ -102,14 +102,45 @@ I started to suspect that the problem could be caused by collisions, which could
 
 In the logs, things were… not right: the offset of many items was over 20, and in the worst case, in the order of thousands!
 
-Part of the problem was caused by the scripts using strings for lots of numbers - and especially a big range of numbers from 1 to several hundreds without gaps. The hash key algorithm had two implementations, one for numbers and another for other strings. While the string hash function was quite classical, the implementation for the numbers would basically return the value of the number prefixed by the number of digits, which was problematic.
+Part of the problem was caused by the scripts using strings for lots of numbers - and especially a big range of numbers from 1 to several hundreds without gaps. The hash key algorithm had two implementations, one for numbers and another for other strings. While the string hash function was quite classical, the implementation for the numbers would basically return the value of the number prefixed by the number of digits:
 
-Some examples of problems with this hash function:
+```
+ValueBits := 24
+Mask := (1 << ValueBits) - 1  /* 0xffffff */
+OriginalHash(x) := (digits(x) << ValueBits) | (x & Mask)
+```
+
+| x | OriginalHash(x) |
+| -: | -: |
+| 0   | `0x1000000` |
+| 1   | `0x1000001` |
+| 2   | `0x1000002` |
+| 3   | `0x1000003` |
+| 10  | `0x200000a` |
+| 11  | `0x200000b` |
+| 100 | `0x3000064` |
+
+This function was problematic. Some examples of problems with this hash function:
 
 - Once we inserted a string whose hash key value was a small number, we would run into collisions when we tried to store another number in that location, and there would be similar collisions if we tried to store subsequent numbers consecutively.
 - Or even worse: if there were already a lot of consecutive numbers stored in the map, and we wanted to insert a string whose hash key value was in that range, we had to move the entry along all the occupied locations to find a free location.
 
-What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 positions to the left. So, for each number, we would introduce 3 free positions. Why 2? Empirical testing across several work-sets showed this number was the best choice to minimize collisions.
+What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 positions to the left.
+
+```
+NewHash(x) := OriginalHash(x) << 2
+``````
+
+| x | OriginalHash(x) | NewHash(x) |
+| -: | -: | -: |
+| 0   | `0x1000000` | `0x4000000` |
+| 1   | `0x1000001` | `0x4000004` |
+| 2   | `0x1000002` | `0x4000008` |
+| 3   | `0x1000003` | `0x400000c` |
+| 10  | `0x200000a` | `0x8000028` |
+| 11  | `0x200000b` | `0x800002c` |
+
+So, for each number, we would introduce 3 free positions. Why rotating 2 bits? Empirical testing across several work-sets showed this number was the best choice to minimize collisions.
 
 [This hashing fix](https://chromium-review.googlesource.com/c/v8/v8/+/4428811) has landed in V8.
 
