@@ -63,16 +63,9 @@ Furthermore, we found the problem happened on both Windows and Linux. The proble
 
 As the problem was initially reported on a Windows platform, I used [Windows Performance Toolkit](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/), based on [ETW](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/event-tracing-for-windows--etw-), for analysis. This is a powerful low-level expert tool to find out exactly what a program is doing on Windows.
 
-To record the session, I followed these steps:
+To analyze the performance of heap snapshot generation, I followed [these steps](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/wpr-how-to-topics#start-a-recording) to run the Windows Performance Recorder with the failing script, with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept `--profile-heap-snapshot` in `NODE_OPTIONS`, as it uses an allowlist to filter V8 flags that can be configured through the environment variable.
 
-1. Opened [Windows Performance Recorder](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-recorder) and selected CPU profiling, verbose detail level, general scenario, and file logging mode.
-
-    ![](/_img/speeding-up-v8-heap-snapshots/img1.png){.no-darkening}
-
-
-2. After that, I started the recording session (pressing the Start button).
-3. Then, I executed the failing script with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept `--profile-heap-snapshot` in `NODE_OPTIONS`, as it uses an allowlist to filter V8 flags that can be configured through the environment variable.
-4. I just let it run to generate a couple of heap snapshots (it would already take over 10 minutes!) and then I stopped the recording.
+I just let it run to generate a couple of heap snapshots (it would already take over 10 minutes!) and then I stopped the recording.
 
 ## First Optimization: Improved StringsStorage hashing
 
@@ -104,10 +97,13 @@ In the logs, things were… not right: the offset of many items was over 20, and
 
 Part of the problem was caused by numeric strings - especially strings for a wide range of consecutive numbers. The hash key algorithm had two implementations, one for numeric strings and another for other strings. While the string hash function was quite classical, the implementation for the numeric strings would basically return the value of the number prefixed by the number of digits:
 
-```
-ValueBits := 24
-Mask := (1 << ValueBits) - 1  /* 0xffffff */
-OriginalHash(x) := (digits(x) << ValueBits) | (x & Mask)
+```cpp
+int32_t OriginalHash(const std::string& numeric_string) {
+  int kValueBits = 24;
+
+  int32_t mask = (1 << kValueBits) - 1; /* 0xffffff */
+  return (numeric_string.length() << kValueBits) | (numeric_string & mask);
+}
 ```
 
 | x | OriginalHash(x) |
@@ -127,8 +123,10 @@ This function was problematic. Some examples of problems with this hash function
 
 What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 bits to the left.
 
-```
-NewHash(x) := OriginalHash(x) << 2
+```cpp
+int32_t NewHash(const std::string& numeric_string) {
+  return OriginalHash(numeric_string) << 2;
+}
 ``````
 
 | x | OriginalHash(x) | NewHash(x) |
@@ -148,11 +146,7 @@ So for each pair of consecutive numbers, we would introduce 3 free positions in 
 
 After fixing the hashing, we re-profiled and found a further optimization opportunity that would reduce a significant part of the overhead.
 
-When generating a heaps snapshot, for each function in the heap, V8 tries to record its start position in a pair of line and column numbers. This information can be used by the DevTools to display a link to the source code of the function. During usual compilation, however, V8 only stores the start position of each function in the form of a linear offset from the beginning of the script. To calculate the line and column numbers based on the linear offset, V8 needs to traverse the whole script and record where the line breaks are. This calculation turns out to be very expensive.
-
-What was happening? It was something similar to [what I fixed in the ETW stack walk](https://chromium-review.googlesource.com/c/v8/v8/+/3669698) and that I explained in [this post](https://blogs.igalia.com/dape/2022/12/21/native-call-stack-profiling-3-3-2022-work-in-v8/).
-
-V8 usually only stores where the the function starts in the form of linear offsets in the script. To map that linear offset into a pair of line and column number within the script, V8 needs to traverse the whole script and record where the line breaks are.
+When generating a heap snapshot, for each function in the heap, V8 tries to record its start position in a pair of line and column numbers. This information can be used by the DevTools to display a link to the source code of the function. During usual compilation, however, V8 only stores the start position of each function in the form of a linear offset from the beginning of the script. To calculate the line and column numbers based on the linear offset, V8 needs to traverse the whole script and record where the line breaks are. This calculation turns out to be very expensive.
 
 Normally, after V8 finishes calculating the offsets of line breaks in a script, it caches them in a newly allocated array attached to the script. Unfortunately, the snapshot implementation cannot modify the heap when traversing it, so the newly calculated line information cannot be cached.
 
