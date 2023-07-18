@@ -53,7 +53,7 @@ JavaScript already has a well developed mechanism for representing asynchronous 
 
 ### How do I deal with exceptions?
 
-To avoid having to deal with JSPI exceptions, you will probably want to avoid exposing your promise rejections to JSPI at all. That can be done by using `.then` to attach a rejection handler that returns the rejected promise into a successfully resolved promise that carries the error code your application is expecting.
+To avoid having to deal with JSPI exceptions, you will probably want to avoid exposing your promise rejections to JSPI at all. That can be done by using `.then()` to attach a rejection handler that returns the rejected promise into a successfully resolved promise that carries the error code your application is expecting.
 
 ### Next steps
 
