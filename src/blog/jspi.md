@@ -51,6 +51,10 @@ However, as with other Promise-style APIs in the browser, any time the WebAssemb
 
 JavaScript already has a well developed mechanism for representing asynchronous computations: the Promise and the `async` function notation. The JSPI is designed to integrate well with this but not to replace it.
 
+### How do I deal with exceptions?
+
+To avoid having to deal with JSPI exceptions, you will probably want to avoid exposing your promise rejections to JSPI at all. That can be done by using `.then` to attach a rejection handler that returns the rejected promise into a successfully resolved promise that carries the error code your application is expecting.
+
 ### Next steps
 
 The JSPI is currently experimental–one should not use it for Web applications that are intended to be deployed in production. However, it is a _standard track_ effort; which means that it will eventually become a standard and we expect this to become a standard implemented across all major browsers.
