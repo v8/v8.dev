@@ -27,7 +27,7 @@ It was this slowness in the memory analysis workflow that we needed to solve.
 
 ## Narrowing the Problem
 
-Then, Bloomberg engineers started investigating the issue using some V8 parameters. As described in the previous post, Node.js and V8 have some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
+Then, Bloomberg engineers started investigating the issue using some V8 parameters. As described in the [this post](https://blogs.igalia.com/dape/2023/05/18/javascript-memory-profiling-with-heap-snapshot/), Node.js and V8 have some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
 
 `--max-old-space-size=100`
 : This limits the heap to 100 megabytes and helps to reproduce the issue much faster.
