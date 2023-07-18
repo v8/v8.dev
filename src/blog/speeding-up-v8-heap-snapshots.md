@@ -21,13 +21,13 @@ A common technique to debug a routine memory leak scenario like this is to captu
 require('v8').writeHeapSnapshot();
 ```
 
-They wanted to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes** alone!
+They wanted to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes**!
 
 It was this slowness in the memory analysis workflow that we needed to solve.
 
 ## Narrowing the Problem
 
-Then, Bloomberg engineers started investigating the issue using some V8 parameters. As described in the previous post, V8 has some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
+Then, Bloomberg engineers started investigating the issue using some V8 parameters. As described in the previous post, Node.js and V8 have some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
 
 `--max-old-space-size=100`
 : This limits the heap to 100 megabytes and helps to reproduce the issue much faster.
@@ -41,7 +41,7 @@ Then, Bloomberg engineers started investigating the issue using some V8 paramete
 `--interpreted-frames-native-stack`
 : This flag is used in combination with tools like ETW, WPA & xperf to see the native stack when profiling. (available in Node.js v20+).
 
-When V8 is close to the heap limit, it forces a garbage collection to reduce the memory usage and avoid hitting the limit. It also notifies the embedder that the heap is about to reach the memory limit. The `--heapsnapshot-near-heap-limit` flag in Node.js dumps a new heap snapshot upon notification. In the test case, the memory usage decreases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
+When the size of the V8 heap is approaching the limit, V8 forces a garbage collection to reduce the memory usage. It also notifies the embedder about this. The `--heapsnapshot-near-heap-limit` flag in Node.js generates a new heap snapshot upon notification. In the test case, the memory usage decreases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
 
 They took recordings using Windows Performance Analyzer (see below) in order to narrow down the issue. This revealed that most CPU time was being spent within the V8 Heap Explorer. Specifically, it took around 30 minutes just to walk through the heap to visit each node and collect the name. This didn’t seem to make much sense - why would recording the name of each property take so long?
 
@@ -53,9 +53,9 @@ The first step was adding support in V8 to better understand where time is spent
 
 Using this flag, we learned some interesting things!
 
-First, we could observe the exact time the CPU was using for each snapshot. In our reduced test case, the first took 5 minutes, the second took 8 minutes, and each subsequent snapshot kept on taking longer and longer.  Nearly all of this time was spent in the generation phase.
+First, we could observe the exact amount of time V8 was spending on generating each snapshot. In our reduced test case, the first took 5 minutes, the second took 8 minutes, and each subsequent snapshot kept on taking longer and longer.  Nearly all of this time was spent in the generation phase.
 
-We also identified other widely-used JavaScript applications that demonstrated the same slowdown, in particular, running ESLint on TypeScript. The problem was not app-specific.
+This also allowed us to quantify the time spent on snapshot generation with a trivial overhead, which helped us isolate and identify similar slowdowns in other widely-used JavaScript applications - in particular, ESLint on TypeScript. So we know the problem was not app-specific.
 
 Furthermore, we found the problem happened on both Windows and Linux. The problem was also not platform-specific.
 
@@ -96,13 +96,13 @@ Because this was run with a release build, the information of the inlined functi
 
 So over 30% of the snapshot generation time was spent on `ComputeStringHash()`, but why?
 
-Let’s first talk about `StringsStorage`. Its purpose is to store a unique copy of all the strings that will be used in the heap snapshot. For fast access and avoiding duplicates, this class uses a flatmap: a hashmap backed by an array, where collisions are handled by storing elements in the next position of the array.
+Let’s first talk about `StringsStorage`. Its purpose is to store a unique copy of all the strings that will be used in the heap snapshot. For fast access and avoiding duplicates, this class uses a flatmap: a hashmap backed by an array, where collisions are handled by storing elements in the next free location in the array.
 
-I started to suspect that the problem could be caused by collisions, which could lead to long searches in the array. But I needed to prove it. So I added exhaustive logs to see the generated hash keys and, on insertion, see how far it was between the expected position calculated from the hash key and the actual position the entry ended up in due to collisions.
+I started to suspect that the problem could be caused by collisions, which could lead to long searches in the array. So I added exhaustive logs to see the generated hash keys and, on insertion, see how far it was between the expected position calculated from the hash key and the actual position the entry ended up in due to collisions.
 
 In the logs, things were… not right: the offset of many items was over 20, and in the worst case, in the order of thousands!
 
-Part of the problem was caused by the scripts using strings for lots of numbers - and especially a big range of numbers from 1 to several hundreds without gaps. The hash key algorithm had two implementations, one for numbers and another for other strings. While the string hash function was quite classical, the implementation for the numbers would basically return the value of the number prefixed by the number of digits:
+Part of the problem was caused by numeric strings - especially strings for a wide range of consecutive numbers. The hash key algorithm had two implementations, one for numeric strings and another for other strings. While the string hash function was quite classical, the implementation for the numeric strings would basically return the value of the number prefixed by the number of digits:
 
 ```
 ValueBits := 24
@@ -125,7 +125,7 @@ This function was problematic. Some examples of problems with this hash function
 - Once we inserted a string whose hash key value was a small number, we would run into collisions when we tried to store another number in that location, and there would be similar collisions if we tried to store subsequent numbers consecutively.
 - Or even worse: if there were already a lot of consecutive numbers stored in the map, and we wanted to insert a string whose hash key value was in that range, we had to move the entry along all the occupied locations to find a free location.
 
-What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 positions to the left.
+What did I do to fix it? As the problem comes mostly from numbers represented as strings that would fall in consecutive positions, I modified the hash function so we would rotate the resulting hash value 2 bits to the left.
 
 ```
 NewHash(x) := OriginalHash(x) << 2
@@ -140,7 +140,7 @@ NewHash(x) := OriginalHash(x) << 2
 | 10  | `0x200000a` | `0x8000028` |
 | 11  | `0x200000b` | `0x800002c` |
 
-So, for each number, we would introduce 3 free positions. Why rotating 2 bits? Empirical testing across several work-sets showed this number was the best choice to minimize collisions.
+So for each pair of consecutive numbers, we would introduce 3 free positions in between. This modification was chosen because empirical testing across several work-sets showed that it worked best for minimizing collisions.
 
 [This hashing fix](https://chromium-review.googlesource.com/c/v8/v8/+/4428811) has landed in V8.
 
@@ -148,17 +148,17 @@ So, for each number, we would introduce 3 free positions. Why rotating 2 bits? E
 
 After fixing the hashing, we re-profiled and found a further optimization opportunity that would reduce a significant part of the overhead.
 
-For each allocation in the V8 heap, the heap snapshot tries to record the call stack responsible for the allocation. Therefore, for each stack frame, it needs to know the function name and its source location (filename, line number, column number). It was the fetching of this information that turned out to be super slow!
+When generating a heaps snapshot, for each function in the heap, V8 tries to record its start position in a pair of line and column numbers. This information can be used by the DevTools to display a link to the source code of the function. During usual compilation, however, V8 only stores the start position of each function in the form of a linear offset from the beginning of the script. To calculate the line and column numbers based on the linear offset, V8 needs to traverse the whole script and record where the line breaks are. This calculation turns out to be very expensive.
 
 What was happening? It was something similar to [what I fixed in the ETW stack walk](https://chromium-review.googlesource.com/c/v8/v8/+/3669698) and that I explained in [this post](https://blogs.igalia.com/dape/2022/12/21/native-call-stack-profiling-3-3-2022-work-in-v8/).
 
-To compute the source code lines of a function, V8 knows the linear position of the function in the script. But, to find the source line, it needs to traverse the whole script to identify where each newline occurs. This is expensive.
+V8 usually only stores where the the function starts in the form of linear offsets in the script. To map that linear offset into a pair of line and column number within the script, V8 needs to traverse the whole script and record where the line breaks are.
 
-When requesting line information, V8 already implements caching of the source line positions per-script in method `Script::InitLineEnds()`. That information is stored in each script using a new heap object. Unfortunately, the snapshot implementation cannot modify the heap when traversing it, so the newly calculated line information cannot be cached.
+Normally, after V8 finishes calculating the offsets of line breaks in a script, it caches them in a newly allocated array attached to the script. Unfortunately, the snapshot implementation cannot modify the heap when traversing it, so the newly calculated line information cannot be cached.
 
-The solution? Before generating the heap snapshot, we now iterate over all the scripts in the V8 context to compute and cache the source line positions. As this is not done when we traverse the heap for heap snapshot generation, it is still possible to modify the heap and store the source line positions as a cache.
+The solution? Before generating the heap snapshot, we now iterate over all the scripts in the V8 context to compute and cache the offsets of the line breaks. As this is not done when we traverse the heap for heap snapshot generation, it is still possible to modify the heap and store the source line positions as a cache.
 
-[This source position caching fix](https://chromium-review.googlesource.com/c/v8/v8/+/4538766) has also landed in V8.
+[The fix for the caching of line break offsets](https://chromium-review.googlesource.com/c/v8/v8/+/4538766) has also landed in V8.
 
 ## Did we make it fast?
 
