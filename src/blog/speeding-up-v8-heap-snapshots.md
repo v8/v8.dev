@@ -76,7 +76,7 @@ When I opened the recording with [Windows Performance Analyzer](https://learn.mi
 
 One third of the samples was spent in `v8::internal::StringsStorage::GetEntry`:
 
-```javascript
+```cpp
 181 base::HashMap::Entry* StringsStorage::GetEntry(const char* str, int len) {
 182   uint32_t hash = ComputeStringHash(str, len);
 183   return names_.LookupOrInsert(const_cast<char*>(str), hash);
@@ -89,7 +89,7 @@ Because this was run with a release build, the information of the inlined functi
 
 So over 30% of the snapshot generation time was spent on `ComputeStringHash()`, but why?
 
-Let’s first talk about `StringsStorage`. Its purpose is to store a unique copy of all the strings that will be used in the heap snapshot. For fast access and avoiding duplicates, this class uses a flatmap: a hashmap backed by an array, where collisions are handled by storing elements in the next free location in the array.
+Let’s first talk about `StringsStorage`. Its purpose is to store a unique copy of all the strings that will be used in the heap snapshot. For fast access and avoiding duplicates, this class uses a hashmap backed by an array, where collisions are handled by storing elements in the next free location in the array.
 
 I started to suspect that the problem could be caused by collisions, which could lead to long searches in the array. So I added exhaustive logs to see the generated hash keys and, on insertion, see how far it was between the expected position calculated from the hash key and the actual position the entry ended up in due to collisions.
 
