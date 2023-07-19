@@ -2,7 +2,7 @@
 title: 'Speeding up V8 heap snapshots'
 description: 'This post about V8 heap snapshots presents some performance problems found by Bloomberg engineers, and how we fixed them to make JavaScript memory analysis faster than ever.'
 author: 'Jose Dapena Paz'
-date: 2023-06-23
+date: 2023-07-27
 tags:
  - memory
  - tools
