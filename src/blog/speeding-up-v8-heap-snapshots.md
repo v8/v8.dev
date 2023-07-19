@@ -127,7 +127,7 @@ What did I do to fix it? As the problem comes mostly from numbers represented as
 int32_t NewHash(const std::string& numeric_string) {
   return OriginalHash(numeric_string) << 2;
 }
-``````
+```
 
 | x | OriginalHash(x) | NewHash(x) |
 | -: | -: | -: |
@@ -137,6 +137,7 @@ int32_t NewHash(const std::string& numeric_string) {
 | 3   | `0x1000003` | `0x400000c` |
 | 10  | `0x200000a` | `0x8000028` |
 | 11  | `0x200000b` | `0x800002c` |
+| 100 | `0x3000064` | `0xc000190` |
 
 So for each pair of consecutive numbers, we would introduce 3 free positions in between. This modification was chosen because empirical testing across several work-sets showed that it worked best for minimizing collisions.
 
