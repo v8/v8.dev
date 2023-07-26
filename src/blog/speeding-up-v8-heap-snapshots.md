@@ -59,15 +59,9 @@ This also allowed us to quantify the time spent on snapshot generation with a tr
 
 Furthermore, we found the problem happened on both Windows and Linux. The problem was also not platform-specific.
 
-## Windows Performance Analyzer to the rescue
-
-As the problem was initially reported on a Windows platform, I used [Windows Performance Toolkit](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/), based on [ETW](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/event-tracing-for-windows--etw-), for analysis. This is a powerful low-level expert tool to find out exactly what a program is doing on Windows.
-
-To analyze the performance of heap snapshot generation, I followed [these steps](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/wpr-how-to-topics#start-a-recording) to run the Windows Performance Recorder with the failing script, with `NODE_OPTIONS="--max-old-space-size=100 --heapsnapshot-near-heap-limit=10 --profile-heap-snapshot`. I had to modify Node.js to accept `--profile-heap-snapshot` in `NODE_OPTIONS`, as it uses an allowlist to filter V8 flags that can be configured through the environment variable.
-
-I just let it run to generate a couple of heap snapshots (it would already take over 10 minutes!) and then I stopped the recording.
-
 ## First Optimization: Improved StringsStorage hashing
+
+To identify what was causing the excesive delay I profiled the failing script using [Windows Performance Toolkit](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/).
 
 When I opened the recording with [Windows Performance Analyzer](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer), this was what I found:
 
