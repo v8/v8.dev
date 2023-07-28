@@ -29,17 +29,10 @@ It was this slowness in the memory analysis workflow that we needed to solve.
 
 Then, Bloomberg engineers started investigating the issue using some V8 parameters. As described in the [this post](https://blogs.igalia.com/dape/2023/05/18/javascript-memory-profiling-with-heap-snapshot/), Node.js and V8 have some nice command line parameters that can help with that. These options were used to create the heap snapshots, simplify the reproduction, and improve observability:
 
-`--max-old-space-size=100`
-: This limits the heap to 100 megabytes and helps to reproduce the issue much faster.
-
-`--heapsnapshot-near-heap-limit=10`
-: This is a Node.js specific command line parameter that tells Node.js to generate a snapshot each time it comes close to running out of memory. It is configured to generate up to 10 snapshots in total. This prevents thrashing where the memory-starved program spends a long time producing more snapshots than needed.
-
-`--enable-etw-stack-walking`
-: This allows tools such as ETW, WPA & xperf to see the JS stack which has been called in V8. (available in Node.js v20+)
-
-`--interpreted-frames-native-stack`
-: This flag is used in combination with tools like ETW, WPA & xperf to see the native stack when profiling. (available in Node.js v20+).
+- `--max-old-space-size=100`: This limits the heap to 100 megabytes and helps to reproduce the issue much faster.
+- `--heapsnapshot-near-heap-limit=10`: This is a Node.js specific command line parameter that tells Node.js to generate a snapshot each time it comes close to running out of memory. It is configured to generate up to 10 snapshots in total. This prevents thrashing where the memory-starved program spends a long time producing more snapshots than needed.
+- `--enable-etw-stack-walking`: This allows tools such as ETW, WPA & xperf to see the JS stack which has been called in V8. (available in Node.js v20+)
+- `--interpreted-frames-native-stack`: This flag is used in combination with tools like ETW, WPA & xperf to see the native stack when profiling. (available in Node.js v20+).
 
 When the size of the V8 heap is approaching the limit, V8 forces a garbage collection to reduce the memory usage. It also notifies the embedder about this. The `--heapsnapshot-near-heap-limit` flag in Node.js generates a new heap snapshot upon notification. In the test case, the memory usage decreases, but, after several iterations, garbage collection ultimately can not free up enough space and so the application is terminated with an *Out-Of-Memory* error.
 
