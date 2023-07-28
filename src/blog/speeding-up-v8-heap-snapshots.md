@@ -13,15 +13,15 @@ In this post about V8 heap snapshots, I will talk about some performance problem
 
 ## The problem
 
-Bloomberg engineers were working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. For the tested application, the V8 heap limit was configured to be around 1400MB. Normally V8’s garbage collector should be able to keep the heap usage under that limit, so the failures indicated that there was likely a leak.
+Bloomberg engineers were working on diagnosing a memory leak in a JavaScript application. It was failing with *Out-Of-Memory* errors. For the tested application, the V8 heap limit was configured to be around 1400 MB. Normally V8’s garbage collector should be able to keep the heap usage under that limit, so the failures indicated that there was likely a leak.
 
-A common technique to debug a routine memory leak scenario like this is to capture a heap snapshot first, then load it in the DevTools "Memory" tab and find out what is consuming the most memory by inspecting the various summaries and object attributes. In the DevTools UI, the heap snapshot can be taken in the "Memory" tab. For Node.js applications, the heap snapshot [can be triggered programmatically](https://nodejs.org/en/docs/guides/diagnostics/memory/using-heap-snapshot) using this API:
+A common technique to debug a routine memory leak scenario like this is to capture a heap snapshot first, then load it in the DevTools “Memory” tab and find out what is consuming the most memory by inspecting the various summaries and object attributes. In the DevTools UI, the heap snapshot can be taken in the “Memory” tab. For Node.js applications, the heap snapshot [can be triggered programmatically](https://nodejs.org/en/docs/guides/diagnostics/memory/using-heap-snapshot) using this API:
 
 ```js
 require('v8').writeHeapSnapshot();
 ```
 
-They wanted to capture several snapshots at different points in the application's life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500MB) snapshot was taking **over 30 minutes**!
+They wanted to capture several snapshots at different points in the application’s life, so that DevTools Memory viewer could be used to show the difference between the heaps at different times. The problem was that capturing a single full-size (500 MB) snapshot was taking **over 30 minutes**!
 
 It was this slowness in the memory analysis workflow that we needed to solve.
 
@@ -70,7 +70,7 @@ One third of the samples was spent in `v8::internal::StringsStorage::GetEntry`:
 184 }
 ```
 
-Because this was run with a release build, the information of the inlined function calls were folded into `StringsStorage::GetEntry()`. To figure out exactly how much time the inlined function calls were taking, I added the "Source Line Number" column to the breakdown and found that most of the time was spent on line 182, which was a call to `ComputeStringHash()`:
+Because this was run with a release build, the information of the inlined function calls were folded into `StringsStorage::GetEntry()`. To figure out exactly how much time the inlined function calls were taking, I added the “Source Line Number” column to the breakdown and found that most of the time was spent on line 182, which was a call to `ComputeStringHash()`:
 
 ![](/_img/speeding-up-v8-heap-snapshots/wpa-2.png){ .no-darkening }
 
@@ -82,7 +82,7 @@ I started to suspect that the problem could be caused by collisions, which could
 
 In the logs, things were… not right: the offset of many items was over 20, and in the worst case, in the order of thousands!
 
-Part of the problem was caused by numeric strings - especially strings for a wide range of consecutive numbers. The hash key algorithm had two implementations, one for numeric strings and another for other strings. While the string hash function was quite classical, the implementation for the numeric strings would basically return the value of the number prefixed by the number of digits:
+Part of the problem was caused by numeric strings — especially strings for a wide range of consecutive numbers. The hash key algorithm had two implementations, one for numeric strings and another for other strings. While the string hash function was quite classical, the implementation for the numeric strings would basically return the value of the number prefixed by the number of digits:
 
 ```cpp
 int32_t OriginalHash(const std::string& numeric_string) {
@@ -155,7 +155,7 @@ Why was there a massive difference between production and development code? The 
 
 The optimizations were validated on both Windows and Linux target environments.
 
-For the particularly challenging problem originally faced by the Bloomberg engineers, the total end-to-end time to capture a 100MB snapshot was reduced from a painful 10 minutes down to a very pleasant 6 seconds. That is **a 100x win!** 🔥
+For the particularly challenging problem originally faced by the Bloomberg engineers, the total end-to-end time to capture a 100MB snapshot was reduced from a painful 10 minutes down to a very pleasant 6 seconds. That is **a 100× win!** 🔥
 
 The optimizations are generic wins that we expect to be widely applicable to anyone performing memory debugging on V8, Node.js, and Chromium. These wins were shipped in V8 v11.5.130, which means they are found in Chromium 115.0.5576.0. We look forward to Node.js gaining these optimizations in the next semver-major release.
 
