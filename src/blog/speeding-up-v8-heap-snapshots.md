@@ -93,15 +93,15 @@ int32_t OriginalHash(const std::string& numeric_string) {
 }
 ```
 
-|   x | OriginalHash(x) |
-| --: | --------------: |
-|   0 |     `0x1000000` |
-|   1 |     `0x1000001` |
-|   2 |     `0x1000002` |
-|   3 |     `0x1000003` |
-|  10 |     `0x200000a` |
-|  11 |     `0x200000b` |
-| 100 |     `0x3000064` |
+| `x` | `OriginalHash(x)` |
+| --: | ----------------: |
+|   0 |       `0x1000000` |
+|   1 |       `0x1000001` |
+|   2 |       `0x1000002` |
+|   3 |       `0x1000003` |
+|  10 |       `0x200000a` |
+|  11 |       `0x200000b` |
+| 100 |       `0x3000064` |
 
 This function was problematic. Some examples of problems with this hash function:
 
@@ -116,15 +116,15 @@ int32_t NewHash(const std::string& numeric_string) {
 }
 ```
 
-|   x | OriginalHash(x) |  NewHash(x) |
-| --: | --------------: | ----------: |
-|   0 |     `0x1000000` | `0x4000000` |
-|   1 |     `0x1000001` | `0x4000004` |
-|   2 |     `0x1000002` | `0x4000008` |
-|   3 |     `0x1000003` | `0x400000c` |
-|  10 |     `0x200000a` | `0x8000028` |
-|  11 |     `0x200000b` | `0x800002c` |
-| 100 |     `0x3000064` | `0xc000190` |
+| `x` | `OriginalHash(x)` | `NewHash(x)` |
+| --: | ----------------: | -----------: |
+|   0 |       `0x1000000` |  `0x4000000` |
+|   1 |       `0x1000001` |  `0x4000004` |
+|   2 |       `0x1000002` |  `0x4000008` |
+|   3 |       `0x1000003` |  `0x400000c` |
+|  10 |       `0x200000a` |  `0x8000028` |
+|  11 |       `0x200000b` |  `0x800002c` |
+| 100 |       `0x3000064` |  `0xc000190` |
 
 So for each pair of consecutive numbers, we would introduce 3 free positions in between. This modification was chosen because empirical testing across several work-sets showed that it worked best for minimizing collisions.
 
