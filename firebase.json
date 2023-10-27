@@ -35,12 +35,12 @@
       },
       {
         "source": "/bug",
-        "destination": "https://bugs.chromium.org/p/v8/issues/entry",
+        "destination": "https://bugs.chromium.org/p/chromium/issues/entry?components=Blink%3EJavaScript",
         "type": 301
       },
       {
         "source": "/bugs",
-        "destination": "https://bugs.chromium.org/p/v8/issues/list",
+        "destination": "https://bugs.chromium.org/p/chromium/issues/list?can=2&q=component%3ABlink%3EJavaScript",
         "type": 301
       },
       {
