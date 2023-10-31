@@ -15,6 +15,7 @@ A recent article on [WebAssembly Garbage Collection (WasmGC)](https://developer.
 * The **WasmGC** porting approach, in which the language is compiled down to GC constructs in Wasm itself that are defined in the recent GC proposal.
 
 We’ll explain what those two approaches are and the technical tradeoffs between them, especially regarding size and speed. While doing so, we’ll see that WasmGC has several major advantages, but it also requires new work both in toolchains and in Virtual Machines (VMs). The later sections of this article will explain what the V8 team has been doing in those areas, including benchmark numbers. If you’re interested in Wasm, GC, or both, we hope you’ll find this interesting, and make sure to check out the demo and getting started links near the end!
+
 ## The “Traditional” Porting Approach
 
 How are languages typically ported to new architectures? Say that Python wants to run on the [ARM architecture](https://en.wikipedia.org/wiki/ARM_architecture_family), or Dart wants to run on the [MIPS architecture](https://en.wikipedia.org/wiki/MIPS_architecture). The general idea is then to recompile the VM to that architecture. Aside from that, if the VM has architecture-specific code, like just-in-time (JIT) or ahead-of-time (AOT) compilation, then you also implement a backend for JIT/AOT for the new architecture. This approach makes a lot of sense, because often the main part of the codebase can just be recompiled for each new architecture you port to:
@@ -43,6 +44,7 @@ Now that we have an idea of what the two porting approaches for GC languages are
 ### Shipping memory management code
 
 In practice, a lot of Wasm code is run inside a VM that already has a garbage collector, which is the case on the Web, and also in runtimes like [Node.js](https://nodejs.org/), [workerd](https://github.com/cloudflare/workerd), [Deno](https://deno.com/), and [Bun](https://bun.sh/). In such places, shipping a GC implementation adds unnecessary size to the Wasm binary. In fact, this is not just a problem with GC languages in WasmMVP, but also with languages using linear memory like C, C++, and Rust, since code in those languages that does any sort of interesting allocation will end up bundling `malloc/free` to manage linear memory, which requires several kilobytes of code. For example, `dlmalloc` requires 6K, and even a malloc that trades off speed for size, like [`emmalloc`](https://groups.google.com/g/emscripten-discuss/c/SCZMkfk8hyk/m/yDdZ8Db3AwAJ), takes over 1K. WasmGC, on the other hand, has the VM automatically manage memory for us so we need no memory management code at all—neither a GC nor `malloc/free`—in the Wasm. In [the previously-mentioned article on WasmGC](https://developer.chrome.com/blog/wasmgc), the size of the `fannkuch` benchmark was measured and WasmGC was much smaller than C or Rust—**2.3** K vs **6.1-9.6** K—for this exact reason.
+
 ### Cycle collection
 
 In browsers, Wasm often interacts with JavaScript (and through JavaScript, Web APIs), but in WasmMVP (and even with the [reference types](https://github.com/WebAssembly/reference-types/blob/master/proposals/reference-types/Overview.md) proposal) there is no way to have bidirectional links between Wasm and JS that allow cycles to be collected in a fine-grained manner. Links to JS objects can only be placed in the Wasm table, and links back to the Wasm can only refer to the entire Wasm instance as a single big object, like this:
@@ -81,6 +83,7 @@ In a traditional port to WasmMVP, objects are placed in linear memory which is h
 ![WasmGC code running in the Chrome heap profiler](/_img/wasm-gc-porting/devtools.png)
 
 The figure above shows the Memory tab in Chrome DevTools, where we have a heap snapshot of a page that ran WasmGC code that created 1,001 small objects in a [linked list](https://gist.github.com/kripken/5cd3e18b6de41c559d590e44252eafff). You can see the name of the object’s type, `$Node`, and the field `$next` which refers to the next object in the list. All the usual heap snapshot information is present, like the number of objects, the shallow size, the retained size, and so forth, letting us easily see how much memory is actually used by WasmGC objects. Other Chrome DevTools features like the debugger work as well on WasmGC objects.
+
 ### Language Semantics
 
 When you recompile a VM in a traditional port you get the exact language you expect, since you’re running familiar code that implements that language. That’s a major advantage! In comparison, with a WasmGC port you may end up considering compromises in semantics in return for efficiency. That is because with WasmGC we define new GC types—structs and arrays—and compile to them. As a result, we can’t simply compile a VM written in C, C++, Rust, or similar languages to that form, since those only compile to linear memory, and so WasmGC can’t help with the great majority of existing VM codebases. Instead, in a WasmGC port you typically write new code that transforms your language’s constructs into WasmGC primitives. And there are multiple ways to do that transformation, with different tradeoffs.
@@ -195,16 +198,22 @@ if (ref instanceof Type) {
 These optimizations are especially useful after speculative inlining, because then we see more than the toolchain did when it produced the Wasm.
 
 Overall, in WasmMVP there was a fairly clear separation between toolchain and VM optimizations: We did as much as possible in the toolchain and left only necessary ones for the VM, which made sense as it kept VMs simpler. With WasmGC that balance might shift somewhat, because as we’ve seen there is a need to do more optimizations at runtime for GC languages, and also WasmGC itself is more optimizable, allowing us to have more of an overlap between toolchain and VM optimizations. It will be interesting to see how the ecosystem develops here.
+
 ## Demo and status
+
 You can use WasmGC today! After reaching [phase 4](https://github.com/WebAssembly/meetings/blob/main/process/phases.md#4-standardize-the-feature-working-group) at the W3C, WasmGC is now a full and finalized standard, and Chrome 119 shipped with support for it. With that browser (or any other browser that has WasmGC support; for example, Firefox 120 is expected to launch with WasmGC support later this month) you can run this [Flutter demo](https://flutterweb-wasm.web.app/) in which Dart compiled to WasmGC drives the application’s logic, including its widgets, layout, and animation.
 
 ![The Flutter demo running in Chrome 119.](/_img/wasm-gc-porting/flutter-wasm-demo.png "Material 3 rendered by Flutter WasmGC.")
+
 ## Getting started
+
 If you’re interested in using WasmGC, the following links might be useful:
 
 * Various toolchains have support for WasmGC today, including [Dart](https://flutter.dev/wasm), [Java (J2Wasm)](https://github.com/google/j2cl/blob/master/docs/getting-started-j2wasm.md), [Kotlin](https://kotl.in/wasmgc), [OCaml (wasm_of_ocaml)](https://github.com/ocaml-wasm/wasm_of_ocaml), and [Scheme (Hoot)]( https://gitlab.com/spritely/guile-hoot).
 * The [source code](https://gist.github.com/kripken/5cd3e18b6de41c559d590e44252eafff) of the small program whose output we showed in the developer tools section is an example of writing a “hello world” WasmGC program by hand. (In particular you can see the `$Node` type defined and then created using `struct.new`.)
 * The Binaryen wiki has [documentation](https://github.com/WebAssembly/binaryen/wiki/GC-Implementation---Lowering-Tips) about how compilers can emit WasmGC code that optimizes well. The earlier links to the various WasmGC-targeting toolchains can also be useful to learn from, for example, you can look at the Binaryen passes and flags that [Java](https://github.com/google/j2cl/blob/8609e47907cfabb7c038101685153d3ebf31b05b/build_defs/internal_do_not_use/j2wasm_application.bzl#L382-L415), [Dart](https://github.com/dart-lang/sdk/blob/f36c1094710bd51f643fb4bc84d5de4bfc5d11f3/sdk/bin/dart2wasm#L135), and [Kotlin](https://github.com/JetBrains/kotlin/blob/f6b2c642c2fff2db7f9e13cd754835b4c23e90cf/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/binaryen/BinaryenExec.kt#L36-L67) use.
+
 ## Summary
+
 WasmGC is a new and promising way to implement GC languages in WebAssembly. Traditional ports in which a VM is recompiled to Wasm will still make the most sense in some cases, but we hope that WasmGC ports will become a popular technique because of their benefits: WasmGC ports have the ability to be smaller than traditional ports—even smaller than WasmMVP programs written in C, C++, or Rust—and they integrate better with the Web on matters like cycle collection, memory use, developer tooling, and more. WasmGC is also a more optimizable representation, which can provide significant speed benefits as well as opportunities to share more toolchain effort between languages.
 
