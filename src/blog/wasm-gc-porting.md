@@ -3,7 +3,7 @@ title: 'A new way to bring garbage collected programming languages efficiently t
 author: 'Alon Zakai'
 avatars:
   - 'alon-zakai'
-date: 2023-10-01
+date: 2023-11-01
 tags:
   - WebAssembly
 tweet: '123456'
