@@ -11,8 +11,8 @@ tweet: '123456'
 
 A recent article on [WebAssembly Garbage Collection (WasmGC)](https://developer.chrome.com/blog/wasmgc) explains at a high level how the [Garbage Collection (GC) proposal](https://github.com/WebAssembly/gc) aims to better support GC languages in Wasm, which is very important given their popularity. In this article, we will get into the technical details of how GC languages such as Java, Kotlin, Dart, Python, and C# can be ported to Wasm. There are in fact two main approaches:
 
-* The “**traditional**” porting approach, in which an existing implementation of the language is compiled to WasmMVP, that is, the WebAssembly Minimum Viable Product that launched in 2017.
-* The **WasmGC** porting approach, in which the language is compiled down to GC constructs in Wasm itself that are defined in the recent GC proposal.
+- The “**traditional**” porting approach, in which an existing implementation of the language is compiled to WasmMVP, that is, the WebAssembly Minimum Viable Product that launched in 2017.
+- The **WasmGC** porting approach, in which the language is compiled down to GC constructs in Wasm itself that are defined in the recent GC proposal.
 
 We’ll explain what those two approaches are and the technical tradeoffs between them, especially regarding size and speed. While doing so, we’ll see that WasmGC has several major advantages, but it also requires new work both in toolchains and in Virtual Machines (VMs). The later sections of this article will explain what the V8 team has been doing in those areas, including benchmark numbers. If you’re interested in Wasm, GC, or both, we hope you’ll find this interesting, and make sure to check out the demo and getting started links near the end!
 
@@ -153,14 +153,14 @@ Since we can do general optimizations *after* compiling to WasmGC, a Wasm-to-Was
 
 [Binaryen](https://github.com/WebAssembly/binaryen/), the WebAssembly toolchain optimizer project, already had a [wide range of optimizations](https://www.youtube.com/watch?v=_lLqZR4ufSI) for WasmMVP content such as inlining, constant propagation, dead code elimination, etc., almost all of which also apply to WasmGC. However, as we mentioned before, WasmGC allows us to do a lot more optimizations than WasmMVP, and we have written a lot of new optimizations accordingly:
 
-* [Escape analysis](https://github.com/WebAssembly/binaryen/blob/main/src/passes/Heap2Local.cpp) to move heap allocations to locals.
-* [Devirtualization](https://github.com/WebAssembly/binaryen/blob/main/src/passes/ConstantFieldPropagation.cpp) to turn indirect calls into direct ones (that can then be inlined, potentially).
-* [More powerful global dead code elimination](https://github.com/WebAssembly/binaryen/pull/4621).
-* [Whole-program type-aware content flow analysis (GUFA)](https://github.com/WebAssembly/binaryen/pull/4598).
-* [Cast optimizations](https://github.com/WebAssembly/binaryen/blob/main/src/passes/OptimizeCasts.cpp) such as removing redundant casts and moving them to earlier locations.
-* [Type pruning](https://github.com/WebAssembly/binaryen/blob/main/src/passes/GlobalTypeOptimization.cpp).
-* [Type merging](https://github.com/WebAssembly/binaryen/blob/main/src/passes/TypeMerging.cpp).
-* Type refining (for [locals](https://github.com/WebAssembly/binaryen/blob/main/src/passes/LocalSubtyping.cpp), [globals](https://github.com/WebAssembly/binaryen/blob/main/src/passes/GlobalRefining.cpp), [fields](https://github.com/WebAssembly/binaryen/blob/main/src/passes/TypeRefining.cpp), and [signatures](https://github.com/WebAssembly/binaryen/blob/main/src/passes/SignatureRefining.cpp)).
+- [Escape analysis](https://github.com/WebAssembly/binaryen/blob/main/src/passes/Heap2Local.cpp) to move heap allocations to locals.
+- [Devirtualization](https://github.com/WebAssembly/binaryen/blob/main/src/passes/ConstantFieldPropagation.cpp) to turn indirect calls into direct ones (that can then be inlined, potentially).
+- [More powerful global dead code elimination](https://github.com/WebAssembly/binaryen/pull/4621).
+- [Whole-program type-aware content flow analysis (GUFA)](https://github.com/WebAssembly/binaryen/pull/4598).
+- [Cast optimizations](https://github.com/WebAssembly/binaryen/blob/main/src/passes/OptimizeCasts.cpp) such as removing redundant casts and moving them to earlier locations.
+- [Type pruning](https://github.com/WebAssembly/binaryen/blob/main/src/passes/GlobalTypeOptimization.cpp).
+- [Type merging](https://github.com/WebAssembly/binaryen/blob/main/src/passes/TypeMerging.cpp).
+- Type refining (for [locals](https://github.com/WebAssembly/binaryen/blob/main/src/passes/LocalSubtyping.cpp), [globals](https://github.com/WebAssembly/binaryen/blob/main/src/passes/GlobalRefining.cpp), [fields](https://github.com/WebAssembly/binaryen/blob/main/src/passes/TypeRefining.cpp), and [signatures](https://github.com/WebAssembly/binaryen/blob/main/src/passes/SignatureRefining.cpp)).
 
 That’s just a quick list of some of the work we’ve been doing. For more on Binaryen’s new GC optimizations and how to use them, see the [Binaryen docs](https://github.com/WebAssembly/binaryen/wiki/GC-Optimization-Guidebook).
 
@@ -209,9 +209,9 @@ You can use WasmGC today! After reaching [phase 4](https://github.com/WebAssembl
 
 If you’re interested in using WasmGC, the following links might be useful:
 
-* Various toolchains have support for WasmGC today, including [Dart](https://flutter.dev/wasm), [Java (J2Wasm)](https://github.com/google/j2cl/blob/master/docs/getting-started-j2wasm.md), [Kotlin](https://kotl.in/wasmgc), [OCaml (wasm_of_ocaml)](https://github.com/ocaml-wasm/wasm_of_ocaml), and [Scheme (Hoot)]( https://gitlab.com/spritely/guile-hoot).
-* The [source code](https://gist.github.com/kripken/5cd3e18b6de41c559d590e44252eafff) of the small program whose output we showed in the developer tools section is an example of writing a “hello world” WasmGC program by hand. (In particular you can see the `$Node` type defined and then created using `struct.new`.)
-* The Binaryen wiki has [documentation](https://github.com/WebAssembly/binaryen/wiki/GC-Implementation---Lowering-Tips) about how compilers can emit WasmGC code that optimizes well. The earlier links to the various WasmGC-targeting toolchains can also be useful to learn from, for example, you can look at the Binaryen passes and flags that [Java](https://github.com/google/j2cl/blob/8609e47907cfabb7c038101685153d3ebf31b05b/build_defs/internal_do_not_use/j2wasm_application.bzl#L382-L415), [Dart](https://github.com/dart-lang/sdk/blob/f36c1094710bd51f643fb4bc84d5de4bfc5d11f3/sdk/bin/dart2wasm#L135), and [Kotlin](https://github.com/JetBrains/kotlin/blob/f6b2c642c2fff2db7f9e13cd754835b4c23e90cf/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/binaryen/BinaryenExec.kt#L36-L67) use.
+- Various toolchains have support for WasmGC today, including [Dart](https://flutter.dev/wasm), [Java (J2Wasm)](https://github.com/google/j2cl/blob/master/docs/getting-started-j2wasm.md), [Kotlin](https://kotl.in/wasmgc), [OCaml (wasm_of_ocaml)](https://github.com/ocaml-wasm/wasm_of_ocaml), and [Scheme (Hoot)]( https://gitlab.com/spritely/guile-hoot).
+- The [source code](https://gist.github.com/kripken/5cd3e18b6de41c559d590e44252eafff) of the small program whose output we showed in the developer tools section is an example of writing a “hello world” WasmGC program by hand. (In particular you can see the `$Node` type defined and then created using `struct.new`.)
+- The Binaryen wiki has [documentation](https://github.com/WebAssembly/binaryen/wiki/GC-Implementation---Lowering-Tips) about how compilers can emit WasmGC code that optimizes well. The earlier links to the various WasmGC-targeting toolchains can also be useful to learn from, for example, you can look at the Binaryen passes and flags that [Java](https://github.com/google/j2cl/blob/8609e47907cfabb7c038101685153d3ebf31b05b/build_defs/internal_do_not_use/j2wasm_application.bzl#L382-L415), [Dart](https://github.com/dart-lang/sdk/blob/f36c1094710bd51f643fb4bc84d5de4bfc5d11f3/sdk/bin/dart2wasm#L135), and [Kotlin](https://github.com/JetBrains/kotlin/blob/f6b2c642c2fff2db7f9e13cd754835b4c23e90cf/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/binaryen/BinaryenExec.kt#L36-L67) use.
 
 ## Summary
 
