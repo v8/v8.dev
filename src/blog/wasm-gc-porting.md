@@ -6,7 +6,7 @@ avatars:
 date: 2023-11-01
 tags:
   - WebAssembly
-tweet: '123456'
+tweet: '1720161507324076395'
 ---
 
 A recent article on [WebAssembly Garbage Collection (WasmGC)](https://developer.chrome.com/blog/wasmgc) explains at a high level how the [Garbage Collection (GC) proposal](https://github.com/WebAssembly/gc) aims to better support GC languages in Wasm, which is very important given their popularity. In this article, we will get into the technical details of how GC languages such as Java, Kotlin, Dart, Python, and C# can be ported to Wasm. There are in fact two main approaches:
