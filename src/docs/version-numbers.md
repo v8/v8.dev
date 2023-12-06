@@ -18,11 +18,10 @@ Embedders of V8 should generally use *the head of the branch corresponding to th
 
 To find out what version this is,
 
-1. Go to <https://omahaproxy.appspot.com/>
+1. Go to <https://chromiumdash.appspot.com/releases>
 2. Find the latest stable Chrome version in the table
-3. Check the `v8_version` column (to the right) on the same row
+3. Click on the (i) and check the `V8` column 
 
-Example: at the time of this writing, the site indicates that for `mac`/`stable`, the Chrome release version is 59.0.3071.86, which corresponds to V8 version 5.9.211.31.
 
 ### Finding the head of the corresponding branch
 
@@ -32,7 +31,7 @@ V8’s version-related branches do not appear in the online repository at <https
 https://chromium.googlesource.com/v8/v8.git/+/branch-heads/<minor-version>
 ```
 
-Example: for the V8 minor version 5.9 found above, we go to <https://chromium.googlesource.com/v8/v8.git/+/branch-heads/5.9>, finding a commit titled “Version 5.9.211.33”. Thus, the version of V8 that embedders should use at the time of this writing is **5.9.211.33**.
+Example: for the V8 minor version 12.1 found above, we go to <https://chromium.googlesource.com/v8/v8.git/+/branch-heads/12.1>, finding a commit titled “Version 12.1.285.2.
 
 **Caution:** You should *not* simply find the numerically-greatest tag corresponding to the above minor V8 version, as sometimes those are not supported, e.g. they are tagged before deciding where to cut minor releases. Such versions do not receive backports or similar.
 
@@ -52,11 +51,4 @@ If you did not use `depot_tools`, edit `.git/config` and add the line below to t
 
 ```
 fetch = +refs/branch-heads/*:refs/remotes/branch-heads/*
-```
-
-Example: for the V8 minor version 5.9 found above, we can do:
-
-```bash
-$ git checkout branch-heads/5.9
-HEAD is now at 8c3db649d8... Version 5.9.211.33
 ```
