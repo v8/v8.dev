@@ -20,7 +20,7 @@ In Chrome M117 we introduced a new optimizing compiler: Maglev. Maglev sits betw
 
 # Background
 
-Until 2021 V8 had two main execution tiers: Ignition, the interpreter; and [TurboFan](/docs/turboFan), V8’s optimizing compiler focused on peak performance. All JavaScript code is first compiled to ignition bytecode, and executed by interpreting it. During execution V8 tracks how the program behaves, including tracking object shapes and types. Both the runtime execution metadata and bytecode are fed into the optimizing compiler to generate high-performance, often speculative, machine code that runs significantly faster than the interpreter can.
+Until 2021 V8 had two main execution tiers: Ignition, the interpreter; and [TurboFan](/docs/turbofan), V8’s optimizing compiler focused on peak performance. All JavaScript code is first compiled to ignition bytecode, and executed by interpreting it. During execution V8 tracks how the program behaves, including tracking object shapes and types. Both the runtime execution metadata and bytecode are fed into the optimizing compiler to generate high-performance, often speculative, machine code that runs significantly faster than the interpreter can.
 
 These improvements are clearly visible on benchmarks like [JetStream](https://browserbench.org/JetStream2.1/), a collection of traditional pure JavaScript benchmarks measuring startup, latency, and peak performance. TurboFan helps V8 run the suite 4.35x as fast! JetStream has a reduced emphasis on steady state performance compared to past benchmarks (like the [retired Octane benchmark](/blog/retiring-octane)), but due to the simplicity of many line items, the optimized code is still where most time is spent.
 
