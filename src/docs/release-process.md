@@ -44,6 +44,7 @@ refs/branch-heads/12.1
 They are promoted (reused) Beta branches.
 
 ## API
+
 Chromiumdash is also providing an API to collect the same information:
 
 ```
