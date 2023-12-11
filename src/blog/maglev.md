@@ -47,7 +47,7 @@ This is where Maglev comes in, our new optimizing JIT that generates code thatâ€
 
 # Maglev: A Simple SSA-Based JIT compiler
 
-When we started this project we saw two paths forward to cover the gap between Sparkplug and TurboFan: either try to generate better code using the single-pass approach taken by Sparkplug, or build a JIT with an intermediate representation (IR). Since we felt that not having an IR at all during compilation would likely severely restrict the compiler, we decided to go with a somewhat traditional single-static-assignment (SSA) based approach, using a CFG (control flow graph) rather than TurboFan's more flexible but cache unfriendly sea-of-nodes representation.
+When we started this project we saw two paths forward to cover the gap between Sparkplug and TurboFan: either try to generate better code using the single-pass approach taken by Sparkplug, or build a JIT with an intermediate representation (IR). Since we felt that not having an IR at all during compilation would likely severely restrict the compiler, we decided to go with a somewhat traditional static single-assignment (SSA) based approach, using a CFG (control flow graph) rather than TurboFan's more flexible but cache unfriendly sea-of-nodes representation.
 
 The compiler itself is designed to be fast and easy to work on. It has a minimal set of passes and a simple, single IR that encodes specialized JavaScript semantics.
 
