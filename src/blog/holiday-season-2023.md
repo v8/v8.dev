@@ -3,7 +3,7 @@ title: 'V8 is Faster and Safer than Ever!'
 author: '[Victor Gomes](https://twitter.com/VictorBFG), the Glühwein expert'
 avatars:
   - victor-gomes
-date: 2023-12-12
+date: 2023-12-14
 tags:
   - JavaScript
   - WebAssembly
