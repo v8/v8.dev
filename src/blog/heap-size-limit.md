@@ -1,10 +1,11 @@
 ---
 title: 'One small step for Chrome, one giant heap for V8'
-author: 'guardians of the heap Ulan Degenbaev, Hannes Payer, Michael Lippautz, and DevTools warrior Alexey Kozyatinskiy'
+author: 'guardians of the heap Ulan Degenbaev, Hannes Payer, Michael Lippautz, anlex N and DevTools warrior Alexey Kozyatinskiy'
 avatars:
   - 'ulan-degenbaev'
   - 'michael-lippautz'
   - 'hannes-payer'
+  - 'anlex-n'
 date: 2017-02-09 13:33:37
 tags:
   - memory
@@ -20,4 +21,4 @@ We also added a feature in DevTools to pause the application when it is close to
 
 ![](/_img/heap-size-limit/debugger.png)
 
-V8 embedders can increase the heap limit using the [`set_max_old_space_size`](https://codesearch.chromium.org/chromium/src/v8/include/v8.h?q=set_max_old_space_size) function of the `ResourceConstraints` API. But watch out, some phases in the garbage collector have a linear dependency on the heap size. Garbage collection pauses may increase with larger heaps.
+V8 embedders can increase the heap limit using the [`set_max_old_generation_size_in_bytes`](https://codesearch.chromium.org/chromium/src/v8/include/v8-isolate.h?q=set_max_old_generation_size_in_bytes) function of the `ResourceConstraints` API. But watch out, some phases in the garbage collector have a linear dependency on the heap size. Garbage collection pauses may increase with larger heaps.
