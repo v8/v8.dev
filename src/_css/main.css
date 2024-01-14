@@ -625,3 +625,7 @@ pre mark .token.punctuation {
 .highlight-line {
   display: inline-block;
 }
+
+.deprecated {
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='9em' width='16em' viewBox='0 0 16 9'><text transform='translate(4.77 8.58) rotate(-45)' font-size='2' font-weight='bold' fill='LightSalmon'>Deprecated</text></svg>");
+}
