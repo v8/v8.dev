@@ -26,7 +26,7 @@ Blink features are required so that Chrome can turn off features without distrib
 
 ### Fuzzing is required to ship { #fuzzing }
 
-JavaScript and WebAssembly features must be fuzzed, and all fuzz bugs must be fixed, before they can be shipped.
+JavaScript and WebAssembly features must be fuzzed for a minimum period of 4 weeks, or one (1) release milestone, with all fuzz bugs fixed, before they can be shipped.
 
 For code-complete JavaScript features, start fuzzing by moving the feature flag to the `JAVASCRIPT_STAGED_FEATURES_BASE` macro in [`src/flags/flag-definitions.h`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/flags/flag-definitions.h).
 
