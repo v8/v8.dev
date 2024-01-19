@@ -32,13 +32,45 @@ For code-complete JavaScript features, start fuzzing by moving the feature flag 
 
 For WebAssembly, see the [WebAssembly shipping checklist](/docs/wasm-shipping-checklist).
 
-### Instead of WPT, Test262 and WebAssembly spec tests are sufficient { #tests }
+### [Chromestatus](https://chromestatus.com/) and review gates { #chromestatus }
+
+The blink intent process includes a series of review gates that must be approved on the feature's entry in [Chromestatus](https://chromestatus.com/) before an Intent to Ship is sent out seeking API OWNER approvals.
+
+These gates are tailored towards web APIs, and some gates may not be applicable to JavaScript and WebAssembly features. The following is broad guidance. The specifics differ from feature to feature; do not apply guidance blindly!
+
+#### Privacy
+
+Most JavaScript and WebAssembly features do not affect privacy. Rarely, features may add new fingerprinting vectors that reveal information about a user's operating system or hardware.
+
+#### Security
+
+While JavaScript and WebAssembly are common attack vectors in security exploits, most new features do not add additional attack surface. [Fuzzing](#fuzzing) is required, and mitigates some of the risk.
+
+Features that affect known popular attack vectors, such as `ArrayBuffer`s in JavaScript, and features that might enable side-channel attacks, need extra scrutiny and must be reviewed.
+
+#### Enterprise
+
+Throughout their standardization process in TC39 and the Wasm CG, JavaScript and WebAssembly features already undergo heavy backwards compatibility scrutiny. It is exceedingly rare for features to be willfuly backwards incompatible.
+
+For JavaScript, recently shipped features can also be disabled via `chrome://flags/#disable-javascript-harmony-shipping`.
+
+#### Debuggability
+
+JavaScript and WebAssembly features' debuggability differs significantly from feature to feature. JavaScript features that only add new built-in methods do not need additional debugger support, while WebAssembly features that add new capabilities may need significant additional debugger support.
+
+When in doubt, this gate is applicable.
+
+#### Testing { #tests }
+
+Instead of WPT, Test262 tests are sufficient for JavaScript features, and WebAssembly spec tests are sufficient for WebAssembly features.
 
 Adding Web Platform Tests (WPT) is not required, as JavaScript and WebAssembly language features have their own interoperable test repositories that are run by multiple implementations. Feel free to add some though, if you think it is beneficial.
 
 For JavaScript features, explicit correctness tests in [Test262](https://github.com/tc39/test262) are required. Note that tests in the [staging directory](https://github.com/tc39/test262/blob/main/CONTRIBUTING.md#staging) suffice.
 
 For WebAssembly features, explicit correctness tests in the [WebAssembly Spec Test repo](https://github.com/WebAssembly/spec/tree/master/test) are required.
+
+For performance tests, JavaScript already underlies most existing performance benchmarks, like Speedometer.
 
 ### Who to CC { #cc }
 
