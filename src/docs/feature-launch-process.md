@@ -58,6 +58,8 @@ For JavaScript, recently shipped features can also be disabled via `chrome://fla
 
 JavaScript and WebAssembly features' debuggability differs significantly from feature to feature. JavaScript features that only add new built-in methods do not need additional debugger support, while WebAssembly features that add new capabilities may need significant additional debugger support.
 
+For more details, see the [JavaScript feature debugging checklist](https://docs.google.com/document/d/1_DBgJ9eowJJwZYtY6HdiyrizzWzwXVkG5Kt8s3TccYE/edit#heading=h.u5lyedo73aa9) and the [WebAssembly feature debugging checklist](https://goo.gle/devtools-wasm-checklist).
+
 When in doubt, this gate is applicable.
 
 #### Testing { #tests }
