@@ -3,7 +3,7 @@ title: 'Import attributes'
 author: 'Shu-yu Guo ([@_shu](https://twitter.com/_shu))'
 avatars:
   - 'shu-yu-guo'
-date: 2024-01-30
+date: 2024-01-31
 tags:
   - ECMAScript
 description: 'Import attributes: the evolution of import assertions'
