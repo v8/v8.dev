@@ -3,7 +3,7 @@ title: 'Static Roots: Objects with Compile-Time Constant Addresses'
 author: 'Olivier Flückiger'
 avatars:
   - olivier-flueckiger
-date: 2024-02-02
+date: 2024-02-05
 tags:
   - JavaScript
 description: "Static Roots makes the addresses of certain JS objects a compile-time constant."
