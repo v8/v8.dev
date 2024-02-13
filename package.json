@@ -43,7 +43,7 @@
     "@browser-logos/node.js": "^1.0.1",
     "@browser-logos/safari": "^2.1.0",
     "autoprefixer": "^10.4.13",
-    "cssnano": "^5.1.14",
+    "cssnano": "^6.0.0",
     "dark-mode-toggle": "^0.14.3",
     "firebase-tools": "^11.16.1",
     "get-video-dimensions": "^1.0.0",
