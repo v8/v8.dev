@@ -20,6 +20,11 @@ excludeFromSitemap: true
     <link href="{{ absolutePostUrl }}"/>
     <updated>{{ (post.data.updated or post.date) | rssDate }}</updated>
     <id>{{ absolutePostUrl }}</id>
+    {%- for tag in post.data.tags %}
+      {%- if not 'io' in tag and not 'Node.js' in tag %}
+        <category label="{{ tag }}" term="{{ tag | slug }}" />
+      {%- endif %}
+    {%- endfor %}
     <author>
       <name>{{ post.data.author | markdown | striptags }}</name>
     </author>

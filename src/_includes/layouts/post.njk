@@ -29,7 +29,11 @@ layout: layouts/base.njk
           </picture>
         {% endfor %}
       {% endif %}
-      <p>Posted by {{ author | markdown | safe }}.</p>
+      <p
+      {% if avatars.length > 4 %}
+        style="clear:both"
+      {% endif %}
+      >Posted by {{ author | markdown | safe }}.</p>
     </div>
     {% if tweet %}
       <a href="https://twitter.com/v8js/status/{{ tweet }}" class="retweet">Retweet this article!</a>
