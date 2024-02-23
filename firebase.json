@@ -79,16 +79,12 @@
         "source": "/sw.js",
         "headers": [
           {
-            "key": "Cache-Control",
-            "value": "no-cache"
-          },
-          {
             "key": "Content-Type",
             "value": "text/javascript;charset=utf-8"
           },
           {
             "key": "Cache-Control",
-            "value": "max-age=31557600"
+            "value": "public, max-age=600, stale-while-revalidate=3600"
           }
         ]
       },
