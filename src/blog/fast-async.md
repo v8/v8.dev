@@ -156,6 +156,10 @@ We’ve also been working on a new garbage collector, called Orinoco, which move
 
 And last but not least, there was a handy bug in Node.js 8 that caused `await` to skip microticks in some cases, resulting in better performance. The bug started out as an unintended spec violation, but it later gave us the idea for an optimization. Let’s start by explaining the buggy behavior:
 
+:::note
+**Note:** The following behavior was correct according to the JavaScript spec at the time of writing. Since then, our spec proposal was accepted, and the following "buggy" behavior is now correct.
+:::
+
 ```js
 const p = Promise.resolve();
 
