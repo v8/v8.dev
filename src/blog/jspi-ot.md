@@ -14,7 +14,7 @@ You can find out more about JSPI and how to use it [here](https://v8.dev/blog/js
 
 ## Registering for the origin trial
 
-JSPI is still pre-release; it is going through a standardization process and will not be fully released until we get to phase 5 of that process. To use it today, you can set a flag in the Chrome browser; or, you can apply for an origin trial token that will allow your users to access it without having to set the flag themselves.
+JSPI is still pre-release; it is going through a standardization process and will not be fully released until we get to phase 4 of that process. To use it today, you can set a flag in the Chrome browser; or, you can apply for an origin trial token that will allow your users to access it without having to set the flag themselves.
 
 To register you can go [here](https://developer.chrome.com/origintrials/#/register_trial/1603844417297317889), make sure to follow the registration signup process. To find out more about origin trials in general, [this](https://developer.chrome.com/docs/web-platform/origin-trials) is a good starting place.
 
@@ -28,3 +28,7 @@ For applications that intensively create spawned-off computations, the performan
 We currently allocate a fixed size stack for each wrapped call. This stack is necessarily large in order to accommodate complex applications. However, it also means that an application that has a large number of simple wrapped calls _in flight_ may experience memory pressure.
 
 Both of these issues are planned to be addressed before JSPI is officially released.
+
+## Feedback
+
+Since JSPI is a standards-track effort, we prefer that any issues and feedback be shared [here](https://github.com/WebAssembly/js-promise-integration/issues). However, bug reports can be raised at the standard Chrome bug reporting [site](https://issues.chromium.org/new).
