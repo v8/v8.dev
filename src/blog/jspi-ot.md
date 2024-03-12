@@ -14,7 +14,7 @@ You can find out more about JSPI and how to use it [here](https://v8.dev/blog/js
 
 ## Requirements
 
-Apart from registering for an origin trial, you will also need to generate the appropriate WebAssembly and JavaScript. If you are using Emscripten, then this is straightforward. You should ensure that you are using at least version 
+Apart from registering for an origin trial, you will also need to generate the appropriate WebAssembly and JavaScript. If you are using Emscripten, then this is straightforward. You should ensure that you are using at least version 3.1.47.
 
 ## Registering for the origin trial
 
