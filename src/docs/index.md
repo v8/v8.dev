@@ -8,7 +8,7 @@ This documentation is aimed at C++ developers who want to use V8 in their applic
 
 ## About V8
 
-V8 implements <a href="https://tc39.es/ecma262/">ECMAScript</a> and <a href="https://webassembly.github.io/spec/core/">WebAssembly</a>, and runs on Windows 7 or later, macOS 10.12+, and Linux systems that use x64, IA-32, or ARM processors. Additional systems (IBM i, AIX) and processors (MIPS, ppcle64, s390x) are externally maintained, see [ports](/docs/ports). V8 can run standalone, or can be embedded into any C++ application.
+V8 implements <a href="https://tc39.es/ecma262/">ECMAScript</a> and <a href="https://webassembly.github.io/spec/core/">WebAssembly</a>, and runs on Windows, macOS, and Linux systems that use x64, IA-32, or ARM processors. Additional systems (IBM i, AIX) and processors (MIPS, ppcle64, s390x) are externally maintained, see [ports](/docs/ports). V8 can be embedded into any C++ application.
 
 V8 compiles and executes JavaScript source code, handles memory allocation for objects, and garbage collects objects it no longer needs. V8’s stop-the-world, generational, accurate garbage collector is one of the keys to V8’s performance.
 
