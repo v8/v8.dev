@@ -12,6 +12,10 @@ JSPI is an API that allows so-called sequential code – that has been compiled 
 
 You can find out more about JSPI and how to use it [here](https://v8.dev/blog/jspi) and the specification itself is [here](https://github.com/WebAssembly/js-promise-integration).
 
+## Requirements
+
+Apart from registering for an origin trial, you will also need to generate the appropriate WebAssembly and JavaScript. If you are using Emscripten, then this is straightforward. You should ensure that you are using at least version 
+
 ## Registering for the origin trial
 
 JSPI is still pre-release; it is going through a standardization process and will not be fully released until we get to phase 4 of that process. To use it today, you can set a flag in the Chrome browser; or, you can apply for an origin trial token that will allow your users to access it without having to set the flag themselves.
