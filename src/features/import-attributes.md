@@ -59,5 +59,5 @@ The `assert` keyword is deprecated as of V8 v12.3 and is planned to be removed b
 <feature-support chrome="123 https://chromestatus.com/feature/5205869105250304"
                  firefox="no"
                  safari="17.2 https://developer.apple.com/documentation/safari-release-notes/safari-17_2-release-notes"
-                 nodejs="no"
+                 nodejs="20.10 https://nodejs.org/docs/latest-v20.x/api/esm.html#import-attributes"
                  babel="yes https://babeljs.io/blog/2023/05/26/7.22.0#import-attributes-15536-15620"></feature-support>
