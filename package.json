@@ -35,7 +35,7 @@
     ]
   },
   "devDependencies": {
-    "@11ty/eleventy": "^1.0.2",
+    "@11ty/eleventy": "^2.0.1",
     "@11ty/eleventy-plugin-rss": "^1.2.0",
     "@11ty/eleventy-plugin-syntaxhighlight": "^4.2.0",
     "@browser-logos/chrome": "^2.0.0",
@@ -43,11 +43,11 @@
     "@browser-logos/node.js": "^1.0.1",
     "@browser-logos/safari": "^2.1.0",
     "autoprefixer": "^10.4.13",
-    "cssnano": "^5.1.14",
+    "cssnano": "^6.0.0",
     "dark-mode-toggle": "^0.14.3",
     "firebase-tools": "^11.16.1",
     "get-video-dimensions": "^1.0.0",
-    "glob": "^8.0.3",
+    "glob": "^9.3.4",
     "he": "^1.2.0",
     "html-minifier-terser": "^7.1.0",
     "husky": "^8.0.2",
@@ -71,6 +71,6 @@
     "shx": "^0.3.4",
     "superstatic": "^9.0.0",
     "terser": "^5.16.0",
-    "workbox-cli": "^4.3.1"
+    "workbox-cli": "^6.3.0"
   }
 }
