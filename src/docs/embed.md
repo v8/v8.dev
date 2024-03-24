@@ -10,7 +10,7 @@ This document is intended for C++ programmers who want to embed the V8 JavaScrip
 
 ## Hello world
 
-Let’s look at a [Hello World example](https://chromium.googlesource.com/v8/v8/+/branch-heads/6.8/samples/hello-world.cc) that takes a JavaScript statement as a string argument, executes it as JavaScript code, and prints the result to standard out.
+Let’s look at a [Hello World example](https://chromium.googlesource.com/v8/v8/+/branch-heads/11.9/samples/hello-world.cc) that takes a JavaScript statement as a string argument, executes it as JavaScript code, and prints the result to standard out.
 
 First, some key concepts:
 
@@ -26,7 +26,7 @@ These concepts are discussed in greater detail in [the advanced guide](/docs/emb
 Follow the steps below to run the example yourself:
 
 1. Download the V8 source code by following [the Git instructions](/docs/source-code#using-git).
-1. The instructions for this hello world example have last been tested with V8 v10.5.1. You can check out this branch with `git checkout refs/tags/10.5.1 -b sample -t`
+1. The instructions for this hello world example have last been tested with V8 v11.9. You can check out this branch with `git checkout branch-heads/11.9 -b sample -t`
 1. Create a build configuration using the helper script:
 
     ```bash
@@ -48,7 +48,7 @@ Follow the steps below to run the example yourself:
 1. Compile `hello-world.cc`, linking to the static library created in the build process. For example, on 64bit Linux using the GNU compiler:
 
     ```bash
-    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -fno-rtti -lv8_monolith -lv8_libbase -lv8_libplatform -ldl -Lout.gn/x64.release.sample/obj/ -pthread -std=c++17 -DV8_COMPRESS_POINTERS
+    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -fno-rtti -lv8_monolith -lv8_libbase -lv8_libplatform -ldl -Lout.gn/x64.release.sample/obj/ -pthread -std=c++17 -DV8_COMPRESS_POINTERS -DV8_ENABLE_SANDBOX
     ```
 
 1. For more complex code, V8 fails without an ICU data file. Copy this file to where your binary is stored:
@@ -65,17 +65,17 @@ Follow the steps below to run the example yourself:
 
 1. It prints `Hello, World!`. Yay!
 
-If you are looking for an example which is in sync with master, check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/master/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
+If you are looking for an example which is in sync with the main branch, check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/main/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
 
 ## More example code
 
 The following samples are provided as part of the source code download.
 
-### [`process.cc`](https://github.com/v8/v8/blob/master/samples/process.cc)
+### [`process.cc`](https://github.com/v8/v8/blob/main/samples/process.cc)
 
 This sample provides the code necessary to extend a hypothetical HTTP request processing application — which could be part of a web server, for example — so that it is scriptable. It takes a JavaScript script as an argument, which must provide a function called `Process`. The JavaScript `Process` function can be used to, for example, collect information such as how many hits each page served by the fictional web server gets.
 
-### [`shell.cc`](https://github.com/v8/v8/blob/master/samples/shell.cc)
+### [`shell.cc`](https://github.com/v8/v8/blob/main/samples/shell.cc)
 
 This sample takes filenames as arguments then reads and executes their contents. Includes a command prompt at which you can enter JavaScript code snippets which are then executed. In this sample additional functions like `print` are also added to JavaScript through the use of object and function templates.
 

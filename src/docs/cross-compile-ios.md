@@ -31,14 +31,12 @@ This section shows how to build a monolithic V8 version for use on either a phys
 Set up GN build files by running `gn args out/release-ios` and inserting the following keys:
 
 ```python
-enable_ios_bitcode = true
 ios_deployment_target = 10
 is_component_build = false
 is_debug = false
 target_cpu = "arm64"                  # "x64" for a simulator build.
 target_os = "ios"
 use_custom_libcxx = false             # Use Xcode's libcxx.
-use_xcode_clang = true
 v8_enable_i18n_support = false        # Produces a smaller binary.
 v8_monolithic = true                  # Enable the v8_monolith target.
 v8_use_external_startup_data = false  # The snaphot is included in the binary.

@@ -9,7 +9,7 @@ WebAssembly is a binary format that allows you to run code from programming lang
 
 Initially, V8 does not compile any functions in a WebAssembly module. Instead, functions get compiled lazily with the baseline compiler [Liftoff](/blog/liftoff) when the function gets called for the first time. Liftoff is a [one-pass compiler](https://en.wikipedia.org/wiki/One-pass_compiler), which means it iterates over the WebAssembly code once and emits machine code immediately for each WebAssembly instruction. One-pass compilers excel at fast code generation, but can only apply a small set of optimizations. Indeed, Liftoff can compile WebAssembly code very fast, tens of megabytes per second.
 
-Once Liftoff compilation is finished, the the resulting machine code gets registered with the WebAssembly module, so that for future calls to the function the compiled code can be used immediately.
+Once Liftoff compilation is finished, the resulting machine code gets registered with the WebAssembly module, so that for future calls to the function the compiled code can be used immediately.
 
 ## TurboFan
 
