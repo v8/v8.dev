@@ -102,6 +102,7 @@ const count = tags.reduce((sum , value) => { return sum + (value == 'security' ?
 ```
 
 ## .toArray()
+
 `toArray` returns an array form iterator values. 
 
 ```javascript
@@ -113,6 +114,7 @@ const arr = posts.values().take(10).toArray();
 ```
 
 ## .forEach(fn)
+
 `forEach` takes a function as an argument and is applied on each element of the itarator. This helper returns undefined.
 
 ```javascript
@@ -126,6 +128,7 @@ console.log(dates);
 ```
 
 ## .some(fn)
+
 `some` takes a predicate function as an argument. This helper returns `true` if any iterator element returns true when the function is applied to it. Iterator is consumed after `.some` is called.
 
 ```javascript
@@ -137,6 +140,7 @@ posts.values().some(x => x.textContent.includes('Iterators'));
 ```
 
 ## .every(fn)
+
 `every` takes a predicate function as an argument. This helper returns `true` if every iterator element returns true when the function is applied to it. Iterator is consumed after `.every` is called.
 
 ```javascript
@@ -148,6 +152,7 @@ posts.values().every(x => x.textContent.includes('V8'));
 ```
 
 ## .find(fn)
+
 `find` takes a predicate function as an argument. This helper returns the first element of the iterator that matches function, or `undefined` if no element of the iterator matches function.
 
 ```javascript
@@ -159,6 +164,7 @@ console.log(posts.values().find(x => x.textContent.includes('V8')).textContent);
 ```
 
 ## Iterator.from(object)
+
 `from` is a static method and takes an object as an argument. This helper returns an iterator wrapped around the object.
 
 ```javascript
