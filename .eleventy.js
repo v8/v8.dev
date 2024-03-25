@@ -181,6 +181,7 @@ module.exports = (eleventyConfig) => {
 
   // Copy assets that don’t require a build step.
   eleventyConfig.addPassthroughCopy('src/favicon.ico');
+  eleventyConfig.addPassthroughCopy('src/favicon.png');
   eleventyConfig.addPassthroughCopy('src/robots.txt');
   eleventyConfig.addPassthroughCopy('src/_img');
   eleventyConfig.addPassthroughCopy('src/_css/img');

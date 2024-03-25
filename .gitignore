@@ -9,3 +9,7 @@ dist/
 firebase-debug.log
 node_modules/
 package-lock.json
+.DS_Store
+Desktop.ini
+._*
+Thumbs.db

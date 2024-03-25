@@ -23,10 +23,7 @@ layout: layouts/base.njk
     <div>
       {% if avatars %}
         {% for avatar in avatars %}
-          <picture>
-            <source srcset="/_img/avatars/{{ avatar }}.avif, /_img/avatars/{{ avatar }}@2x.avif 2x" type="image/avif"></source>
-            <img src="/_img/avatars/{{ avatar }}.jpg" srcset="/_img/avatars/{{ avatar }}@2x.jpg 2x" alt="" width="96" height="96" loading="lazy">
-          </picture>
+          <img src="/_img/avatars/{{ avatar }}.avif" alt="" width="96" height="96" loading="lazy">
         {% endfor %}
       {% endif %}
       <p>Posted by {{ author | markdown | safe }}.</p>
