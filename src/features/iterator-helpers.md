@@ -2,51 +2,29 @@
 title: 'Iterator helpers'
 author: 'Rezvan Mahdavi Hezaveh'
 avatars:
-  - ''
-date: 2024-02-13
+  - 'rezvan-mahdavi-hezaveh'
+date: 2024-03-13
 tags:
   - ECMAScript
 description: 'Interfaces that help with general usage and consumption of iterators.'
 tweet: ''
 ---
 
-Look for more real life examples for iterators. Look at devtools code base. For-of examples (for of iter.map(..)). You are talking to developers
+V8 shipped a collection of new methods on Iterator prototype (*Iterator helpers*) that help in general use of iterators in v12.2. The introduced helpers are as follow:
 
-Section with problems, web compat. At the end, tell which browsers ship it.
-
-https://2ality.com/2022/12/iterator-helpers.html
-https://blog.delpuppo.net/iterate-like-a-pro-mastering-javascript-iterators-for-effortless-code 
-
-What APIs return iterators? Try to find something
-
-Una Kravets -> email or message. Ask about the examples
-
-
-
-V8 shipped iterator helpers in v12.2. The introduced helpers are as follow:
 
 ## .map(mapperFn)
 
 `map` takes a mapper function as an argument. This helper returns an iterator of values with the mapper function applied to the original iterator values.
 
 ```javascript
-function* gen() {
-  yield 42;
-  yield 43;
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
+
+// Get the list of posts, return a list of their text content and log them.
+for (const post of posts.values().map((x) => { return x.textContent})) {
+  console.log(post);
 }
-
-const iter = gen();
-const mapIterator = iter.map((x, i) => { 
-return x + 2; 
-});
-
-mapIterator.next()
-// {value: 44, done: false }
-mapIterator.next()
-// {value: 45, done: false }
-mapIterator.next()
-// {value: undefined, done: true }
-
 ```
 
 ## .filter(filtererFn)
@@ -54,20 +32,13 @@ mapIterator.next()
 `filter` takes a filter function as an argument. This helper returns an iterator of values from the original iterator that pass the filter function.
 
 ```javascript
-function* gen() {
-  yield 42;
-  yield 43;
-}
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
-const iter = gen();
-const filterIterator = iter.filter((x, i) => { 
-return x%2 == 0; 
-});
-
-filterIterator.next()
-// {value: 42, done: false }
-filterIterator.next()
-// {value: undefined, done: true }
+// Filter blog posts that includes `V8` in their text content and log them.
+for (const post of posts.values().filter((x) => { return x.textContent.includes('V8')})) {
+  console.log(post);
+} 
 ```
 
 ## .take(limit)
@@ -75,59 +46,27 @@ filterIterator.next()
 `take` takes a an integer as an argument. This helper returns an iterator of values from the original iterator from 0 until the limit.
 
 ```javascript
-// Sellect all elements with class = "example" from a webpage document and create an iterator form it
-const items = document.querySelectorAll('.example');
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
-// Log text context of the first two elements.
-for (const item of items.values().take(2)) {
-    console.log(item.textContext);
+// Select 10 recent blog posts and log them.
+for (const post of posts.values().take(10)) {
+  console.log(post);
 }
-```
-
-```javascript
-function* gen() {
-  yield 42;
-  yield 43;
-}
-
-const iter = gen();
-const takeIterator = iter.take(1);
-
-takeIterator.next()
-// {value: 42, done: false }
-takeIterator.next()
-// {value: undefined, done: true }
 ```
 
 ## .drop(limit)
 
 `drop` takes a an integer as an argument. This helper returns an iterator of values from the original iterator after the limit.
 
-
 ```javascript
-// Sellect all elements with class = "example" from a webpage document and create an iterator form it
-const items = document.querySelectorAll('.example');
-const iterator = items[Symbol.iterator]();
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
-// Log text context of the elements after the first element.
-for (const item of iterator.value().drop(1)) {
-    console.log(item.textContext);
+// Drop 10 recent blog posts and log the rest of them.
+for (const post of posts.values().drop(10)) {
+  console.log(post);
 }
-```
-
-```javascript
-function* gen() {
-  yield 42;
-  yield 43;
-}
-
-const iter = gen();
-const dropIterator = iter.drop(1);
-
-dropIterator.next()
-// {value: 43, done: false }
-dropIterator.next()
-// {value: undefined, done: true }
 ```
 
 ## .flatMap(mapperFn)
@@ -135,21 +74,13 @@ dropIterator.next()
 `flatMap` takes a mapper function as an argument. This helper returns an iterator of flat values of the iterators produced by applying the mapper function to the original iterator values.
 
 ```javascript
-const iter = ['It\'s Sunny in', '', 'California'].values();
-const flatMapIterator = iter.flatMap(value => value.split(' ').values());
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
-flatMapIterator.next()
-// {value: 'It\'s', done: false}
-flatMapIterator.next()
-// {value: 'Sunny', done: false}
-flatMapIterator.next()
-// {value: 'in', done: false}
-flatMapIterator.next()
-// {value: '', done: false}
-flatMapIterator.next()
-// {value: 'California', done: false}
-flatMapIterator.next()
-// {value: undefined, done: true}
+// Get list of tags of the blog posts and log them. Each post can have more than one tag.
+for (const tag of posts.values().flatMap((x) => x.querySelectorAll('.tag').values())) {
+    console.log(tag.textContent);
+}
 ```
 
 ## .reduce(reducer [, initialValue ])
@@ -157,42 +88,91 @@ flatMapIterator.next()
 `reduce` takes a reducer function and an optional initial value. This helper returns ``one'' value as a result of applying the reducer function to every item of the iterator while keeping track of the last result of applying th reducer. The initial value will be used as the last result of applying reducer for applying it to the first item of the iterator.
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// Get list of tags for all posts.
+const tagLists = posts.values().flatMap((x) => x.querySelectorAll('.tag').values());
+
+// Get text context for each tag in the list.
+const tags = tags.map((x) => {return x.textContent});
+
+// Counts posts with security tag.
+const count = tags.reduce((sum , value) => { return sum + (value == 'security' ? 1: 0);}, 0);
 ```
 
 ## .toArray()
-`toArray` returns an Array 
+`toArray` returns an array form iterator values. 
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// Create an array from the list of 10 recent blog posts.
+const arr = posts.values().take(10).toArray();
 ```
 
 ## .forEach(fn)
+`forEach` takes a function as an argument and is applied on each element of the itarator. This helper returns undefined.
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// Get the dates that at least one blog post is published and log them.
+const dates = new Set();
+const forEach = posts.values().forEach((x) => dates.add(x.querySelector('time')));
+console.log(dates);
 ```
 
 ## .some(fn)
+`some` takes a predicate function as an argument. This helper returns `true` if any iterator element returns true when the function is applied to it. Iterator is consumed after `.some` is called.
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// Find out if text content of any blog post includes `Iteartors` keyword.
+posts.values().some(x => x.textContent.includes('Iterators'));
 ```
 
 ## .every(fn)
+`.every` takes a predicate function as an argument. This helper returns `true` if every iterator element returns true when the function is applied to it. Iterator is consumed after `.every` is called.
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// Find out if text content of all blog post includes `V8` keyword.
+posts.values().every(x => x.textContent.includes('V8'));
 ```
 
 ## .find(fn)
+`.find` takes a predicate function as an argument. This helper returns the first element of the iterator that matches function, or `undefined` if no element of the iterator matches function.
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// Log the text content of the recent blog post includes `V8` keyword.
+console.log(posts.values().find(x => x.textContent.includes('V8')).textContent);
 ```
 
 ## Iterator.from(object)
+`.from` is a static method and takes an object as an argument. This helper returns an iterator wrapped around the object.
 
 ```javascript
+// Sellect the list of blog posts from a blog archive page.
+const posts = document.querySelectorAll('.post');
 
+// First create an ietrator from the posts. Then, log the text content of the recent blog post includes `V8` keyword.
+console.log(Iterator.from(posts).find(x => x.textContent.includes('V8')).textContent);
 ```
+
+## Import attribute support
+
+<feature-support chrome="122 https://chromestatus.com/feature/5102502917177344"
+                 firefox="No https://bugzilla.mozilla.org/show_bug.cgi?id=1568906"
+                 safari="No https://bugs.webkit.org/show_bug.cgi?id=248650" 
+                 nodejs="No"
+                 babel="No"></feature-support>
