@@ -137,7 +137,7 @@ posts.values().some(x => x.textContent.includes('Iterators'));
 ```
 
 ## .every(fn)
-`.every` takes a predicate function as an argument. This helper returns `true` if every iterator element returns true when the function is applied to it. Iterator is consumed after `.every` is called.
+`every` takes a predicate function as an argument. This helper returns `true` if every iterator element returns true when the function is applied to it. Iterator is consumed after `.every` is called.
 
 ```javascript
 // Sellect the list of blog posts from a blog archive page.
@@ -148,7 +148,7 @@ posts.values().every(x => x.textContent.includes('V8'));
 ```
 
 ## .find(fn)
-`.find` takes a predicate function as an argument. This helper returns the first element of the iterator that matches function, or `undefined` if no element of the iterator matches function.
+`find` takes a predicate function as an argument. This helper returns the first element of the iterator that matches function, or `undefined` if no element of the iterator matches function.
 
 ```javascript
 // Sellect the list of blog posts from a blog archive page.
@@ -159,7 +159,7 @@ console.log(posts.values().find(x => x.textContent.includes('V8')).textContent);
 ```
 
 ## Iterator.from(object)
-`.from` is a static method and takes an object as an argument. This helper returns an iterator wrapped around the object.
+`from` is a static method and takes an object as an argument. This helper returns an iterator wrapped around the object.
 
 ```javascript
 // Sellect the list of blog posts from a blog archive page.
@@ -172,7 +172,7 @@ console.log(Iterator.from(posts).find(x => x.textContent.includes('V8')).textCon
 ## Import attribute support
 
 <feature-support chrome="122 https://chromestatus.com/feature/5102502917177344"
-                 firefox="No https://bugzilla.mozilla.org/show_bug.cgi?id=1568906"
-                 safari="No https://bugs.webkit.org/show_bug.cgi?id=248650" 
-                 nodejs="No"
-                 babel="No"></feature-support>
+                 firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1568906"
+                 safari="no https://bugs.webkit.org/show_bug.cgi?id=248650" 
+                 nodejs="no"
+                 babel="no"></feature-support>
