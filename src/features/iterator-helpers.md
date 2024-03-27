@@ -10,7 +10,7 @@ description: 'Interfaces that help with general usage and consumption of iterato
 tweet: ''
 ---
 
-Iterator helpers are a collection of new methods on Iterator prototype (*Iterator helpers*) that help in general use of iterators. Since these helper methods are on the iterator prototype, any object that has Iterator.prototyype on its prototype change (e.g. array iterators) will get the methods. In the following subsections, we explain these introduced helpers. All the provided examples are working in a blog archive page that includes list of blog posts, illustrating how iterator helpers are helpful for finding and manupulating posts.
+*Iterator helpers* are a collection of new methods on Iterator prototype that help in general use of iterators. Since these helper methods are on the iterator prototype, any object that has Iterator.prototype on its prototype chain (e.g. array iterators) will get the methods. In the following subsections, we explain iterator helpers. All the provided examples are working in a blog archive page that includes list of blog posts, illustrating how iterator helpers are helpful for finding and manupulating posts.
 
 
 ## .map(mapperFn)
@@ -35,7 +35,7 @@ for (const post of posts.values().map((x) => x.textContent)) {
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li');
 
-// Filter blog posts that includes `V8` in their text content and log them.
+// Filter blog posts that includes `V8` in their text content (titles) and log them.
 for (const post of posts.values().filter((x) => x.textContent.includes('V8'))) {
   console.log(post);
 } 
@@ -85,7 +85,7 @@ for (const tag of posts.values().flatMap((x) => x.querySelectorAll('.tag').value
 
 ## .reduce(reducer [, initialValue ])
 
-`reduce` takes a reducer function and an optional initial value. This helper returns ``one'' value as a result of applying the reducer function to every item of the iterator while keeping track of the last result of applying the reducer. The initial value is used as the starting point for the reducer function when it processes the first item of the iterator.
+`reduce` takes a reducer function and an optional initial value. This helper returns one value as a result of applying the reducer function to every value of the iterator while keeping track of the last result of applying the reducer. The initial value is used as the starting point for the reducer function when it processes the first value of the iterator.
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
@@ -129,25 +129,25 @@ console.log(dates);
 
 ## .some(fn)
 
-`some` takes a predicate function as an argument. This helper returns `true` if any iterator element returns true when the function is applied to it. The iterator is consumed after `.some` is called.
+`some` takes a predicate function as an argument. This helper returns `true` if any iterator element returns true when the function is applied to it. The iterator is consumed after `some` is called.
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li');
 
-// Find out if text content of any blog post includes the `Iteartors` keyword.
+// Find out if text content (title) of any blog post includes the `Iteartors` keyword.
 posts.values().some((x) => x.textContent.includes('Iterators'));
 ```
 
 ## .every(fn)
 
-`every` takes a predicate function as an argument. This helper returns `true` if every iterator element returns true when the function is applied to it. The iterator is consumed after `.every` is called.
+`every` takes a predicate function as an argument. This helper returns `true` if every iterator element returns true when the function is applied to it. The iterator is consumed after `every` is called.
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li');
 
-// Find out if text content of all blog post includes the `V8` keyword.
+// Find out if text content (title) of all blog post includes the `V8` keyword.
 posts.values().every((x) => x.textContent.includes('V8'));
 ```
 
@@ -159,19 +159,19 @@ posts.values().every((x) => x.textContent.includes('V8'));
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li');
 
-// Log the text content of the recent blog post includes `V8` keyword.
+// Log the text content (title) of the recent blog post includes `V8` keyword.
 console.log(posts.values().find((x) => x.textContent.includes('V8')).textContent);
 ```
 
 ## Iterator.from(object)
 
-`from` is a static method and takes an object as an argument. If the `object` is already an instance of Iterator, the helper returns it directly. If the `object` has @@iterator (is an iterable), its @@iterator method is called to get the iterator and the helper returns it. Otherwise, a new Iterator object (that inherit from Iterator.prototype and has `next()` and `return()` methods) is created that wraps the `object` and is returned by this helper.
+`from` is a static method and takes an object as an argument. If the `object` is already an instance of Iterator, the helper returns it directly. If the `object` has @@iterator which means it is an iterable, its @@iterator method is called to get the iterator and the helper returns it. Otherwise, a new Iterator object (that inherit from Iterator.prototype and has `next()` and `return()` methods) is created that wraps the `object` and is returned by this helper.
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li');
 
-// First create an iterator from the posts. Then, log the text content of the recent blog post that includes the `V8` keyword.
+// First create an iterator from the posts. Then, log the text content (title) of the recent blog post that includes the `V8` keyword.
 console.log(Iterator.from(posts).find((x) => x.textContent.includes('V8')).textContent);
 ```
 
