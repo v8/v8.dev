@@ -10,7 +10,7 @@ description: 'Interfaces that help with general usage and consumption of iterato
 tweet: ''
 ---
 
-*Iterator helpers* are a collection of new methods on Iterator prototype that help in general use of iterators. Since these helper methods are on the iterator prototype, any object that has Iterator.prototype on its prototype chain (e.g. array iterators) will get the methods. In the following subsections, we explain iterator helpers. All the provided examples are working in a blog archive page that includes list of blog posts, illustrating how iterator helpers are helpful for finding and manupulating posts.
+*Iterator helpers* are a collection of new methods on Iterator prototype that help in general use of iterators. Since these helper methods are on the iterator prototype, any object that has `Iterator.prototype` on its prototype chain (e.g. array iterators) will get the methods. In the following subsections, we explain iterator helpers. All the provided examples are working in a blog archive page that includes list of blog posts, illustrating how iterator helpers are helpful for finding and manupulating posts. You can try them on [V8 blog page](https://v8.dev/blog)!
 
 
 ## .map(mapperFn)
@@ -19,7 +19,7 @@ tweet: ''
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Get the list of posts, return a list of their text content (titles) and log them.
 for (const post of posts.values().map((x) => x.textContent)) {
@@ -33,7 +33,7 @@ for (const post of posts.values().map((x) => x.textContent)) {
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Filter blog posts that includes `V8` in their text content (titles) and log them.
 for (const post of posts.values().filter((x) => x.textContent.includes('V8'))) {
@@ -47,7 +47,7 @@ for (const post of posts.values().filter((x) => x.textContent.includes('V8'))) {
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Select 10 recent blog posts and log them.
 for (const post of posts.values().take(10)) {
@@ -61,7 +61,7 @@ for (const post of posts.values().take(10)) {
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Drop 10 recent blog posts and log the rest of them.
 for (const post of posts.values().drop(10)) {
@@ -75,7 +75,7 @@ for (const post of posts.values().drop(10)) {
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Get list of tags of the blog posts and log them. Each post can have more than one tag.
 for (const tag of posts.values().flatMap((x) => x.querySelectorAll('.tag').values())) {
@@ -89,16 +89,17 @@ for (const tag of posts.values().flatMap((x) => x.querySelectorAll('.tag').value
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Get list of tags for all posts.
 const tagLists = posts.values().flatMap((x) => x.querySelectorAll('.tag').values());
 
 // Get text context for each tag in the list.
-const tags = tags.map((x) => x.textContent);
+const tags = tagLists.map((x) => x.textContent);
 
 // Counts posts with security tag.
 const count = tags.reduce((sum , value) => sum + (value === 'security' ? 1 : 0), 0);
+console.log(count);
 ```
 
 ## .toArray()
@@ -107,7 +108,7 @@ const count = tags.reduce((sum , value) => sum + (value === 'security' ? 1 : 0),
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Create an array from the list of 10 recent blog posts.
 const arr = posts.values().take(10).toArray();
@@ -119,7 +120,7 @@ const arr = posts.values().take(10).toArray();
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Get the dates that at least one blog post is published and log them.
 const dates = new Set();
@@ -133,7 +134,7 @@ console.log(dates);
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Find out if text content (title) of any blog post includes the `Iteartors` keyword.
 posts.values().some((x) => x.textContent.includes('Iterators'));
@@ -145,7 +146,7 @@ posts.values().some((x) => x.textContent.includes('Iterators'));
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Find out if text content (title) of all blog post includes the `V8` keyword.
 posts.values().every((x) => x.textContent.includes('V8'));
@@ -157,7 +158,7 @@ posts.values().every((x) => x.textContent.includes('V8'));
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // Log the text content (title) of the recent blog post includes `V8` keyword.
 console.log(posts.values().find((x) => x.textContent.includes('V8')).textContent);
@@ -165,11 +166,11 @@ console.log(posts.values().find((x) => x.textContent.includes('V8')).textContent
 
 ## Iterator.from(object)
 
-`from` is a static method and takes an object as an argument. If the `object` is already an instance of Iterator, the helper returns it directly. If the `object` has @@iterator which means it is an iterable, its @@iterator method is called to get the iterator and the helper returns it. Otherwise, a new Iterator object (that inherit from Iterator.prototype and has `next()` and `return()` methods) is created that wraps the `object` and is returned by this helper.
+`from` is a static method and takes an object as an argument. If the `object` is already an instance of Iterator, the helper returns it directly. If the `object` has `Symbol.iterator`, which means it is an iterable, its `Symbol.iterator` method is called to get the iterator and the helper returns it. Otherwise, a new `Iterator` object (that inherit from `Iterator.prototype` and has `next()` and `return()` methods) is created that wraps the `object` and is returned by this helper.
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
-const posts = document.querySelectorAll('li');
+const posts = document.querySelectorAll('li:not(header li)');
 
 // First create an iterator from the posts. Then, log the text content (title) of the recent blog post that includes the `V8` keyword.
 console.log(Iterator.from(posts).find((x) => x.textContent.includes('V8')).textContent);
