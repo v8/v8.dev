@@ -77,7 +77,8 @@ for (const post of posts.values().drop(10)) {
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li:not(header li)');
 
-// Get list of tags of the blog posts and log them. Each post can have more than one tag.
+// Get list of tags of the blog posts and log them. Each post can have more than
+// one tag.
 for (const tag of posts.values().flatMap((x) => x.querySelectorAll('.tag').values())) {
     console.log(tag.textContent);
 }
@@ -136,7 +137,8 @@ console.log(dates);
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li:not(header li)');
 
-// Find out if text content (title) of any blog post includes the `Iteartors` keyword.
+// Find out if text content (title) of any blog post includes the `Iteartors`
+// keyword.
 posts.values().some((x) => x.textContent.includes('Iterators'));
 ```
 
@@ -172,7 +174,8 @@ console.log(posts.values().find((x) => x.textContent.includes('V8')).textContent
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li:not(header li)');
 
-// First create an iterator from the posts. Then, log the text content (title) of the recent blog post that includes the `V8` keyword.
+// First create an iterator from the posts. Then, log the text content (title) of 
+// the recent blog post that includes the `V8` keyword.
 console.log(Iterator.from(posts).find((x) => x.textContent.includes('V8')).textContent);
 ```
 
