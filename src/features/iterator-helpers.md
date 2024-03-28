@@ -137,7 +137,7 @@ console.log(dates);
 // Select the list of blog posts from a blog archive page.
 const posts = document.querySelectorAll('li:not(header li)');
 
-// Find out if text content (title) of any blog post includes the `Iteartors`
+// Find out if text content (title) of any blog post includes the `Iterators`
 // keyword.
 posts.values().some((x) => x.textContent.includes('Iterators'));
 ```
