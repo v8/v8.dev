@@ -186,7 +186,7 @@ Iterator helpers are shipped in V8 v12.2.
 ## Import attribute support
 
 <feature-support chrome="122 https://chromestatus.com/feature/5102502917177344"
-                 firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1568906"
-                 safari="no https://bugs.webkit.org/show_bug.cgi?id=248650" 
-                 nodejs="no"
-                 babel="no"></feature-support>
+                 firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1568906"
+                 safari="no https://bugs.webkit.org/show_bug.cgi?id=248650" 
+                 nodejs="no"
+                 babel="yes https://github.com/zloirock/core-js#iterator-helpers"></feature-support>
