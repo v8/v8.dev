@@ -105,7 +105,7 @@ console.log(count);
 
 ## .toArray()
 
-`toArray` returns an array form iterator values. 
+`toArray` returns an array from iterator values. 
 
 ```javascript
 // Select the list of blog posts from a blog archive page.
