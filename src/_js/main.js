@@ -39,7 +39,7 @@
 
   // A user right-clicking the logo probably wants to download it.
   if (location.pathname !== '/logo') {
-    let logo = document.querySelector('#header a');
+    const logo = document.querySelector('#header a');
     logo.addEventListener('contextmenu', (event) => {
       event.preventDefault();
       self.location = '/logo';
@@ -48,8 +48,8 @@
 
   // Helper function to dynamically insert scripts.
   const firstScript = document.scripts[0];
-  let insertScript = (src) => {
-    let script = document.createElement('script');
+  const insertScript = (src) => {
+    const script = document.createElement('script');
     script.src = src;
     firstScript.parentNode.insertBefore(script, firstScript);
   };
