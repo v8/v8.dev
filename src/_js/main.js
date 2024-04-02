@@ -14,20 +14,18 @@
 (function() {
 
   const darkModeToggle = document.querySelector('dark-mode-toggle');
-  if (darkModeToggle) {
-    // Toggles the `dark` class based on the dark mode toggle’s mode.
-    const root = document.documentElement;
-    const updateThemeClass = () => {
-      root.classList.toggle('dark', darkModeToggle.mode === 'dark');
-    };
+  // Toggles the `dark` class based on the dark mode toggle’s mode.
+  const root = document.documentElement;
+  const updateThemeClass = () => {
+    root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+  };
 
-    // Set or remove the `dark` class the first time.
-    updateThemeClass();
+  // Set or remove the `dark` class the first time.
+  updateThemeClass();
 
-    // Listen for toggle changes (which includes `prefers-color-scheme` changes)
-    // and toggle the `dark` class accordingly.
-    darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
-  }
+  // Listen for toggle changes (which includes `prefers-color-scheme` changes)
+  // and toggle the `dark` class accordingly.
+  darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
 
   // Navigation toggle.
   const toggle = document.querySelector('#nav-toggle');
