@@ -183,7 +183,7 @@ console.log(Iterator.from(posts).find((x) => x.textContent.includes('V8')).textC
 
 Iterator helpers are shipped in V8 v12.2.
 
-## Import attribute support
+## Iterator helpers support
 
 <feature-support chrome="122 https://chromestatus.com/feature/5102502917177344"
                  firefox="no https://bugzilla.mozilla.org/show_bug.cgi?id=1568906"
