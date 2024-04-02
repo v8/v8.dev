@@ -43,12 +43,12 @@ if (location.pathname !== '/logo') {
   });
 }
 
-// Install our service worker.
-if ('serviceWorker' in navigator) {
-  addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
-  });
-}
+// Remove any existing service worker
+navigator.serviceWorker.getRegistrations().then((registrations) => {
+  for(let registration of registrations) {
+    registration.unregister();
+  }
+});
 
 // Remove UTM garbage from URLs, to make it less likely such links get shared.
 if (location.search.includes('utm_source')) {
