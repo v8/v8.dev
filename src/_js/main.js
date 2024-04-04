@@ -13,8 +13,22 @@
 
 (function() {
 
+  const darkModeToggle = document.querySelector('dark-mode-toggle');
+  // Toggles the `dark` class based on the dark mode toggle’s mode.
+  const root = document.documentElement;
+  const updateThemeClass = () => {
+    root.classList.toggle('dark', darkModeToggle.mode === 'dark');
+  };
+
+  // Set or remove the `dark` class the first time.
+  updateThemeClass();
+
+  // Listen for toggle changes (which includes `prefers-color-scheme` changes)
+  // and toggle the `dark` class accordingly.
+  darkModeToggle.addEventListener('colorschemechange', updateThemeClass);
+
   // Navigation toggle.
-  var toggle = document.querySelector('#nav-toggle');
+  const toggle = document.querySelector('#nav-toggle');
   toggle.addEventListener('click', (event) => {
     event.preventDefault();
     document.querySelector('header nav').classList.add('show');
@@ -23,7 +37,7 @@
 
   // A user right-clicking the logo probably wants to download it.
   if (location.pathname !== '/logo') {
-    var logo = document.querySelector('#header a');
+    const logo = document.querySelector('#header a');
     logo.addEventListener('contextmenu', (event) => {
       event.preventDefault();
       self.location = '/logo';
@@ -31,15 +45,15 @@
   }
 
   // Helper function to dynamically insert scripts.
-  var firstScript = document.scripts[0];
-  var insertScript = (src) => {
-    var script = document.createElement('script');
+  const firstScript = document.scripts[0];
+  const insertScript = (src) => {
+    const script = document.createElement('script');
     script.src = src;
     firstScript.parentNode.insertBefore(script, firstScript);
   };
 
   // Dynamically insert the Twitter widget if needed.
-  var twitterTimeline = document.querySelector('.twitter-timeline');
+  const twitterTimeline = document.querySelector('.twitter-timeline');
   if (twitterTimeline) {
     insertScript('https://platform.twitter.com/widgets.js');
   }
@@ -59,7 +73,7 @@
   }
 
   // Google Analytics.
-  var UA_ID = 'UA-65961526-1';
+  const UA_ID = 'UA-65961526-1';
   self.GoogleAnalyticsObject = 'ga';
   self.ga = function() {
     ga.q.push(arguments);

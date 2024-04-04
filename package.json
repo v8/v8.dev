@@ -5,7 +5,7 @@
     "eleventy": "eleventy",
     "html": "html-minifier-terser --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css && postcss src/_css/feature-support.css --output dist/_css/feature-support.css",
-    "js": "shx mkdir -p dist/_js && terser src/_js/main.mjs -cm --module -o dist/_js/main.mjs && terser src/_js/legacy.js -cm -o dist/_js/legacy.js",
+    "js": "shx mkdir -p dist/_js && terser src/_js/main.js -cm -o dist/_js/main.js",
     "json": "json-minify src/.webmanifest > dist/.webmanifest",
     "xml": "minify-xml --in-place dist/sitemap.xml && minify-xml --in-place dist/blog.atom && minify-xml --in-place dist/features.atom",
     "sw": "workbox injectManifest workbox-config.js && terser dist/sw.js -cm -o dist/sw.js",
