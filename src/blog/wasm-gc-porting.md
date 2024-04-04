@@ -203,7 +203,7 @@ Overall, in WasmMVP there was a fairly clear separation between toolchain and VM
 
 You can use WasmGC today! After reaching [phase 4](https://github.com/WebAssembly/meetings/blob/main/process/phases.md#4-standardize-the-feature-working-group) at the W3C, WasmGC is now a full and finalized standard, and Chrome 119 shipped with support for it. With that browser (or any other browser that has WasmGC support; for example, Firefox 120 is expected to launch with WasmGC support later this month) you can run this [Flutter demo](https://flutterweb-wasm.web.app/) in which Dart compiled to WasmGC drives the application’s logic, including its widgets, layout, and animation.
 
-![The Flutter demo running in Chrome 119.](/_img/wasm-gc-porting/flutter-wasm-demo.png "Material 3 rendered by Flutter WasmGC.")
+![The Flutter demo running in Chrome 119.](/_img/wasm-gc-porting/flutter-wasm-demo.png "Material 3 rendered by Flutter WasmGC."){ .no-darkening }
 
 ## Getting started
 

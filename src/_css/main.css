@@ -191,7 +191,13 @@ hr {
   font-size: 0.8em;
 }
 .footnote-item:target {
-  background: var(--lightyellow);
+  background-color: var(--lightyellow);
+  --html-color: var(--black);
+  --main-background: var(--white);
+  --main-and-footer-link-color: var(--darkblue);
+}
+.footnote-item:target > * {
+  color: var(--html-color);
 }
 .retweet {
   display: inline-block;
