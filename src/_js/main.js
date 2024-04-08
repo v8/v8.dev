@@ -59,11 +59,8 @@
   }
 
   // Remove any existing service worker
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for(let registration of registrations) {
-      registration.unregister();
-    }
-  });
+  navigator.serviceWorker.getRegistrations().then(
+    registrations => registrations.forEach(each => each.unregister()));
 
   // Remove UTM garbage from URLs, to make it less likely such links get shared.
   if (location.search.indexOf('utm_source') > -1) {
