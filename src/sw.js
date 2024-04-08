@@ -20,6 +20,4 @@ workbox.core.setCacheNameDetails({
 // Note: this is populated at build time.
 workbox.precaching.precacheAndRoute([]);
 
-workbox.googleAnalytics.initialize({});
-
 workbox.skipWaiting();
