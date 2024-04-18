@@ -1,11 +1,10 @@
 ---
 title: 'One small step for Chrome, one giant heap for V8'
-author: 'guardians of the heap Ulan Degenbaev, Hannes Payer, Michael Lippautz, anlex N and DevTools warrior Alexey Kozyatinskiy'
+author: 'guardians of the heap Ulan Degenbaev, Hannes Payer, Michael Lippautz, and DevTools warrior Alexey Kozyatinskiy'
 avatars:
   - 'ulan-degenbaev'
   - 'michael-lippautz'
   - 'hannes-payer'
-  - 'anlex-n'
 date: 2017-02-09 13:33:37
 tags:
   - memory
