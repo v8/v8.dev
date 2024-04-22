@@ -68,6 +68,7 @@ namespace math {
 Builtin objects such as `Math` are set up mostly in [`src/init/bootstrapper.cc`](https://cs.chromium.org/chromium/src/v8/src/init/bootstrapper.cc?q=src/init/bootstrapper.cc+package:%5Echromium$&l=1) (with some setup occurring in `.js` files). Attaching our new builtin is simple:
 
 ```cpp
+// Existing code to set up Math, included here for clarity.
 // -- M a t h
 Handle<JSObject> math = factory->NewJSObject(isolate_->object_function(), AllocationType::kOld);
 JSObject::AddProperty(global, "Math", math, DONT_ENUM);
