@@ -117,6 +117,7 @@ namespace math {
         return smi == 42 ? True : False;
       }
       case (heapNumber: HeapNumber): {
+        // Instead of handling heap numbers inline, we now call our new builtin.
         return HeapNumberIs42(heapNumber);
       }
     }
