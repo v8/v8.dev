@@ -102,18 +102,9 @@ namespace math {
   }
 
   transitioning javascript builtin MathIs42(js-implicit context: NativeContext)(x: JSAny): Boolean {
-    // At this point, x can be basically anything - a Smi, a HeapNumber,
-    // undefined, or any other arbitrary JS object. ToNumber_Inline is defined
-    // in CodeStubAssembler. It inlines a fast-path (if the argument is a number
-    // already) and calls the ToNumber builtin otherwise.
     const number: Number = ToNumber_Inline(x);
-    // A typeswitch allows us to switch on the dynamic type of a value. The type
-    // system knows that a Number can only be a Smi or a HeapNumber, so this
-    // switch is exhaustive.
     typeswitch (number) {
       case (smi: Smi): {
-        // The result of smi == 42 is not a Javascript boolean, so we use a
-        // conditional to create a Javascript boolean value.
         return smi == 42 ? True : False;
       }
       case (heapNumber: HeapNumber): {
