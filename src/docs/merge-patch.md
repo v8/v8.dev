@@ -37,6 +37,7 @@ Merge: Rejected-123
 ```
 
 After the CL landed, this will be adjusted one more time to:
+
 ```
 Merge: Merged-123
 ```
