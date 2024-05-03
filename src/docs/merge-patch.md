@@ -62,17 +62,12 @@ On top the **Releases** section should show a Canary.
 
 ### Option 2: Using the automated script
 
-Let’s assume you’re merging revision af3cf11 to branch 2.4 (please specify full git hashes - abbreviations are used here for simplicity).
+Let’s assume you’re merging revision af3cf11 to branch 12.2 (please specify full git hashes - abbreviations are used here for simplicity).
 
-```bash
-tools/release/merge_to_branch.py --branch 2.4 af3cf11
+```
+https://source.chromium.org/chromium/chromium/src/+/main:v8/tools/release/merge_to_branch_gerrit.py --branch 12.3 -r af3cf11
 ```
 
-Run the script with `-h` to display its help message, which includes more options (e.g. you can specify a file containing your patch, or you can reverse a patch, specify a custom commit message, or resume a merging process you’ve canceled before). Note that the script will use a temporary checkout of V8 - it won’t touch your work space. You can also merge more than one revision at once; just list them all.
-
-```bash
-tools/release/merge_to_branch.py --branch 2.4 af3cf11 cf33f1b sf3cf09
-```
 
 ### After landing: Observe the [branch waterfall](https://ci.chromium.org/p/v8)
 
