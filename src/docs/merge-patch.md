@@ -27,14 +27,16 @@ The merge process in the V8 tracker is driven by Attributes in the form of:
 ```
 Merge-Request: 123
 ```
-once reviewed, this will be adjusted to
+
+once reviewed, this will be adjusted during the review to:
+
 ```
 Merge: Approved-123
 or
 Merge: Rejected-123
 ```
 
-After the CL landed
+After the CL landed, this will be adjusted one more time to:
 ```
 Merge: Merged-123
 ```
