@@ -68,18 +68,4 @@
     // set the location to `location.pathname` directly.
     history.replaceState({}, '', location.pathname);
   }
-
-  // Google Analytics.
-  const UA_ID = 'UA-65961526-1';
-  self.GoogleAnalyticsObject = 'ga';
-  self.ga = function() {
-    ga.q.push(arguments);
-  };
-  ga.l = +new Date();
-  ga.q = [];
-  ga('create', UA_ID, 'auto');
-  ga('set', 'referrer', document.referrer.split('?')[0]);
-  ga('send', 'pageview');
-  insertScript('https://www.google-analytics.com/analytics.js');
-
 }());
