@@ -70,7 +70,6 @@
     "postcss-custom-properties": "^13.0.0",
     "shx": "^0.3.4",
     "superstatic": "^9.0.0",
-    "terser": "^5.16.0",
-    "workbox-cli": "^4.3.1"
+    "terser": "^5.16.0"
   }
 }
