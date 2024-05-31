@@ -89,7 +89,7 @@ The current implementation of JSPI is based on allocating stacks of a fixed size
 
 However, this is not a sustainable strategy: we would like to support applications with millions of suspended coroutines; this is not possible if each stack is 1Mb in size.
 
-Growable stacks refers to a stack allocation strategy that allows a WebAssembly stack to grow as needed. That way, we can start with very small stacks for those applications that only need small stack space and grow the stack when the application runs out of room (otherwise known as stack overflow).
+Growable stacks refers to a stack allocation strategy that allows a WebAssembly stack to grow as needed. That way, we can start with very small stacks for those applications that only need small stack space, and grow the stack when the application runs out of space (otherwise known as stack overflow).
 
 There are several potential techniques for implementing growable stacks. One that we are investigating is segmented stacks. A segmented stack consists of a chain of stack regions &mdash; each of which has a fixed size, but different segments may have different sizes.
 
