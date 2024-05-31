@@ -8,7 +8,7 @@ tags:
 ---
 WebAssembly’s JavaScript Promise Integration (JSPI) API has a new API, available in Chrome release M126. We talk about what has changed, how to use it with Emscripten, and what is the roadmap for JSPI.
 
-JSPI is an API that allows WebAssembly applications that use *sequential* APIs to access Web APIs that are *asynchronous*. Many Web APIs are crafted in terms of JavaScript `Promise`s: instead of immediately performing the requested operation they return a `Promise` to do so. On the other hand, many applications compiled to WebAssembly come from the C/C++ universe which is dominated by APIs that block the caller until they are completed.
+JSPI is an API that allows WebAssembly applications that use *sequential* APIs to access Web APIs that are *asynchronous*. Many Web APIs are crafted in terms of JavaScript `Promise` objects: instead of immediately performing the requested operation, they return a `Promise` to do so. On the other hand, many applications compiled to WebAssembly come from the C/C++ universe, which is dominated by APIs that block the caller until they are completed.
 
 JSPI hooks into the Web architecture to allow a WebAssembly application to be suspended when the `Promise` is returned and resumed when the `Promise` is resolved.
 
