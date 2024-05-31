@@ -18,7 +18,7 @@ You can find out more about JSPI and how to use it [here](https://v8.dev/blog/js
 
 ### The end of `Suspender`s
 
-In January 2024, the Stacks sub-group of the Wasm CG [voted](https://github.com/WebAssembly/meetings/blob/297ac8b5ac00e6be1fe33b1f4a146cc7481b631d/stack/2024/stack-2024-01-29.md) to amend the API for JSPI. Specifically, instead of an explicit `Suspender` object we will use the JavaScript/WebAssembly boundary as the delimiter for determining what computations are suspended.
+In January 2024, the Stacks sub-group of the Wasm CG [voted](https://github.com/WebAssembly/meetings/blob/297ac8b5ac00e6be1fe33b1f4a146cc7481b631d/stack/2024/stack-2024-01-29.md) to amend the API for JSPI. Specifically, instead of an explicit `Suspender` object, we will use the JavaScript/WebAssembly boundary as the delimiter for determining what computations are suspended.
 
 The difference is fairly small but potentially significant: when a computation is to be suspended it is the most recent call into a wrapped WebAssembly export that determines the 'cut point' for what is suspended.
 
