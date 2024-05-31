@@ -101,6 +101,6 @@ As of publication, there is an active [origin trial for JSPI](https://v8.dev/blo
 
 The previous API will also be available during the origin trial; however, it is planned to be retired shortly after Chrome M132.
 
-After that, the main thrust for JSPI revolves around the standardization process. JSPI is currently (at publication time) in phase 3 of the W3C Wasm CG process. The next step, moving to phase 4, marks the crucial adoption of JSPI as a standard API for the JavaScript and WebAssembly.
+After that, the main thrust for JSPI revolves around the standardization process. JSPI is currently (at publication time) in phase 3 of the W3C Wasm CG process. The next step, i.e., moving to phase 4, marks the crucial adoption of JSPI as a standard API for the JavaScript and WebAssembly ecosystems.
 
 We would like to know what you think about these changes to JSPI! Join the discussion at the [W3C WebAssembly Community Group repo](https://github.com/WebAssembly/js-promise-integration).
