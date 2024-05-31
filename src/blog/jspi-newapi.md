@@ -71,7 +71,7 @@ On the other hand, the `promising` function takes a regular WebAssembly function
 
 If you are an Emscripten user, then using the new API will typically involve no changes to your code. You must be using a version of Emscripten that is at least 3.1.61, and you must be using a version of Chrome that is at least 126.0.6478.17 (Milestone 126).
 
-If you are rolling your own integration, then your code should be significantly simpler. In particular, it is no longer necessary to have code that stores the passed-in `Suspender` object (and retrieve it when calling the import). One can simply use regular sequential code within the WebAssembly module.
+If you are rolling your own integration, then your code should be significantly simpler. In particular, it is no longer necessary to have code that stores the passed-in `Suspender` object (and retrieve it when calling the import). You can simply use regular sequential code within the WebAssembly module.
 
 ### The old API
 
