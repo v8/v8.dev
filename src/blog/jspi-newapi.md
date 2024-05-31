@@ -97,7 +97,7 @@ Note that while we may be solving the stack overflow issue for coroutines, we ar
 
 ### The standards process
 
-As of publication, there is an origin trial for JSPI &mdash; see [here](https://v8.dev/blog/jspi-ot) &mdash; that is active. The new API will be live during the remainder of the origin trial &mdash; available with Chrome M126.
+As of publication, there is an active [origin trial for JSPI](https://v8.dev/blog/jspi-ot). The new API will be live during the remainder of the origin trial &mdash; available with Chrome M126.
 
 The previous API will also be available during the origin trial; however, it is planned to be retired shortly after Chrome M132.
 
