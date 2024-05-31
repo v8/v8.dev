@@ -93,7 +93,7 @@ Growable stacks refers to a stack allocation strategy that allows a WebAssembly 
 
 There are several potential techniques for implementing growable stacks. One that we are investigating is segmented stacks. A segmented stack consists of a chain of stack regions &mdash; each of which has a fixed size, but different segments may have different sizes.
 
-Note that while we may be solving the stack overflow issue for coroutines we are not planning to make the main or central stack growable. Thus, if your application runs out of stack space, growable stacks will not fix your problem unless you use JSPI.
+Note that while we may be solving the stack overflow issue for coroutines, we are not planning to make the main or central stack growable. Thus, if your application runs out of stack space, growable stacks will not fix your problem unless you use JSPI.
 
 ### The standards process
 
