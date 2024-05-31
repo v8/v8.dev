@@ -53,7 +53,7 @@ Function Webassembly.promising(Function wsFun)
 
 Note that even if the argument is typed as a JavaScript `Function`, it is actually restricted to WebAssembly functions.
 
-On the suspending side, we have a new class `WebAssembly.Suspending`, together with a constructor that takes a JavaScript function as argument. In WebIDL this is written:
+On the suspending side, there's a new class `WebAssembly.Suspending`, together with a constructor that takes a JavaScript function as an argument. In WebIDL, this is written as follows:
 
 ```js
 interface Suspending{
