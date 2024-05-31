@@ -69,7 +69,7 @@ On the other hand, the `promising` function takes a regular WebAssembly function
 
 ### Using the new API
 
-If you are an Emscripten user, then using the new API will typically involve no changes to your code. You must be using a version of Emscripten that is at least 3.1.61, and you must be using a version of Chrome that is at least 126.0.6478.17 (Milestone 126).
+If you are an Emscripten user, then using the new API will typically involve no changes to your code. You must be using a version of Emscripten that is at least 3.1.61, and you must be using a version of Chrome that is at least 126.0.6478.17 (Chrome M126).
 
 If you are rolling your own integration, then your code should be significantly simpler. In particular, it is no longer necessary to have code that stores the passed-in `Suspender` object (and retrieve it when calling the import). You can simply use regular sequential code within the WebAssembly module.
 
@@ -99,7 +99,7 @@ Note that while we may be solving the stack overflow issue for coroutines, we ar
 
 As of publication, there is an active [origin trial for JSPI](https://v8.dev/blog/jspi-ot). The new API will be live during the remainder of the origin trial &mdash; available with Chrome M126.
 
-The previous API will also be available during the origin trial; however, it is planned to be retired shortly after Chrome M132.
+The previous API will also be available during the origin trial; however, it is planned to be retired shortly after Chrome M128.
 
 After that, the main thrust for JSPI revolves around the standardization process. JSPI is currently (at publication time) in phase 3 of the W3C Wasm CG process. The next step, i.e., moving to phase 4, marks the crucial adoption of JSPI as a standard API for the JavaScript and WebAssembly ecosystems.
 
