@@ -12,7 +12,7 @@ JSPI is an API that allows WebAssembly applications that use *sequential* APIs t
 
 JSPI hooks into the Web architecture to allow a WebAssembly application to be suspended when the `Promise` is returned and resumed when the `Promise` is resolved.
 
-You can find out more about JSPI and how to use it [here](https://v8.dev/blog/jspi) and the specification itself is [here](https://github.com/WebAssembly/js-promise-integration).
+You can find out more about JSPI and how to use it [in this blog post](https://v8.dev/blog/jspi) and in the [specification](https://github.com/WebAssembly/js-promise-integration).
 
 ## What is new?
 
