@@ -85,7 +85,7 @@ Note that Emscripten itself will no longer support the old API as of version 3.1
 
 The biggest change to JSPI that we are working on is actually invisible to most programmers: so-called growable stacks.
 
-The current implementation of JSPI is based on allocating stacks of a fixed size. In fact, the allocated stacks are rather large; because we have to be able to accomodate arbitrary WebAssembly computations which may require deep stacks to handle recursion properly.
+The current implementation of JSPI is based on allocating stacks of a fixed size. In fact, the allocated stacks are rather large. This is because we have to be able to accommodate arbitrary WebAssembly computations which may require deep stacks to handle recursion properly.
 
 However, this is not a sustainable strategy: we would like to support applications with millions of suspended coroutines; this is not possible if each stack is 1Mb in size.
 
