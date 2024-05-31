@@ -41,7 +41,7 @@ A third change refers to the behavior of suspending calls. Instead of always sus
 
 This change, while apparently going against the [recommendations](https://www.w3.org/2001/tag/doc/promises-guide#accepting-promises) of the W3C TAG, represents a safe optimization for JSPI users. It is safe because JSPI is actually taking on the role of a *caller* to a function that returns a `Promise`.
 
-This change will likely have minimal impact on most applications; however, some applications will see a notable benefit by avoiding unnecessary trips to the browser event loop.
+This change will likely have minimal impact on most applications; however, some applications will see a notable benefit by avoiding unnecessary trips to the browser's event loop.
 
 ### The new API
 
