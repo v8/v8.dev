@@ -45,7 +45,7 @@ This change will likely have minimal impact on most applications; however, some 
 
 ### The new API
 
-The API is pretty simple: there is a function that takes a function exported from a WebAssembly module and converts it into a `Promise` returning function:
+The API is straightforward: there is a function that takes a function exported from a WebAssembly module and converts it into a function that returns a `Promise`:
 
 ```js
 Function Webassembly.promising(Function wsFun)
