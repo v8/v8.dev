@@ -30,8 +30,8 @@ Another change is to the style of the API. Instead of characterizing JSPI wrappe
 
 This has a number of benefits:
 
-- It removes dependency on the [*Type Reflection Proposal*](https://github.com/WebAssembly/js-types), and
-- it makes tooling for JSPI simpler: the new API functions no longer need to refer explicitly to the WebAssembly types of functions.
+- It removes dependency on the [*Type Reflection* Proposal](https://github.com/WebAssembly/js-types).
+- It makes tooling for JSPI simpler: the new API functions no longer need to refer explicitly to the WebAssembly types of functions.
 
 This change is enabled by the decision to no longer have explicitly referenced `Suspender` objects. 
 
