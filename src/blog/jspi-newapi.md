@@ -51,7 +51,7 @@ The API is straightforward: there is a function that takes a function exported f
 Function Webassembly.promising(Function wsFun)
 ```
 
-Note that, although the argument is typed as a `Function` &mdash; i.e., a JavaScript function &mdash; it is actually restricted to WebAssembly functions.
+Note that even if the argument is typed as a JavaScript `Function`, it is actually restricted to WebAssembly functions.
 
 On the suspending side, we have a new class `WebAssembly.Suspending`, together with a constructor that takes a JavaScript function as argument. In WebIDL this is written:
 
