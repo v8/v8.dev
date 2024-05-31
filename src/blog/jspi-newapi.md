@@ -57,7 +57,7 @@ On the suspending side, there's a new class `WebAssembly.Suspending`, together w
 
 ```js
 interface Suspending{
-    constructor (Function fun);
+  constructor (Function fun);
 }
 ```
 
