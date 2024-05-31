@@ -61,7 +61,7 @@ interface Suspending{
 }
 ```
 
-Note that this API has an asymmetric feel to it: we have a function that takes a WebAssembly function and returns a new promising (sic) function; whereas to mark a suspending function we enclose it in a `Suspending` object. This reflects a deeper reality about what is happening under the hood.
+Note that this API has an asymmetric feel to it: there's have a function that takes a WebAssembly function and returns a new promising (_sic_) function; whereas to mark a suspending function, you enclose it in a `Suspending` object. This reflects a deeper reality about what is happening under the hood.
 
 The suspending behavior of an import is intrinsically part of the *call* to the import: i.e., some function inside the instantiated module calls the import and suspends as a result.
 
