@@ -79,6 +79,22 @@ The old API will continue to operate at least until October 29, 2024 (Chrome M12
 
 Note that Emscripten itself will no longer support the old API as of version 3.1.61.
 
+### Detecting which API is in your browser
+
+Changing APIs should never be taken lightly. We are able to do so in this case because JSPI itself is still provisional. There is a simple way that you can test to see which API is enabled in your browser:
+
+```js
+function oldAPI(){
+  return WebAssembly.Suspender!=undefined
+}
+
+function newAPI(){
+  return WebAssembly.Suspending!=undefined
+}
+```
+
+The `oldAPI` function returns true if the old JSPI API is enabled in your browser, and the `newAPI` function returns true if the new JSPI API is enabled.
+
 ## What is happening with JSPI?
 
 ### Implementation aspects
