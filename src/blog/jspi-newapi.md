@@ -75,7 +75,7 @@ If you are rolling your own integration, then your code should be significantly 
 
 ### The old API
 
-The old API will continue to operate at least until 10/29/2024 (Chrome M128). After that we plan on removing the old API.
+The old API will continue to operate at least until October 29, 2024 (Chrome M128). After that, we plan on removing the old API.
 
 Note that Emscripten itself will no longer support the old API as of version 3.1.61.
 
