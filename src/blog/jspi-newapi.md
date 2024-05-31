@@ -39,7 +39,7 @@ This change is enabled by the decision to no longer have explicitly referenced `
 
 A third change refers to the behavior of suspending calls. Instead of always suspending when calling a JavaScript function from a suspending import, we only suspend when the JavaScript function actually returns a `Promise`.
 
-This change, while apparently going against the [recommendations](https://www.w3.org/2001/tag/doc/promises-guide#accepting-promises) of the W3C TAG, represents a safe optimization for JSPI users. It is safe because JSPI is actually taking on the role of a *caller* to a `Promise` returning function.
+This change, while apparently going against the [recommendations](https://www.w3.org/2001/tag/doc/promises-guide#accepting-promises) of the W3C TAG, represents a safe optimization for JSPI users. It is safe because JSPI is actually taking on the role of a *caller* to a function that returns a `Promise`.
 
 This change will likely have minimal impact on most applications; however, some applications will see a notable benefit by avoiding unnecessary trips to the browser event loop.
 
