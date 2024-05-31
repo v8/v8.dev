@@ -87,7 +87,7 @@ The biggest change to JSPI that we are working on is actually invisible to most 
 
 The current implementation of JSPI is based on allocating stacks of a fixed size. In fact, the allocated stacks are rather large. This is because we have to be able to accommodate arbitrary WebAssembly computations which may require deep stacks to handle recursion properly.
 
-However, this is not a sustainable strategy: we would like to support applications with millions of suspended coroutines; this is not possible if each stack is 1Mb in size.
+However, this is not a sustainable strategy: we would like to support applications with millions of suspended coroutines; this is not possible if each stack is 1MB in size.
 
 Growable stacks refers to a stack allocation strategy that allows a WebAssembly stack to grow as needed. That way, we can start with very small stacks for those applications that only need small stack space, and grow the stack when the application runs out of space (otherwise known as stack overflow).
 
