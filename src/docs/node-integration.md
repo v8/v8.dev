@@ -44,7 +44,7 @@ cd node
 git remote add v8 http://github.com/v8/node
 git remote add <your-user-name> git@github.com:<your-user-name>/node.git
 git fetch v8
-git checkout node-ci-<sync-date>
+git checkout v8/node-ci-<sync-date>
 export BRANCH_NAME=`date +"%Y-%m-%d"`_fix_name
 git checkout -b $BRANCH_NAME
 ```
