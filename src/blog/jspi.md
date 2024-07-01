@@ -2,7 +2,7 @@
 title: 'Introducing the WebAssembly JavaScript Promise Integration API'
 description: 'This document introduces JSPI and provides some simple examples to get you started in using it'
 author: 'Francis McCabe, Thibaud Michaud, Ilya Rezvov, Brendan Dahl'
-date: 2024-06-20
+date: 2024-07-01
 tags:
   - WebAssembly
 ---
