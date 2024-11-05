@@ -26,7 +26,7 @@ These concepts are discussed in greater detail in [the advanced guide](/docs/emb
 Follow the steps below to run the example yourself:
 
 1. Download the V8 source code by following [the Git instructions](/docs/source-code#using-git).
-1. The instructions for this hello world example have last been tested with V8 v11.9. You can check out this branch with `git checkout branch-heads/11.9 -b sample -t`
+1. The instructions for this hello world example have last been tested with V8 v13.1. You can check out this branch with `git checkout branch-heads/13.1 -b sample -t`
 1. Create a build configuration using the helper script:
 
     ```bash
@@ -45,10 +45,10 @@ Follow the steps below to run the example yourself:
     ninja -C out.gn/x64.release.sample v8_monolith
     ```
 
-1. Compile `hello-world.cc`, linking to the static library created in the build process. For example, on 64bit Linux using the GNU compiler:
+1. Compile `hello-world.cc`, linking to the static library created in the build process. For example, on 64bit Linux using the GNU compiler and LLD linker:
 
     ```bash
-    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -fno-rtti -lv8_monolith -lv8_libbase -lv8_libplatform -ldl -Lout.gn/x64.release.sample/obj/ -pthread -std=c++17 -DV8_COMPRESS_POINTERS -DV8_ENABLE_SANDBOX
+    g++ -I. -Iinclude samples/hello-world.cc -o hello_world -fno-rtti -fuse-ld=lld -lv8_monolith -lv8_libbase -lv8_libplatform -ldl -Lout.gn/x64.release.sample/obj/ -pthread -std=c++20 -DV8_COMPRESS_POINTERS -DV8_ENABLE_SANDBOX
     ```
 
 1. For more complex code, V8 fails without an ICU data file. Copy this file to where your binary is stored:
@@ -63,7 +63,8 @@ Follow the steps below to run the example yourself:
     ./hello_world
     ```
 
-1. It prints `Hello, World!`. Yay!
+1. It prints `Hello, World!`. Yay!  
+   Note: as of November 2024, it might also segfault early during process startup. Investigation is pending. If you run into this and can figure out what's wrong, please comment on [issue 377222400](https://issues.chromium.org/issues/377222400), or [submit a patch](https://v8.dev/docs/contribute).
 
 If you are looking for an example which is in sync with the main branch, check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/main/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
 
