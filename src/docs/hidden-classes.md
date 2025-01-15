@@ -110,7 +110,7 @@ There are different things we could do at this point, but since you must really 
 
 Notice that **Map1**, **Map2**, and **Map3** all point to **DescriptorArray1**. The number next to the "descriptors" field in each Map indicates how many fields over in the DescriptorArray belong to the Map. So **Map1**, which only knows about the "name" property, looks only at the first property listed in **DescriptorArray1**. Whereas **Map2** has two properties, "name" and "height." So it looks at the first and second items in **DescriptorArray1** (name and height). This kind of sharing saves a lot of space.
 
-Naturally, we can't share where there is a split. There is a transition from Map2 over to Map4 if the "experience" property is added, and over to Map3 if the "prominence" property is added. You can see Map4 and Map4 sharing DescriptorArray2 in the same way that DescriptorArray1 was shared among three Maps.
+Naturally, we can't share where there is a split. There is a transition from Map2 over to Map4 if the "experience" property is added, and over to Map3 if the "prominence" property is added. You can see Map4 and Map5 sharing DescriptorArray2 in the same way that DescriptorArray1 was shared among three Maps.
 
 The only thing missing from our "true to life" diagram is the `TransitionArray` which is still metaphorical at this point. Let's change that. I took the liberty of removing the **back pointer** lines, which cleans things up a bit. Just remember that from any Map in the tree, you can walk up the tree, too.
 
