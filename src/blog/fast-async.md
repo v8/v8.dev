@@ -61,7 +61,7 @@ function handler() {
 }
 ```
 
-Even more recently, JavaScript gained support for [async functions](https://developers.google.com/web/fundamentals/primers/async-functions). The above asynchronous code can now be written in a way that looks very similar to synchronous code:
+Even more recently, JavaScript gained support for [async functions](https://web.dev/articles/async-functions). The above asynchronous code can now be written in a way that looks very similar to synchronous code:
 
 ```js
 async function handler() {
