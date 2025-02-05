@@ -12,6 +12,8 @@ A committer is a contributor to the V8 project’s success and a citizen helping
 
 *Note to Googlers: There is a [slightly different approach for V8 team members](http://go/v8/setup_permissions.md).*
 
+If you haven't done so already, **you'll need to set up a Security Key on your account before you're added to the committer list.**
+
 In a nutshell, contribute 20 non-trivial patches and get at least three different people to review them (you'll need three people to support you). Then ask someone to nominate you. You're demonstrating your:
 
 - commitment to the project (20 good patches requires a lot of your valuable time),
