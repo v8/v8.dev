@@ -18,7 +18,7 @@ Don’t just `git clone` either of these URLs! if you want to build V8 from your
 
 1. On Linux or macOS, first install Git and then [`depot_tools`](https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up).
 
-    On Windows, follow the Chromium instructions ([for Googlers](https://goto.google.com/building-chrome-win), [for non-Googlers](https://chromium.googlesource.com/chromium/src/+/master/docs/windows_build_instructions.md#Setting-up-Windows)) to install Visual Studio, Debugging tools for Windows, and `depot_tools` (which on Windows includes Git).
+    On Windows, follow the Chromium instructions ([for Googlers](https://goto.google.com/building-chrome-win), [for non-Googlers](https://chromium.googlesource.com/chromium/src/+/master/docs/windows_build_instructions.md#Setting-up-Windows)) to install Git, Visual Studio, Debugging tools for Windows, and `depot_tools`.
 
 1. Update `depot_tools` by executing the following into your terminal/shell. On Windows, this has to be done in the Command Prompt (`cmd.exe`), as opposed to PowerShell or others.
 
@@ -26,9 +26,9 @@ Don’t just `git clone` either of these URLs! if you want to build V8 from your
     gclient
     ```
 
-1. For **push access**, you need to setup a `.netrc` file with your Git password:
+1. For **push access**, you need to set up a `.netrc` file with your Git password:
 
-    1. Go to <https://chromium.googlesource.com/new-password> and log in with your committer account (usually an `@chromium.org` account). Note: creating a new password doesn’t automatically revoke any previously-created passwords. Please make sure you use the same email as the one set for `git config user.email`.
+    1. Go to <https://chromium.googlesource.com/new-password> and log in with your committer account (usually an `@chromium.org` account). Note: creating a new password doesn’t automatically revoke any previously created passwords. Please make sure you use the same email as the one set for `git config user.email`.
     1. Have a look at the big, grey box containing shell commands. Paste those lines into your shell.
 
 1. Now, get the V8 source code, including all branches and dependencies:
