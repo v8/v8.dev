@@ -3,7 +3,7 @@ title: 'Turbocharging V8 with mutable heap numbers'
 author: '[Victor Gomes](https://twitter.com/VictorBFG), the bit shifter'
 avatars:
   - victor-gomes
-date: 2025-02-20
+date: 2025-02-25
 tags:
   - JavaScript
   - benchmarks
@@ -12,7 +12,7 @@ description: "Adding mutable heap numbers to script context"
 tweet: ''
 ---
 
-At V8, we're constantly striving to improve JavaScript performance. As part of this effort, we recently revisited the [JetStream2](https://browserbench.org/JetStream2.1/) benchmark suite to eliminate performance cliffs. This post details a specific optimization we made that yielded a significant `2.5x` improvement in the `async-fs` benchmark, contributing to a noticeable boost in the overall score.
+At V8, we're constantly striving to improve JavaScript performance. As part of this effort, we recently revisited the [JetStream2](https://browserbench.org/JetStream2.1/) benchmark suite to eliminate performance cliffs. This post details a specific optimization we made that yielded a significant `2.5x` improvement in the `async-fs` benchmark, contributing to a noticeable boost in the overall score. The optimization was inspired by the benchmark, but such patterns do appear in [real-world code](https://github.com/WebAssembly/binaryen/blob/3339c1f38da5b68ce8bf410773fe4b5eee451ab8/scripts/fuzz_shell.js#L248).
 
 # The target `async-fs` and a peculiar `Math.random`
 
