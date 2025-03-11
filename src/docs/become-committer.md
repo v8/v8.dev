@@ -22,7 +22,7 @@ In a nutshell, contribute 20 non-trivial patches and get at least three differen
 - understanding of the projects' code base and coding style, and
 - ability to write good code (last but certainly not least)
 
-A current committer nominates you by sending email to <v8-committers@googlegroups.com> containing:
+A current committer nominates you by sending email to <v8-committers@chromium.org> containing:
 
 - your first and last name
 - your email address in Gerrit
