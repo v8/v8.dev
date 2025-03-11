@@ -22,10 +22,11 @@ More information can be found on the [relevant Chromium page](https://chromium.g
 
 ## The merge process
 
-The merge process in the V8 tracker is driven by Attributes in the form of:
+The merge process in the V8 tracker is driven by Attributes. Therefore please set the 'Merge-Request' on to the relevant Chrome Milestone. In case the merge is only affecting a V8 [port](https://v8.dev/docs/ports) please set the HW attribute accordingliy. E.g:
 
 ```
 Merge-Request: 123
+HW: MIPS,LoongArch64
 ```
 
 once reviewed, this will be adjusted during the review to:
@@ -39,7 +40,7 @@ Merge: Rejected-123
 After the CL landed, this will be adjusted one more time to:
 
 ```
-Merge: Merged-123
+Merge: Merged-123, Merged-12.3
 ```
 
 ## How to check if a commit was already merged/reverted/has Canary coverage
