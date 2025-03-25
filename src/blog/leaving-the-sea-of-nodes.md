@@ -137,14 +137,14 @@ Here is the corresponding Turbofan graph. To make things clearer, I’ve highlig
 
 The first observation is that almost all nodes are on the effect chain. Let’s go over a few of them, and see if they really need to be:
 
-* `1` (`CheckedTaggedToTaggedPointer`): this checks that the 1st input of the function is a pointer and not a “small integer” (see [Pointer Compression in V8](https://v8.dev/blog/pointer-compression)). On its own, it wouldn’t really *need* an effect input, but in practice, it still needs to be on the effect chain, because it guards the following nodes.
-* `2` (`CheckMaps`): now that we know that the 1st input is a pointer, this node loads its “map” (see [Maps (Hidden Classes) in V8](https://v8.dev/docs/hidden-classes)), and checks that it matches what the feedback recorded for this object.
-* `3` (`LoadField`): now that we know that the 1st object is a pointer with the right map, we can load its `.str` field.
-* `4`, `5` and `6` are a repeat for the second input.
-* `7` (`CheckString`): now that we’ve loaded `a.str`, this node checks that it’s indeed a string.
-* `8`: repeat for the second input.
-* `9`: checks that the combined length of `a.str` and `b.str` is less than the maximum size of a String in V8.
-* `10` (`StringConcat`): finally concatenates the 2 strings.
+- `1` (`CheckedTaggedToTaggedPointer`): this checks that the 1st input of the function is a pointer and not a “small integer” (see [Pointer Compression in V8](https://v8.dev/blog/pointer-compression)). On its own, it wouldn’t really *need* an effect input, but in practice, it still needs to be on the effect chain, because it guards the following nodes.
+- `2` (`CheckMaps`): now that we know that the 1st input is a pointer, this node loads its “map” (see [Maps (Hidden Classes) in V8](https://v8.dev/docs/hidden-classes)), and checks that it matches what the feedback recorded for this object.
+- `3` (`LoadField`): now that we know that the 1st object is a pointer with the right map, we can load its `.str` field.
+- `4`, `5` and `6` are a repeat for the second input.
+- `7` (`CheckString`): now that we’ve loaded `a.str`, this node checks that it’s indeed a string.
+- `8`: repeat for the second input.
+- `9`: checks that the combined length of `a.str` and `b.str` is less than the maximum size of a String in V8.
+- `10` (`StringConcat`): finally concatenates the 2 strings.
 
 This graph is very typical of Turbofan graphs for JavaScript programs: checking maps, loading values, checking the maps of the loaded values, and so on, and eventually doing a few calculations on those values. And like in this example, in a lot of cases, most instructions end up being on the effect or control chain, which imposes a strict order on the operations, and completely defeats the purpose of Sea of Nodes.
 
@@ -226,11 +226,11 @@ In total, it took three steps to optimize the whole sequence, and each step did 
 
 With Sea of Nodes, it’s not possible to process pure instructions from start to end, since they aren’t on any control or effect chain, and thus there is no pointer to pure roots or anything like that. Instead, the usual way to process a Sea of Nodes graph for peephole optimizations is to start from the end (e.g., `return` instructions), and go up the value, effect and control inputs. This has the nice property that we won’t visit any unused instruction, but the upsides stop about there, because for peephole optimization, this is about the worst visitation order you could get. On the example above, here are the steps we would take:
 
-* Start by visiting `v3`, but can’t lower it at this point, then move on to its inputs
-  * Visit `v1`, lower it to `a << 3`, then move on to its uses, in case the lowering of `v1` enables them to be optimized.
-    * Visit `v3` again, but can’t lower it yet (this time, we wouldn’t visit its inputs again though)
-  * Visit `v2`, lower it to `b << 3`, then move on to its uses, in case this lowering enables them to be optimized.
-    * Visit `v3` again, lower it to `(a & b) << 3`.
+- Start by visiting `v3`, but can’t lower it at this point, then move on to its inputs
+    - Visit `v1`, lower it to `a << 3`, then move on to its uses, in case the lowering of `v1` enables them to be optimized.
+        - Visit `v3` again, but can’t lower it yet (this time, we wouldn’t visit its inputs again though)
+    - Visit `v2`, lower it to `b << 3`, then move on to its uses, in case this lowering enables them to be optimized.
+        - Visit `v3` again, lower it to `(a & b) << 3`.
 
 So, in total, `v3` was visited 3 times but only lowered once.
 
