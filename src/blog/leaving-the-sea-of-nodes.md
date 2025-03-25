@@ -55,7 +55,7 @@ Now let’s add control flow in the mix. Control nodes (e.g. `branch`, `goto`, `
 In this example, without control edges, nothing would prevent the `return`s from being executed before the `branch`, which would obviously be wrong.
 The crucial thing here is that the control edges only impose an order of the operations that have such incoming or outgoing edges, but not on other operations such as the arithmetic operations. This is the main difference between Sea of Nodes and Control flow graphs.
 
-Let’s now add effectful operations (eg, loads and stores from and to memory) in the mix. Similarly to control nodes, effectful operations often have no value dependencies, but still cannot run in a random order. For instance, `a[0] += 42; x = a[0]` and `x = a[0]; a[0] += 42` are not equivalent. So, we need a way to impose an order (= a schedule) on effectful operations.  We could reuse the control chain for this purpose, but this would be stricter than required. For instance, consider this small snippet:
+Let’s now add effectful operations (eg, loads and stores from and to memory) in the mix. Similarly to control nodes, effectful operations often have no value dependencies, but still cannot run in a random order. For instance, `a[0] += 42; x = a[0]` and `x = a[0]; a[0] += 42` are not equivalent. So, we need a way to impose an order (= a schedule) on effectful operations. We could reuse the control chain for this purpose, but this would be stricter than required. For instance, consider this small snippet:
 
 ```javascript
 let v = a[2];
@@ -70,7 +70,7 @@ So, to enjoy more freedom and actually benefit from Sea of Nodes, Turbofan has a
 
 ![Sea of Nodes graph with effectful operations](/_img/leaving-the-sea-of-nodes/Sea-of-Nodes-effects.svg)
 
-In this example, `arr[0] = 42` and `let x = arr[a]` have no value dependency (ie, the former is not an input of the latter, and vice versa) . However, because `a` could be `0`,  `arr[0] = 42` should be executed before `x = arr[a]`, in order for the latter to always load the correct value from the array.
+In this example, `arr[0] = 42` and `let x = arr[a]` have no value dependency (ie, the former is not an input of the latter, and vice versa) . However, because `a` could be `0`,  `arr[0] = 42` should be executed before `x = arr[a]` in order for the latter to always load the correct value from the array.
 *Note that while Turbofan has a single effect chain (which splits on branches, and merges back when the control flow merges) which is used for all effectful operations, it’s possible to have multiple effect chains, where operations that have no dependencies could be on different effect chains, thus relaxing how they can be scheduled (see [Chapter 10 of SeaOfNodes/Simple](https://github.com/SeaOfNodes/Simple/blob/main/chapter10/README.md) for more details). However, as we’ll explain later, maintaining a single effect chain is already very error prone, so we did not attempt in Turbofan to have multiple ones.*
 
 And, of course, most real programs will contain both control flow and effectful operations.
@@ -91,7 +91,7 @@ After more than a decade of dealing with Sea of Nodes, we think that it has more
 
 ## Manually/visually inspecting and understanding a Sea of Nodes graph is hard
 
-We’ve already seen that on small programs, CFG is easier to read, as it is closer to the original source code, which is what developers (including Compiler Engineers\!) are used to write. For the unconvinced readers, let me offer a slightly larger example, so that you understand the issue better. Consider the following JavaScript function, which concatenates an array of strings:
+We’ve already seen that on small programs CFG is easier to read, as it is closer to the original source code, which is what developers (including Compiler Engineers\!) are used to write. For the unconvinced readers, let me offer a slightly larger example, so that you understand the issue better. Consider the following JavaScript function, which concatenates an array of strings:
 
 ```javascript
 function concat(arr) {
@@ -213,12 +213,12 @@ Let’s have a look at an interesting example:
 
 You’ll notice that while the source JavaScript program has two identical divisions, the Sea of Node graph only has one. In reality, Sea of Nodes would start with two divisions, but since this is a pure operation (assuming double inputs), redundancy elimination would easily deduplicate them into one.
 Then when reaching the scheduling phase, we would have to find a place to schedule this division. Clearly, it cannot go after `case 1` or `case 2`, since it’s used in the other one. Instead, it would have to be scheduled before the `switch`. The downside is that, now, `a / b` will be computed even when `c` is `3`, where it doesn’t really need to be computed. This is a real issue that can lead to many deduplicated instructions floating to the common dominator of their users, slowing down many paths that don’t need them.
-There is a fix though: Turbofan’s scheduler will try to identify these cases, and duplicate the instructions so that they are only computed on the paths that need them. The downside is that this makes the scheduler more complex, requiring additional logic to figure out which nodes could and should be duplicated, and how to duplicate them.
+There is a fix though: Turbofan’s scheduler will try to identify these cases and duplicate the instructions so that they are only computed on the paths that need them. The downside is that this makes the scheduler more complex, requiring additional logic to figure out which nodes could and should be duplicated, and how to duplicate them.
 So, basically, we started with 2 divisions, then “optimized” to a single division, and then optimized further to 2 divisions again. And this doesn’t happen just for division: a lot of other operations will go through similar cycles.
 
 ## Finding a good order to visit the graph is difficult
 
-All passes of a compiler need to visit the graph, be it to lower nodes, to apply local optimizations, or to run analysis over the whole graph. In a CFG, the order in which to visit nodes is usually straightforward: start from the first block (assuming a single-entry function), and iterate through each node of the block, and then move on to the successors and so on. In a [peephole optimization](https://en.wikipedia.org/wiki/Peephole_optimization) phase (such as [strength reduction](https://en.wikipedia.org/wiki/Strength_reduction)), a nice property of processing the graph in this order is that inputs are always optimized before a node is processed, and visiting each node exactly once is thus enough to apply most peephole optimizations. Consider for instance the following sequence of reductions
+All passes of a compiler need to visit the graph, be it to lower nodes, to apply local optimizations, or to run analysis over the whole graph. In a CFG, the order in which to visit nodes is usually straightforward: start from the first block (assuming a single-entry function), and iterate through each node of the block, and then move on to the successors and so on. In a [peephole optimization](https://en.wikipedia.org/wiki/Peephole_optimization) phase (such as [strength reduction](https://en.wikipedia.org/wiki/Strength_reduction)), a nice property of processing the graph in this order is that inputs are always optimized before a node is processed, and visiting each node exactly once is thus enough to apply most peephole optimizations. Consider for instance the following sequence of reductions:
 
 ![](/_img/leaving-the-sea-of-nodes/CFG-peepholes.svg)
 
