@@ -235,7 +235,7 @@ global_templ->SetAccessor(v8::String::NewFromUtf8(isolate, "x"),
 global_templ->SetAccessor(v8::String::NewFromUtf8(isolate, "y"),
                           YGetter, YSetter);
 v8::Persistent<v8::Context> context =
-    v8::Context::v8::New(isolate, nullptr, global_templ);
+    v8::Context::New(isolate, nullptr, global_templ);
 ```
 
 Note that the object template in the code above is created at the same time as the context. The template could have been created in advance and then used for any number of contexts.
