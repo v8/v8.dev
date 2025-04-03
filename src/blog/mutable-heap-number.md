@@ -71,5 +71,5 @@ These changes significantly speed up the peculiar `Math.random` function:
 
 ![`async-fs` benchmark results on a Mac M1. Higher scores are better.](/_img/mutable-heap-number/result.png)
 
-The combined effect of these optimizations is a remarkable `~2.5x` speedup on the `async-fs` benchmark. This, in turn, contributes to a `~1.6%` improvement in the overall JetStream2 score .This demonstrates that seemingly simple code can create unexpected performance bottlenecks, and that small, targeted optimizations can have large impact not just for the benchmark.
+The combined effect of these optimizations is a remarkable `~2.5x` speedup on the `async-fs` benchmark. This, in turn, contributes to a `~1.6%` improvement in the overall JetStream2 score. This demonstrates that seemingly simple code can create unexpected performance bottlenecks, and that small, targeted optimizations can have large impact not just for the benchmark.
 
