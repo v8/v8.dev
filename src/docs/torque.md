@@ -28,7 +28,7 @@ Next, open up `test/cctest/torque/test-torque.cc` and add the following test cas
 ```cpp
 TEST(HelloWorld) {
   Isolate* isolate(CcTest::InitIsolateOnce());
-  CodeAssemblerTester asm_tester(isolate, 0);
+  CodeAssemblerTester asm_tester(isolate, JSParameterCount(0));
   TestTorqueAssembler m(asm_tester.state());
   {
     m.PrintHelloWorld();
