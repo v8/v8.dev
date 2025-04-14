@@ -105,6 +105,7 @@ Some pointers when a design doc is appropriate:
 - Is a language feature
 - Platform specific code will be touched
 - User facing changes
+- Has special security consideration or security impact is not obvious
 
 When in doubt, ask the TL.
 

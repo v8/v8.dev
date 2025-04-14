@@ -104,6 +104,10 @@ V8 implements this tag transitioning system as a [lattice](https://en.wikipedia.
 
 It’s only possible to transition downwards through the lattice. Once a single floating-point number is added to an array of Smis, it is marked as DOUBLE, even if you later overwrite the float with a Smi. Similarly, once a hole is created in an array, it’s marked as holey forever, even when you fill it later.
 
+:::note
+**Update @ 2025-02-28:** There is now an exception to this [for `Array.prototype.fill` specifically](https://chromium-review.googlesource.com/c/v8/v8/+/6285929).
+:::
+
 V8 currently distinguishes [21 different elements kinds](https://cs.chromium.org/chromium/src/v8/src/elements-kind.h?l=14&rcl=ec37390b2ba2b4051f46f153a8cc179ed4656f5d), each of which comes with its own set of possible optimizations.
 
 In general, more specific elements kinds enable more fine-grained optimizations. The further down the elements kind is in the lattice, the slower manipulations of that object might be. For optimal performance, avoid needlessly transitioning to less specific types — stick to the most specific one that’s applicable to your situation.
