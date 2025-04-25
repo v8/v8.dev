@@ -19,7 +19,9 @@ If a JavaScript function ends up being called during page load, compiling it eag
 - During the initial processing of the script, we need to do at least a lightweight parse to find the function end. In JavaScript, finding the function end requires parsing the full syntax (there are no shortcuts where we could count the curly braces - the grammar is too complex). Doing the lightweight parsing first and the actual parsing afterwards is duplicate work.
 - If we decide to compile a function eagerly, the work happens on a background thread, and parts of it are interleaved with loading the script from the network. If we instead compile the function only when it's being called, it's too late to parallelize work, since the main thread cannot proceed until the function is compiled.
 
-Many web pages would benefit from selecting the correct functions for eager compilation. For example, in our experiment with popular we pages, 17 out of 20 showed improvements, and the average foreground parse and compile times reduction was 630 ms.
+You can read more about how V8 parses and compiles JavaScript in [here](https://v8.dev/blog/preparser).
+
+Many web pages would benefit from selecting the correct functions for eager compilation. For example, in our experiment with popular web pages, 17 out of 20 showed improvements, and the average foreground parse and compile times reduction was 630 ms.
 
 We're developing a feature, [Explicit Compile Hints](https://github.com/WICG/explicit-javascript-compile-hints-file-based), which allows web developers to control which JavaScript files and functions are compiled eagerly. Chrome 136 is now shipping a version where you can select individual files for eager compilation.
 
