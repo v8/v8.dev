@@ -29,7 +29,7 @@ This version is particularly useful if you have a "core file" which you can sele
 
 You can trigger eager compilation for the whole file by inserting the magic comment
 
-```
+```js
 //# allFunctionsCalledOnLoad
 ```
 
@@ -43,18 +43,14 @@ You can observe compile hints working by telling v8 to log the function events. 
 
 index.html:
 
-```
-<html>
-<head>
+```html
 <script src="script1.js"></script>
 <script src="script2.js"></script>
-</head>
-</html>
 ```
 
 script1.js:
 
-```
+```js
 function testfunc1() {
   console.log('testfunc1 called!');
 }
@@ -64,7 +60,7 @@ testfunc1();
 
 script2.js:
 
-```
+```js
 //# allFunctionsCalledOnLoad
 
 function testfunc2() {
@@ -76,13 +72,13 @@ testfunc2();
 
 Remember to run Chorme with a clean user data directory, so that code caching won't mess with your experiment. An example command line would be:
 
-```
+```sh
 rm -rf /tmp/chromedata && google-chrome --no-first-run --user-data-dir=/tmp/chromedata --js-flags=--log-function_events > log.txt
 ```
 
 After you've navigated to your test page, you can see the following function events in the log:
 
-```
+```sh
 $ grep testfunc log.txt
 function,preparse-no-resolution,5,18,60,0.036,179993,testfunc1
 function,full-parse,5,18,60,0.003,181178,testfunc1
@@ -94,7 +90,7 @@ function,interpreter,6,48,90,0.005,184822,testfunc2
 
 Since `testfunc1` was compiled lazily, we see the `parse-function` event when it's eventually called:
 
-```
+```sh
 function,parse-function,5,18,60,0.014,181186,testfunc1
 ```
 
