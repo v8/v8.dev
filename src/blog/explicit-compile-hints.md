@@ -70,7 +70,7 @@ function testfunc2() {
 testfunc2();
 ```
 
-Remember to run Chorme with a clean user data directory, so that code caching won't mess with your experiment. An example command line would be:
+Remember to run Chrome with a clean user data directory, so that code caching won't mess with your experiment. An example command line would be:
 
 ```sh
 rm -rf /tmp/chromedata && google-chrome --no-first-run --user-data-dir=/tmp/chromedata --js-flags=--log-function_events > log.txt
