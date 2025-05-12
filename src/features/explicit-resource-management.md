@@ -10,111 +10,124 @@ description: 'The Explicit Resource Management proposal empowers developers to e
 tweet: ''
 ---
 
-The *Explicit Resource Management* proposal introduces a more deterministic approach, empowering developers to explicitly manage the lifecycle of resources like file handles, network connections, and more. This proposal brings the following additions to the language: the `using` and `await using` declarations, which automatically calls dispose method when a resource goes out of scope; `[Symbol.dispose]()` and `[Symbol.asyncDispose]()` symbols for cleanup operations; two new global objects `DisposableStack` and `AsyncDisposableStack` as containers to aggregate disposable resources; and `SuppressedError` as a new type of error which would contain both the error that was most recently thrown, as well as the error that was suppressed. These additions enable developers to write more robust, performant, and maintainable code by providing fine-grained control over resource disposal.
+The *Explicit Resource Management* proposal introduces a deterministic approach to explicitly manage the lifecycle of resources like file handles, network connections, and more. This proposal brings the following additions to the language: the `using` and `await using` declarations, which automatically calls dispose method when a resource goes out of scope; `[Symbol.dispose]()` and `[Symbol.asyncDispose]()` symbols for cleanup operations; two new global objects `DisposableStack` and `AsyncDisposableStack` as containers to aggregate disposable resources; and `SuppressedError` as a new type of error (contain both the error that was most recently thrown, as well as the error that was suppressed) to address the scenario where an error occurs during the disposal of a resource, and potientially masking an existing error thrown from the body, or from the disposal of another resource. These additions enable developers to write more robust, performant, and maintainable code by providing fine-grained control over resource disposal.
 
 ## `using` and `await using` declarations
 
-The core of the Explicit Resource Management proposal lies in the `using` and `await using` declarations. The `using` declaration is designed for synchronous resources, ensuring that the `[Symbol.dispose]()` method of a disposable resource is called when the scope in which it's declared exits. For asynchronous resources, the `await using` declaration works similarly, but ensures that the `[Symbol.asyncDispose]()` method is called and the result of this calling is awaited, allowing for asynchronous cleanup operations. This distinction enables developers to reliably manage both synchronous and asynchronous resources, preventing leaks and improving overall code quality. The `using` and `await using` keywords can be used inside braces `{}` (such as bloks, for loops and function bodies), and cannot be used in top-levels. 
+The core of the Explicit Resource Management proposal lies in the `using` and `await using` declarations. The `using` declaration is designed for synchronous resources, ensuring that the `[Symbol.dispose]()` method of a disposable resource is called when the scope in which it's declared exits. For asynchronous resources, the `await using` declaration works similarly, but ensures that the `[Symbol.asyncDispose]()` method is called and the result of this calling is awaited, allowing for asynchronous cleanup operations. This distinction enables developers to reliably manage both synchronous and asynchronous resources, preventing leaks and improving overall code quality. The `using` and `await using` keywords can be used inside braces `{}` (such as blocks, for loops and function bodies), and cannot be used in top-levels. 
 
-For example, When working with [`ReadableStreamDefaultReader`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader), it's crucial to call `reader.releaseLock()` to unlock the stream and allow it to be used elsewhere. However, error handling introduces a common problem: if an error occurs during the reading process, and you forget to call `releaseLock()` before the error propagates, the stream remains locked. Let's start with a naive example:
+For example, when working with [`ReadableStreamDefaultReader`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader), it's crucial to call `reader.releaseLock()` to unlock the stream and allow it to be used elsewhere. However, error handling introduces a common problem: if an error occurs during the reading process, and you forget to call `releaseLock()` before the error propagates, the stream remains locked. Let's start with a naive example:
 
 ```javascript
-async function downloadFile(url) {
-    const response = await fetch(url);
+let responsePromise = null;
+
+async function readFile(url) {  
+    if (!responsePromise) {
+        // Only fetch if we don't have a promise yet
+        responsePromise = fetch(url);
+    }
+    const response = await responsePromise;
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-  
-    const contentLength = response.headers.get('content-length');
-    if (!contentLength) {
-      console.warn('Content-Length header is missing. Progress tracking may not be accurate.');
-    }
-    const total = parseInt(contentLength, 10);
-    let loaded = 0;
-  
+    const processedData = await processData(response);
+
+    // Do something with processedData
+    ...
+ }
+
+async function processData(response) {
     const reader = response.body.getReader();
     let done = false;
     let value;
+    let processedData;
     
     while (!done) {
         ({ done, value } = await reader.read());
         if (value) {
-            loaded += value.byteLength;
-            if (contentLength) {
-                const progress = (loaded / total) * 100;
-                console.log(`Downloaded ${loaded} of ${total} bytes (${progress.toFixed(2)}%)`);
-                updateProgressBar(progress); //some UI update
-            }
+            // Process data and save the result in processedData
+            ...
+            // An error is thrown here!
         }
     }
     
-    // If an error occures before this line, the stream remaines locked.
+    // Because the error is thrown before this line, the stream remains locked.
     reader.releaseLock(); 
 
-    ... // The rest of the code
+    return processedData;
   }
-  
- downloadFile('https://example.com/largefile.dat');
+ 
+ readFile('https://example.com/largefile.dat');
 ```
-So it is crucial for developers, to have `try...finally` block while using streams and put `reader.releaseLock()` in `finally`. This pattern ensures that `reader.releaseLock()` is always called.
+So it is crucial for developers to have `try...finally` block while using streams and put `reader.releaseLock()` in `finally`. This pattern ensures that `reader.releaseLock()` is always called.
 
 ```javascript
-async function downloadFile(url) {
-    const response = await fetch(url);
+let responsePromise = null;
+
+async function readFile(url) {  
+    if (!responsePromise) {
+        // Only fetch if we don't have a promise yet
+        responsePromise = fetch(url);
+    }
+    const response = await responsePromise;
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-  
-    const contentLength = response.headers.get('content-length');
-    if (!contentLength) {
-      console.warn('Content-Length header is missing. Progress tracking may not be accurate.');
-    }
-    const total = parseInt(contentLength, 10);
-    let loaded = 0;
-  
+    const processedData = await processData(response);
+
+    // Do something with processedData
+    ...
+ }
+
+async function processData(response) {
     const reader = response.body.getReader();
     let done = false;
     let value;
+    let processedData;
     
     try {
         while (!done) {
             ({ done, value } = await reader.read());
             if (value) {
-                loaded += value.byteLength;
-                if (contentLength) {
-                    const progress = (loaded / total) * 100;
-                    console.log(`Downloaded ${loaded} of ${total} bytes (${progress.toFixed(2)}%)`);
-                    updateProgressBar(progress); //some UI update
-                }
+                // Process data and save the result in processedData
+                ...
+                // An error is thrown here!
             }
         }
-    } catch (error) {
-        console.error("reading error", error);
     } finally {
-        reader.releaseLock(); 
+        reader.releaseLock(); // The reader's lock on the stream will be always released.
     }
 
-    ... // The rest of the code
+    return processedData;
   }
-  
- downloadFile('https://example.com/largefile.dat');
+ 
+ readFile('https://example.com/largefile.dat');
 ```
 
 An alternative to write this code is to create a disposable object `readerResource`, which has the reader (`response.body.getReader()`) and the `[Symbol.dispose]()` method that calls `this.reader.releaseLock()`. The `using` declaration ensures that `readerResource[Symbol.dispose]()` is called when the code block exits, and remembering to call `releaseLock` is no longer needed because the using declaration handles it. Integration of `[Symbol.dispose]` and `[Symbol.asyncDispose]` in web APIs like streams may happen in the future, so developers do not have to write the manual wrapper object.
 
 ```javascript
-  async function downloadFileWithUsing(url) {
-    const response = await fetch(url);
+let responsePromise = null;
+
+async function readFile(url) {  
+    if (!responsePromise) {
+        // Only fetch if we don't have a promise yet
+        responsePromise = fetch(url);
+    }
+    const response = await responsePromise;
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-  
-    const contentLength = response.headers.get('content-length');
-    if (!contentLength) {
-      console.warn('Content-Length header is missing. Progress tracking may not be accurate.');
-    }
-    const total = parseInt(contentLength, 10);
-    let loaded = 0;
+    const processedData = await processData(response);
+
+    // Do something with processedData
+    ...
+ }
+
+ async function processData(response) {
+    const reader = response.body.getReader();
+    let done = false;
+    let value;
     
     { // Introduce a new scope with a block
         // Wrap the reader in a disposable resource
@@ -128,30 +141,22 @@ An alternative to write this code is to create a disposable object `readerResour
     
         let done = false;
         let value;
-
-        try {
-            while (!done) {
-                ({ done, value } = await reader.read());
-                if (value) {
-                    loaded += value.byteLength;
-                    if (contentLength) {
-                        const progress = (loaded / total) * 100;
-                        console.log(`Downloaded ${loaded} of ${total} bytes (${progress.toFixed(2)}%)`);
-                    }
-                    updateProgressBar(progress); //some UI update
-                }
+        let processedData;
+        while (!done) {
+            ({ done, value } = await reader.read());
+            if (value) {
+                // Process data and save the result in processedData
+                ...
+                // An error is thrown here!
             }
-        } catch (error) {
-            console.error("reading error", error);
         }
         
     } // readerResource[Symbol.dispose]() is called automatically
 
-    ... // The rest of the code
+    return processedData;
   }
-  
-  // Example usage:
-  downloadFileWithUsing('https://example.com/largefile.dat');
+ 
+ readFile('https://example.com/largefile.dat');
 ```
 
 ## `DisposableStack` and `AsyncDisposableStack`
@@ -163,47 +168,68 @@ Let’s take a look at each method and see an example of it:
 `use(value)` adds a resource to the top of the stack.
 
 ```javascript
-const readerResource = {
-      reader: response.body.getReader(),
-      [Symbol.dispose]() {
-        this.reader.releaseLock();
-        console.log('Reader lock released.');
-      },
+{
+    const readerResource = {
+        reader: response.body.getReader(),
+        [Symbol.dispose]() {
+            this.reader.releaseLock();
+            console.log('Reader lock released.');
+        },
     };
-let stack = new DisposableStack();
-stack.use(readerResource);
+    using stack = new DisposableStack();
+    stack.use(readerResource);
+}
+// Reader lock released.
 ```
 
 `adopt(value, onDispose)` adds a non-disposable resource and a disposal callback to the top of the stack.
 
 ```javascript
-let stack = new DisposableStack();
-  stack.adopt(response.body.getReader(), reader => reader.releaseLock());
+{
+    using stack = new DisposableStack();
+    stack.adopt(response.body.getReader(), reader => {reader.releaseLock(); console.log('Reader lock released.');});
+}
+// Reader lock released.
 ```
 
 `defer(onDispose)` adds a disposal callback to the top of the stack. It's useful for adding cleanup actions that don't have an associated resource.
 
 ```javascript
-let stack = new DisposableStack();
-stack.defer(() => console.log("done"));
+{
+    using stack = new DisposableStack();
+    stack.defer(() => console.log("done."));
+}
+// done.
 ```
 
 `move()` moves all resources currently in this stack into a new `DisposableStack`. This can be useful if you need to transfer ownership of resources to another part of your code.
 
 ```javascript
-let stack = new DisposableStack();
-stack.use(firstDisposableResource);
-stack.use(secondDisposableResource);
-let newStack = stack.move();
-// stack is disposed at this point 
+{
+    using stack = new DisposableStack();
+    stack.adopt(response.body.getReader(), reader => {reader.releaseLock(); console.log('Reader lock released.');});
+    using newStack = stack.move();
+}
+// At this point just newStack exists and the resource inside it will be disposed.
+// Reader lock released.
 ```
 
-`dispose()` in DisposableStack and `asyncDispose()` in AsyncDisposableStack: Disposes of resources within this object.
+`dispose()` in DisposableStack and `asyncDispose()` in AsyncDisposableStack dispose the resources within this object.
 
 ```javascript
-let stack = new DisposableStack();
-stack.use(firstDisposableResource);
-stack.dispose();
+{
+    const readerResource = {
+        reader: response.body.getReader(),
+        [Symbol.dispose]() {
+            this.reader.releaseLock();
+            console.log('Reader lock released.');
+        },
+    };
+    let stack = new DisposableStack();
+    stack.use(readerResource);
+    stack.dispose();
+}
+// Reader lock released.
 ```
 
 ## Availability
