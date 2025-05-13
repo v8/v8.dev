@@ -79,7 +79,8 @@ async function processData(response) {
             }
         }
     } finally {
-        reader.releaseLock(); // The reader's lock on the stream will be always released.
+        // The reader's lock on the stream will be always released.
+        reader.releaseLock();
     }
 
     return processedData;
@@ -182,7 +183,7 @@ Let’s take a look at each method and see an example of it:
       });
     using newStack = stack.move();
 }
-// At this point just newStack exists and the resource inside it will be disposed.
+// Here just the newStack exists and the resource inside it will be disposed.
 // Reader lock released.
 ```
 
