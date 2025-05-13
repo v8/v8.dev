@@ -62,23 +62,6 @@ async function processData(response) {
 So it is crucial for developers to have `try...finally` block while using streams and put `reader.releaseLock()` in `finally`. This pattern ensures that `reader.releaseLock()` is always called.
 
 ```javascript
-let responsePromise = null;
-
-async function readFile(url) {  
-    if (!responsePromise) {
-        // Only fetch if we don't have a promise yet
-        responsePromise = fetch(url);
-    }
-    const response = await responsePromise;
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const processedData = await processData(response);
-
-    // Do something with processedData
-    ...
- }
-
 async function processData(response) {
     const reader = response.body.getReader();
     let done = false;
@@ -107,55 +90,35 @@ async function processData(response) {
 An alternative to write this code is to create a disposable object `readerResource`, which has the reader (`response.body.getReader()`) and the `[Symbol.dispose]()` method that calls `this.reader.releaseLock()`. The `using` declaration ensures that `readerResource[Symbol.dispose]()` is called when the code block exits, and remembering to call `releaseLock` is no longer needed because the using declaration handles it. Integration of `[Symbol.dispose]` and `[Symbol.asyncDispose]` in web APIs like streams may happen in the future, so developers do not have to write the manual wrapper object.
 
 ```javascript
-let responsePromise = null;
-
-async function readFile(url) {  
-    if (!responsePromise) {
-        // Only fetch if we don't have a promise yet
-        responsePromise = fetch(url);
-    }
-    const response = await responsePromise;
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const processedData = await processData(response);
-
-    // Do something with processedData
-    ...
- }
-
  async function processData(response) {
     const reader = response.body.getReader();
     let done = false;
     let value;
-    
-    { // Introduce a new scope with a block
-        // Wrap the reader in a disposable resource
-        using readerResource = {
-            reader: response.body.getReader(),
-            [Symbol.dispose]() {
-                this.reader.releaseLock();
-            },
-        };
-        const { reader } = readerResource;
-    
-        let done = false;
-        let value;
-        let processedData;
-        while (!done) {
-            ({ done, value } = await reader.read());
-            if (value) {
-                // Process data and save the result in processedData
-                ...
-                // An error is thrown here!
-            }
-        }
-        
-    } // readerResource[Symbol.dispose]() is called automatically
 
+    // Wrap the reader in a disposable resource
+    using readerResource = {
+        reader: response.body.getReader(),
+        [Symbol.dispose]() {
+            this.reader.releaseLock();
+        },
+    };
+    const { reader } = readerResource;
+
+    let done = false;
+    let value;
+    let processedData;
+    while (!done) {
+        ({ done, value } = await reader.read());
+        if (value) {
+            // Process data and save the result in processedData
+            ...
+            // An error is thrown here!
+        }
+    }
     return processedData;
   }
- 
+ // readerResource[Symbol.dispose]() is called automatically.
+
  readFile('https://example.com/largefile.dat');
 ```
 
@@ -187,7 +150,11 @@ Let’s take a look at each method and see an example of it:
 ```javascript
 {
     using stack = new DisposableStack();
-    stack.adopt(response.body.getReader(), reader => {reader.releaseLock(); console.log('Reader lock released.');});
+    stack.adopt(
+      response.body.getReader(), reader = > {
+        reader.releaseLock();
+        console.log('Reader lock released.');
+      });
 }
 // Reader lock released.
 ```
@@ -207,7 +174,11 @@ Let’s take a look at each method and see an example of it:
 ```javascript
 {
     using stack = new DisposableStack();
-    stack.adopt(response.body.getReader(), reader => {reader.releaseLock(); console.log('Reader lock released.');});
+    stack.adopt(
+      response.body.getReader(), reader = > {
+        reader.releaseLock();
+        console.log('Reader lock released.');
+      });
     using newStack = stack.move();
 }
 // At this point just newStack exists and the resource inside it will be disposed.
