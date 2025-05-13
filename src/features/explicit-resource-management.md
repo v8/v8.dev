@@ -59,6 +59,7 @@ async function processData(response) {
  
  readFile('https://example.com/largefile.dat');
 ```
+
 So it is crucial for developers to have `try...finally` block while using streams and put `reader.releaseLock()` in `finally`. This pattern ensures that `reader.releaseLock()` is always called.
 
 ```javascript
