@@ -187,7 +187,7 @@ Let’s take a look at each method and see an example of it:
 // Reader lock released.
 ```
 
-`dispose()` in DisposableStack and `asyncDispose()` in AsyncDisposableStack dispose the resources within this object.
+`dispose()` in DisposableStack and `disposeAsync()` in AsyncDisposableStack dispose the resources within this object.
 
 ```javascript
 {
