@@ -13,3 +13,4 @@ package-lock.json
 Desktop.ini
 ._*
 Thumbs.db
+.vscode/

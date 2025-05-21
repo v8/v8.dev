@@ -14,9 +14,9 @@ This note outlines what the core capabilities of the JSPI API are, how to access
 
 Asynchronous APIs operate by separating the _initiation_ of the operation from its _resolution_; with the latter coming some time after the first. Most importantly, the application continues execution after kicking off the operation; and is then notified when the operation completes.
 
-For example, using the `fetch` API, Web applications can access the contents associated with a URL; however, the `fetch` function does not directly return the results of the fetch; instead it returns a `Promise` object. The connection between the fetch response and the original request is reestablished by attaching a _callback_ to that `Promise` object. The callback function can inspect the response and collect the data (if it is there of course).
+For example, using the `fetch` Web API, Web applications can access the contents associated with a URL; however, the `fetch` function does not directly return the results of the fetch; instead it returns a `Promise` object. The connection between the fetch response and the original request is reestablished by attaching a _callback_ to that `Promise` object. The callback function can inspect the response and collect the data (if it is there of course).
 
-In many cases C/C++ (and many other languages) applications are originally written against a _synchronous_ API. For example, the Posix `read` function does not complete until the I/O operation is complete: the `read` function *blocks* until the read is complete.
+On the other hand, many cases C/C++ (and many other languages) applications are originally written against a _synchronous_ API. For example, the Posix `read` function does not complete until the I/O operation is complete: the `read` function *blocks* until the read is complete.
 
 However, it is not permitted to block the browser’s main thread; and many environments are not supportive of synchronous programming. The result is a mismatch between the desires of the application programmer for a simple to use API and the wider ecosystem that requires I/O to be crafted with asynchronous code. This is especially a problem for existing legacy applications that would be expensive to port.
 
@@ -28,7 +28,7 @@ Crucially, using JSPI requires very few changes to the WebAssembly application i
 
 The JSPI works by intercepting the `Promise` object returned from  calls to JavaScript and suspending the main logic of the WebAssembly application. A callback is attached to this `Promise` object which will resume the suspended WebAssembly code when invoked by the browser's event loop task runner.
 
-In addition, the WebAssembly export is refactored to return a `Promise` object &mdash; instead of the original returned value from the export. This `Promise` object becomes the value returned by the WebAssembly application: when the WebAssembly code is suspended,[^first] the export `Promise` object is returned as the value of the call into WebAssembly.
+In addition, the WebAssembly export is refactored to return a `Promise` object &mdash; instead of the original returned value from the export. This `Promise` object becomes the value returned by the WebAssembly application: when the WebAssembly code is suspended,[^first] the exported `Promise` object is returned as the value of the call into WebAssembly.
 
 [^first]: If a WebAssembly application is suspended more than once, subsequent suspensions will return to the browser's event loop and will not be directly visible to the web application.
 
@@ -56,27 +56,15 @@ However, as with other Promise-style APIs in the browser, any time the WebAssemb
 
 JavaScript already has a well developed mechanism for representing asynchronous computations: the `Promise` object and the `async` function notation. The JSPI is designed to integrate well with this but not to replace it.
 
+In particular, it is _not_ permitted to cause JavaScript code to be suspended by using JSPI.
+
 ### How can I use JSPI today?
 
-The JSPI is currently being standardized by the W3C WebAssembly WG. As of this writing, it is phase 3 of the standards process and we anticipate full standardization before the end of 2024.
+The JSPI is currently being standardized by the W3C WebAssembly WG. As of this writing, it is in phase 4 of the standards process. This means that the specification has been standardized. In addition, it is available in Chrome as of M137, and in Firefox as of  version 139.
 
-JSPI is available for Chrome on Linux, MacOS, Windows and ChromeOS, on Intel and Arm platforms, both 64 bit and 32 bit.[^firefox]
+JSPI is available for Chrome on Linux, MacOS, Windows and ChromeOS, on Intel and Arm platforms, both 64 bit and 32 bit.
 
-[^firefox]: JSPI is also available in Firefox nightly: turn on "`javascript.options.wasm_js_promise_integration`" in the about:config panel &mdash; and restart.
-
-JSPI can be used in two ways today: via an [origin trial](https://developer.chrome.com/origintrials/#/register_trial/1603844417297317889) and locally via a Chrome flag. To test it locally, go to `chrome://flags` in Chrome, search for “Experimental WebAssembly JavaScript Promise Integration (JSPI)” and check the box. Relaunch as suggested for it to take effect.
-
-You should use at least version `126.0.6478.26` to get the latest version of the API. We recommend using the Dev channel to ensure that any stability updates are applied. In addition, if you wish to use Emscripten to generate WebAssembly (which we recommend), you should use a version that is at least `3.1.61`.
-
-Once enabled, you should be able to run scripts that use JSPI. Below we show how you can use Emscripten to generate a WebAssembly module in C/C++ that uses JSPI. If your application involves a different language, not using Emscripten for example, then we suggest that you look at how the API works you should look at the [proposal](https://github.com/WebAssembly/js-promise-integration/blob/main/proposals/js-promise-integration/Overview.md).
-
-#### Limitations
-
-The Chrome implementation of JSPI already supports typical use cases. However it is still considered to be experimental so there are a few limitations to be aware of:
-
-- Requires the use of a command line flag, or participation in the origin trial.
-- Each call to a JSPI export runs on a fixed size stack.
-- Debugging support is somewhat minimal. In particular, it may be difficult to see the different events happening in the Dev tools panel. Providing a richer support for debugging JSPI applications is on the roadmap.
+Below we show how you can use Emscripten to generate a WebAssembly module in C/C++ that uses JSPI. If your application involves a different language, not using Emscripten for example, then we suggest that you look at how the API works you should look at the [proposal](https://github.com/WebAssembly/js-promise-integration/blob/main/proposals/js-promise-integration/Overview.md).
 
 ## A small demo
 
@@ -363,7 +351,7 @@ EMSCRIPTEN_KEEPALIVE long provide42() {
 <!-- Footnotes themselves at the bottom. -->
 ## Notes
 
-[^1]: For the technically curious, see [the WebAssembly proposal for JSPI](https://github.com/WebAssembly/js-promise-integration/blob/main/proposals/js-promise-integration/Overview.md) and [the V8 stack switching design portfolio](https://docs.google.com/document/d/16Us-pyte2-9DECJDfGm5tnUpfngJJOc8jbj54HMqE9Y).
+[^1]: For the technically curious, see [the WebAssembly proposal for JSPI](https://github.com/WebAssembly/js-promise-integration/blob/main/proposals/js-promise-integration/Overview.md).
 
 [^2]: Note: we include the complete program below, in Appendix A.
 
