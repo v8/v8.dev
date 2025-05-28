@@ -60,7 +60,7 @@ In particular, it is _not_ permitted to cause JavaScript code to be suspended by
 
 ### How can I use JSPI today?
 
-The JSPI is currently being standardized by the W3C WebAssembly WG. As of this writing, it is in phase 4 of the standards process. This means that the specification has been voted on by the W3C Wasm CG -- it is effectively standardized. In addition, it is available in Chrome as of M137, and in Firefox as of  version 139.
+JSPI is currently [phase 4](https://github.com/WebAssembly/meetings/blob/main/process/phases.md#4-standardize-the-feature-working-group) in the W3C WebAssembly WG. This means that the specification has been voted on by the W3C Wasm CG -- it is effectively standardized. In addition, it is available in Chrome 137, and in Firefox 139.
 
 JSPI is available for Chrome on Linux, MacOS, Windows and ChromeOS, on Intel and Arm platforms, both 64 bit and 32 bit.
 
