@@ -26,11 +26,13 @@ An overview over the shipping phases together with their respective requirements
 We usually define one or more command line flags that guard the feature from being active in production environments before it's ready for general use. These flags allow fine-grained control for testing and debugging and can be kept beyond the release of a feature to switch it off when needed. This is mostly not necessary and not worth maintaining the alternative code path, but can sometimes be useful (e.g. we kept the flags for lazy compilation and dynamic tiering).
 
 ### Wasm feature flags vs. V8 flags
+
 In WebAssembly, we have the option of using a Wasm feature flag (`--experimental-wasm-*`) which is defined via a macro in [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h) (different macros for different phases of development). These flags are usually used for new functionality, e.g. related to a new WebAssembly proposal.
 
 Alternatively, one can use a regular V8 flag as defined in [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h). These flags are commonly used for architectural changes or optimizations. In early stages, you should use `DEFINE_EXPERIMENTAL_FEATURE()`.
 
 ### Flags for (pre-)staging
+
 There are also common flags which bundle multiple experimental flags together through implications. `--experimental-fuzzing` is for enabling experimental features on our fuzzers in the pre-staging phase. Wasm feature flags defined in the `FOREACH_WASM_PRE_STAGING_FEATURE_FLAG` macro are automatically implied by this flag. V8 flags for pre-staged features require an explicit implication in [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h).
 
 Wasm feature flags also require a use counter to be added (or explicitly disabled this using `kIntentionallyNoUseCounter`). It's generally advisable to add a use counter to track adoption. You can pick a `WebFeature` or a `WebDXFeature` for your implementation. If it's linked to a W3C WebAssembly proposal, `WebDXFeature` is recommended. Otherwise, a `WebFeature` can be used which requires no approval process.
@@ -40,23 +42,29 @@ For staged features, that are ready for public evaluation (including the VRP) be
 ## Phases
 
 ### Inception
+
 This is the phase in which implementation in V8 is starting, but there might not be a [Chrome feature entry](https://chromestatus.com/features) or even a proper name for the feature. Code might be in local branches only or submitted to the main branch, guarded behind a feature flag.
 
-### Developer trial
+### Developer trial (optional)
+
 We can optionally ask external partners for feedback on the scope, interface or performance of the feature. During the developer trial, they can only test locally, because enabling the feature requires explicitly enabling the feature flag via the command line. A developer trial may start before staging and can continue until shipping.
 
 ### (Pre-)Staged
+
 Once we believe the feature is mature enough to consider user testing or even shipping, we stage it for at least one milestone. This increases coverage on our test and fuzzing infrastructure. The pre-staging phase is enabled by adding the feature flag as an implication to `--experimental-fuzzing`.
 
 After a short time in this stage, we will move the implication to `--wasm-staging` or `--future` depending on whether it's a feature or an optimization/architectural change respectively. This will open it for the VRP to encourage external researchers to find issues with the code. During this phase, we usually hold a shipping review where the development team assesses the test and fuzzer coverage and decides on requirements for the following phases.
 
 ### Origin/field trial
+
 If we need more data to decide on the readiness of a feature, we can schedule a trial. This can either be an origin trial in tight collaboration with partners or a broader field trial (Finch). Origin trials tend to run for longer than field trials, but complex features might also spend several months in a field trial until they are sufficiently mature.
 
 ### Shipped
+
 Once a feature is stable, complete and fully spec'd (phase 4 in the WebAssembly Community Group), we can ship it. This enables the feature for all users, even though only a tiny fraction of websites might use it in the beginning. We keep the flag around for 1-2 more milestones to be able to switch the feature off in case of unexpected side-effects.
 
 ### Clean up
+
 After 1-2 milestones, we can remove the flag, outdated code and do other clean-up work. For some features, it might be worth keeping the flag around to allow easier debugging, A/B comparisons, etc.
 
 
@@ -78,9 +86,10 @@ Note that the stage of the feature proposal in the standardization process does 
 
 ## How to stage a WebAssembly feature
 
-### Wasm feature flags
+### Staging Wasm feature flags
 
 Pre-stage the feature to collect fuzzer coverage for two weeks
+
 - In [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_EXPERIMENTAL_FEATURE_FLAG` macro list to the `FOREACH_WASM_PRE_STAGING_FEATURE_FLAG` macro list.
 - In [`tools/wasm/update-wasm-spec-tests.sh`](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh), add the proposal repository name to the `repos` list of repositories.
 - Run [`tools/wasm/update-wasm-spec-tests.sh`](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh) to create and upload the spec tests of the new proposal.
@@ -88,14 +97,17 @@ Pre-stage the feature to collect fuzzer coverage for two weeks
 - In [`test/wasm-js/testcfg.py`](https://cs.chromium.org/chromium/src/v8/test/wasm-js/testcfg.py), add the proposal repository name and the feature flag to the `proposal_flags` list.
 
 After two weeks of fuzzer coverage, we can open the feature to the VRP to encourage external bug reporting.
+
 - In [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_PRE_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list.
 
-### Other feature flags
+### Staging other feature flags
 
 Pre-stage the feature to collect fuzzer coverage for two weeks
+
 - In [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h) add an implication from `experimental_fuzzing` to the feature flag using `DEFINE_WEAK_IMPLICATION()`.
 
 After two weeks of fuzzer coverage, we can open the feature to the VRP to encourage external bug reporting.
+
 - Switch the flag definition from `DEFINE_EXPERIMENTAL_FEATURE` to `DEFINE_BOOL` with a `false` default.
 - In [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h), move the feature flag implication from the `experimental_fuzzing` to `future` (performance optimizations) or `wasm_staging` (other architectural changes). Either implication will continue fuzzing coverage, but an implication from `future` will also enable it for benchmarking which might or might not be desired.
 
@@ -108,7 +120,7 @@ There are multiple ways of experimenting with a new feature and gathering inform
 
 This is the easiest trial to run. It often does not require any changes to the code, but developers are encouraged to try it out. This can happen via the existing command line flag, by adding a Chrome flag that developers can enable via the `chrome://flags` or by staging a Wasm feature flag which automatically adds it to the existing *Experimental WebAssembly* option there (`chrome://flags#enable-experimental-webassembly-features`). Because the latter option might be switched on by users accidentally (e.g. because they tried another feature earlier and forgot to disable it afterwards), the bar for adding features there is higher and one should carefully evaluate if the feature meets the criteria for staging before choosing this option.
 
-### Process
+### Steps to enable a developer trial
 
 - Reach out to partners and collect feedback (direct communication, issues or polls).
 
@@ -118,9 +130,10 @@ Features that web developers want to try out with their own users are ideal for 
 
 The feedback can be collected from partners or via Chrome's metric collection. It is usually reported back to the W3C WebAssembly community group and to the Blink API owners.
 
-### Process
+### Steps to launch an origin trial
 
 To get the experiment going, do the following
+
 - Inform the Chrome Security Team about the pending experiment (tracking sheet or email).
 - Request all required reviews for experimentation on the Chrome Feature entry.
 - Send Intent to Experiment (up to 6 months/milestones) to Blink API Owners and get one LGTM.
@@ -128,6 +141,7 @@ To get the experiment going, do the following
 - Distribute the signup link to interested partners.
 
 To get an extension (up to 3 months/milestones)
+
 - Summarize feedback of the experiment so far.
 - Motivate extension and summarize progress in an Intent to Extend Experiment to the Blink API Owners and get one LGTM.
 - Update Chrome Status entry and wait for its resolution.
@@ -137,7 +151,7 @@ To get an extension (up to 3 months/milestones)
 
 When a feature does not require any changes to user code, Chrome can decide to run a trial without partner engagement. Such trials are ideal for performance improvements or larger architectural changes. Chrome's metric collection can then be used to compare different configurations and their impact on common performance and stability metrics.
 
-### Process
+### Steps to launch a Finch trial
 
 - Make the Chrome Security Team aware of the pending experiment (tracking sheet or email).
 - Consider adding GWS ids and inform partners of the experiment to track any changes in application metrics that are not covered by Chrome (e.g. performance metrics).
@@ -171,12 +185,12 @@ The longer experimentation time at 10% of stable users is to accommodate for man
 - Request all required reviews for shipping on the Chrome Feature entry.
 - Send Intent to Ship to Blink API Owners and get three LGTMs.
 
-### Wasm feature flags
+### Ship Wasm feature flags
 
 - In [`src/wasm/wasm-feature-flags.h`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_SHIPPED_FEATURE_FLAG` macro list.
 - Additionally, enable the feature by default by changing the third parameter in `FOREACH_WASM_SHIPPED_FEATURE_FLAG` to `true`.
 
-### Other feature flags
+### Ship other feature flags
 
 - In [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h), remove any implication from `future` and `wasm-staging`.
 - Set the default value of the feature in [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h) to `true`.
