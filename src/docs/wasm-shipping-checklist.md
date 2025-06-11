@@ -16,9 +16,9 @@ Once we consider a feature sufficiently stable that we consider experimentation 
 
 Some features might ship directly from this phase, if we don't expect to gain any insights from further experimentation. Others will go through one or more phases of experimentation, e.g. developer trial, origin trial or Finch trial where we collect data from partners or in-the-wild usage.
 
-An overview over the shipment phases together with their respective requirements is shown here:
+An overview over the shipping phases together with their respective requirements is shown here:
 
-![Overview of WebAssembly shipment phases](/_img/wasm-launch-process/phases.svg)
+![Overview of WebAssembly shipping phases](/_img/wasm-launch-process/phases.svg)
 
 
 ## Flags
@@ -46,9 +46,9 @@ This is the phase in which implementation in V8 is starting, but there might not
 We can optionally ask external partners for feedback on the scope, interface or performance of the feature. During the developer trial, they can only test locally, because enabling the feature requires explicitly enabling the feature flag via the command line. A developer trial may start before staging and can continue until shipping.
 
 ### (Pre-)Staged
-Once we believe the feature is mature enough to consider user testing or even shipment, we stage it for at least one milestone. This increases coverage on our test and fuzzing infrastructure. The pre-staging phase is enabled by adding the feature flag as an implication to `--experimental-fuzzing`.
+Once we believe the feature is mature enough to consider user testing or even shipping, we stage it for at least one milestone. This increases coverage on our test and fuzzing infrastructure. The pre-staging phase is enabled by adding the feature flag as an implication to `--experimental-fuzzing`.
 
-After a short time in this stage, we will move the implication to `--wasm-staging` or `--future` depending on whether it's a feature or an optimization/architectural change respectively. This will open it for the VRP to encourage external researchers to find issues with the code. During this phase, we usually hold a shipment review where the development team assesses the test and fuzzer coverage and decides on requirements for the following phases.
+After a short time in this stage, we will move the implication to `--wasm-staging` or `--future` depending on whether it's a feature or an optimization/architectural change respectively. This will open it for the VRP to encourage external researchers to find issues with the code. During this phase, we usually hold a shipping review where the development team assesses the test and fuzzer coverage and decides on requirements for the following phases.
 
 ### Origin/field trial
 If we need more data to decide on the readiness of a feature, we can schedule a trial. This can either be an origin trial in tight collaboration with partners or a broader field trial (Finch). Origin trials tend to run for longer than field trials, but complex features might also spend several months in a field trial until they are sufficiently mature.
@@ -147,8 +147,8 @@ When a feature does not require any changes to user code, Chrome can decide to r
 - After at least 2 weeks of stable experimentation, advance the experiment to 50% of beta users.
 - After at least 2 weeks of stable experimentation, advance the experiment to 1% of stable users.
 - After at least 2 weeks of stable experimentation, advance the experiment to 10% of stable users.
-- After at least 4 weeks of stable experimentation, advance the experiment to 50% of stable users (in case *WebView* is not part of the trial, one can jump straight to shipment from here, but it's recommended to include WebView into each trial).
-- After at least 2 weeks of stable experimentation, you can consider shipment.
+- After at least 4 weeks of stable experimentation, advance the experiment to 50% of stable users (in case *WebView* is not part of the trial, one can jump straight to shipping from here, but it's recommended to include WebView into each trial).
+- After at least 2 weeks of stable experimentation, you can consider shipping.
 
 The longer experimentation time at 10% of stable users is to accommodate for manually detected bugs and reporting which tend to have a longer lead time than signals gathered from metrics and automated testing. At 10% the impact of the experiment is still limited while providing good visibility for partners to identify issues.
 
@@ -168,7 +168,7 @@ The longer experimentation time at 10% of stable users is to accommodate for man
 
 ### Prerequisites
 
-- Request all required reviews for shipment on the Chrome Feature entry.
+- Request all required reviews for shipping on the Chrome Feature entry.
 - Send Intent to Ship to Blink API Owners and get three LGTMs.
 
 ### Wasm feature flags
@@ -184,7 +184,7 @@ The longer experimentation time at 10% of stable users is to accommodate for man
 ### After enabling the feature
 
 - Ensure to add a blink CQ bot on the CL to check for [blink web test](https://v8.dev/docs/blink-layout-tests) failures caused by enabling the feature (add this line to the footer of the CL description: `Cq-Include-Trybots: luci.v8.try:v8_linux_blink_rel`).
-- If the feature has been tried in a Finch experiment, you can soft-launch the feature via Finch by setting its experiment to 100% of users. This allows faster shipment and can be rolled back easily.
+- If the feature has been tried in a Finch experiment, you can soft-launch the feature via Finch by setting its experiment to 100% of users. This allows faster shipping and can be rolled back easily.
 - Set a reminder to remove the feature flag, the Finch configuration and outdated code after two milestones.
 
 ### Disabling an already shipped feature
