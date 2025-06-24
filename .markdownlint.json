@@ -32,5 +32,6 @@
   },
   "no-multiple-blanks": false,
   "no-trailing-spaces": false,
-  "ol-prefix": false
+  "ol-prefix": false,
+  "no-duplicate-heading": false
 }
