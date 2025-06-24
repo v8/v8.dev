@@ -172,16 +172,17 @@ Naturally, microbenchmarks isolate and emphasize the effects of an optimization 
 # Conclusion and Outlook
 
 This concludes our post about two new optimizations in the V8 engine for WebAssembly. To summarize, we have seen:
-* How speculative inlining can inline functions even in the presence of indirect calls,
-* what feedback is and how it is used and updated,
-* what to do when assumptions made during optimizations are invalid at runtime,
-* how a deoptimization can exit optimized code and enters baseline code in the middle of executing a function, and finally
-* how this significantly improves the execution of real-world workloads.
+
+- How speculative inlining can inline functions even in the presence of indirect calls,
+- what feedback is and how it is used and updated,
+- what to do when assumptions made during optimizations are invalid at runtime,
+- how a deoptimization can exit optimized code and enters baseline code in the middle of executing a function, and finally
+- how this significantly improves the execution of real-world workloads.
 
 In the future, we plan on adding more speculative optimizations based on deopt support for WebAssembly, e.g. bounds-check elimination or more extensive load elimination for WasmGC objects. And also in terms of inlining, there is more to be done: While we now have Wasm-into-Wasm inlining for all kinds of call instructions, we can still extend inlining across the language boundary, e.g., for JavaScript-to-Wasm calls. Check back on our V8 blog for exciting updates in the future!
 
 <!-- Footnotes themselves at the bottom. -->
-### Footnotes
+## Footnotes
 
 [^1]: Due to the SIMD extension for Wasm this also includes all 128-bit vector registers used by TurboFan.
 
