@@ -28,7 +28,7 @@ The stack trace is collected when the error is created and is the same regardles
 Error.stackTraceLimit
 ```
 
-Setting it to `0` disables stack trace collection. Any finite integer value can be used as the maximum number of frames to collect. Setting it to `Infinity` means that all frames get collected. This variable only affects the current context; it has to be set explicitly for each context that needs a different value. (Note that what is known as a “context” in V8 terminology corresponds to a page or `<iframe>` in Google Chrome). To set a different default value that affects all contexts use the following V8 command-line flag:
+Setting it to `0` or `undefined` disables stack trace collection. Any finite integer value can be used as the maximum number of frames to collect. Setting it to `Infinity` means that all frames get collected. This variable only affects the current context; it has to be set explicitly for each context that needs a different value. (Note that what is known as a “context” in V8 terminology corresponds to a page or `<iframe>` in Google Chrome). To set a different default value that affects all contexts use the following V8 command-line flag:
 
 ```bash
 --stack-trace-limit <value>
