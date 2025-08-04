@@ -36,8 +36,8 @@ Any string in JavaScript can contain characters that require escaping when seria
 
 To accelerate this, we employ a two-level strategy based on the string's length:
 
-* For longer strings, we switch to dedicated hardware SIMD instructions (e.g., ARM64 Neon). This allows us to load a much larger chunk of the string into a wide SIMD register and check multiple bytes for any escapable characters at once in just a few instructions. ([source](https://crsrc.org/c/v8/src/json/json-stringifier.cc;drc=1645281bbd1b183a252835d376166bd210135bbe;l=3369))  
-* For shorter strings, where the setup cost of hardware instructions would be too high, we use a technique called SWAR (SIMD Within A Register). This approach uses clever bitwise logic on standard general-purpose registers to process multiple characters at once with very low overhead. ([source](https://crsrc.org/c/v8/src/json/json-stringifier.cc;drc=1645281bbd1b183a252835d376166bd210135bbe;l=3353))
+- For longer strings, we switch to dedicated hardware SIMD instructions (e.g., ARM64 Neon). This allows us to load a much larger chunk of the string into a wide SIMD register and check multiple bytes for any escapable characters at once in just a few instructions. ([source](https://crsrc.org/c/v8/src/json/json-stringifier.cc;drc=1645281bbd1b183a252835d376166bd210135bbe;l=3369))  
+- For shorter strings, where the setup cost of hardware instructions would be too high, we use a technique called SWAR (SIMD Within A Register). This approach uses clever bitwise logic on standard general-purpose registers to process multiple characters at once with very low overhead. ([source](https://crsrc.org/c/v8/src/json/json-stringifier.cc;drc=1645281bbd1b183a252835d376166bd210135bbe;l=3353))
 
 Regardless of the method, the process is highly efficient: we rapidly scan through the string chunk by chunk. If no chunk contains any special characters (the common case), we can simply copy the whole string.
 
