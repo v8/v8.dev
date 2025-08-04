@@ -79,4 +79,6 @@ For the vast majority of use cases, such as serializing data for API responses o
 # Conclusion
 
 By rethinking `JSON.stringify` from the ground up, from its high-level logic down to its core memory and character-handling operations, we've delivered a more than 2x performance improvement measured on the JetStream2 json-stringify-inspector benchmark. See the figure below for results on different platforms. These optimizations are available in V8 starting with version 13.8 (Chrome 138).  
+
 ![JetStream2 Results](/_img/json-stringify/results-jetstream2.svg)
+
