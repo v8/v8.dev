@@ -66,10 +66,10 @@ gn args out/foo
 This opens an editor window for specifying the [`gn` arguments](https://gn.googlesource.com/gn/+/master/docs/reference.md). Alternatively, you can pass the arguments on the command line:
 
 ```bash
-gn gen out/foo --args='is_debug=false target_cpu="x64" v8_target_cpu="arm64" use_goma=true'
+gn gen out/foo --args='is_debug=false target_cpu="x64" v8_target_cpu="arm64"'
 ```
 
-This generates build files for compiling V8 with the arm64 simulator in release mode using `goma` for compilation.
+This generates build files for compiling V8 with the arm64 simulator in release mode.
 
 For an overview of all available `gn` arguments, run:
 
