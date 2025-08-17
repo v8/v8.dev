@@ -93,10 +93,6 @@ An alternative to write this code is to create a disposable object `readerResour
 
 ```javascript
  async function processData(response) {
-    const reader = response.body.getReader();
-    let done = false;
-    let value;
-
     // Wrap the reader in a disposable resource
     using readerResource = {
         reader: response.body.getReader(),
