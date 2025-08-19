@@ -28,50 +28,52 @@ This example demonstrates:
 - Using Torque to implement simple logic: type distinction, Smi and heap-number handling, conditionals.
 - Installation of the CSA builtin on the `Math` object.
 
-In case you’d like to follow along locally, the following code is based off revision [589af9f2](https://chromium.googlesource.com/v8/v8/+/589af9f257166f66774b4fb3008cd09f192c2614).
+In case you’d like to follow along locally, the following code is based off revision [5e0cc470](https://chromium.googlesource.com/v8/v8/+/5e0cc470deed2d3b0957b7441d1e960313bbbf2d).
 
 ## Defining `MathIs42`
 
-Torque code is located in `src/builtins/*.tq` files, roughly organized by topic. Since we will be writing a `Math` builtin, we’ll put our definition into `src/builtins/math.tq`. Since this file doesn't exist yet, we have to add it to [`torque_files`](https://cs.chromium.org/chromium/src/v8/BUILD.gn?l=914&rcl=589af9f257166f66774b4fb3008cd09f192c2614) in [`BUILD.gn`](https://cs.chromium.org/chromium/src/v8/BUILD.gn).
+Torque code is located in `src/builtins/*.tq` files, roughly organized by topic. Since we will be writing a `Math` builtin, we’ll put our definition into `src/builtins/math.tq`.
+This file already exists, but in case you want to add new file you have to add it to [`torque_files`](https://source.chromium.org/chromium/v8/v8.git/+/5e0cc470deed2d3b0957b7441d1e960313bbbf2d:BUILD.gn;l=1892) in [`BUILD.gn`](https://cs.chromium.org/chromium/src/v8/BUILD.gn).
 
 ```torque
+// Existing code to set up Math, included here for clarity.
 namespace math {
-  javascript builtin MathIs42(
-      context: Context, receiver: Object, x: Object): Boolean {
-    // At this point, x can be basically anything - a Smi, a HeapNumber,
-    // undefined, or any other arbitrary JS object. ToNumber_Inline is defined
-    // in CodeStubAssembler. It inlines a fast-path (if the argument is a number
-    // already) and calls the ToNumber builtin otherwise.
-    const number: Number = ToNumber_Inline(x);
-    // A typeswitch allows us to switch on the dynamic type of a value. The type
-    // system knows that a Number can only be a Smi or a HeapNumber, so this
-    // switch is exhaustive.
-    typeswitch (number) {
-      case (smi: Smi): {
-        // The result of smi == 42 is not a Javascript boolean, so we use a
-        // conditional to create a Javascript boolean value.
-        return smi == 42 ? True : False;
+  // […snip…]
+  transitioning javascript builtin MathIs42(
+      js-implicit context: NativeContext)(x: JSAny): Boolean {
+      // At this point, x can be basically anything - a Smi, a HeapNumber,
+      // undefined, or any other arbitrary JS object. ToNumber_Inline is defined
+      // in CodeStubAssembler. It inlines a fast-path (if the argument is a number
+      // already) and calls the ToNumber builtin otherwise.
+      const number: Number = ToNumber_Inline(x);
+      // A typeswitch allows us to switch on the dynamic type of a value. The type
+      // system knows that a Number can only be a Smi or a HeapNumber, so this
+      // switch is exhaustive.
+      typeswitch (number) {
+        case (smi: Smi): {
+          // The result of smi == 42 is not a Javascript boolean, so we use a
+          // conditional to create a Javascript boolean value.
+          return smi == 42 ? True : False;
+        }
+        case (heapNumber: HeapNumber): {
+          return Convert<float64>(heapNumber) == 42 ? True : False;
+        }
       }
-      case (heapNumber: HeapNumber): {
-        return Convert<float64>(heapNumber) == 42 ? True : False;
-      }
-    }
   }
 }
 ```
 
-We put the definition in the Torque namespace `math`. Since this namespace didn't exist before, we have to add it to [`torque_namespaces`](https://cs.chromium.org/chromium/src/v8/BUILD.gn?l=933&rcl=589af9f257166f66774b4fb3008cd09f192c2614) in [`BUILD.gn`](https://cs.chromium.org/chromium/src/v8/BUILD.gn).
-
 ## Attaching `Math.is42`
 
-Builtin objects such as `Math` are set up mostly in [`src/bootstrapper.cc`](https://cs.chromium.org/chromium/src/v8/src/bootstrapper.cc?q=src/bootstrapper.cc+package:%5Echromium$&l=1) (with some setup occurring in `.js` files). Attaching our new builtin is simple:
+Builtin objects such as `Math` are set up mostly in [`src/init/bootstrapper.cc`](https://cs.chromium.org/chromium/src/v8/src/init/bootstrapper.cc?q=src/init/bootstrapper.cc+package:%5Echromium$&l=1) (with some setup occurring in `.js` files). Attaching our new builtin is simple:
 
 ```cpp
 // Existing code to set up Math, included here for clarity.
-Handle<JSObject> math = factory->NewJSObject(cons, TENURED);
-JSObject::AddProperty(global, name, math, DONT_ENUM);
+// -- M a t h
+Handle<JSObject> math = factory->NewJSObject(isolate_->object_function(), AllocationType::kOld);
+JSObject::AddProperty(global, "Math", math, DONT_ENUM);
 // […snip…]
-SimpleInstallFunction(isolate_, math, "is42", Builtins::kMathIs42, 1, true);
+SimpleInstallFunction(isolate_, math, "is42", Builtin::kMathIs42, 1, true);
 ```
 
 Now that `is42` is attached, it can be called from JS:
@@ -96,13 +98,11 @@ The definition is also straightforward. The only difference to our builtin with 
 
 ```torque
 namespace math {
-  builtin HeapNumberIs42(implicit context: Context)(heapNumber: HeapNumber):
-      Boolean {
+  transitioning macro HeapNumberIs42(implicit context: Context)(heapNumber: HeapNumber): Boolean {
     return Convert<float64>(heapNumber) == 42 ? True : False;
   }
 
-  javascript builtin MathIs42(implicit context: Context)(
-      receiver: Object, x: Object): Boolean {
+  transitioning javascript builtin MathIs42(js-implicit context: NativeContext)(x: JSAny): Boolean {
     const number: Number = ToNumber_Inline(x);
     typeswitch (number) {
       case (smi: Smi): {
@@ -132,7 +132,7 @@ TEST(MathIsHeapNumber42) {
   Heap* heap = isolate->heap();
   Zone* zone = scope.main_zone();
 
-  StubTester tester(isolate, zone, Builtins::kMathIs42);
+  StubTester tester(isolate, zone, Builtin::kMathIs42);
   Handle<Object> result1 = tester.Call(Handle<Smi>(Smi::FromInt(0), isolate));
   CHECK(result1->BooleanValue());
 }
