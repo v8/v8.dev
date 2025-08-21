@@ -89,7 +89,7 @@ However, if many properties get added and deleted from an object, it can generat
 
 ## Elements or array-indexed properties
 
-So far we have looked at named properties and ignored integer indexed properties commonly used with arrays. Handling of integer indexed properties is no less complex than named properties. Even though all indexed properties are always kept separately in the elements store, there are [20](https://cs.chromium.org/chromium/src/v8/src/elements-kind.h?q=elements-kind.h&sq=package:chromium&dr&l=14) different types of elements!
+So far we have looked at named properties and ignored integer indexed properties commonly used with arrays. Handling of integer indexed properties is no less complex than named properties. Even though all indexed properties are always kept separately in the elements store, there are [20](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/elements-kind.h;l=105) different types of elements!
 
 **Packed or Holey Elements:** The first major distinction V8 makes is whether the elements backing store is packed or has holes in it. You get holes in a backing store if you delete an indexed element, or for instance, you don't define it. A simple example is `[1,,3]` where the second entry is a hole. The following example illustrates this issue:
 
