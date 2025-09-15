@@ -43,7 +43,7 @@ Luckily for us, we have a trick up our sleeve. The top bits can be synthesized f
 When improving memory, usually it comes at the cost of performance. Usually. We are proud to announce that we saw improvements in performance on real websites in the time spent in V8, and in its garbage collector!
 
 :::table-wrapper
-|                       || Desktop | Mobile |
+|             |          | Desktop | Mobile |
 |-------------|----------|---------|--------|
 | Facebook    | V8-Total | -8%     | -6%    |
 | ^^          | GC       | -10%    | -17%   |
