@@ -31,7 +31,7 @@ A current committer nominates you by sending email to <v8-committers@chromium.or
 
 Two other committers need to second your nomination. If no one objects in 5 working days, you're a committer.  If anyone objects or wants more information, the committers discuss and usually come to a consensus (within the 5 working days). If issues cannot be resolved, there's a vote among current committers.
 
-Once you get approval from the existing committers, you are granted additional review permissions. You'll also be added to the mailing list v8-committers@googlegroups.com.
+Once you get approval from the existing committers, you are granted additional review permissions. You'll also be added to the mailing list v8-committers@chromium.org.
 
 In the worst case, the process can drag out for two weeks. Keep writing patches! Even in the rare cases where a nomination fails, the objection is usually something easy to address like “more patches” or “not enough people are familiar with this person’s work.”
 
@@ -41,6 +41,6 @@ You don't really need to do much to maintain committer status: just keep being a
 
 In the unhappy event that a committer continues to disregard good citizenship (or actively disrupts the project), we may need to revoke that person's status. The process is the same as for nominating a new committer: someone suggests the revocation with a good reason, two people second the motion, and a vote may be called if consensus cannot be reached. I hope that's simple enough, and that we never have to test it in practice.
 
-In addition, as a security measure, if you are inactive on Gerrit (no upload, no comment and no review) for more than a year, we may revoke your committer privileges. An email notification is sent about 7 days prior to the removal. This is not meant as a punishment, so if you wish to resume contributing after that, contact v8-committers@googlegroups.com to ask that it be restored, and we will normally do so.
+In addition, as a security measure, if you are inactive on Gerrit (no upload, no comment and no review) for more than a year, we may revoke your committer privileges. An email notification is sent about 7 days prior to the removal. This is not meant as a punishment, so if you wish to resume contributing after that, contact v8-committers@chromium.org to ask that it be restored, and we will normally do so.
 
 (This document was inspired by <https://dev.chromium.org/getting-involved/become-a-committer>.)
