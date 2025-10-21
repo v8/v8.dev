@@ -96,8 +96,7 @@ This requires a two-step process, first `perf record` creates a `perf.data` file
 perf record --call-graph=fp --clockid=mono --freq=max \
     --output=perf.data
     out/x64.release/d8 \
-      --perf-prof --no-write-protect-code-memory \
-      --interpreted-frames-native-stack \
+      --perf-prof --interpreted-frames-native-stack \
     test.js;
 perf inject --jit --input=perf.data --output=perf.data.jitted;
 perf report --input=perf.data.jitted;
@@ -106,8 +105,6 @@ perf report --input=perf.data.jitted;
 ### V8 linux-perf Flags
 
 [`--perf-prof`](https://source.chromium.org/search?q=FLAG_perf_prof) is used to the V8 command-line to record performance samples in JIT code.
-
-[`--nowrite-protect-code-memory`](https://source.chromium.org/search?q=FLAG_nowrite_protect_code_memory) is required to disable write protection for code memory. This is necessary because `perf` discards information about code pages when it sees the event corresponding to removing the write bit from the code page. Here’s an example that records samples from a test JavaScript file:
 
 [`--interpreted-frames-native-stack`](https://source.chromium.org/search?q=FLAG_interpreted_frames_native_stack) is used to create different entry points (copied versions of InterpreterEntryTrampoline) for interpreted functions so they can be distinguished by `perf` based on the address alone. Since the InterpreterEntryTrampoline has to be copied this comes at slight performance and memory regression.
 
@@ -122,7 +119,7 @@ perf report --input=perf.data.jitted;
     out/x64.release/chrome \
         --user-data-dir=`mktemp -d` \
         --no-sandbox --incognito --enable-benchmarking \
-        --js-flags='--perf-prof --no-write-protect-code-memory --interpreted-frames-native-stack'
+        --js-flags='--perf-prof --interpreted-frames-native-stack'
     ```
 
 1. After starting up chrome, find the renderer process id using the Task Manager and use it to start profiling:
