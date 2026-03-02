@@ -5,7 +5,7 @@
     "redirects": [
       {
         "source": "/@",
-        "destination": "https://twitter.com/v8js",
+        "destination": "https://twitter.com/v8js", 
         "type": 301
       },
       {
