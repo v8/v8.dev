@@ -16,8 +16,9 @@
     "build": "npm run clean && npm run css && npm run js && npm run json && npm run copy-img && npm run copy-js && npm run eleventy && npm run sw && npm run xml && npm run html",
     "watch": "npm run build && npx eleventy --watch",
     "serve": "npm start",
+    "dev": "npm start",
     "debug": "DEBUG=* npx eleventy",
-    "start": "superstatic --port=9001 .",
+    "start": "http-server dist -p 9001",
     "deploy": "firebase deploy",
     "ci": "npm run lint && npm run build"
   },
@@ -50,6 +51,7 @@
     "glob": "^8.0.3",
     "he": "^1.2.0",
     "html-minifier-terser": "^7.1.0",
+    "http-server": "^14.1.1",
     "husky": "^8.0.2",
     "image-size": "^1.0.2",
     "json-minify": "^1.0.0",
@@ -69,7 +71,6 @@
     "postcss-cli": "^10.0.0",
     "postcss-custom-properties": "^13.0.0",
     "shx": "^0.3.4",
-    "superstatic": "^9.0.0",
     "terser": "^5.16.0"
   }
 }
