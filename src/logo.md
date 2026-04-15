@@ -38,6 +38,25 @@ Download the official V8 logos here in vector format (SVG). The SVG files have b
   </figure>
 </a>
 
+## Sparkplug
+
+<a href="/_img/v8-sparkpug.svg" class="logo-download" download>
+  <figure>
+    <img src="/_img/v8-sparkpug.svg" width="256" height="256" intrinsicsize="1024x1024" alt="" class="no-darkening">
+    <figcaption>Logo for Sparkplug, V8’s baseline compiler</figcaption>
+  </figure>
+</a>
+
+
+## Turboshaft
+
+<a href="/_img/v8-turboshaft-outline.svg" class="logo-download" download>
+  <figure>
+    <img src="/_img/v8-turboshaft-outline.svg" width="256" height="256" intrinsicsize="524x524" alt="" class="no-darkening">
+    <figcaption>Logo for Turboshaft with a white outline, for use on dark backgrounds</figcaption>
+  </figure>
+</a>
+
 ## TurboFan
 
 <a href="/_img/v8-turbofan.svg" class="logo-download" download>
