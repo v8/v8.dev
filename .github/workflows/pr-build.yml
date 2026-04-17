@@ -19,5 +19,6 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_V8_DEV }}"
           projectId: v8-dev
+          expires: 14d
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
