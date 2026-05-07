@@ -42,7 +42,7 @@ Some *features* might ship directly from this phase, if we don't expect to gain 
 
 An overview over the shipping *steps* together with their respective properties and requirements is shown here:
 
-![Overview of shipping phases](/_svg/launch-process/phases.svg)
+![Overview of shipping steps](/_svg/launch-process/steps.svg)
 
 The full list of requirements and steps to be taken is listed below.
 
