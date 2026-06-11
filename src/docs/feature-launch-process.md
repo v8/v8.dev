@@ -126,6 +126,10 @@ All *features* must be fuzzed for a minimum period of 4 weeks, with all fuzz bug
 
 ## Steps {#steps}
 
+All features and their current step must be consistently tracked in [`src/flags/FEATURES.md`](https://cs.chromium.org/chromium/src/v8/src/flags/FEATURES.md) where you can also find more information on the code changes required for moving through the steps.
+
+This file also serves as a reference for *Chrome Security* and others to determine the state of a *feature* at a specific point in the Git history.
+
 ### Inception
 
 This is the *step* in which implementation in V8 is starting, but there might not be a [Chrome feature entry](https://chromestatus.com/features) or even a proper name for the *feature*. Code might be in local branches only or submitted to the main branch, guarded behind a *feature flag*.
@@ -160,29 +164,9 @@ After 1-2 milestones, we can remove the *feature flag*, outdated code and do oth
 
 # Pre-staging { #pre-staging }
 
-## When to pre-stage a feature
-
 Pre-staging allows getting early feedback from fuzzing and ensuring that there are no obvious bugs left from fuzzing before opening up the *feature* further in staging.
 
 This should happen two weeks before staging at latest to give the fuzzers enough time to find bugs, but can happen as soon as any fuzzer coverage is available and fuzzing can meaningfully test the code, even while the *feature* is still in development.
-
-## How to pre-stage a feature
-
-### Pre-staging a JavaScript or V8 feature
-
-Pre-stage the *feature* to collect fuzzer coverage for at least two weeks, if not pre-staged earlier in feature development.
-
-- In [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h) add an implication from `experimental_fuzzing` to the *feature flag* using `DEFINE_WEAK_IMPLICATION()`.
-
-### Pre-staging a WebAssembly feature
-
-Pre-stage the *feature* to collect fuzzer coverage for at least two weeks, if not pre-staged earlier in feature development.
-
-- In [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the *feature flag* from the `FOREACH_WASM_EXPERIMENTAL_FEATURE_FLAG` macro list to the `FOREACH_WASM_PRE_STAGING_FEATURE_FLAG` macro list.
-- In [`tools/wasm/update-wasm-spec-tests.sh`](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh), add the proposal repository name to the `repos` list of repositories.
-- Run [`tools/wasm/update-wasm-spec-tests.sh`](https://cs.chromium.org/chromium/src/v8/tools/wasm/update-wasm-spec-tests.sh) to create and upload the spec tests of the new proposal.
-- In [`test/wasm-spec-tests/testcfg.py`](https://cs.chromium.org/chromium/src/v8/test/wasm-spec-tests/testcfg.py), add the proposal repository name and the *feature flag* to the `proposal_flags` list.
-- In [`test/wasm-js/testcfg.py`](https://cs.chromium.org/chromium/src/v8/test/wasm-js/testcfg.py), add the proposal repository name and the *feature flag* to the `proposal_flags` list.
 
 # Staging { #staging }
 
@@ -200,23 +184,6 @@ The staging of a *feature* defines the end of its implementation phase. The impl
 - All existing proposal spec tests pass. Missing spec tests should be added before entering staging.
 
 Note that the *phase/stage* of the *spec feature* in the standardization process does not matter for staging the *feature* in V8. The proposal should, however, be mostly stable.
-
-## How to stage a feature
-
-To inform the Chrome Security team of the new state, move the tracking issue to the "V8 Feature staged" hotlist. This signals that the *feature* has reached some level of external scrutiny. To link the *feature* to the command line flag, make sure that the corresponding field in the issue is set correctly.
-
-### Staging a JavaScript or V8 feature
-
-After at least two weeks of fuzzer coverage in pre-staging, we can stage the *feature* to open it to the VRP, encouraging external bug reporting.
-
-- Switch the flag definition from `DEFINE_EXPERIMENTAL_FEATURE` to `DEFINE_BOOL` with a `false` default.
-- In [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h), move the feature flag implication from the `experimental_fuzzing` to `future` (pure performance optimizations) or to `wasm_staging` (other changes). Either implication will continue fuzzing coverage, but an implication from `future` will also enable it for benchmarking which might or might not be desired.
-
-### Staging a WebAssembly feature
-
-After at least two weeks of fuzzer coverage in pre-staging, we can stage the *feature* to open it to the VRP, encouraging external bug reporting.
-
-- In [`src/wasm/wasm-feature-flags.h`](https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-feature-flags.h), move the feature flag from the `FOREACH_WASM_PRE_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list.
 
 # V8 launch review { #v8-launch-review }
 
@@ -301,7 +268,7 @@ To get the experiment going, do the following
 - Request all required reviews for experimentation on the Chromestatus entry.
 - Send *intent to experiment* (up to 6 months/milestones) to Blink API Owners and get one LGTM.
 - Inform the origin trial team and wait for the resolution.
-- Inform the Chrome Security Team about the pending experiment by moving the tracking issue to the "V8 Feature in trial" hotlist and linking the origin trial in a comment. Remove the issue from the "V8 Feature staged" hotlist.
+- Update the step in [`src/flags/FEATURES.md`](https://cs.chromium.org/chromium/src/v8/src/flags/FEATURES.md) to `Origin trial` and link the trial registration for reference.
 - Distribute the signup link to interested partners.
 
 To get an extension (up to 3 months/milestones)
@@ -319,7 +286,7 @@ When a *feature* does not require any changes to user code, V8 can decide to run
 
 - Consider adding GWS ids and inform partners of the experiment to track any changes in application metrics that are not covered by Chrome (e.g. performance metrics).
 - [Submit a configuration](https://uma.googleplex.com/p/chrome/variations/creator/) to be tested in the Chrome repository.
-- Make the Chrome Security Team aware of the pending experiment by moving the tracking issue to the "V8 Feature in trial" hotlist and linking the Finch configuration in a comment. Remove the issue from the "V8 Feature staged" hotlist.
+- Update the step in [`src/flags/FEATURES.md`](https://cs.chromium.org/chromium/src/v8/src/flags/FEATURES.md) to `Finch trial` and link the Finch configuration for reference.
 - Enable the Finch experiment, starting with 50% of canary/dev users.
 - Inform potentially affected partners of the upcoming change, especially if they should monitor changes in GWS metrics more closely.
 - Consider announcing the upcoming experiment with details on how to test them in the [Chrome Enterprise release notes](https://support.google.com/chrome/a/answer/7679408?hl=en&co=CHROME_ENTERPRISE._Product%3DChromeBrowser).
@@ -346,30 +313,17 @@ The optional longer experimentation time for critical features at 10% of stable 
 - All spec tests ([JavaScript](https://github.com/tc39/test262), [WebAssembly](https://github.com/WebAssembly/spec/tree/master/test)) pass.
 - For *WebAssembly features*, the [Chromium DevTools checklist](https://chromium.googlesource.com/devtools/devtools-frontend/+/main/docs/checklist/webassembly.md) is satisfied.
 
-## How to ship a feature
-
 ### Prerequisites
 
 - Request all required reviews for shipping on the Chromestatus entry.
 - Send *intent to ship* to Blink API Owners and get three LGTMs.
 
-### Ship WebAssembly feature flags
-
-- In [`src/wasm/wasm-feature-flags.h`](https://source.chromium.org/chromium/chromium/src/+/master:v8/src/wasm/wasm-feature-flags.h), move the *feature flag* from the `FOREACH_WASM_STAGING_FEATURE_FLAG` macro list to the `FOREACH_WASM_SHIPPED_FEATURE_FLAG` macro list.
-- Additionally, enable the feature by default by changing the third parameter in `FOREACH_WASM_SHIPPED_FEATURE_FLAG` to `true`.
-
-### Ship JavaScript and V8 feature flags
-
-- In [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h), remove any implication from `future` and `wasm-staging`.
-- Set the default value of the *feature* in [`src/flags/flag-definitions.h`](https://cs.chromium.org/chromium/src/v8/src/flags/flag-definitions.h) to `true`.
-
-### After enabling the feature
+## After enabling the feature
 
 - Ensure to add a blink CQ bot on the CL to check for [blink web test](https://v8.dev/docs/blink-layout-tests) failures caused by enabling the *feature* (add this line to the footer of the CL description: `Cq-Include-Trybots: luci.v8.try:v8_linux_blink_rel`).
 - If the *feature* has been tried in a Finch experiment, you can soft-launch the *feature* via Finch by setting its experiment to 100% of users. This allows faster shipping and can be rolled back easily.
 - Set a reminder to remove the *feature* flag, the Finch configuration and outdated code after two milestones.
 
-### Disabling an already shipped feature
+## Disabling an already shipped feature
 
 If there are any issues during early stages, a *reverse Finch trial* can disable the *feature* if the flag has not been removed yet and the Finch config is still there. After a prolonged time, this might not be a viable option anymore even if the *feature flag* is still active, because the alternative code path is no longer tested and poses a higher risk.
-
