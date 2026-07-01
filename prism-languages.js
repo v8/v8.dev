@@ -12,6 +12,9 @@
 // limitations under the License.
 
 const installPrismLanguages = (Prism) => {
+  // Define an empty dummy language for 'text' so Prism does not fail
+  // when trying to highlight plain text blocks.
+  Prism.languages.text = {};
 
   // Based on the grammar defined at the bottom of:
   // https://cs.chromium.org/chromium/src/v8/src/torque/torque-parser.cc

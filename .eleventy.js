@@ -106,6 +106,7 @@ module.exports = (eleventyConfig) => {
   });
 
   eleventyConfig.addFilter('markdown', (string) => {
+    if (!string) return '';
     return md.renderInline(string);
   });
 
