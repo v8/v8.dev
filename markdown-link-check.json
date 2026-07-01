@@ -1,7 +1,48 @@
 {
+  "ignorePatterns": [
+    {
+      "pattern": "^https?://"
+    },
+    {
+      "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^/bugs?$"
+    },
+    {
+      "pattern": "^\\.\\./\\.\\./src/"
+    },
+    {
+      "pattern": "^#"
+    },
+    {
+      "pattern": "torque(\\.md)?$"
+    },
+    {
+      "pattern": "torque-builtins(\\.md)?$"
+    },
+    {
+      "pattern": "csa-builtins(\\.md)?$"
+    },
+    {
+      "pattern": "turbofan(\\.md)?$"
+    },
+    {
+      "pattern": "ignition(\\.md)?$"
+    },
+    {
+      "pattern": "hidden-classes(\\.md)?$"
+    },
+    {
+      "pattern": "wasm-compilation-pipeline(\\.md)?$"
+    },
+    {
+      "pattern": "sandbox(\\.md)?$"
+    }
+  ],
   "replacementPatterns": [
     {
-      "pattern": "^/((docs|blog|features)/[\\w-]+)(?:#.*)?$",
+      "pattern": "^/((docs|blog|features)/[\\w/-]+)(?:#.*)?$",
       "replacement": "{{BASEURL}}/src/$1.md"
     },
     {

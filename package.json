@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "lint": "markdownlint \"src/**/*.md\"",
+    "lint": "markdownlint \"src/**/*.md\" && npm run lint:links",
+    "lint:links": "markdown-link-check -q --config markdown-link-check.json src/docs/**/*.md",
     "eleventy": "eleventy",
     "html": "html-minifier-terser --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css && postcss src/_css/feature-support.css --output dist/_css/feature-support.css",

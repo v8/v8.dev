@@ -29,8 +29,8 @@ function sh(cmdArray, options = {}) {
   }
 }
 
-if (!REPO_PATH.startsWith('http') && !REPO_PATH.startsWith('git')) {
-  console.error(`Error: ${REPO_PATH} is not a recognized Git URL.`);
+if (!REPO_PATH.startsWith('http') && !REPO_PATH.startsWith('git') && !REPO_PATH.startsWith('/')) {
+  console.error(`Error: ${REPO_PATH} is not a recognized Git URL or local path.`);
   process.exit(1);
 }
 
