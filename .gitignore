@@ -13,6 +13,7 @@ package-lock.json
 Desktop.ini
 ._*
 Thumbs.db
+.v8-tmp/
 # Ignore synced docs
 /src/docs/*
 !/src/docs/docs.json
