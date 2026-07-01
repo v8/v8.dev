@@ -13,3 +13,7 @@ package-lock.json
 Desktop.ini
 ._*
 Thumbs.db
+# Ignore synced docs
+/src/docs/*
+!/src/docs/docs.json
+!/src/docs/README_V8_DEV.md
