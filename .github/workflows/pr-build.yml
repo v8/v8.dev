@@ -17,6 +17,8 @@ jobs:
         with:
           node-version-file: '.nvmrc'
       - run: npm install
+      - name: Sync V8 docs
+        run: npm run sync-docs
       - run: npm run lint
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0

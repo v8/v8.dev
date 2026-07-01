@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "lint": "markdownlint \"src/**/*.md\"",
+    "lint": "markdownlint \"src/**/*.md\" && npm run lint:links",
+    "lint:links": "markdown-link-check -q --config markdown-link-check.json src/docs/**/*.md",
     "eleventy": "eleventy",
     "html": "html-minifier-terser --config-file=.html-minifier.json --input-dir=dist --output-dir=dist --file-ext=html",
     "css": "postcss src/_css/main.css --output dist/_css/main.css && postcss src/_css/feature-support.css --output dist/_css/feature-support.css",
@@ -13,8 +14,9 @@
     "copy-js": "shx cp ./node_modules/dark-mode-toggle/dist/dark-mode-toggle.min.mjs dist/_js/dark-mode-toggle.mjs",
     "img-video-dimensions": "node add-image-and-video-dimensions.js",
     "clean": "shx rm -rf -- dist",
-    "build": "npm run clean && npm run css && npm run js && npm run json && npm run copy-img && npm run copy-js && npm run eleventy && npm run sw && npm run xml && npm run html",
-    "watch": "npm run build && npx eleventy --watch",
+    "sync-docs": "node sync-docs.mjs",
+    "build": "npm run clean && npm run sync-docs && npm run css && npm run js && npm run json && npm run copy-img && npm run copy-js && npm run eleventy && npm run sw && npm run xml && npm run html",
+    "watch": "npm run sync-docs && npm run build && npx eleventy --watch",
     "serve": "npm start",
     "dev": "npm start",
     "debug": "DEBUG=* npx eleventy",

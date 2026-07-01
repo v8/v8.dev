@@ -86,6 +86,7 @@ md.renderer.rules.table_column_open = (tokens, idx, options, env, self) => {
 };
 
 module.exports = (eleventyConfig) => {
+  eleventyConfig.setUseGitIgnore(false);
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight, {
     init({ Prism }) {
@@ -105,6 +106,7 @@ module.exports = (eleventyConfig) => {
   });
 
   eleventyConfig.addFilter('markdown', (string) => {
+    if (!string) return '';
     return md.renderInline(string);
   });
 
