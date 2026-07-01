@@ -86,6 +86,7 @@ md.renderer.rules.table_column_open = (tokens, idx, options, env, self) => {
 };
 
 module.exports = (eleventyConfig) => {
+  eleventyConfig.setUseGitIgnore(false);
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight, {
     init({ Prism }) {

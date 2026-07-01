@@ -1,1 +1,5 @@
 **/_*.md
+!src/docs/**
+src/docs/README*.md
+src/docs/viewer/**
+src/docs/**/*.html
