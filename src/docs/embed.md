@@ -64,7 +64,7 @@ Follow the steps below to run the example yourself:
     ```
 
 1. It prints `Hello, World!`. Yay!  
-   Note: as of November 2024, it might also segfault early during process startup. Investigation is pending. If you run into this and can figure out what's wrong, please comment on [issue 377222400](https://issues.chromium.org/issues/377222400), or [submit a patch](https://v8.dev/docs/contribute).
+   Note: as of November 2024, it might also segfault early during process startup. Investigation is pending. If you run into this and can figure out what's wrong, please comment on [issue 393955678](https://issues.chromium.org/issues/393955678), or [submit a patch](https://v8.dev/docs/contribute).
 
 If you are looking for an example which is in sync with the main branch, check out the file [`hello-world.cc`](https://chromium.googlesource.com/v8/v8/+/main/samples/hello-world.cc). This is a very simple example and you’ll likely want to do more than just execute scripts as strings. [The advanced guide below](#advanced-guide) contains more information for V8 embedders.
 
