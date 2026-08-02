@@ -1,7 +1,7 @@
 ---
 layout: layouts/base.njk
 ---
-<article itemscope itemtype="http://schema.org/BlogPosting">
+<article itemscope itemtype="http://schema.org/BlogPosting" class="{{ 'deprecated' if deprecated }}">
   <header>
     <h1 itemprop="headline">{{ title | markdown | safe }}</h1>
     <p class="meta">
